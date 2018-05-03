@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-27 17:57:32
+ * @Last Modified time: 2018-05-03 17:08:15
  */
 <template>
   <div>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { Sticky, ButtonTab, ButtonTabItem, Toast, Checker, CheckerItem, Group, PopupPicker, XAddress, ChinaAddressV4Data, Value2nameFilter } from 'vux'
+import { Sticky, ButtonTab, ButtonTabItem, Checker, CheckerItem, Group, PopupPicker, XAddress, ChinaAddressV4Data, Value2nameFilter } from 'vux'
 import { saveOrUpdateApi, plateApi, detailApi } from '@/api/source'
 import { deepClone } from '@/utils'
 
@@ -88,7 +88,6 @@ export default {
     Sticky,
     ButtonTab,
     ButtonTabItem,
-    Toast,
     Checker,
     Group,
     PopupPicker,
@@ -121,16 +120,14 @@ export default {
         if (resData && typeof resData === 'object') {
           this.userForm = Object.assign(this.userForm, resData)
           let length = this.userForm.guestSourceAreas.length
-          if (length !== 3) { // 保证数组长度 方便遍历
+          if (length !== 3) { // 保证需求区域遍历的时候一直会有三个
             for (let i = 0; i < 3 - length; i++) {
               this.userForm.guestSourceAreas.push('')
             }
           }
           this.sourceValue = [String(resData.source), String(resData.sourceType)]
         }
-      }).catch(res => {
-        this.$vux.toast.text(res.message)
-      })
+      }).catch(res => {})
     }
   },
   filters: {
@@ -394,16 +391,13 @@ export default {
         }
       })
       paramData.guestSourceAreas = arr
-      console.log(JSON.stringify(paramData))
       saveOrUpdateApi(paramData).then(res => {
         if (this.guestSourceId !== 0) {
           this.$router.push({name: 'sourceDetail', params: {guestSourceId: this.guestSourceId}})
         } else {
           this.$router.push({name: 'sourceList', params: {sessionId: this.sessionId}})
         }
-      }).catch(res => {
-        this.$vux.toast.text(res.message)
-      })
+      }).catch(res => {})
     },
     getName(val) {
       return Value2nameFilter(val, ChinaAddressV4Data)

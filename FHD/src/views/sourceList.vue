@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-28 11:07:24
+ * @Last Modified time: 2018-05-03 16:47:22
  */
 <template>
   <div>
@@ -148,7 +148,6 @@ export default {
       })
     },
     clearSearch() {
-      console.log(111)
       this.keyWord = ''
       this.searchParam()
     },

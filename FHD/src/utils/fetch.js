@@ -2,10 +2,11 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-27 16:53:15
+ * @Last Modified time: 2018-05-03 16:53:50
  */
 
 import axios from 'axios'
+import Vue from 'vue'
 
 // 创建axios实例
 const service = axios.create({
@@ -55,6 +56,7 @@ service.interceptors.response.use(
           return response.data
         }
       }
+      Vue.$vux.toast.text(res.message)
       return Promise.reject(res)
     } else {
       return response.data
