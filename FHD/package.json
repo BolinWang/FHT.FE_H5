@@ -1,9 +1,9 @@
 {
-  "name": "FT_mobile-seed",
+  "name": "fhd",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "FHT mobile frame template",
-  "author": "王玲波 <454949876@qq.com>",
+  "description": "FHD frame template",
+  "author": "chenxing",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
