@@ -10,7 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-const env = require('../config/prod.env')
+const env = require('../config/' + process.env.env_config + '.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {

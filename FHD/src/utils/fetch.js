@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-03 16:53:50
+ * @Last Modified time: 2018-05-07 10:41:36
  */
 
 import axios from 'axios'
@@ -22,13 +22,9 @@ service.interceptors.request.use(config => {
     sign: '8F4C4A8E9D850EDD9692DE38723D0543'
   }
   if (config.method.toUpperCase() === 'POST') {
-    if (!config.isSearch) {
+    if (!config.isSearch) { // 搜索不需要封装
       const sessionId = localStorage.getItem('sessionId')
-      if (config.isHms) {
-        config.data.params.sessionId = sessionId
-      } else {
-        defaultConfig.sessionId = sessionId
-      }
+      defaultConfig.sessionId = sessionId
       if (!config.noAssign) {
         config.data = Object.assign(config.data, defaultConfig)
       }

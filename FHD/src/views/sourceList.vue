@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-03 16:47:22
+ * @Last Modified time: 2018-05-07 10:42:38
  */
 <template>
   <div>
@@ -166,7 +166,10 @@ export default {
       JSRunAs.runAsAction(item.relateMobile)
     },
     getUserName() {
-      getUserNameApi({}).then(res => {
+      const param = {
+        sessionId: this.sessionId
+      }
+      getUserNameApi(param).then(res => {
         if (res.data) {
           this.userName = res.data.name || ''
         }

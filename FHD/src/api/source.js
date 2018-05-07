@@ -1,9 +1,8 @@
 import fetch from '@/utils/fetch'
 // 部分接口是之前hms下面不是BOP
-const hmsUrl = 'https://api.mdguanjia.com/hms/api/hmsuser'
+const hmsUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'api') + '.mdguanjia.com/hms/api/hmsuser'
 // 搜索引擎的url
-const searchUrl = 'https://www.mdguanjia.com/search/room/search'
-
+const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search/room/search'
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
@@ -55,7 +54,6 @@ export function getUserNameApi(params = {}) {
   return fetch({
     url: hmsUrl,
     method: 'post',
-    isHms: true,
     data: {
       method: 'queryUserInfo',
       params
