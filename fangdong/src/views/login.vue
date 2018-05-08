@@ -156,7 +156,7 @@ export default {
         mobile: this.mobile,
         validateCode: this.validateCode
       }).then((response) => {
-        this.$router.push({ name: 'landlord' })
+        this.$router.push({ path: '/landlord' })
       }).catch(() => {
         console.log(1)
       })
