@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-07 10:41:36
+ * @Last Modified time: 2018-05-09 14:05:50
  */
 
 import axios from 'axios'
@@ -21,6 +21,7 @@ service.interceptors.request.use(config => {
     timestamp: new Date().getTime(),
     sign: '8F4C4A8E9D850EDD9692DE38723D0543'
   }
+  console.log(1)
   if (config.method.toUpperCase() === 'POST') {
     if (!config.isSearch) { // 搜索不需要封装
       const sessionId = localStorage.getItem('sessionId')
