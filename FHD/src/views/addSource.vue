@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-03 17:08:15
+ * @Last Modified time: 2018-05-09 17:38:57
  */
 <template>
   <div>
@@ -60,6 +60,37 @@
         :data="list3" 
         @on-change="changeSource"
         @on-hide="sourceShow = false"></popup-picker>
+    </div>
+    <div class="line" @click="priceShow = true">
+      <div class="labelText">价格</div>
+      <div class="textArea" :class="{black: priceValue.length > 0}">{{priceValue | priceFilter}}</div>
+      <div class="positionRight">
+        <i class="iconfont icon-youjiantou"></i>
+      </div>
+      <popup-picker style="display:none"
+        :show="priceShow"
+        :data="priceList"
+        v-model="priceValue"
+        @on-change="changePrice"
+        @on-hide="priceShow = false"></popup-picker>
+    </div>
+    <div class="line">
+      <div class="labelText">类型</div>
+      <div class="status">
+        <checker v-model="userForm.type" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+          <checker-item :value="1">整租</checker-item>
+          <checker-item :value="2">合租</checker-item>
+        </checker>
+      </div>
+    </div>
+    <div class="line" v-show="userForm.type === 2">
+      <div class="labelText">要求(多选)</div>
+      <div class="status">
+        <checker v-model="userForm.requirement" type="checkbox" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+          <checker-item :value="1">独厨</checker-item>
+          <checker-item :value="2">独卫</checker-item>
+        </checker>
+      </div>
     </div>
     <div class="line">
       <div class="labelText">意向度</div>
@@ -126,6 +157,19 @@ export default {
             }
           }
           this.sourceValue = [String(resData.source), String(resData.sourceType)]
+          let priceArr = []
+          if (resData.priceMin) {
+            priceArr.push(resData.priceMin)
+          }
+          if (resData.priceMax) {
+            priceArr.push(resData.priceMax)
+          }
+          this.priceValue = [priceArr.join(',')]
+          this.userForm.requirement = resData.requirement.split(',')
+          this.userForm.requirement = this.userForm.requirement.map(v => {
+            return parseInt(v)
+          })
+          console.log(this.userForm.requirement)
         }
       }).catch(res => {})
     }
@@ -153,6 +197,24 @@ export default {
         str = '请选择来源渠道'
       } else {
         str = (val[0] === '1' ? '网络 - ' : '线下 - ') + sourceArr[val[0]][val[1]]
+      }
+      return str
+    },
+    priceFilter(val) {
+      let str = ''
+      if (val.length === 0) {
+        str = '请选择价格区间'
+      } else {
+        let price = val[0].split(',')
+        if (price.length > 1) {
+          str = `${price[0]}元-${price[1]}元`
+        } else if(price[0] === '5000') {
+          str = price[0] + '元以上'
+        } else if(price[0] === '1500') {
+          str = price[0] + '元以下'
+        } else {
+          str = '不限'
+        }
       }
       return str
     },
@@ -185,13 +247,18 @@ export default {
         intentionality: 2,
         source: '',
         sourceType: '',
-        guestSourceAreas: ['', '', '']
+        guestSourceAreas: ['', '', ''],
+        priceMin: '',
+        priceMax: '',
+        type: 1,
+        requirement: [1,2]
       },
       addressValue: [],
       fixedFlag: true,
       title: '新增',
       guestSourceId: 0,
       sourceValue: [],
+      priceValue: [],
       plateList: [],
       plateValue: [],
       cityName: [],
@@ -200,6 +267,7 @@ export default {
       addressData: ChinaAddressV4Data,
       sourceStr: '请选择来源渠道',
       sourceShow: false,
+      priceShow: false,
       plateShow: false,
       showPopup: true,
       showAddress: false,
@@ -279,7 +347,29 @@ export default {
           value: '4',
           parent: '2'
         }
-      ]
+      ],
+      priceList: [[{
+        value: '0',
+        name: '不限'
+      },{
+        value: '1500',
+        name: '1500元以下'
+      },{
+        value: '1500,2000',
+        name: '1500-2000元'
+      },{
+        value: '2000,3000',
+        name: '2000-3000元'
+      },{
+        value: '3000,4000',
+        name: '3000-4000元'
+      },{
+        value: '4000,5000',
+        name: '4000-5000元'
+      },{
+        value: '5000',
+        name: '5000元以上'
+      }]]
     }
   },
   methods: {
@@ -320,6 +410,17 @@ export default {
     changeSource(val) {
       this.userForm.source = val[0]
       this.userForm.sourceType = val[1]
+    },
+    changePrice(val){
+      let price = val[0].split(',')
+      if (price.length > 1) {
+        this.userForm.priceMin = price[0]
+        this.userForm.priceMax = price[1]
+      } else if (price[0] === '0'){
+        
+      } else {
+        price[0] === '5000' ? this.userForm.priceMax = price[0] :  this.userForm.priceMin = price[0]
+      }
     },
     addAddress(flag) { // flag为ture时有板块 false没有
       let cityInfo = {
@@ -377,8 +478,13 @@ export default {
       if (this.guestSourceId !== 0) {
         paramData.guestSourceId = this.guestSourceId
       }
+      
       // 为后台做数据处理
       paramData.source = parseInt(paramData.source)
+      paramData.priceMin = parseFloat(paramData.priceMin)
+      paramData.priceMax = parseFloat(paramData.priceMax)
+      // 合租时将要求转为字符串
+      paramData.requirement = paramData.type === 2 ?  paramData.requirement.join(',') : null
       paramData.sourceType = parseInt(paramData.sourceType)
       let arr = []
       paramData.guestSourceAreas.map(val => {
@@ -470,6 +576,15 @@ export default {
         border: none;
         outline: none;
       }
+    }
+    .price {
+      width: 200px;
+    }
+    .section {
+      display: inline-block;
+      .left;
+      text-align: center;
+      width: 60px;
     }
     .status {
       .left;

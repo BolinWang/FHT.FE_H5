@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-27 17:58:30
+ * @Last Modified time: 2018-05-09 17:30:47
  */
 <template>
   <div>
@@ -31,6 +31,18 @@
     <div class="line">
       <div class="labelText">来源：</div>
       <div class="inputs">{{userForm | listStatus}}</div>
+    </div>
+    <div class="line">
+      <div class="labelText">价格：</div>
+      <div class="inputs">{{userForm | priceStatus}}</div>
+    </div>
+    <div class="line">
+      <div class="labelText">类型：</div>
+      <div class="inputs">{{userForm.type | typeStatus}}</div>
+    </div>
+    <div class="line" v-if="userForm.type === 2">
+      <div class="labelText">要求：</div>
+      <div class="inputs">{{userForm.requirement | requireStatus}}</div>
     </div>
     <div class="line">
       <div class="labelText">意向度：</div>
@@ -90,6 +102,32 @@ export default {
     statusStr(val) {
       const status = ['低', '中', '高']
       return val ? status[val - 1] : '中'
+    },
+    priceStatus(val) {
+      let str = ''
+      if (val.priceMin && val.priceMax) {
+        str = `${val.priceMin}元 - ${val.priceMax}元`
+      } else if (val.priceMin) {
+        str = `${val.priceMin}元以下`
+      } else if (val.priceMax) {
+        str = `${val.priceMax}元以上`
+      }else {
+        str = '不限'
+      }
+      return str
+    },
+    typeStatus(val) {
+      const status = ['整租', '合租']
+      return val ? status[val - 1] : ''
+    },
+    requireStatus(val) {
+      const status = ['', '独厨', '独卫']
+      const valList = val ? val.split(',') : []
+      let arr = []
+      valList.map(v => {
+        arr.push(status[v])
+      })
+      return arr.join(',')
     },
     listStatus(val) {
       const online = ['', '闲鱼', '58个人', '58企业', '赶集', '安居客', '网络搜索', '社交媒体（论坛、豆瓣等）', '麦邻生活', '官方微信', '其他渠道']
