@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-09 17:30:47
+ * @Last Modified time: 2018-05-09 17:45:04
  */
 <template>
   <div>
@@ -118,7 +118,7 @@ export default {
     },
     typeStatus(val) {
       const status = ['整租', '合租']
-      return val ? status[val - 1] : ''
+      return val ? status[val - 1] : '整租'
     },
     requireStatus(val) {
       const status = ['', '独厨', '独卫']
