@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-09 17:38:57
+ * @Last Modified time: 2018-05-15 11:12:32
  */
 <template>
   <div>
@@ -412,6 +412,8 @@ export default {
       this.userForm.sourceType = val[1]
     },
     changePrice(val){
+      this.userForm.priceMin = ''
+      this.userForm.priceMax = ''
       let price = val[0].split(',')
       if (price.length > 1) {
         this.userForm.priceMin = price[0]
