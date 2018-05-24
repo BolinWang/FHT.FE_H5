@@ -1,0 +1,419 @@
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  margin: 0 auto;
+  background: #F2F2F2;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+.header {
+  background: #4680FF;
+  color: #fff;
+  position: relative;
+  padding: 10px 20px;
+  height: 110px;
+  box-sizing: border-box;
+  h2 {
+    font-size: 0.4rem;
+  }
+  h3 {
+    font-size: 0.3rem;
+  }
+  .head-rightBtn{
+    background: #fff;
+    color: #4680FF;
+    padding: 5px 15px;
+    position: absolute;
+    border:1px solid #fff;
+    border-radius: 5px;
+    top: 30px;
+    right: 10px;
+  }
+  i.iconfont {
+    position: absolute;
+  }
+  .headerTitle {
+    text-align: center;
+    font-size: 0.45rem;
+  }
+  .headRight {
+    position: absolute;
+    right: 20px;
+    top:0;
+    font-size: 0.45rem;
+  }
+}
+.headDiv {
+  padding: 0 20px;
+  line-height: 110px;
+}
+.fixedBottm {
+  position: fixed;
+  bottom:0;
+  width: 100%;
+  max-width: 10rem;
+}
+.btn {
+  width: 100%;
+  height: 100px;
+  background: #4680FF;
+  color: #fff;
+  text-align: center;
+  line-height: 100px;
+  display: inline-block;
+  border: none;
+  font-size: 0.5rem;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.black {
+  color: black !important;
+}
+.searchDiv {
+  line-height: 60px;
+}
+.icon-wushuju {
+  font-size: 200px;
+  color: #666;
+  position: absolute;
+  left: 250px;
+  top: 500px;
+}
+.icon-zuojiantou {
+  width: 70px;
+}
+
+
+*{
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video, button{
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  list-style: none;
+  font-weight: normal;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section{
+  display:block;
+}
+nav ul{
+  list-style:none;
+}
+blockquote, q{
+  quotes:none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after{
+  content:'';
+  content:none;
+}
+a{
+  margin:0;
+  padding:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+  text-decoration: none;
+}
+/* change colours to suit your needs */
+ins{
+  background-color:#ff9;
+  color:#000;
+  text-decoration:none;
+}
+/* change colours to suit your needs */
+mark{
+  background-color:#ff9;
+  color:#000;
+  font-style:italic;
+  font-weight:bold;
+}
+del{
+  text-decoration: line-through;
+}
+abbr[title], dfn[title]{
+  border-bottom:1px dotted;
+  cursor:help;
+}
+table{
+  border-collapse:collapse;
+  border-spacing:0;
+}
+input{
+  outline:none;
+}
+/* change border colour to suit your needs */
+hr{
+  display:block;
+  height:1px;
+  border:0;
+  border-top:1px solid #cccccc;
+  margin:1em 0;
+  padding:0;
+}
+input, select{
+  vertical-align:middle;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.userNav {
+  li {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 10px 30px;
+    box-sizing: border-box;
+    background-color: #fff;
+    display:flex;/*Flex布局*/
+    align-items:center;/*指定垂直居中*/
+    .icon-youjiantou {
+      position: absolute;
+      right: 10px;
+      color: #ccc;
+      top: 25px;
+    }
+    .userLeft {
+      width: 300px;
+      line-height: 40px;
+      padding: 10px 0;
+      font-size: 28px;
+      .left;
+      .name{
+        width: 140px;
+        .left;
+      }
+      
+      .gender{
+        width: 100px;
+        .left;
+      }
+      .mobile {
+        .left;
+        color:#666;
+      }
+      .card {
+        float: left;
+        color: #4680FF;
+      }
+      .width100 {
+        width: 100%;
+      }
+      
+    }
+    .userStatus {
+      .left;
+      width: 40px;
+      height: 40px;
+      background: #4680FF;
+      line-height: 44px;
+      text-align: center;
+      color:#fff;
+    }
+    .warn {
+      background: red
+    }
+    .success{
+      background: rgb(56, 224, 40);
+    }
+    .userRight {
+      width: 340px;
+      text-align: center;
+      line-height: 60px;
+      padding-right: 10px;
+      font-size: 28px;
+      .right;
+    }
+  }
+}
+.icon-xinjian1 {
+  font-size: 20px;
+}
+
+body {
+  .header {
+    width:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:100;
+  }
+  .height100 {
+    height: 100%;
+  }
+
+  .vux-tap-active:active {
+    background-color: #4680FF;
+  }
+
+  .smallSwitch {
+    padding: 10px;
+    .userTitle {
+      position: relative;
+      top:5px;
+    }
+    .small {
+      height: 16PX;
+      border-radius: 8PX;
+    }
+    .weui-switch:before, .weui-switch-cp__box:before {
+      width: 36PX;
+      .small
+    }
+    .weui-switch:after, .weui-switch-cp__box:after {
+      width: 16PX;
+     .small
+    }
+    .weui-switch {
+      width: 38PX;
+      height: 18PX;
+    }
+    
+  }
+  // 弹窗按钮颜色修改
+  .weui-dialog__btn_primary {
+    color: #4680FF;
+  }
+  .black {
+    .weui-cell__ft{
+      color: #000;
+    }
+  }
+  .rightWarn {
+    .weui-cell__ft {
+      position: relative;
+      .weui-icon {
+        position: absolute;
+        left: -36PX;
+        top:2PX;
+      }
+      .weui-icon-clear {
+        top: 5PX;
+      }
+    }
+  }
+  .weui-search-bar {
+    padding: 9PX 10PX;
+    .weui-search-bar__form {
+      background-color: #4680FF;
+    }
+    &:before {
+      border-top: 1PX solid #4680FF;
+    }
+  }
+  .vux-search-fixed {
+    z-index: 999;
+  }
+  .noTop {
+    .weui-cells, .vux-no-group-title {
+      margin-top: 0;
+    }
+  }
+  .bottomDiv {
+    position: relative;
+    top: -42PX;
+  }
+  .weui-btn:after {
+    border: none;
+  }
+  .weui-cell {
+    padding: 8PX 12PX;
+  }
+  .weui-cell:before { //cell左边边距
+    left: 0;
+  }
+  .vux-cell-box:not(:first-child):before{
+    left: 0;
+  }
+  .blue {
+    color: #4680FF;
+  }
+  .rightIcon {
+    position: relative;
+    &:after{
+      font-family: 'iconfont';
+      content: '\e678';
+      position: absolute;
+      right: 10px;
+      color: #999;
+      top: 0;
+    }
+  }
+}
+

@@ -1,0 +1,2921 @@
+module.exports = [{
+	"cityId": 610900,
+	"cityName": "安康市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ANKANGSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "AKS"
+}, {
+	"cityId": 152900,
+	"cityName": "阿拉善盟",
+	"cityFirstLetter": "A",
+	"cityLetter": "ALASHANMENG",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "ALSM"
+}, {
+	"cityId": 652900,
+	"cityName": "阿克苏地区",
+	"cityFirstLetter": "A",
+	"cityLetter": "AKESUDIQU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "AKSDQ"
+}, {
+	"cityId": 340800,
+	"cityName": "安庆市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ANQINGSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "AQS"
+}, {
+	"cityId": 410500,
+	"cityName": "安阳市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ANYANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "AYS"
+}, {
+	"cityId": 654300,
+	"cityName": "阿勒泰地区",
+	"cityFirstLetter": "A",
+	"cityLetter": "ALETAIDIQU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "ALTDQ"
+}, {
+	"cityId": 542500,
+	"cityName": "阿里地区",
+	"cityFirstLetter": "A",
+	"cityLetter": "ALIDIQU",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "ALDQ"
+}, {
+	"cityId": 210300,
+	"cityName": "鞍山市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ANSHANSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "ASS"
+}, {
+	"cityId": 520400,
+	"cityName": "安顺市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ANSHUNSHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "ASS"
+}, {
+	"cityId": 513200,
+	"cityName": "阿坝藏族羌族自治州",
+	"cityFirstLetter": "A",
+	"cityLetter": "ABACANGZUQIANGZUZIZHIZHOU",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "ABCZQZZZZ"
+}, {
+	"cityId": 659002,
+	"cityName": "阿拉尔市",
+	"cityFirstLetter": "A",
+	"cityLetter": "ALAERSHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "ALES"
+}, {
+	"cityId": 620400,
+	"cityName": "白银市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAIYINSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "BYS"
+}, {
+	"cityId": 652800,
+	"cityName": "巴音郭楞蒙古自治州",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAYINGUOLENGMENGGUZIZHIZHOU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "BYGLMGZZZ"
+}, {
+	"cityId": 652700,
+	"cityName": "博尔塔拉蒙古自治州",
+	"cityFirstLetter": "B",
+	"cityLetter": "BOERTALAMENGGUZIZHIZHOU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "BETLMGZZZ"
+}, {
+	"cityId": 610300,
+	"cityName": "宝鸡市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAOJISHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "BJS"
+}, {
+	"cityId": 220800,
+	"cityName": "白城市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAICHENGSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "BCS"
+}, {
+	"cityId": 130600,
+	"cityName": "保定市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAODINGSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "BDS"
+}, {
+	"cityId": 220600,
+	"cityName": "白山市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAISHANSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "BSS"
+}, {
+	"cityId": 450500,
+	"cityName": "北海市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BEIHAISHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "BHS"
+}, {
+	"cityId": 451000,
+	"cityName": "百色市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAISESHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "BSS"
+}, {
+	"cityId": 210500,
+	"cityName": "本溪市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BENXISHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "BXS"
+}, {
+	"cityId": 469025,
+	"cityName": "白沙黎族自治县",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAISHALIZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "BSLZZZX"
+}, {
+	"cityId": 340300,
+	"cityName": "蚌埠市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BANGBUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "BBS"
+}, {
+	"cityId": 530500,
+	"cityName": "保山市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAOSHANSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "BSS"
+}, {
+	"cityId": 520500,
+	"cityName": "毕节市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BIJIESHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "BJS"
+}, {
+	"cityId": 110100,
+	"cityName": "北京市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BEIJINGSHI",
+	"provinceCode": 110000,
+	"provinceName": "北京市",
+	"initial": "BJS"
+}, {
+	"cityId": 150200,
+	"cityName": "包头市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAOTOUSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "BTS"
+}, {
+	"cityId": 341600,
+	"cityName": "亳州市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BOZHOUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "BZS"
+}, {
+	"cityId": 371600,
+	"cityName": "滨州市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BINZHOUSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "BZS"
+}, {
+	"cityId": 511900,
+	"cityName": "巴中市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAZHONGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "BZS"
+}, {
+	"cityId": 469029,
+	"cityName": "保亭黎族苗族自治县",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAOTINGLIZUMIAOZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "BTLZMZZZX"
+}, {
+	"cityId": 150800,
+	"cityName": "巴彦淖尔市",
+	"cityFirstLetter": "B",
+	"cityLetter": "BAYANNEERSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "BYNES"
+}, {
+	"cityId": 431000,
+	"cityName": "郴州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHENZHOUSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "CZS"
+}, {
+	"cityId": 445100,
+	"cityName": "潮州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHAOZHOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "CZS"
+}, {
+	"cityId": 469026,
+	"cityName": "昌江黎族自治县",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGJIANGLIZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "CJLZZZX"
+}, {
+	"cityId": 532300,
+	"cityName": "楚雄彝族自治州",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHUXIONGYIZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "CXYZZZZ"
+}, {
+	"cityId": 469023,
+	"cityName": "澄迈县",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHENGMAIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "CMX"
+}, {
+	"cityId": 451400,
+	"cityName": "崇左市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHONGZUOSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "CZS"
+}, {
+	"cityId": 211300,
+	"cityName": "朝阳市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHAOYANGSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "CYS"
+}, {
+	"cityId": 540300,
+	"cityName": "昌都市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGDUSHI",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "CDS"
+}, {
+	"cityId": 220100,
+	"cityName": "长春市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGCHUNSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "CCS"
+}, {
+	"cityId": 510100,
+	"cityName": "成都市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHENGDUSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "CDS"
+}, {
+	"cityId": 150400,
+	"cityName": "赤峰市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHIFENGSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "CFS"
+}, {
+	"cityId": 430700,
+	"cityName": "常德市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGDESHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "CDS"
+}, {
+	"cityId": 140400,
+	"cityName": "长治市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGZHISHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "CZS"
+}, {
+	"cityId": 430100,
+	"cityName": "长沙市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGSHASHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "CSS"
+}, {
+	"cityId": 341700,
+	"cityName": "池州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHIZHOUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "CZS"
+}, {
+	"cityId": 130900,
+	"cityName": "沧州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CANGZHOUSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "CZS"
+}, {
+	"cityId": 341100,
+	"cityName": "滁州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHUZHOUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "CZS"
+}, {
+	"cityId": 130800,
+	"cityName": "承德市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHENGDESHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "CDS"
+}, {
+	"cityId": 652300,
+	"cityName": "昌吉回族自治州",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGJIHUIZUZIZHIZHOU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "CJHZZZZ"
+}, {
+	"cityId": 320400,
+	"cityName": "常州市",
+	"cityFirstLetter": "C",
+	"cityLetter": "CHANGZHOUSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "CZS"
+}, {
+	"cityId": 441900,
+	"cityName": "东莞市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DONGGUANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "DGS"
+}, {
+	"cityId": 511700,
+	"cityName": "达州市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DAZHOUSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "DZS"
+}, {
+	"cityId": 469021,
+	"cityName": "定安县",
+	"cityFirstLetter": "D",
+	"cityLetter": "DINGANXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "DAX"
+}, {
+	"cityId": 469007,
+	"cityName": "东方市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DONGFANGSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "DFS"
+}, {
+	"cityId": 460400,
+	"cityName": "儋州市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DANZHOUSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "DZS"
+}, {
+	"cityId": 140200,
+	"cityName": "大同市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DATONGSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "DTS"
+}, {
+	"cityId": 139001,
+	"cityName": "定州市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DINGZHOUSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "DZS"
+}, {
+	"cityId": 621100,
+	"cityName": "定西市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DINGXISHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "DXS"
+}, {
+	"cityId": 371400,
+	"cityName": "德州市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DEZHOUSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "DZS"
+}, {
+	"cityId": 370500,
+	"cityName": "东营市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DONGYINGSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "DYS"
+}, {
+	"cityId": 210200,
+	"cityName": "大连市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DALIANSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "DLS"
+}, {
+	"cityId": 230600,
+	"cityName": "大庆市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DAQINGSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "DQS"
+}, {
+	"cityId": 533400,
+	"cityName": "迪庆藏族自治州",
+	"cityFirstLetter": "D",
+	"cityLetter": "DIQINGCANGZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "DQCZZZZ"
+}, {
+	"cityId": 510600,
+	"cityName": "德阳市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DEYANGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "DYS"
+}, {
+	"cityId": 532900,
+	"cityName": "大理白族自治州",
+	"cityFirstLetter": "D",
+	"cityLetter": "DALIBAIZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "DLBZZZZ"
+}, {
+	"cityId": 533100,
+	"cityName": "德宏傣族景颇族自治州",
+	"cityFirstLetter": "D",
+	"cityLetter": "DEHONGDAIZUJINGPOZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "DHDZJPZZZZ"
+}, {
+	"cityId": 210600,
+	"cityName": "丹东市",
+	"cityFirstLetter": "D",
+	"cityLetter": "DANDONGSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "DDS"
+}, {
+	"cityId": 232700,
+	"cityName": "大兴安岭地区",
+	"cityFirstLetter": "D",
+	"cityLetter": "DAXINGANLINGDIQU",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "DXALDQ"
+}, {
+	"cityId": 422800,
+	"cityName": "恩施土家族苗族自治州",
+	"cityFirstLetter": "E",
+	"cityLetter": "ENSHITUJIAZUMIAOZUZIZHIZHOU",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "ESTJZMZZZZ"
+}, {
+	"cityId": 150600,
+	"cityName": "鄂尔多斯市",
+	"cityFirstLetter": "E",
+	"cityLetter": "EERDUOSISHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "EEDSS"
+}, {
+	"cityId": 420700,
+	"cityName": "鄂州市",
+	"cityFirstLetter": "E",
+	"cityLetter": "EZHOUSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "EZS"
+}, {
+	"cityId": 341200,
+	"cityName": "阜阳市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUYANGSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "FYS"
+}, {
+	"cityId": 210400,
+	"cityName": "抚顺市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUSHUNSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "FSS"
+}, {
+	"cityId": 210900,
+	"cityName": "阜新市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUXINSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "FXS"
+}, {
+	"cityId": 450600,
+	"cityName": "防城港市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FANGCHENGGANGSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "FCGS"
+}, {
+	"cityId": 350100,
+	"cityName": "福州市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUZHOUSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "FZS"
+}, {
+	"cityId": 361000,
+	"cityName": "抚州市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUZHOUSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "FZS"
+}, {
+	"cityId": 440600,
+	"cityName": "佛山市",
+	"cityFirstLetter": "F",
+	"cityLetter": "FUSHANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "FSS"
+}, {
+	"cityId": 450800,
+	"cityName": "贵港市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUIGANGSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "GGS"
+}, {
+	"cityId": 632600,
+	"cityName": "果洛藏族自治州",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUOLUOCANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "GLCZZZZ"
+}, {
+	"cityId": 510800,
+	"cityName": "广元市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUANGYUANSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "GYS"
+}, {
+	"cityId": 511600,
+	"cityName": "广安市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUANGANSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "GAS"
+}, {
+	"cityId": 450300,
+	"cityName": "桂林市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUILINSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "GLS"
+}, {
+	"cityId": 520100,
+	"cityName": "贵阳市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUIYANGSHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "GYS"
+}, {
+	"cityId": 360700,
+	"cityName": "赣州市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GANZHOUSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "GZS"
+}, {
+	"cityId": 623000,
+	"cityName": "甘南藏族自治州",
+	"cityFirstLetter": "G",
+	"cityLetter": "GANNANCANGZUZIZHIZHOU",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "GNCZZZZ"
+}, {
+	"cityId": 640400,
+	"cityName": "固原市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUYUANSHI",
+	"provinceCode": 640000,
+	"provinceName": "宁夏回族自治区",
+	"initial": "GYS"
+}, {
+	"cityId": 513300,
+	"cityName": "甘孜藏族自治州",
+	"cityFirstLetter": "G",
+	"cityLetter": "GANZICANGZUZIZHIZHOU",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "GZCZZZZ"
+}, {
+	"cityId": 440100,
+	"cityName": "广州市",
+	"cityFirstLetter": "G",
+	"cityLetter": "GUANGZHOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "GZS"
+}, {
+	"cityId": 410600,
+	"cityName": "鹤壁市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEBISHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "HBS"
+}, {
+	"cityId": 340400,
+	"cityName": "淮南市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUAINANSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "HNS"
+}, {
+	"cityId": 320800,
+	"cityName": "淮安市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUAIANSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "HAS"
+}, {
+	"cityId": 340600,
+	"cityName": "淮北市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUAIBEISHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "HBS"
+}, {
+	"cityId": 330100,
+	"cityName": "杭州市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HANGZHOUSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "HZS"
+}, {
+	"cityId": 341000,
+	"cityName": "黄山市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUANGSHANSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "HSS"
+}, {
+	"cityId": 460100,
+	"cityName": "海口市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAIKOUSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "HKS"
+}, {
+	"cityId": 211400,
+	"cityName": "葫芦岛市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HULUDAOSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "HLDS"
+}, {
+	"cityId": 632800,
+	"cityName": "海西蒙古族藏族自治州",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAIXIMENGGUZUCANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "HXMGZCZZZZ"
+}, {
+	"cityId": 231100,
+	"cityName": "黑河市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEIHESHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "HHS"
+}, {
+	"cityId": 130400,
+	"cityName": "邯郸市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HANDANSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "HDS"
+}, {
+	"cityId": 632500,
+	"cityName": "海南藏族自治州",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAINANCANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "HNCZZZZ"
+}, {
+	"cityId": 330500,
+	"cityName": "湖州市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUZHOUSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "HZS"
+}, {
+	"cityId": 451200,
+	"cityName": "河池市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HECHISHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "HCS"
+}, {
+	"cityId": 632300,
+	"cityName": "黄南藏族自治州",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUANGNANCANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "HNCZZZZ"
+}, {
+	"cityId": 150100,
+	"cityName": "呼和浩特市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUHEHAOTESHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "HHHTS"
+}, {
+	"cityId": 441600,
+	"cityName": "河源市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEYUANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "HYS"
+}, {
+	"cityId": 441300,
+	"cityName": "惠州市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUIZHOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "HZS"
+}, {
+	"cityId": 632200,
+	"cityName": "海北藏族自治州",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAIBEICANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "HBCZZZZ"
+}, {
+	"cityId": 630200,
+	"cityName": "海东市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAIDONGSHI",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "HDS"
+}, {
+	"cityId": 650500,
+	"cityName": "哈密市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAMISHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "HMS"
+}, {
+	"cityId": 451100,
+	"cityName": "贺州市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEZHOUSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "HZS"
+}, {
+	"cityId": 150700,
+	"cityName": "呼伦贝尔市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HULUNBEIERSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "HLBES"
+}, {
+	"cityId": 340100,
+	"cityName": "合肥市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEFEISHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "HFS"
+}, {
+	"cityId": 653200,
+	"cityName": "和田地区",
+	"cityFirstLetter": "H",
+	"cityLetter": "HETIANDIQU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "HTDQ"
+}, {
+	"cityId": 431200,
+	"cityName": "怀化市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUAIHUASHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "HHS"
+}, {
+	"cityId": 230400,
+	"cityName": "鹤岗市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEGANGSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "HGS"
+}, {
+	"cityId": 430400,
+	"cityName": "衡阳市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HENGYANGSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "HYS"
+}, {
+	"cityId": 532500,
+	"cityName": "红河哈尼族彝族自治州",
+	"cityFirstLetter": "H",
+	"cityLetter": "HONGHEHANIZUYIZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "HHHNZYZZZZ"
+}, {
+	"cityId": 421100,
+	"cityName": "黄冈市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUANGGANGSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "HGS"
+}, {
+	"cityId": 420200,
+	"cityName": "黄石市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HUANGSHISHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "HSS"
+}, {
+	"cityId": 371700,
+	"cityName": "菏泽市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HEZESHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "HZS"
+}, {
+	"cityId": 131100,
+	"cityName": "衡水市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HENGSHUISHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "HSS"
+}, {
+	"cityId": 610700,
+	"cityName": "汉中市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HANZHONGSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "HZS"
+}, {
+	"cityId": 230100,
+	"cityName": "哈尔滨市",
+	"cityFirstLetter": "H",
+	"cityLetter": "HAERBINSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "HEBS"
+}, {
+	"cityId": 620200,
+	"cityName": "嘉峪关市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIAYUGUANSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "JYGS"
+}, {
+	"cityId": 440700,
+	"cityName": "江门市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIANGMENSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "JMS"
+}, {
+	"cityId": 360400,
+	"cityName": "九江市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIUJIANGSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "JJS"
+}, {
+	"cityId": 210700,
+	"cityName": "锦州市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINZHOUSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "JZS"
+}, {
+	"cityId": 330700,
+	"cityName": "金华市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINHUASHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "JHS"
+}, {
+	"cityId": 370800,
+	"cityName": "济宁市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JININGSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "JNS"
+}, {
+	"cityId": 620900,
+	"cityName": "酒泉市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIUQUANSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "JQS"
+}, {
+	"cityId": 140700,
+	"cityName": "晋中市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINZHONGSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "JZS"
+}, {
+	"cityId": 445200,
+	"cityName": "揭阳市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIEYANGSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "JYS"
+}, {
+	"cityId": 421000,
+	"cityName": "荆州市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINGZHOUSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "JZS"
+}, {
+	"cityId": 420800,
+	"cityName": "荆门市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINGMENSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "JMS"
+}, {
+	"cityId": 230300,
+	"cityName": "鸡西市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIXISHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "JXS"
+}, {
+	"cityId": 140500,
+	"cityName": "晋城市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINCHENGSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "JCS"
+}, {
+	"cityId": 360800,
+	"cityName": "吉安市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIANSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "JAS"
+}, {
+	"cityId": 230800,
+	"cityName": "佳木斯市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIAMUSISHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "JMSS"
+}, {
+	"cityId": 220200,
+	"cityName": "吉林市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JILINSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "JLS"
+}, {
+	"cityId": 419001,
+	"cityName": "济源市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIYUANSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "JYS"
+}, {
+	"cityId": 370100,
+	"cityName": "济南市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINANSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "JNS"
+}, {
+	"cityId": 410800,
+	"cityName": "焦作市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIAOZUOSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "JZS"
+}, {
+	"cityId": 330400,
+	"cityName": "嘉兴市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JIAXINGSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "JXS"
+}, {
+	"cityId": 360200,
+	"cityName": "景德镇市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINGDEZHENSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "JDZS"
+}, {
+	"cityId": 620300,
+	"cityName": "金昌市",
+	"cityFirstLetter": "J",
+	"cityLetter": "JINCHANGSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "JCS"
+}, {
+	"cityId": 650200,
+	"cityName": "克拉玛依市",
+	"cityFirstLetter": "K",
+	"cityLetter": "KELAMAYISHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "KLMYS"
+}, {
+	"cityId": 410200,
+	"cityName": "开封市",
+	"cityFirstLetter": "K",
+	"cityLetter": "KAIFENGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "KFS"
+}, {
+	"cityId": 530100,
+	"cityName": "昆明市",
+	"cityFirstLetter": "K",
+	"cityLetter": "KUNMINGSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "KMS"
+}, {
+	"cityId": 653100,
+	"cityName": "喀什地区",
+	"cityFirstLetter": "K",
+	"cityLetter": "KASHIDIQU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "KSDQ"
+}, {
+	"cityId": 653000,
+	"cityName": "克孜勒苏柯尔克孜自治州",
+	"cityFirstLetter": "K",
+	"cityLetter": "KEZILESUKEERKEZIZIZHIZHOU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "KZLSKEKZZZZ"
+}, {
+	"cityId": 431300,
+	"cityName": "娄底市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LOUDISHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "LDS"
+}, {
+	"cityId": 411100,
+	"cityName": "漯河市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LEIHESHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "LHS"
+}, {
+	"cityId": 331100,
+	"cityName": "丽水市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LISHUISHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "LSS"
+}, {
+	"cityId": 510500,
+	"cityName": "泸州市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LUZHOUSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "LZS"
+}, {
+	"cityId": 540400,
+	"cityName": "林芝市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINZHISHI",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "LZS"
+}, {
+	"cityId": 371500,
+	"cityName": "聊城市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIAOCHENGSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "LCS"
+}, {
+	"cityId": 371300,
+	"cityName": "临沂市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINYISHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "LYS"
+}, {
+	"cityId": 211000,
+	"cityName": "辽阳市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIAOYANGSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "LYS"
+}, {
+	"cityId": 371200,
+	"cityName": "莱芜市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LAIWUSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "LWS"
+}, {
+	"cityId": 341500,
+	"cityName": "六安市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIUANSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "LAS"
+}, {
+	"cityId": 540100,
+	"cityName": "拉萨市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LASASHI",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "LSS"
+}, {
+	"cityId": 513400,
+	"cityName": "凉山彝族自治州",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIANGSHANYIZUZIZHIZHOU",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "LSYZZZZ"
+}, {
+	"cityId": 469028,
+	"cityName": "陵水黎族自治县",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINGSHUILIZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "LSLZZZX"
+}, {
+	"cityId": 469027,
+	"cityName": "乐东黎族自治县",
+	"cityFirstLetter": "L",
+	"cityLetter": "LEDONGLIZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "LDLZZZX"
+}, {
+	"cityId": 530900,
+	"cityName": "临沧市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINCANGSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "LCS"
+}, {
+	"cityId": 131000,
+	"cityName": "廊坊市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LANGFANGSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "LFS"
+}, {
+	"cityId": 530700,
+	"cityName": "丽江市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIJIANGSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "LJS"
+}, {
+	"cityId": 141000,
+	"cityName": "临汾市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINFENSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "LFS"
+}, {
+	"cityId": 320700,
+	"cityName": "连云港市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIANYUNGANGSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "LYGS"
+}, {
+	"cityId": 220400,
+	"cityName": "辽源市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIAOYUANSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "LYS"
+}, {
+	"cityId": 451300,
+	"cityName": "来宾市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LAIBINSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "LBS"
+}, {
+	"cityId": 621200,
+	"cityName": "陇南市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LONGNANSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "LNS"
+}, {
+	"cityId": 450200,
+	"cityName": "柳州市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIUZHOUSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "LZS"
+}, {
+	"cityId": 469024,
+	"cityName": "临高县",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINGAOXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "LGX"
+}, {
+	"cityId": 622900,
+	"cityName": "临夏回族自治州",
+	"cityFirstLetter": "L",
+	"cityLetter": "LINXIAHUIZUZIZHIZHOU",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "LXHZZZZ"
+}, {
+	"cityId": 620100,
+	"cityName": "兰州市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LANZHOUSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "LZS"
+}, {
+	"cityId": 520200,
+	"cityName": "六盘水市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LIUPANSHUISHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "LPSS"
+}, {
+	"cityId": 511100,
+	"cityName": "乐山市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LESHANSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "LSS"
+}, {
+	"cityId": 410300,
+	"cityName": "洛阳市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LUOYANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "LYS"
+}, {
+	"cityId": 141100,
+	"cityName": "吕梁市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LVLIANGSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "LLS"
+}, {
+	"cityId": 350800,
+	"cityName": "龙岩市",
+	"cityFirstLetter": "L",
+	"cityLetter": "LONGYANSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "LYS"
+}, {
+	"cityId": 441400,
+	"cityName": "梅州市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MEIZHOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "MZS"
+}, {
+	"cityId": 440900,
+	"cityName": "茂名市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MAOMINGSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "MMS"
+}, {
+	"cityId": 511400,
+	"cityName": "眉山市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MEISHANSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "MSS"
+}, {
+	"cityId": 510700,
+	"cityName": "绵阳市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MIANYANGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "MYS"
+}, {
+	"cityId": 340500,
+	"cityName": "马鞍山市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MAANSHANSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "MASS"
+}, {
+	"cityId": 231000,
+	"cityName": "牡丹江市",
+	"cityFirstLetter": "M",
+	"cityLetter": "MUDANJIANGSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "MDJS"
+}, {
+	"cityId": 450100,
+	"cityName": "南宁市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANNINGSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "NNS"
+}, {
+	"cityId": 320100,
+	"cityName": "南京市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANJINGSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "NJS"
+}, {
+	"cityId": 533300,
+	"cityName": "怒江傈僳族自治州",
+	"cityFirstLetter": "N",
+	"cityLetter": "NUJIANGLISUZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "NJLSZZZZ"
+}, {
+	"cityId": 360100,
+	"cityName": "南昌市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANCHANGSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "NCS"
+}, {
+	"cityId": 350900,
+	"cityName": "宁德市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NINGDESHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "NDS"
+}, {
+	"cityId": 511000,
+	"cityName": "内江市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NAJIANGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "NJS"
+}, {
+	"cityId": 350700,
+	"cityName": "南平市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANPINGSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "NPS"
+}, {
+	"cityId": 511300,
+	"cityName": "南充市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANCHONGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "NCS"
+}, {
+	"cityId": 542400,
+	"cityName": "那曲地区",
+	"cityFirstLetter": "N",
+	"cityLetter": "NAQUDIQU",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "NQDQ"
+}, {
+	"cityId": 411300,
+	"cityName": "南阳市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANYANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "NYS"
+}, {
+	"cityId": 330200,
+	"cityName": "宁波市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NINGBOSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "NBS"
+}, {
+	"cityId": 320600,
+	"cityName": "南通市",
+	"cityFirstLetter": "N",
+	"cityLetter": "NANTONGSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "NTS"
+}, {
+	"cityId": 410400,
+	"cityName": "平顶山市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PINGDINGSHANSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "PDSS"
+}, {
+	"cityId": 350300,
+	"cityName": "莆田市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PUTIANSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "PTS"
+}, {
+	"cityId": 360300,
+	"cityName": "萍乡市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PINGXIANGSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "PXS"
+}, {
+	"cityId": 410900,
+	"cityName": "濮阳市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PUYANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "PYS"
+}, {
+	"cityId": 530800,
+	"cityName": "普洱市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PUERSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "PES"
+}, {
+	"cityId": 620800,
+	"cityName": "平凉市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PINGLIANGSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "PLS"
+}, {
+	"cityId": 211100,
+	"cityName": "盘锦市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PANJINSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "PJS"
+}, {
+	"cityId": 510400,
+	"cityName": "攀枝花市",
+	"cityFirstLetter": "P",
+	"cityLetter": "PANZHIHUASHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "PZHS"
+}, {
+	"cityId": 330800,
+	"cityName": "衢州市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QUZHOUSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "QZS"
+}, {
+	"cityId": 130300,
+	"cityName": "秦皇岛市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QINHUANGDAOSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "QHDS"
+}, {
+	"cityId": 469002,
+	"cityName": "琼海市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIONGHAISHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "QHS"
+}, {
+	"cityId": 230900,
+	"cityName": "七台河市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QITAIHESHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "QTHS"
+}, {
+	"cityId": 350500,
+	"cityName": "泉州市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QUANZHOUSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "QZS"
+}, {
+	"cityId": 441800,
+	"cityName": "清远市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QINGYUANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "QYS"
+}, {
+	"cityId": 522300,
+	"cityName": "黔西南布依族苗族自治州",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIANXINANBUYIZUMIAOZUZIZHIZHOU",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "QXNBYZMZZZZ"
+}, {
+	"cityId": 370200,
+	"cityName": "青岛市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QINGDAOSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "QDS"
+}, {
+	"cityId": 450700,
+	"cityName": "钦州市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QINZHOUSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "QZS"
+}, {
+	"cityId": 522700,
+	"cityName": "黔南布依族苗族自治州",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIANNANBUYIZUMIAOZUZIZHIZHOU",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "QNBYZMZZZZ"
+}, {
+	"cityId": 530300,
+	"cityName": "曲靖市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QUJINGSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "QJS"
+}, {
+	"cityId": 621000,
+	"cityName": "庆阳市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QINGYANGSHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "QYS"
+}, {
+	"cityId": 429005,
+	"cityName": "潜江市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIANJIANGSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "QJS"
+}, {
+	"cityId": 469030,
+	"cityName": "琼中黎族苗族自治县",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIONGZHONGLIZUMIAOZUZIZHIXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "QZLZMZZZX"
+}, {
+	"cityId": 230200,
+	"cityName": "齐齐哈尔市",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIQIHAERSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "QQHES"
+}, {
+	"cityId": 522600,
+	"cityName": "黔东南苗族侗族自治州",
+	"cityFirstLetter": "Q",
+	"cityLetter": "QIANDONGNANMIAOZUDONGZUZIZHIZHOU",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "QDNMZDZZZZ"
+}, {
+	"cityId": 540200,
+	"cityName": "日喀则市",
+	"cityFirstLetter": "R",
+	"cityLetter": "RIKAZESHI",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "RKZS"
+}, {
+	"cityId": 371100,
+	"cityName": "日照市",
+	"cityFirstLetter": "R",
+	"cityLetter": "RIZHAOSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "RZS"
+}, {
+	"cityId": 341300,
+	"cityName": "宿州市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUZHOUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "SZS"
+}, {
+	"cityId": 440200,
+	"cityName": "韶关市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHAOGUANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "SGS"
+}, {
+	"cityId": 440300,
+	"cityName": "深圳市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHENCHOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "SCS"
+}, {
+	"cityId": 421300,
+	"cityName": "随州市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUIZHOUSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "SZS"
+}, {
+	"cityId": 440500,
+	"cityName": "汕头市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANTOUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "STS"
+}, {
+	"cityId": 140600,
+	"cityName": "朔州市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHUOZHOUSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "SZS"
+}, {
+	"cityId": 411400,
+	"cityName": "商丘市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANGQIUSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "SQS"
+}, {
+	"cityId": 231200,
+	"cityName": "绥化市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUIHUASHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "SHS"
+}, {
+	"cityId": 611000,
+	"cityName": "商洛市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANGLUOSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "SLS"
+}, {
+	"cityId": 460200,
+	"cityName": "三亚市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SANYASHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "SYS"
+}, {
+	"cityId": 460300,
+	"cityName": "三沙市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SANSHASHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "SSS"
+}, {
+	"cityId": 429021,
+	"cityName": "神农架林区",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHENNONGJIALINQU",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "SNJLQ"
+}, {
+	"cityId": 220700,
+	"cityName": "松原市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SONGYUANSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "SYS"
+}, {
+	"cityId": 321300,
+	"cityName": "宿迁市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUQIANSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "SQS"
+}, {
+	"cityId": 441500,
+	"cityName": "汕尾市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANWEISHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "SWS"
+}, {
+	"cityId": 230500,
+	"cityName": "双鸭山市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHUANGYASHANSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "SYSS"
+}, {
+	"cityId": 361100,
+	"cityName": "上饶市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANGRAOSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "SRS"
+}, {
+	"cityId": 430500,
+	"cityName": "邵阳市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHAOYANGSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "SYS"
+}, {
+	"cityId": 220300,
+	"cityName": "四平市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SIPINGSHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "SPS"
+}, {
+	"cityId": 640200,
+	"cityName": "石嘴山市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHIZUISHANSHI",
+	"provinceCode": 640000,
+	"provinceName": "宁夏回族自治区",
+	"initial": "SZSS"
+}, {
+	"cityId": 310100,
+	"cityName": "上海市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANGHAISHI",
+	"provinceCode": 310000,
+	"provinceName": "上海市",
+	"initial": "SHS"
+}, {
+	"cityId": 420300,
+	"cityName": "十堰市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHIYANSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "SYS"
+}, {
+	"cityId": 210100,
+	"cityName": "沈阳市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHENYANGSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "SYS"
+}, {
+	"cityId": 540500,
+	"cityName": "山南市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHANNANSHI",
+	"provinceCode": 540000,
+	"provinceName": "西藏自治区",
+	"initial": "SNS"
+}, {
+	"cityId": 330600,
+	"cityName": "绍兴市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHAOXINGSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "SXS"
+}, {
+	"cityId": 510900,
+	"cityName": "遂宁市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUININGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "SNS"
+}, {
+	"cityId": 320500,
+	"cityName": "苏州市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SUZHOUSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "SZS"
+}, {
+	"cityId": 130100,
+	"cityName": "石家庄市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHIJIAZHUANGSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "SJZS"
+}, {
+	"cityId": 350400,
+	"cityName": "三明市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SANMINGSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "SMS"
+}, {
+	"cityId": 659001,
+	"cityName": "石河子市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SHIHEZISHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "SHZS"
+}, {
+	"cityId": 411200,
+	"cityName": "三门峡市",
+	"cityFirstLetter": "S",
+	"cityLetter": "SANMENXIASHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "SMXS"
+}, {
+	"cityId": 520600,
+	"cityName": "铜仁市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TONGRENSHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "TRS"
+}, {
+	"cityId": 659006,
+	"cityName": "铁门关市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TIEMENGUANSHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "TMGS"
+}, {
+	"cityId": 469022,
+	"cityName": "屯昌县",
+	"cityFirstLetter": "T",
+	"cityLetter": "TUNCHANGXIAN",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "TCX"
+}, {
+	"cityId": 659003,
+	"cityName": "图木舒克市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TUMUSHUKESHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "TMSKS"
+}, {
+	"cityId": 140100,
+	"cityName": "太原市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TAIYUANSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "TYS"
+}, {
+	"cityId": 610200,
+	"cityName": "铜川市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TONGCHUANSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "TCS"
+}, {
+	"cityId": 620500,
+	"cityName": "天水市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TIANSHUISHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "TSS"
+}, {
+	"cityId": 120100,
+	"cityName": "天津市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TIANJINSHI",
+	"provinceCode": 120000,
+	"provinceName": "天津市",
+	"initial": "TJS"
+}, {
+	"cityId": 211200,
+	"cityName": "铁岭市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TIELINGSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "TLS"
+}, {
+	"cityId": 150500,
+	"cityName": "通辽市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TONGLIAOSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "TLS"
+}, {
+	"cityId": 130200,
+	"cityName": "唐山市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TANGSHANSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "TSS"
+}, {
+	"cityId": 429006,
+	"cityName": "天门市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TIANMENSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "TMS"
+}, {
+	"cityId": 654200,
+	"cityName": "塔城地区",
+	"cityFirstLetter": "T",
+	"cityLetter": "TACHENGDIQU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "TCDQ"
+}, {
+	"cityId": 370900,
+	"cityName": "泰安市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TAIANSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "TAS"
+}, {
+	"cityId": 321200,
+	"cityName": "泰州市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TAIZHOUSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "TZS"
+}, {
+	"cityId": 220500,
+	"cityName": "通化市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TONGHUASHI",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "THS"
+}, {
+	"cityId": 650400,
+	"cityName": "吐鲁番市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TULUFANSHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "TLFS"
+}, {
+	"cityId": 331000,
+	"cityName": "台州市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TAIZHOUSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "TZS"
+}, {
+	"cityId": 340700,
+	"cityName": "铜陵市",
+	"cityFirstLetter": "T",
+	"cityLetter": "TONGLINGSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "TLS"
+}, {
+	"cityId": 469001,
+	"cityName": "五指山市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUZHISHANSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "WZSS"
+}, {
+	"cityId": 650100,
+	"cityName": "乌鲁木齐市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WULUMUQISHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "WLMQS"
+}, {
+	"cityId": 640300,
+	"cityName": "吴忠市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUZHONGSHI",
+	"provinceCode": 640000,
+	"provinceName": "宁夏回族自治区",
+	"initial": "WZS"
+}, {
+	"cityId": 659004,
+	"cityName": "五家渠市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUJIAQUSHI",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "WJQS"
+}, {
+	"cityId": 330300,
+	"cityName": "温州市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WENZHOUSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "WZS"
+}, {
+	"cityId": 370700,
+	"cityName": "潍坊市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WEIFANGSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "WFS"
+}, {
+	"cityId": 532600,
+	"cityName": "文山壮族苗族自治州",
+	"cityFirstLetter": "W",
+	"cityLetter": "WENSHANZHUANGZUMIAOZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "WSZZMZZZZ"
+}, {
+	"cityId": 450400,
+	"cityName": "梧州市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUZHOUSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "WZS"
+}, {
+	"cityId": 150300,
+	"cityName": "乌海市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUHAISHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "WHS"
+}, {
+	"cityId": 340200,
+	"cityName": "芜湖市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUHUSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "WHS"
+}, {
+	"cityId": 371000,
+	"cityName": "威海市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WEIHAISHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "WHS"
+}, {
+	"cityId": 620600,
+	"cityName": "武威市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUWEISHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "WWS"
+}, {
+	"cityId": 420100,
+	"cityName": "武汉市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUHANSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "WHS"
+}, {
+	"cityId": 320200,
+	"cityName": "无锡市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WUXISHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "WXS"
+}, {
+	"cityId": 469005,
+	"cityName": "文昌市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WENCHANGSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "WCS"
+}, {
+	"cityId": 469006,
+	"cityName": "万宁市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WANNINGSHI",
+	"provinceCode": 460000,
+	"provinceName": "海南省",
+	"initial": "WNS"
+}, {
+	"cityId": 150900,
+	"cityName": "乌兰察布市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WULANCHABUSHI",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "WLCBS"
+}, {
+	"cityId": 610500,
+	"cityName": "渭南市",
+	"cityFirstLetter": "W",
+	"cityLetter": "WEINANSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "WNS"
+}, {
+	"cityId": 130500,
+	"cityName": "邢台市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINGTAISHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "XTS"
+}, {
+	"cityId": 532800,
+	"cityName": "西双版纳傣族自治州",
+	"cityFirstLetter": "X",
+	"cityLetter": "XISHUANGBANNADAIZUZIZHIZHOU",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "XSBNDZZZZ"
+}, {
+	"cityId": 433100,
+	"cityName": "湘西土家族苗族自治州",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANGXITUJIAZUMIAOZUZIZHIZHOU",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "XXTJZMZZZZ"
+}, {
+	"cityId": 320300,
+	"cityName": "徐州市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XUZHOUSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "XZS"
+}, {
+	"cityId": 429004,
+	"cityName": "仙桃市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANTAOSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "XTS"
+}, {
+	"cityId": 610400,
+	"cityName": "咸阳市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANYANGSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "XYS"
+}, {
+	"cityId": 421200,
+	"cityName": "咸宁市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANNINGSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "XNS"
+}, {
+	"cityId": 420900,
+	"cityName": "孝感市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIAOGANSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "XGS"
+}, {
+	"cityId": 341800,
+	"cityName": "宣城市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XUANCHENGSHI",
+	"provinceCode": 340000,
+	"provinceName": "安徽省",
+	"initial": "XCS"
+}, {
+	"cityId": 420600,
+	"cityName": "襄阳市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANGYANGSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "XYS"
+}, {
+	"cityId": 350200,
+	"cityName": "厦门市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIAMENSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "XMS"
+}, {
+	"cityId": 360500,
+	"cityName": "新余市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINYUSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "XYS"
+}, {
+	"cityId": 152500,
+	"cityName": "锡林郭勒盟",
+	"cityFirstLetter": "X",
+	"cityLetter": "XILINGUOLEMENG",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "XLGLM"
+}, {
+	"cityId": 610100,
+	"cityName": "西安市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "XAS"
+}, {
+	"cityId": 630100,
+	"cityName": "西宁市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XININGSHI",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "XNS"
+}, {
+	"cityId": 430300,
+	"cityName": "湘潭市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XIANGTANSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "XTS"
+}, {
+	"cityId": 140900,
+	"cityName": "忻州市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINZHOUSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "XZS"
+}, {
+	"cityId": 152200,
+	"cityName": "兴安盟",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINGANMENG",
+	"provinceCode": 150000,
+	"provinceName": "内蒙古自治区",
+	"initial": "XAM"
+}, {
+	"cityId": 410700,
+	"cityName": "新乡市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINXIANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "XXS"
+}, {
+	"cityId": 411000,
+	"cityName": "许昌市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XUCHANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "XCS"
+}, {
+	"cityId": 411500,
+	"cityName": "信阳市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINYANGSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "XYS"
+}, {
+	"cityId": 139002,
+	"cityName": "辛集市",
+	"cityFirstLetter": "X",
+	"cityLetter": "XINJISHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "XJS"
+}, {
+	"cityId": 230700,
+	"cityName": "伊春市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YICHUNSHI",
+	"provinceCode": 230000,
+	"provinceName": "黑龙江省",
+	"initial": "YCS"
+}, {
+	"cityId": 640100,
+	"cityName": "银川市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YINCHUANSHI",
+	"provinceCode": 640000,
+	"provinceName": "宁夏回族自治区",
+	"initial": "YCS"
+}, {
+	"cityId": 140300,
+	"cityName": "阳泉市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANGQUANSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "YQS"
+}, {
+	"cityId": 420500,
+	"cityName": "宜昌市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YICHANGSHI",
+	"provinceCode": 420000,
+	"provinceName": "湖北省",
+	"initial": "YCS"
+}, {
+	"cityId": 222400,
+	"cityName": "延边朝鲜族自治州",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANBIANCHAOXIANZUZIZHIZHOU",
+	"provinceCode": 220000,
+	"provinceName": "吉林省",
+	"initial": "YBCXZZZZ"
+}, {
+	"cityId": 140800,
+	"cityName": "运城市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YUNCHENGSHI",
+	"provinceCode": 140000,
+	"provinceName": "山西省",
+	"initial": "YCS"
+}, {
+	"cityId": 370600,
+	"cityName": "烟台市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANTAISHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "YTS"
+}, {
+	"cityId": 360900,
+	"cityName": "宜春市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YICHUNSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "YCS"
+}, {
+	"cityId": 430600,
+	"cityName": "岳阳市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YUEYANGSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "YYS"
+}, {
+	"cityId": 360600,
+	"cityName": "鹰潭市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YINGTANSHI",
+	"provinceCode": 360000,
+	"provinceName": "江西省",
+	"initial": "YTS"
+}, {
+	"cityId": 530400,
+	"cityName": "玉溪市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YUXISHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "YXS"
+}, {
+	"cityId": 632700,
+	"cityName": "玉树藏族自治州",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YUSHUCANGZUZIZHIZHOU",
+	"provinceCode": 630000,
+	"provinceName": "青海省",
+	"initial": "YSCZZZZ"
+}, {
+	"cityId": 610600,
+	"cityName": "延安市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANANSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "YAS"
+}, {
+	"cityId": 610800,
+	"cityName": "榆林市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YULINSHI",
+	"provinceCode": 610000,
+	"provinceName": "陕西省",
+	"initial": "YLS"
+}, {
+	"cityId": 430900,
+	"cityName": "益阳市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YIYANGSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "YYS"
+}, {
+	"cityId": 431100,
+	"cityName": "永州市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YONGZHOUSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "YZS"
+}, {
+	"cityId": 441700,
+	"cityName": "阳江市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANGJIANGSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "YJS"
+}, {
+	"cityId": 445300,
+	"cityName": "云浮市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YUNFUSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "YFS"
+}, {
+	"cityId": 321000,
+	"cityName": "扬州市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANGZHOUSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "YZS"
+}, {
+	"cityId": 320900,
+	"cityName": "盐城市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YANCHENGSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "YCS"
+}, {
+	"cityId": 654000,
+	"cityName": "伊犁哈萨克自治州",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YILIHASAKEZIZHIZHOU",
+	"provinceCode": 650000,
+	"provinceName": "新疆维吾尔自治区",
+	"initial": "YLHSKZZZ"
+}, {
+	"cityId": 450900,
+	"cityName": "玉林市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YULINSHI",
+	"provinceCode": 450000,
+	"provinceName": "广西壮族自治区",
+	"initial": "YLS"
+}, {
+	"cityId": 511800,
+	"cityName": "雅安市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YAANSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "YAS"
+}, {
+	"cityId": 511500,
+	"cityName": "宜宾市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YIBINSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "YBS"
+}, {
+	"cityId": 210800,
+	"cityName": "营口市",
+	"cityFirstLetter": "Y",
+	"cityLetter": "YINGKOUSHI",
+	"provinceCode": 210000,
+	"provinceName": "辽宁省",
+	"initial": "YKS"
+}, {
+	"cityId": 410100,
+	"cityName": "郑州市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHENGZHOUSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "ZZS"
+}, {
+	"cityId": 440400,
+	"cityName": "珠海市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHUHAISHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "ZHS"
+}, {
+	"cityId": 640500,
+	"cityName": "中卫市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHONGWEISHI",
+	"provinceCode": 640000,
+	"provinceName": "宁夏回族自治区",
+	"initial": "ZWS"
+}, {
+	"cityId": 440800,
+	"cityName": "湛江市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHANJIANGSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "ZJS"
+}, {
+	"cityId": 441200,
+	"cityName": "肇庆市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHAOQINGSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "ZQS"
+}, {
+	"cityId": 411700,
+	"cityName": "驻马店市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHUMADIANSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "ZMDS"
+}, {
+	"cityId": 330900,
+	"cityName": "舟山市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHOUSHANSHI",
+	"provinceCode": 330000,
+	"provinceName": "浙江省",
+	"initial": "ZSS"
+}, {
+	"cityId": 130700,
+	"cityName": "张家口市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHANGJIAKOUSHI",
+	"provinceCode": 130000,
+	"provinceName": "河北省",
+	"initial": "ZJKS"
+}, {
+	"cityId": 520300,
+	"cityName": "遵义市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZUNYISHI",
+	"provinceCode": 520000,
+	"provinceName": "贵州省",
+	"initial": "ZYS"
+}, {
+	"cityId": 442000,
+	"cityName": "中山市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHONGSHANSHI",
+	"provinceCode": 440000,
+	"provinceName": "广东省",
+	"initial": "ZSS"
+}, {
+	"cityId": 530600,
+	"cityName": "昭通市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHAOTONGSHI",
+	"provinceCode": 530000,
+	"provinceName": "云南省",
+	"initial": "ZTS"
+}, {
+	"cityId": 321100,
+	"cityName": "镇江市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHENJIANGSHI",
+	"provinceCode": 320000,
+	"provinceName": "江苏省",
+	"initial": "ZJS"
+}, {
+	"cityId": 350600,
+	"cityName": "漳州市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHANGZHOUSHI",
+	"provinceCode": 350000,
+	"provinceName": "福建省",
+	"initial": "ZZS"
+}, {
+	"cityId": 430800,
+	"cityName": "张家界市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHANGJIAJIESHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "ZJJS"
+}, {
+	"cityId": 430200,
+	"cityName": "株洲市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHUZHOUSHI",
+	"provinceCode": 430000,
+	"provinceName": "湖南省",
+	"initial": "ZZS"
+}, {
+	"cityId": 411600,
+	"cityName": "周口市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHOUKOUSHI",
+	"provinceCode": 410000,
+	"provinceName": "河南省",
+	"initial": "ZKS"
+}, {
+	"cityId": 512000,
+	"cityName": "资阳市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZIYANGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "ZYS"
+}, {
+	"cityId": 370400,
+	"cityName": "枣庄市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZAOZHUANGSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "ZZS"
+}, {
+	"cityId": 370300,
+	"cityName": "淄博市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZIBOSHI",
+	"provinceCode": 370000,
+	"provinceName": "山东省",
+	"initial": "ZBS"
+}, {
+	"cityId": 620700,
+	"cityName": "张掖市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHANGYESHI",
+	"provinceCode": 620000,
+	"provinceName": "甘肃省",
+	"initial": "ZYS"
+}, {
+	"cityId": 500100,
+	"cityName": "重庆市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZHONGQINGSHI",
+	"provinceCode": 500000,
+	"provinceName": "重庆市",
+	"initial": "ZQS"
+}, {
+	"cityId": 510300,
+	"cityName": "自贡市",
+	"cityFirstLetter": "Z",
+	"cityLetter": "ZIGONGSHI",
+	"provinceCode": 510000,
+	"provinceName": "四川省",
+	"initial": "ZGS"
+}]
