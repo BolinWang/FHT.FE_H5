@@ -6,13 +6,17 @@
           <li :class="{active: tabIndex === 0}" @click="tabIndex = 0">快速搜索</li>
           <li :class="{active: tabIndex === 1}" @click="tabIndex = 1">精准匹配</li>
         </ul>
-        <div class="cancel" @click="searchShow = false">取消</div>
+        <div class="cancel" @click="cancelSearch">取消</div>
       </div>
       <div class="popSearch" v-show="tabIndex === 0">
-        <search :auto-fixed="false" cancel-text=" " placeholder="小区名/房间号/房东">
+        <search :auto-fixed="false" 
+          cancel-text=" " 
+          @on-change="keywordSearch"
+          placeholder="小区名/房间号/房东">
         </search>
-        <div style="background:#fff">
-          hhh</div> 
+        <div>
+          <house-list :data="searchData"></house-list>
+        </div> 
       </div>
       <div class="searchGroup" v-show="tabIndex === 1">
         <div class="line">
@@ -39,29 +43,32 @@
           <div class="labelTitle">整租/合租</div>
           <div class="cellRight hasIcon">请选择</div>
         </div>
+        <div class="line">
+          <i class="iconfont icon-xuanzekuanghou" style="color: #ddd"></i>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, XImg, Popup, TransferDom, Search, PopupHeader } from 'vux'
-import footers from '@/components/footer'
+import { Tab, TabItem, XImg, Popup, TransferDom, Search, PopupHeader, debounce } from 'vux'
 import scroll from '@/components/scroll'
+import houseList from './components/houseList'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    footers,
     Tab, 
     TabItem,
     scroll,
     XImg,
     Popup,
     Search,
-    PopupHeader
+    PopupHeader,
+    houseList
   },
   mounted() {
   },
@@ -69,13 +76,20 @@ export default {
     return {
       searchShow: false,
       tabIndex: 0,
-      show: false
+      show: false,
+      searchData: []
     }
   },
   methods: {
     toSearch() {
       this.searchShow = true
-    }
+    },
+    cancelSearch() {
+      this.$router.push({name: 'houseIndex'})
+    },
+    keywordSearch: debounce(function(){
+      this.searchData = [1, 2, 3] 
+    }, 500),
   }
 }
 </script>
