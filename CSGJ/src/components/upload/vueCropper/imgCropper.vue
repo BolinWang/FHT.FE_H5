@@ -107,7 +107,11 @@ const bus = new Vue()
 .wrapper{
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: inherit;
+  // position: relative;
 }
 .footer{
   position: absolute;
@@ -119,7 +123,7 @@ const bus = new Vue()
 }
 .footer p{
   width: 100%;
-  line-height: 30px;
+  line-height: 60px;
 }
 .footer span{
   display: flex;

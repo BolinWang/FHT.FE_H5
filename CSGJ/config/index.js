@@ -26,7 +26,7 @@ module.exports = {
       }
     },
     // host: 'localhost',
-    host: '192.168.5.230',
+    host: '0.0.0.0',
     port: 1315,
     autoOpenBrowser: true,
     errorOverlay: true,

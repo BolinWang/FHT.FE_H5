@@ -20,7 +20,8 @@ export default new Router({
       children: [
         { path: '', component: _import('landlord/index'), name: 'landlordIndex' },
         { path: 'person', component: _import('landlord/person'), name: 'person' },
-        { path: 'company', component: _import('landlord/company'), name: 'company' }
+        { path: 'company', component: _import('landlord/company'), name: 'company' },
+        { path: 'bindingCard', component: _import('landlord/bindingCard'), name: 'bindingCard' }
       ]
     },
     {

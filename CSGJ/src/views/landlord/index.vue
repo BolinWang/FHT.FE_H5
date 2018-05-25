@@ -79,6 +79,7 @@ import footers from '@/components/footer'
 import scroll from '@/components/scroll'
 import { queryListByPageApi } from '@/api/source'
 import { plusXing } from '@/utils'
+import { getCheckList } from '@/api/landlord'
 
 export default {
   directives: {
@@ -116,6 +117,7 @@ export default {
       keyword: '',
       searchData: [],
       listData: [{
+        id: 1,
         type: 1,
         name: '张三',
         desc: '哈哈哈',
@@ -123,6 +125,7 @@ export default {
         hasCard: false,
         status: 1
       },{
+        id: 2,
         type: 2,
         name: '阿里巴巴',
         desc: '',
@@ -151,7 +154,11 @@ export default {
 
     },
     toDetail(item) {
-
+      this.$router.push({
+        path: '/person', 
+        name: 'person',
+        params: item
+      })
     },
     searchParam() {
       
@@ -165,6 +172,14 @@ export default {
       } else if (menuKey === 'menu2') {
         this.$router.push({name: 'company'})
       }
+    },
+    dataInit () {
+      getCheckList().then(res => {
+        if (res.data && res.data.content) {
+        }
+      }).catch(res => {
+        this.$vux.toast.text(res.message)
+      })
     }
   }
 }
