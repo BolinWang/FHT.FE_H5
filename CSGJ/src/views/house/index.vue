@@ -9,14 +9,20 @@
       </x-header>
       <house-list :data="[1, 2]"></house-list>
       <footers :selectedIndex="1" slot="bottom"></footers>
+      <actionsheet 
+        v-model="showAdd" 
+        :menus="menus" 
+        @on-click-menu="clickMenu" 
+        show-cancel>
+        <div slot="header">请选择用户类型</div>
+      </actionsheet>
     </view-box>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, XImg } from 'vux'
+import { Tab, TabItem, XImg, Actionsheet } from 'vux'
 import footers from '@/components/footer'
-import scroll from '@/components/scroll'
 import houseList from './components/houseList'
 
 export default {
@@ -24,14 +30,19 @@ export default {
     footers,
     Tab, 
     TabItem,
-    scroll,
     XImg,
-    houseList
+    houseList,
+    Actionsheet
   },
   mounted() {
   },
   data() {
     return {
+      showAdd: false,
+      menus: {
+        menu1: '分散式整租',
+        menu2: '分散式合租'
+      },
     }
   },
   methods: {
@@ -39,7 +50,15 @@ export default {
       this.$router.push({name: 'searchHouse'})
     },
     addHouse() {
-      console.log(1)
+      this.showAdd = true
+    },
+    clickMenu(menuKey, menuItem) { //新增选择类型
+      if (menuKey === 'menu1') {
+        console.log('整租')
+        // this.$router.push({name: 'person'})
+      } else if (menuKey === 'menu2') {
+        // this.$router.push({name: 'company'})
+      }
     }
   }
 }

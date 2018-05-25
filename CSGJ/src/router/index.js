@@ -30,7 +30,8 @@ export default new Router({
       children: [
         { path: '', component: _import('house/index'), name: 'houseIndex' },
         { path: 'searchHouse', component: _import('house/searchHouse'), name: 'searchHouse' },
-        { path: 'searchMap', component: _import('house/searchMap'), name: 'searchMap' }
+        { path: 'searchMap', component: _import('house/searchMap'), name: 'searchMap' },
+        { path: 'roomDetail', component: _import('house/roomDetail'), name: 'roomDetail' }
       ]
     },
     {
