@@ -3,7 +3,6 @@
     <view-box ref="viewBox" body-padding-top="46px" >
       <x-header title="新增房东(企业)" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
       </x-header>
-        {{bankType}}
       <p  class="check-not-pass" v-show="checkStatus === 0">审核未通过，具体原因</p>
       <group class="noTop" label-width="80px">
         <x-input title="企业名称" required v-model="userForm.name" placeholder="请输入"></x-input>
@@ -20,7 +19,7 @@
         <!-- <x-input title="银行卡类型" class="redInput" readonly v-model="userForm.fee" placeholder="请输入"></x-input> -->
         <selector title="银行卡类型"  v-model="userForm.cardType" :options="bankCardType" :min="0" @on-change="getbankType"></selector>
 
-        <selector v-if="checkStatus===4" title="开户银行4"  v-model="userForm.cardType" :options="bankCardType" :min="0"></selector>
+        <selector v-if="checkStatus===4" title="开户银行"  v-model="userForm.cardType" :options="bankCardType" :min="0"></selector>
         <!-- <x-input v-else title="开户名" class="redInput" readonly v-model="userForm.accountName" placeholder="请输入"></x-input> -->
         <x-input v-else-if="checkStatus===2" title="开户人身份证2" class="redInput" readonly v-model="plusXingAccountIDCard" placeholder="请输入"></x-input>
         <x-input v-else title="开户人身份证" class="redInput" readonly v-model="userForm.accountIDCard" placeholder="请输入"></x-input>
@@ -56,11 +55,6 @@ export default {
   directives: {
     TransferDom
   },
-  //  watch:{  
-  //   getbankType(val,oldval){  
-  //           console.log(val)  
-  //       }
-  // },
   components: {
     Popup,
     XButton,
@@ -73,7 +67,7 @@ export default {
   },
   data() {
     return {
-      checkStatus: 2, // 0:未通过，1:审核中，2:通过，3:新增企业个人银行, 4:对公银行，5：对公审核中
+      checkStatus: 1, // 0:未通过，1:审核中，2:通过，3:新增企业个人银行, 4:对公银行，5：对公审核中
       userForm: {
         name: '前端牛逼有限公司',
         cardNo: '32132132321', // 社会信用代码
