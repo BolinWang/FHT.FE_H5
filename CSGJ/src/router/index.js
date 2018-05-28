@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: _import('test')
+      component: _import('landlord/index')
     },
     {
       path: '/landlord',
@@ -20,7 +20,14 @@ export default new Router({
       children: [
         { path: '', component: _import('landlord/index'), name: 'landlordIndex' },
         { path: 'person', component: _import('landlord/person'), name: 'person' },
-        { path: 'company', component: _import('landlord/company'), name: 'company' }
+        {
+          name: 'company',
+          path: 'company',
+          component: () => import('../views/landlord/company')
+          // component: resolve => { require(['../views/landlord/company'], resolve) }
+        },
+        // { path: 'company', component: _import('landlord/company'), name: 'company' },
+        { path: 'bindingCard', component: _import('landlord/bindingCard'), name: 'bindingCard' }
       ]
     },
     {

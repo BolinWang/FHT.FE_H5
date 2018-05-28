@@ -1,227 +1,169 @@
 <template>
   <div class="height100">
     <view-box ref="viewBox" body-padding-top="46px" >
-      <x-header title="房东管理" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
-        <x-icon slot="overwrite-left" type="ios-search-strong" style="fill:#fff;position:relative;top:-8px;left:-3px;" size="30" @click="doSearch"></x-icon>
-        <i class="iconfont icon-xinjian1" slot="right" @click="addNew"></i>
+      <x-header title="新增房东(企业)" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
       </x-header>
-      <tab>
-        <tab-item selected @on-item-click="activeIndex = 0">已审核</tab-item>
-        <tab-item @on-item-click="activeIndex = 1">处理中</tab-item>
-      </tab>
-      <scroll :pullUpLoad="false" @pullingDown="pullingDown" :data="listData">
-        <ul class="userInfoNav" :class="{action: activeIndex === 1}">
-          <li v-for="(item, key) in listData" @click="toDetail(item)" :key="key">
-            <div class="userInfo">
-              <span class="userType" :class="{company: item.type === 2}">{{item.type | typeStr}}</span>
-              <span class="name">{{item.name}}</span>
-              <span v-show="item.desc">（{{item.desc}}）</span>
-            </div>
-            <div class="contact">
-              <div class="left">{{item.mobile | mobileStr}}
-                <span v-show="item.mobileName">（{{item.mobileName}}）</span>
-              </div>
-              <div class="noCard" v-show="item.hasCard">银行卡未绑定</div>
-            </div>
-            <div class="actionStatus rightIcon" v-if="activeIndex === 1">
-              <div class="statusText" :class="{statusError: item.status === 2}">{{item.status === 1 ? '审核中' : '审核未通过：具体原因'}}</div>
-            </div>
-          </li>
-          <div class="clearfix"></div>
-        </ul>
-      </scroll>
-      <actionsheet 
-        v-model="showAdd" 
-        :menus="menus" 
-        @on-click-menu="clickMenu" 
-        show-cancel>
-        <div slot="header">请选择用户类型</div>
-      </actionsheet>
-      <div v-transfer-dom>
-        <popup v-show="searchShow" 
-        height="100%" position="top" 
-        width="100%">
-          <div>
-            <search v-model="keyword" 
-            ref="houseSearch"
-            :auto-fixed="false"
-            placeholder="房东姓名/企业名称"
-            @on-change="keywordSearch"
-            @on-cancel="hideSearch"></search>
-            <ul class="userInfoNav">
-              <li v-for="(item, key) in searchData" @click="toDetail(item)" :key="key">
-                <div class="userInfo">
-                  <span class="userType" :class="{company: item.type === 2}">{{item.type | typeStr}}</span>
-                  <span class="name">{{item.name}}</span>
-                  <span v-show="item.desc">（{{item.desc}}）</span>
-                </div>
-                <div class="contact">
-                  <div class="left">{{item.mobile | mobileStr}}
-                    <span v-show="item.mobileName">（{{item.mobileName}}）</span>
-                  </div>
-                  <div class="noCard" v-show="item.hasCard">银行卡未绑定</div>
-                </div>
-              </li>
-              <div class="clearfix"></div>
-            </ul>
-          </div>
-          
-        </popup>
+      <p  class="check-not-pass" v-show="checkStatus === 0">审核未通过，具体原因</p>
+      <group class="noTop" label-width="80px">
+        <x-input title="企业名称" required v-model="userForm.name" placeholder="请输入"></x-input>
+        <x-input title="社会统一信用代码" required v-model="userForm.cardNo" placeholder="请输入"></x-input>
+        <x-input title="企业法人" required v-model="userForm.businessEntity" placeholder="请输入"></x-input>
+        <x-input title="出房费率" class="redInput" readonly v-model="userForm.fee" placeholder="请输入"></x-input>
+        <x-input title="企业联系人" class="redInput" readonly v-model="userForm.concatPerson" placeholder="请输入">
+           <i class="iconfont icon-zhaoxiangji" slot="right" @click.prevent="photo" v-show="checkStatus===0 || 3"></i>
+        </x-input>
+        <x-input v-if="checkStatus===2"  title="身份证号码" class="redInput" readonly v-model="plusXingCard" placeholder="请输入"></x-input>
+        <x-input v-else title="身份证号码" class="redInput" readonly v-model="userForm.IDCard" placeholder="请输入"></x-input>
+        <x-input title="手机号码" class="redInput" readonly v-model="userForm.mobile" placeholder="请输入"></x-input>
+        <x-input title="备注" class="redInput" readonly v-model="userForm.desc" placeholder="最多10个字"></x-input>
+        <!-- <x-input title="银行卡类型" class="redInput" readonly v-model="userForm.fee" placeholder="请输入"></x-input> -->
+        <selector title="银行卡类型"  v-model="userForm.cardType" :options="bankCardType" :min="0" @on-change="getbankType"></selector>
+
+        <selector v-if="checkStatus===4" title="开户银行"  v-model="userForm.cardType" :options="bankCardType" :min="0"></selector>
+        <!-- <x-input v-else title="开户名" class="redInput" readonly v-model="userForm.accountName" placeholder="请输入"></x-input> -->
+        <x-input v-else-if="checkStatus===2" title="开户人身份证2" class="redInput" readonly v-model="plusXingAccountIDCard" placeholder="请输入"></x-input>
+        <x-input v-else title="开户人身份证" class="redInput" readonly v-model="userForm.accountIDCard" placeholder="请输入"></x-input>
+        <x-input title="银行卡号" class="redInput" readonly v-model="userForm.bankCard" placeholder="请输入"></x-input>
+        <cell title="企业营业执照">
+          <img-upload :uploadParam="uploadParam"></img-upload>
+        </cell>
+        <cell title="房源发布和租客引流服务">
+          <img-upload :uploadParam="uploadParam"></img-upload>
+        </cell>
+      <cell title="房源发布和租客引流服务">
+          <img-upload :uploadParam="uploadParam"></img-upload>
+        </cell>
+        <cell title="房源发布和租客引流服务">
+          <img-upload :uploadParam="uploadParam"></img-upload>
+        </cell>
+      </group>
+      <div slot="bottom" class="bottomDiv">
+        <x-button disabled type="primary" action-type="button" v-if="checkStatus === 1">{{statusBtn}}</x-button>
+        <x-button type="primary" action-type="button" v-else @click.native="toSave">{{statusBtn}}</x-button>
       </div>
-      <footers :selectedIndex="0" slot="bottom"></footers>
     </view-box>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Popup, TransferDom, Search, debounce, Actionsheet } from 'vux'
-import footers from '@/components/footer'
-import scroll from '@/components/scroll'
+import { Popup, TransferDom, XButton, XInput, XTextarea, Selector } from 'vux'
 import { queryListByPageApi } from '@/api/source'
 import { plusXing } from '@/utils'
+import imgUpload from '@/components/upload'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    footers,
-    scroll,
-    Tab, 
-    TabItem,
     Popup,
-    Search,
-    Actionsheet
+    XButton,
+    XInput,
+    XTextarea,
+    imgUpload,
+    Selector
   },
   mounted() {
-    this.searchParam()
-  },
-  filters: {
-    typeStr(val) {
-      return val === 2 ? '企业' : '个人' 
-    },
-    mobileStr(val) {
-      return plusXing(val, 3, 4)
-    }
   },
   data() {
     return {
-      activeIndex: 0,
-      searchShow: false,
-      showAdd: false,
-      menus: {
-        menu1: '个人用户',
-        menu2: '企业用户'
-      },
-      keyword: '',
-      searchData: [],
-      listData: [{
-        type: 1,
-        name: '张三',
-        desc: '哈哈哈',
-        mobile: 18912344321,
-        hasCard: false,
-        status: 1
-      },{
-        type: 2,
-        name: '阿里巴巴',
+      checkStatus: 1, // 0:未通过，1:审核中，2:通过，3:新增企业个人银行, 4:对公银行，5：对公审核中
+      userForm: {
+        name: '前端牛逼有限公司',
+        cardNo: '32132132321', // 社会信用代码
+        businessEntity: '张三', //企业法人
+        fee: '35%',
+        concatPerson: '李四', // 企业联系人
+        IDCard: '61912338298329321321321',
+        mobile: '1332323223',
         desc: '',
-        mobile: 18933552244,
-        mobileName: '马云',
-        hasCard: true,
-        status: 2
-      }]
+        cardType: '1',
+        accountName: '王五', // 开户名
+        accountIDCard: 3213213213213, // 开户人身份证
+        bankCard: 343232323 // 银行卡号
+      },
+      bankType: 1, // 1:对公，2:私人
+      bankCardType: [{
+          value: '对公银行',
+          key: '2'
+        },{
+          value: '个人',
+          key: '1'
+        }
+      ],
+      uploadParam: {
+        fixedNumber: [4, 3], // 截图框的宽高比例
+        fixed: true, // 是否开启截图框宽高固定比例
+        fixedBox: false, // 固定截图框大小 不允许改变
+        info: true, // 裁剪框的大小信息
+        size: 1, // 裁剪生成图片的质量
+        autoCrop: true,
+        // autoCropWidth: 320,
+        // autoCropHeight: 250,
+        canMoveBox: true, // 截图框能否拖动
+        showRotate: true, // 是否显示旋转按钮
+        showPlusMinus: true, // 是否显示加减按钮
+      }
+    }
+  },
+  computed: {
+    statusBtn () {
+      let status = this.checkStatus
+      return status === 0 ? '重新提交申请' : status === 1 ? '审核中' : ''
+    },
+    plusXingCard: {
+      get: function () {
+        return plusXing(this.userForm.IDCard, 6, 4)
+      },
+      set: function () {
+      }
+    },
+    plusXingAccountIDCard: {
+      get: function () {
+        return plusXing(this.userForm.accountIDCard, 6, 4)
+      },
+      set: function () {
+      }
     }
   },
   methods: {
-    doSearch() {
-      this.searchShow = true;
-      this.$nextTick(() => {
-        this.$refs.houseSearch.setFocus()
-      })
+    toSave() {
+      this.$vux.toast.text('fuck')
     },
-    keywordSearch: debounce(function(){
-     this.searchData = this.listData
-    }, 500),
-    hideSearch() {
-      this.searchShow = false
-      this.searchData = []
+    photo() {
+      this.userForm.name = '你爸爸'
     },
-    pullingDown() { //下拉刷新
-
-    },
-    toDetail(item) {
-
-    },
-    searchParam() {
-      
-    },
-    addNew() { //新增
-      this.showAdd = true
-    },
-    clickMenu(menuKey, menuItem) {
-      console.log(menuKey)
-      console.log(menuItem)
+    getbankType (value) {
+      this.checkStatus = value == 1 ? 4 : 3
     }
   }
 }
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-  
-  .userInfoNav {
+  .redInput {
+    .weui-cell__bd {
+      color: red !important;
+    } 
+  }
+  .icon-zhaoxiangji {
+    font-size: 18px;
+    color: #4680FF;
+  }
+  .imgNav {
     li {
-      width: 100%;
-      background: #fff;
-      padding: 12px 0 0 12px;
-      border-bottom: 1px solid #ddd;
-      .userInfo {
-        width: 100%;
-        .userType {
-          width: 40px;
-          height: 20px;
-          border: 1px solid #259B24;
-          border-radius: 4px;
-          color: #259B24;
-          text-align: center;
-          display: inline-block;
-        }
-        .company {
-          border-color: #FF9800;
-          color: #FF9800;
-        }
-        .name {
-          padding: 0 5px;
-          display: inline;
-        }
-      }
-      .contact {
-        width: 100%;
-        padding: 10px 0 30px 0;
-        height: 28px;
-        color: #737373;
-        .noCard {
-          color: #4680FF;
-          float: right;
-          margin-right: 10px;
-        }
-      }  
+      width: 60px;
+      height: 60px;
+      float: left;
+      margin-right: 5px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
     }
   }
-  .action {
-    li {
-      border-bottom: none;
-      margin-bottom: 5px;
-      .actionStatus {
-        width: 100%;
-        height: 28px;
-        line-height: 28px;
-        border-top: 1px solid #ddd;
-        color: #4680FF;
-      }
-      .statusError{
-        color: #E51C23;
-      }
-    }
+  .check-not-pass{
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(229, 28, 35, 1);
   }
 </style>

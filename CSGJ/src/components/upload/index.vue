@@ -2,11 +2,11 @@
   <div class="img-list">
     <ul>
       <li v-for="(item, index) in cropperList" :key="index">
-        <img :src="item.src"  class="preview-img" alt="" @click="$preview.open(index, cropperList, options)">
+        <span @click="deleteImg(index)">x</span>  
+        <p><img :src="item.src"  class="preview-img" alt="" @click="$preview.open(index, cropperList, options)"></p>
       </li>
       <li>
-        +
-        <!-- <img src="../assets/upload.png" alt="" class="icon-upload"> -->
+        <img src="../../assets/upload.png" alt="" class="icon-upload">
         <input type="file" 
           class="file-upload" 
           multiple  
@@ -72,6 +72,9 @@ import bus from './bus'
       },
       isCroppered (isCrop) {
         this.isCropper = isCrop
+      },
+      deleteImg (index) {
+        this.cropperList.splice(index,1)
       },
         /* 选择图片 */
       async uploadImg(e) {
@@ -142,7 +145,7 @@ import bus from './bus'
     mounted () {
       let self = this
       bus.$on('editImg', data => {
-        // self.$preview.close()
+        self.$preview.close()
         self.isCropper = true
         this.currentImg = data
       })
@@ -166,7 +169,25 @@ import bus from './bus'
   position: relative;
   border: 1px solid #ccc;
   margin-left: 10px;
+  box-sizing: border-box;
+}
+
+.img-list ul li p{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+.img-list ul li span{
+  position: absolute;
+  top: -13px;
+  right: -4px;
+  z-index: 99999;
 }
 .img-list ul li:last-child{
   border: none
@@ -190,7 +211,6 @@ import bus from './bus'
 }
 .icon-upload{
   color: #ccc;
-  width: 50%;
   position:absolute;
   left:0;
   top: 0;
@@ -199,9 +219,11 @@ import bus from './bus'
   margin: auto;
 }
 .img-cropper{
-  position: absolute;
-  top: 0;
+  position: fixed;
   width: 100vw;
   height: 100vh;
+  top:0;
+  left:0;
+  z-index: 999999999;
 }
 </style>
