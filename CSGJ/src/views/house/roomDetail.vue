@@ -1,8 +1,13 @@
 <template>
   <div style="height:100%">
+		<x-header class="room-header" :left-options="{backText: ''}">
+			<div slot="right" class="room-header-share">
+				<i class="iconfont icon-share1"></i>
+			</div>
+		</x-header>
 		<swiper :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
 			<swiper-item class="swiper-demo-img" v-for="(item, index) in demo01_list" :key="index">
-				<img :src="item.img">
+				<img :src="item.src" @click="openPhotoSwipe(index)">
 			</swiper-item>
 			<div class="swiper-title">
 				<span>{{demo01_list[curBannerIndex].title}}</span>
@@ -125,11 +130,71 @@
 				保存
 			</div>
 		</Popup>
+		<!-- Root element of PhotoSwipe. Must have class pswp. -->
+		<div ref="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+			<!-- Background of PhotoSwipe.
+					It's a separate element as animating opacity is faster than rgba(). -->
+			<div class="pswp__bg"></div>
+
+			<!-- Slides wrapper with overflow:hidden. -->
+			<div class="pswp__scroll-wrap">
+
+				<!-- Container that holds slides.
+						PhotoSwipe keeps only 3 of them in the DOM to save memory.
+						Don't modify these 3 pswp__item elements, data is added later on. -->
+				<div class="pswp__container">
+						<div class="pswp__item"></div>
+						<div class="pswp__item"></div>
+						<div class="pswp__item"></div>
+				</div>
+
+				<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+				<div class="pswp__ui pswp__ui--hidden">
+
+					<div class="pswp__top-bar">
+
+						<!--  Controls are self-explanatory. Order can be changed. -->
+
+						<div class="pswp__counter"></div>
+
+						<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+						<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+						<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+						<!-- element will get class pswp__preloader--active when preloader is running -->
+						<div class="pswp__preloader">
+							<div class="pswp__preloader__icn">
+								<div class="pswp__preloader__cut">
+									<div class="pswp__preloader__donut"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+						<div class="pswp__share-tooltip"></div>
+					</div>
+
+					<div class="pswp__caption">
+						<div class="pswp__caption__center"></div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
   </div>
 </template>
 
 <script>
 import { XButton, Popup, Swiper, SwiperItem } from 'vux'
+import PhotoSwipe from 'photoswipe/dist/photoswipe.js'
+import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js'
+import 'photoswipe/dist/photoswipe.css'
+import 'photoswipe/dist/default-skin/default-skin.css'
 export default {
   components: {
 		XButton,
@@ -143,23 +208,31 @@ export default {
   data() {
     return {
 			showPayRentWay: false,
-			demo01_list: [{
-				url: 'javascript:',
-				img: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg',
-				title: '送你一朵fua'
-			}, {
-				url: 'javascript:',
-				img: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
-				title: '送你一辆车'
-			}, {
-				url: 'javascript:',
-				img: 'https://static.vux.li/demo/5.jpg', // 404
-				title: '送你一次旅行',
-				fallbackImg: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg'
-			}],
+			demo01_list: [
+				{
+					url: 'javascript:',
+					src: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg',
+					title: '送你一朵fua',
+					w: 600,
+					h: 400
+				}, {
+					url: 'javascript:',
+					src: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
+					title: '送你一辆车',
+					w: 600,
+					h: 400
+				}, {
+					url: 'javascript:',
+					src: 'https://static.vux.li/demo/5.jpg', // 404
+					title: '送你一次旅行',
+					fallbackImg: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg',
+					w: 600,
+					h: 400
+				}
+			],
 			roomInfo: {
 				releaseStatus: 0,	// 0.未发布 1.申请中 2.已发布
-				type: '分散式',
+				type: '集中式',
 				status: 4, // 0.已出租 1.下单中 2.在住 3.保留中 4.空房
 			},
 			roomInfoList: [
@@ -204,13 +277,31 @@ export default {
 		},
 		handleRelease() {
 			console.log(this.roomInfo.releaseStatus);
+		},
+		openPhotoSwipe(i) {
+			let options = {
+        index: i,
+        loop: false
+      };
+			new PhotoSwipe( this.$refs.pswp, PhotoSwipeUI_Default, this.demo01_list, options).init();
 		}
   }
 }
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-
+	.room-header {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background-color: transparent;
+		z-index: 500;
+		.iconfont {
+			font-size: 24px;
+			line-height: 1;
+		}
+	}
 	.room-banner {
 		width: 360px;
 		height: 270px;
@@ -365,6 +456,7 @@ export default {
 			line-height: 24px;
 			background-color: #fff;
 			margin-bottom: 1px;
+			z-index: 501;
 			.payRentWay-item-title {
 				width: 4em;
 			}
