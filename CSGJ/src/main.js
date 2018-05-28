@@ -4,6 +4,7 @@ import App from './App'
 import 'lib-flexible'
 import router from './router'
 import { ConfirmPlugin, ToastPlugin, DatetimePlugin, Group, Cell, ViewBox, XHeader } from 'vux'
+import store from './store'
 import BaiduMap from 'vue-baidu-map'
 import VuePreview from '@/components/upload/Preview/plugins'
 
@@ -14,6 +15,7 @@ Vue.config.productionTip = false
 const vm = new Vue({
   el: '#app-box',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

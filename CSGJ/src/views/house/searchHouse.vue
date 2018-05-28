@@ -21,40 +21,118 @@
       <div class="searchGroup" v-show="tabIndex === 1">
         <div class="line">
           <div class="labelTitle">所属板块</div>
-          <div class="cellRight hasIcon" @click="show = true">请选择</div>
+          <div class="cellRight hasIcon" @click="zoneShow = true">
+            <cell-value :value="zoneValue" :data="zoneList"></cell-value>
+          </div>
         </div>
         <div class="line">
           <div class="labelTitle">小区名称</div>
-          <input type="text" class="cellRight isInput" placeholder="请输入">
+          <input type="text" v-model="searchParam.area" class="cellRight isInput" placeholder="请输入">
         </div>
-        <div class="line">
+        <div class="line" >
           <div class="labelTitle">房间户型</div>
-          <div class="cellRight hasIcon">请选择</div>
+          <div class="cellRight hasIcon" @click="unitShow = true">
+            <cell-value :value="unitValue" :data="unitList"></cell-value>
+          </div>
         </div>
         <div class="line">
           <div class="labelTitle">房间朝向</div>
-          <div class="cellRight hasIcon">请选择（支持多选）</div>
+          <div class="cellRight hasIcon" @click="orientationsShow = true">
+            <cell-value :value="orientationsValue" :data="orientationsList" ></cell-value>
+          </div>
         </div>
-        <div class="line">
+        <div class="line" @click="rentChange">
           <div class="labelTitle">月租金</div>
-          <div class="cellRight hasIcon">请选择</div>
+          <div class="cellRight hasIcon black">{{searchParam | priceStr}}</div>
         </div>
-        <div class="line">
+        <div class="line" @click="typeShow = true">
           <div class="labelTitle">整租/合租</div>
-          <div class="cellRight hasIcon">请选择</div>
+          <div class="cellRight hasIcon">
+            <cell-value :value="typeValue" :data="typeList"></cell-value>
+          </div>
         </div>
         <div class="line">
-          <i class="iconfont icon-xuanzekuanghou" style="color: #ddd"></i>
+          <ul class="checkNav">
+            <li 
+              :class="{'checked': item.checked}"
+              v-for="(item, index) in checkList"
+              @click="item.checked = !item.checked"
+              v-show="searchParam.houseType === '2' || index === 4"
+              :key="index">
+              {{item.label}}
+            </li>
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <div class="buttonDiv">
+          <div class="btn" @click="searchFn">确定</div>
         </div>
       </div>
+    </div>
+    <!-- 选择房源类型 -->
+    <popup-picker title="房源类型" style="display:none"
+      :show="typeShow"
+      :data="typeList"
+      @on-hide="typeShow = false"
+      v-model="typeValue" 
+      @on-change="changeType"
+    ></popup-picker>
+    <!-- 选择月租金 -->
+    <div v-transfer-dom>
+      <alert v-model="rentShow" 
+        title="月租金范围"
+        >
+        <div class="alertBox">
+          <input class="alertInput" type="number" v-model="searchParam.minPrice" placeholder="最低价">
+          <span class="alertSpan">——</span>
+          <input class="alertInput" type="number" v-model="searchParam.maxPrice" placeholder="最高价">
+          <div class="clearfix"></div>
+        </div>
+      </alert>
+    </div>
+    <!-- 所属板块 -->
+    <popup-self :data="zoneList" title="请选择板块" 
+      :show="zoneShow" 
+      v-model="zoneValue" 
+      @closePop="closePop('zoneShow')">
+    </popup-self>
+    <!-- 房间户型 -->
+    <popup-self :data="unitList" title="请选择户型" 
+      :show="unitShow" 
+      v-model="unitValue" 
+      @closePop="closePop('unitShow')">
+    </popup-self>
+    <!-- 房间朝向 -->
+    <popup-self :data="orientationsList" title="房间朝向（可多选）"
+      :show="orientationsShow" 
+      :isradio="false"
+      v-model="orientationsValue" 
+      @closePop="closePop('orientationsShow')">
+    </popup-self>
+    <!-- 精准匹配搜索结果 -->
+    <div v-transfer-dom>
+      <popup v-model="showResult" position="right" width="100%" height="100%" style="background: #fff">
+        <x-header 
+          title="搜索结果" 
+          :left-options="{preventGoBack: true}"
+          @on-click-back="hideResult" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
+          <span slot="right" @click="hideResult">取消</span>
+        </x-header>
+        <div style="padding-top: 46px">
+          <div class="resultNum">符合条件匹配共 <span class="red">{{resultList.length}}</span> 间</div>
+          <house-list :data="resultList" :showTab="false"></house-list>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, XImg, Popup, TransferDom, Search, PopupHeader, debounce } from 'vux'
+import { Tab, TabItem, Popup, TransferDom, Search, debounce, XButton, PopupPicker, Alert } from 'vux'
 import scroll from '@/components/scroll'
 import houseList from './components/houseList'
+import popupSelf from '@/components/popupSelf'
+import cellValue from '@/components/cellValue'
 
 export default {
   directives: {
@@ -64,20 +142,91 @@ export default {
     Tab, 
     TabItem,
     scroll,
-    XImg,
+    PopupPicker,
     Popup,
     Search,
-    PopupHeader,
-    houseList
+    houseList,
+    XButton,
+    Alert,
+    popupSelf,
+    cellValue
   },
-  mounted() {
+  filters: {
+    houseTypeStr(val) {
+      return val === '1' ? '整租' : '合租'
+    },
+    priceStr(val) {
+      let str = '不限制'
+      if (val.maxPrice && val.minPrice) {
+        str = `${val.minPrice}元 - ${val.maxPrice}元`
+      } else if (val.minPrice) {
+        str = `${val.minPrice}元以下`
+      } else if (val.maxPrice) {
+        str = `${val.maxPrice}元以上`
+      }
+      return str
+    }
   },
   data() {
     return {
       searchShow: false,
-      tabIndex: 0,
+      typeShow: false,
+      rentShow: false,
+      zoneShow: false,
+      unitShow: false,
+      showResult: false,
+      orientationsShow: false,
+      tabIndex: 1,
       show: false,
-      searchData: []
+      searchData: [],
+      resultList: [1, 2],
+      typeValue: ['2'],
+      zoneValue: [0],
+      unitValue: [0],
+      orientationsValue: [0],
+      searchParam: {
+        area: '',
+        houseType: '2',
+        minPrice: '',
+        maxPrice: ''
+      },
+      typeList: [[
+        { name: '整租', value: '1' },
+        { name: '合租', value: '2' }
+      ]],
+      checkList: [
+        { label: '独卫', value: 1, checked: false },
+        { label: '独立阳台', value: 2, checked: false },
+        { label: '独立厨房', value: 3, checked: false },
+        { label: '飘窗', value: 4, checked: false },
+        { label: '空房', value: 5, checked: true }
+      ],
+      zoneList: [
+        { label: '不限制', value: 0 },
+        { label: '古荡', value: 1 },
+        { label: '文一路', value: 2},
+        { label: '黄龙', value: 3 },
+      ],
+      unitList: [
+        { label: '不限制', value: 0 },
+        { label: '1室', value: 1 },
+        { label: '2室', value: 2},
+        { label: '3室', value: 3 },
+        { label: '4室', value: 4 },
+        { label: '5室', value: 5 },
+        { label: '5室以上', value: 6 }
+      ],
+      orientationsList: [
+        { label: '不限制', value: 0 },
+        { label: '朝南', value: 1 },
+        { label: '朝北', value: 2},
+        { label: '朝东', value: 3 },
+        { label: '朝西', value: 4 },
+        { label: '东南', value: 5 },
+        { label: '西南', value: 6 },
+        { label: '东北', value: 7 },
+        { label: '西北', value: 8 }
+      ]
     }
   },
   methods: {
@@ -90,6 +239,21 @@ export default {
     keywordSearch: debounce(function(){
       this.searchData = [1, 2, 3] 
     }, 500),
+    changeType(val) { //修改房源类型
+      this.searchParam.houseType = val[0]
+    },
+    rentChange() { //选择月租金范围
+      this.rentShow = true
+    },
+    closePop(show) {
+      this[show] = false
+    },
+    searchFn() {
+      this.showResult = true
+    },
+    hideResult() {
+      this.showResult = false
+    }
   }
 }
 </script>
@@ -111,100 +275,7 @@ export default {
       left: 10px;
     }
   }
-  .houseNav {
-    padding: 0 12px;
-    li {
-      width: 100%;
-      .houseTitle {
-        margin: 5px 0;
-        width: 100%;
-        height: 28px;
-        line-height: 28px;
-        border-radius: 4px;
-        color: rgba(16, 16, 16, 1);
-        font-size: 12px;
-        left: 6px;
-        padding: 0 5px;
-        background-color: rgba(242, 242, 242, 1);
-        .left {
-          width: 90%;
-        }
-        .right {
-          width: 10%;
-          text-align: right;
-        }
-      }
-      .houseDetail{
-        height: 84px;
-        .detailImg {
-          width: 112px;
-          height: 84px;
-          border-radius: 4px;
-          position: relative;
-          float: left;
-          overflow: hidden;
-          .houseImg {
-            width: 100%;
-            height: 100%;
-          }
-          &:after{
-            content:'';
-            position: absolute;
-            right: -25px;
-            bottom: -25px;
-            width: 50px;
-            height: 50px;
-            font-size: 12px;
-            display: inline-block;
-            transform: rotate(-45deg);
-            text-align: center;
-            background: #E5E5E5;
-          }
-        }
-        .hasImg {
-          &:after{
-            content:'有图';
-            color: #4680FF;
-          }  
-        }
-        .noImg {
-          &:after{
-            content:'无图';
-            color:#E51C23;
-          }
-        }
-        .detailRight {
-          width: 212px;
-          height: 84px;
-          float: right;
-          border-bottom: 1px solid #ddd;
-          .roomName {
-            font-size: 14px;
-            color: #101010;
-            width: 80%;
-            float: left;
-          }
-          .roomStatus {
-            width: 15%;
-            float: right;
-            color: #4680FF;
-            font-size: 14px;
-          }
-          .area {
-            font-size: 12px;
-            color: #999;
-            line-height: 35px;
-          }
-          .feature {
-            padding: 3px 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #999;
-          }
-        }
-      }
-    }
-  }
+  
   .popTop {
     width: 100%;
     height: 55px;
@@ -245,15 +316,17 @@ export default {
   .searchGroup {
     .line {
       width:  100%;
-      height: 34px;
-      padding: 2px 0;
+      min-height: 42px;
+      padding: 5px 0;
+      clear: both;
     }
     .labelTitle {
       width: 80px;
-      text-align: center;
+      text-align: left;
       color: #fff;
       line-height: 30px;
       float: left;
+      padding-left: 10px;
     }
     .cellRight {
       width: 270px;
@@ -275,6 +348,7 @@ export default {
         right: 10px;
         position: absolute;
         color: #c8c8c8;
+        top: 0;
       }
     }
     ::-webkit-input-placeholder { /* WebKit browsers */
@@ -290,5 +364,75 @@ export default {
       color: #c8c8c8;
     }
   }
-  
+  .checkNav {
+    li {
+      width: 33.333%;
+      padding-left: 40px;
+      float: left;
+      position: relative;
+      line-height: 28px;
+      color: #fff;
+      &:before {
+        position: absolute;
+        font-family: 'iconfont';
+        content: '\e693';
+        color: #fff;
+        left: 10px;
+        top: 0;
+        font-size: 18px;
+        
+      }
+    }
+    .checked {
+      color: yellow;
+      font-weight: 700;
+      &:before {
+        color: yellow;
+        font-weight: 700;
+      }
+    }
+  }
+  .buttonDiv {
+    padding: 10px 40px;
+    .btn {
+      text-align: center;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 4px;
+      color: #4680FF;
+      background: #FFF;
+    }
+  }
+  .alertBox {
+    width: 100%;
+    padding: 20px 0;
+    .alertInput {
+      width: 40%;
+      height: 36px;
+      line-height: 36px;
+      padding-left: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      float: left; 
+      text-align: center;
+    }
+    .alertSpan {
+      width: 20%;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      float: left;
+    }
+  }
+  .resultNum {
+    width: 100;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    .red {
+      color: red;
+    }
+  }
 </style>

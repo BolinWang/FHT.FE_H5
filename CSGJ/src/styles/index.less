@@ -319,7 +319,7 @@ body {
   }
 
   .vux-tap-active:active {
-    background-color: #4680FF;
+    // background-color: #4680FF;
   }
 
   .smallSwitch {
@@ -376,6 +376,9 @@ body {
     &:before {
       border-top: 1PX solid #4680FF;
     }
+    &:after {
+      border-bottom: 1PX solid #4680FF;
+    }
   }
   .vux-search-fixed {
     z-index: 999;
@@ -414,6 +417,18 @@ body {
       color: #999;
       top: 0;
     }
+  }
+  .addIcon {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    position: relative;
+    top: -10px;
+    left: 15px;
+  }
+  .weui-search-bar__label {
+    top: 4PX;
   }
 }
 

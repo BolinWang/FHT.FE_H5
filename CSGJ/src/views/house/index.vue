@@ -5,14 +5,20 @@
         <div class="search" slot="overwrite-left" @click="toSearch">
           搜索小区/公寓名称
         </div>
-        <i class="iconfont icon-xinjian1" slot="right" @click="addHouse"></i>
+        <div slot="right" class="addIcon" @click="addHouse">
+          <i class="iconfont icon-xinjian1" ></i>
+        </div>
       </x-header>
       <house-list :data="[1, 2]"></house-list>
+      <div @click="tooo" style="width:100px;height:50px;background:red">hh</div>
+      {{imgSrc}}
+      <input type="file" @change="showImg" id="fileinput" class="inputfile" multiple accept="image/*;" capture="camera">
+      <img :src="imgSrc" alt="">
       <footers :selectedIndex="1" slot="bottom"></footers>
       <actionsheet 
         v-model="showAdd" 
         :menus="menus" 
-        @on-click-menu="clickMenu" 
+        @on-click-menu="clickMenu"
         show-cancel>
         <div slot="header">请选择用户类型</div>
       </actionsheet>
@@ -35,6 +41,14 @@ export default {
     Actionsheet
   },
   mounted() {
+    window['backUrl'] = (str) => {
+      this.$vux.toast.text(str)
+      return 'true'
+    }
+    window['getImage'] = (str) => {
+      this.$vux.toast.text(str)
+      this.imgSrc = 'file://' + str
+    }
   },
   data() {
     return {
@@ -43,6 +57,7 @@ export default {
         menu1: '分散式整租',
         menu2: '分散式合租'
       },
+      imgSrc: 'file:///storage/emulated/0/city_house/1527495509812429.png'
     }
   },
   methods: {
@@ -55,10 +70,17 @@ export default {
     clickMenu(menuKey, menuItem) { //新增选择类型
       if (menuKey === 'menu1') {
         console.log('整租')
-        // this.$router.push({name: 'person'})
+        this.$router.push({name: 'addHouse'})
       } else if (menuKey === 'menu2') {
-        // this.$router.push({name: 'company'})
+        this.$router.push({name: 'addHouse'})
       }
+    },
+    tooo() {
+      window.takePhoto.takePhotoAction()
+    },
+    showImg(e){
+      this.imgSrc = e.target.value
+      console.log(e.target.file)
     }
   }
 }
@@ -67,7 +89,7 @@ export default {
 <style rel="stylesheet/less" lang="less" scoped>
   .search {
     width: 300px;
-    height: 30px;
+    height: 100%;
     line-height: 30px;
     padding-left: 30px;
     border-radius: 5px;

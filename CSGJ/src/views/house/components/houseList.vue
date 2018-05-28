@@ -1,6 +1,6 @@
 <template>
   <div v-show="data.length > 0">
-    <tab :scroll-threshold="7">
+    <tab :scroll-threshold="7" v-if="showTab">
       <tab-item selected>全部</tab-item>
       <tab-item>空房</tab-item>
       <tab-item>已出租</tab-item>
@@ -55,6 +55,10 @@ export default {
   props: {
     data: {
       default: []
+    },
+    showTab: {
+      type: Boolean,
+      default: true,
     }
   },
   mounted() {

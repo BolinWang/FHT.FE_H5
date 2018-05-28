@@ -25,12 +25,52 @@ export default new Router({
     },
     {
       path: '/house',
-      component: _import('default'),
+      component: resolve => require(['@/views/default'], resolve),
+      // component: resolve => require(['@/views/house/index'], resolve),
+      // name: 'houseIndex',
       children: [
-        { path: '', component: _import('house/index'), name: 'houseIndex' },
-        { path: 'searchHouse', component: _import('house/searchHouse'), name: 'searchHouse' },
-        { path: 'searchMap', component: _import('house/searchMap'), name: 'searchMap' },
-        { path: 'roomDetail', component: _import('house/roomDetail'), name: 'roomDetail' }
+        {
+          path: '',
+          // component: _import('house/index'),
+          component: resolve => require(['@/views/house/index'], resolve),
+          name: 'houseIndex'
+        },
+        {
+          path: 'searchHouse',
+          component: resolve => require(['@/views/house/searchHouse'], resolve),
+          // component: _import('house/searchHouse'),
+          name: 'searchHouse',
+          meta: {
+            keepAlive: true // 需要被缓存
+          }
+        },
+        {
+          path: 'searchMap',
+          // component: _import('house/searchMap'),
+          component: resolve => require(['@/views/house/searchMap'], resolve),
+          name: 'searchMap',
+          meta: {
+            keepAlive: false // 需要被缓存
+          }
+        },
+        {
+          path: 'addHouse',
+          component: resolve => require(['@/views/house/addHouse'], resolve),
+          name: 'addHouse',
+          meta: {
+            keepAlive: true // 需要被缓存
+          }
+        },
+        {
+          path: 'editHouse',
+          component: resolve => require(['@/views/house/editHouse'], resolve),
+          name: 'editHouse'
+        },
+        {
+          path: 'photoDetail',
+          component: resolve => require(['@/views/house/photoDetail'], resolve),
+          name: 'photoDetail'
+        }
       ]
     },
     {

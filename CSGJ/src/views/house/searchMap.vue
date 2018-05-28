@@ -8,9 +8,7 @@
         </div>
         <div slot="right">确定</div>
       </x-header>
-     
       <map-search :wordShow="wordShow" @changeShow="changeShow"></map-search>
-      
     </view-box>
   </div>
 </template>
@@ -43,19 +41,19 @@ export default {
 <style rel="stylesheet/less" lang="less" scoped>
    #mapDiv {
     width: 100%;
-    height: 500px;
+    height: 250px;
     position: relative
   }
   .search {
     width: 100%;
-    height: 60px;
-    line-height: 60px;
-    border-radius: 10px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
     background-color: rgba(112, 161, 255, 1);
     text-align: center;
     position: relative;
-    top: -4px;
-    font-size: 24px;
+    top: -2px;
+    font-size: 12px;
     color: #eee;
     display: inline-block;
     .icon-sousuo {

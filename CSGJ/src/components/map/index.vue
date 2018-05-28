@@ -10,7 +10,6 @@
       <div style="text-align:center;" v-show="showLoading">
         <inline-loading></inline-loading>
       </div>
-       
       <div class="mapLine" v-show="searchList.length > 0">
         <div class="title blue ellipsis">{{searchList[current] ? searchList[current].title : ''}}</div>
         <div class="address ellipsis">{{searchList[current] ? searchList[current].address : ''}}</div>
@@ -52,7 +51,7 @@
 
     <!-- 搜索 -->
     <div v-transfer-dom>
-      <popup v-model="wordShow" height="100%">
+      <popup v-model="wordShow" height="100%" :is-transparent="true">
         <search
           v-model="keyword" 
           ref="wordSearch"
@@ -110,7 +109,6 @@
     watch: {
       wordShow(val) {
         this.wordShow = val
-       
         this.$nextTick(() => {
           val ? this.$refs.wordSearch.setFocus() : ''
         })
@@ -152,15 +150,19 @@
       debounceSearch: debounce(function(){
         this.searchParam()
       }, 500),
-      searchParam() {
+      searchParam() { //关键字搜索
         // forceLocal表示是否将搜索范围约束在当前城市
-        this.local.search(this.keyword, {forceLocal:true})
+        // this.local.search(this.keyword, {forceLocal:true})
+        this.local.searchNearby(this.keyword, this.center, 10000);
       },
       hideSearch() {
         this.$emit('changeShow')
       },
-      keywordClick(index) {
-
+      keywordClick(index) { //选中关键字搜索结果的某个地址
+        this.center = this.keywordList[index].point
+        this.$emit('changeShow')
+        this.getCenterData(this.keywordList[index].point)
+        this.keywordList = []
       },
       clickOne(index) {
         this.current = index
@@ -242,7 +244,6 @@
             // 判断状态是否正确
             if (self.local.getStatus() == BMAP_STATUS_SUCCESS){
               let resultsLen = results.getCurrentNumPois()
-              console.log(resultsLen)
               if (resultsLen.length === 0 && !self.wordShow) {
                 self.showCurrent = false
                 return 
@@ -274,7 +275,7 @@
 <style lang="less" rel="stylesheet/less" lang="less" scoped>
   #mapDiv {
     width: 100%;
-    height: 500px;
+    height: 250px;
     position: relative
   }
   .map {
@@ -283,65 +284,65 @@
   }
   .mapIcon {
     position: absolute;
-    font-size: 80px;
+    font-size: 40px;
     color:red;
-    width: 50px;
-    height: 50px;
-    left: 330px;
-    top: 155px;
+    width: 25px;
+    height: 25px;
+    left: 157px;
+    top: 78px;
     z-index: 1;
   }
   .currentDiv {
     position: relative;
   }
   .mapBox {
-    height: 612px;
+    height: 306px;
     background: #fff;
   }
   .scrollDiv {
-    height: 500px;
+    height: 250px;
   }
   .mapNav {
     .active:after{
       content:"\e679";
       color: green;
       font-family: "iconfont";
-      font-size: 30px;
+      font-size: 15px;
       position: absolute;
-      right: 20px;
-      top:30px;
+      right: 10px;
+      top: 15px;
     }
   }
   .mapLine {
     width: 100%;
     border-bottom: 1px solid #ddd;
-    padding: 10px 0px 10px 20px;
+    padding: 5px 0px 5px 10px;
     position: relative;
     background: #fff;
     .title {
       width: 85%;
-      font-size: 28px;
+      font-size: 14px;
     }
     .address {
-      font-size: 24px;
+      font-size: 12px;
       width: 85%;
       color: #999;
     }
     .mapEdit {
-      width: 100px;
-      height: 60px;
-      line-height: 60px;
-      border-radius: 8px;
+      width: 50px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 4px;
       color: rgba(255, 152, 0, 1);
-      font-size: 24px;
+      font-size: 12px;
       text-align: center;
       border: 1px solid rgba(255, 152, 0, 1);
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
     }
   }
   .keyDiv {
-    height: 1200px;
+    height: 600px;
   }
 </style>
