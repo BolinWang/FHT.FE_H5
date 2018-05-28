@@ -10,7 +10,7 @@
     </tab>
     <scroll :pullDownRefresh="false" :pullUpLoad="false">
       <ul class="houseNav">
-        <li v-for="(itme, index) in data" :key="index">
+        <li v-for="(itme, index) in data" :key="index" @click="toDetail"> 
           <div class="houseTitle">
             <div class="left">天天小区-19-1单元-4楼-401号</div>
             <div class="right">3间</div>
@@ -65,6 +65,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  methods: {
+    toDetail() {
+      this.$router.push({name: 'roomDetail'})
     }
   },
   watch: {

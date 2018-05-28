@@ -57,7 +57,7 @@ export default {
         menu1: '分散式整租',
         menu2: '分散式合租'
       },
-      imgSrc: 'file:///storage/emulated/0/city_house/1527495509812429.png'
+      imgSrc: ''
     }
   },
   methods: {

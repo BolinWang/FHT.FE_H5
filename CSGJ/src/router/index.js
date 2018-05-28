@@ -26,26 +26,21 @@ export default new Router({
           component: () => import('../views/landlord/company')
           // component: resolve => { require(['../views/landlord/company'], resolve) }
         },
-        // { path: 'company', component: _import('landlord/company'), name: 'company' },
         { path: 'bindingCard', component: _import('landlord/bindingCard'), name: 'bindingCard' }
       ]
     },
     {
       path: '/house',
       component: resolve => require(['@/views/default'], resolve),
-      // component: resolve => require(['@/views/house/index'], resolve),
-      // name: 'houseIndex',
       children: [
         {
           path: '',
-          // component: _import('house/index'),
           component: resolve => require(['@/views/house/index'], resolve),
           name: 'houseIndex'
         },
         {
           path: 'searchHouse',
           component: resolve => require(['@/views/house/searchHouse'], resolve),
-          // component: _import('house/searchHouse'),
           name: 'searchHouse',
           meta: {
             keepAlive: true // 需要被缓存
@@ -53,7 +48,6 @@ export default new Router({
         },
         {
           path: 'searchMap',
-          // component: _import('house/searchMap'),
           component: resolve => require(['@/views/house/searchMap'], resolve),
           name: 'searchMap',
           meta: {
@@ -72,6 +66,11 @@ export default new Router({
           path: 'editHouse',
           component: resolve => require(['@/views/house/editHouse'], resolve),
           name: 'editHouse'
+        },
+        {
+          path: 'roomDetail',
+          component: resolve => require(['@/views/house/roomDetail'], resolve),
+          name: 'roomDetail'
         },
         {
           path: 'photoDetail',
