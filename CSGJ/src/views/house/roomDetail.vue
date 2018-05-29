@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%">
+  <div>
 		<x-header class="room-header" :left-options="{backText: ''}">
 			<div slot="right" class="room-header-share">
 				<i class="iconfont icon-share1"></i>
@@ -7,7 +7,7 @@
 		</x-header>
 		<swiper :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
 			<swiper-item class="swiper-demo-img" v-for="(item, index) in demo01_list" :key="index">
-				<img :src="item.src" @click="openPhotoSwipe(index)">
+				<img :src="item.src" @click="photoViewOptions.index = index; $refs.pswp.openPhotoView()">
 			</swiper-item>
 			<div class="swiper-title">
 				<span>{{demo01_list[curBannerIndex].title}}</span>
@@ -130,80 +130,24 @@
 				保存
 			</div>
 		</Popup>
-		<!-- Root element of PhotoSwipe. Must have class pswp. -->
-		<div ref="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-			<!-- Background of PhotoSwipe.
-					It's a separate element as animating opacity is faster than rgba(). -->
-			<div class="pswp__bg"></div>
-
-			<!-- Slides wrapper with overflow:hidden. -->
-			<div class="pswp__scroll-wrap">
-
-				<!-- Container that holds slides.
-						PhotoSwipe keeps only 3 of them in the DOM to save memory.
-						Don't modify these 3 pswp__item elements, data is added later on. -->
-				<div class="pswp__container">
-						<div class="pswp__item"></div>
-						<div class="pswp__item"></div>
-						<div class="pswp__item"></div>
-				</div>
-
-				<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-				<div class="pswp__ui pswp__ui--hidden">
-
-					<div class="pswp__top-bar">
-
-						<!--  Controls are self-explanatory. Order can be changed. -->
-
-						<div class="pswp__counter"></div>
-
-						<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-						<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-						<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-						<!-- element will get class pswp__preloader--active when preloader is running -->
-						<div class="pswp__preloader">
-							<div class="pswp__preloader__icn">
-								<div class="pswp__preloader__cut">
-									<div class="pswp__preloader__donut"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-						<div class="pswp__share-tooltip"></div>
-					</div>
-
-					<div class="pswp__caption">
-						<div class="pswp__caption__center"></div>
-					</div>
-
-				</div>
-
-			</div>
-
-		</div>
+		<PhotoView ref="pswp" :photoList="demo01_list" :options="photoViewOptions">
+		</PhotoView>
   </div>
 </template>
 
 <script>
 import { XButton, Popup, Swiper, SwiperItem } from 'vux'
-import PhotoSwipe from 'photoswipe/dist/photoswipe.js'
-import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js'
-import 'photoswipe/dist/photoswipe.css'
-import 'photoswipe/dist/default-skin/default-skin.css'
+import PhotoView from '@/components/photoView'
 export default {
   components: {
 		XButton,
 		Popup,
 		Swiper,
-		SwiperItem
+		SwiperItem,
+		PhotoView
   },
   mounted() {
-
+		// this.$refs.pswp.openPhotoView()
   },
   data() {
     return {
@@ -261,7 +205,14 @@ export default {
 					deposit: ''
 				}
 			],
-			curBannerIndex: 0
+			curBannerIndex: 0,
+			photoViewOptions: {
+				index: 0,
+				history: false,
+				loop: false,
+				captionEl: false,
+				tapToToggleControls: false
+			}
     }
   },
   methods: {
@@ -277,13 +228,6 @@ export default {
 		},
 		handleRelease() {
 			console.log(this.roomInfo.releaseStatus);
-		},
-		openPhotoSwipe(i) {
-			let options = {
-        index: i,
-        loop: false
-      };
-			new PhotoSwipe( this.$refs.pswp, PhotoSwipeUI_Default, this.demo01_list, options).init();
 		}
   }
 }
@@ -526,5 +470,8 @@ export default {
 			color: #fff;
 			background-color: #4680ff;
 		}
+	}
+	.heihei {
+		background: #ff0000;
 	}
 </style>
