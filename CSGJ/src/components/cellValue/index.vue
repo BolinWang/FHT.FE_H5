@@ -35,7 +35,17 @@
     },
     methods: {
       getValue() {
-        this.valueName = value2name(this.value, this.data, this.join)
+        let val = []
+        if (this.value instanceof Array) {
+          val = this.value
+        } else {
+          if (Number.isInteger(this.value)) {
+            val = [this.value]
+          } else {
+            val = this.value.split(',')
+          }
+        }
+        this.valueName = value2name(val, this.data, this.join)
       }
     },
     watch: {

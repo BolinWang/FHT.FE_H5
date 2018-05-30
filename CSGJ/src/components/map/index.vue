@@ -3,9 +3,12 @@
     <div id="mapDiv">
       <i class="iconfont icon-ditubiaodianb mapIcon" v-show="showIcon"></i>
       <baidu-map class="map" :center="center" :zoom="zoom" @ready="mapReady">
-        <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="false" :autoLocation="true" @locationSuccess="locationSuccess"></bm-geolocation>
       </baidu-map>
     </div>
+    <select name="" id="">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
     <div class="mapBox">
       <div style="text-align:center;" v-show="showLoading">
         <inline-loading></inline-loading>
@@ -42,6 +45,7 @@
         @on-click-left="editShow = false"
         @on-click-right="editSave"></popup-header>
         <group gutter="0" title="当前选择位置信息" label-width="90px">
+          <!-- <popup-picker title="区域" :data="optList" :popup-style="{'z-index': 502}"></popup-picker> -->
           <selector title="区域" :options="optList" v-model="areaValue" :value-map="valueMap" ref="area"></selector>
           <x-textarea title="小区名称" ref="editTitle" v-model="currentData.title" :show-counter="false" :rows="1" autosize></x-textarea>
           <x-textarea title="小区地址" v-model="currentData.address" :show-counter="false" ref="editAddress" :rows="1" autosize></x-textarea>
@@ -82,7 +86,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { Search, XInput, InlineLoading, PopupHeader, Popup, TransferDom, Selector, XTextarea, debounce } from 'vux'
+  import { Search, XInput, InlineLoading, PopupHeader, Popup, TransferDom, Selector, XTextarea, debounce, PopupPicker } from 'vux'
   import cityData from '../cityData/cityData'
   import scroll from '@/components/scroll'
   export default {
@@ -98,7 +102,8 @@
       PopupHeader, 
       Popup,
       Selector,
-      XTextarea
+      XTextarea,
+      PopupPicker
     },
     props: {
       wordShow: {
@@ -117,8 +122,9 @@
     },
     data() {
       return {
-        center: {lng: 0, lat: 0},
+        center: { lat: 0, lng: 0 },
         zoom: 18,
+        list1: [['小米', 'iPhone', '华为', '情怀', '三星', '其他', '不告诉你']],
         showIcon: false,
         BmapObj: '',
         mapObj: '',
@@ -143,6 +149,17 @@
         areaValue: {}
       }
     },
+    mounted() {
+      window['locationStatusInAndroid'] = (data) => {
+        let obj = JSON.parse(data)
+        this.center = {
+          lng: obj.location.longitude,
+          lat: obj.location.latitude
+        }
+        let point = new BMap.Point(obj.location.longitude, obj.location.latitude)
+        this.getCenterData(point)
+      }
+    },
     methods: {
       editSave() {
         this.editShow = false
@@ -151,8 +168,6 @@
         this.searchParam()
       }, 500),
       searchParam() { //关键字搜索
-        // forceLocal表示是否将搜索范围约束在当前城市
-        // this.local.search(this.keyword, {forceLocal:true})
         this.local.searchNearby(this.keyword, this.center, 10000);
       },
       hideSearch() {
@@ -201,19 +216,16 @@
           })
         }
       },
-      locationSuccess({point, addressComponent, marker}) { //手动定位成功后获取当前数据
-        this.getCenterData(point)
-        //地图默认的比例不是自己设置的估计在10左右，但是获取出来的又是18 如果设置的跟之前一样他不会修改所以在17和18来回设置保证可以设置成功
-        this.zoom = this.zoom === 18 ? 17 : 18
-      },
       getCenterData(point) { //查询附近的房子
         let self = this
         this.showLoading = true
         self.searchList = []
         this.geoc.getLocation(point, function(rs){ // 获取所在的区
-          self.nowAreaName = rs.addressComponents.district
-          self.local.searchNearby('房', point, 100);
-        });  
+          if(rs) {
+            self.nowAreaName = rs.addressComponents.district
+            self.local.searchNearby('房', point, 100)
+          }
+        })
       },
       mapReady({BMap, map}) { //地图加载完成
         let self = this
@@ -222,15 +234,20 @@
         this.geolocation = new BMap.Geolocation()
         this.geoc = new BMap.Geocoder();	
         this.showIcon = true
-        // 自动定位当前位置
-        this.geolocation.getCurrentPosition(function(r){
-          if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            self.center = r.point
-            self.getCenterData(r.point)
-          }
-        },{enableHighAccuracy: true,
-        SDKLocation: true})
-        
+
+        if (window.JSRunAs) {
+           window.JSRunAs.getLocation()
+        } else {
+          //自动定位当前位置
+          this.geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+              self.center = r.point
+              self.getCenterData(self.center)
+            }
+          },{enableHighAccuracy: true,
+          SDKLocation: true})
+        }
+       
         // 拖拽完成触发
         map.addEventListener("touchend", function(e){ 
           setTimeout(function(){

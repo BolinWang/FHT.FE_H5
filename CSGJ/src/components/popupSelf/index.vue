@@ -6,7 +6,7 @@
       <flexbox class="popupDiv" :gutter="0" wrap="wrap">
         <flexbox-item class="popupItem" wrap="wrap" v-for="(item, index) in data" :key="index" :span="1/span">
           <div class="flex-popup" 
-            :class="{active: currentVal.indexOf(item.value) !== -1}"
+            :class="{active: currentVal.indexOf(item.value) !== -1 || currentVal.indexOf(String(item.value)) !== -1}"
             @click="chooseFn(item.value)"
           >{{item.label}}</div>
         </flexbox-item>
@@ -42,7 +42,6 @@
         default: true
       },
       value: {
-        type: Array,
         default: []
       }
     },
@@ -62,14 +61,28 @@
        showPop: false
       }
     },
-    mounted() {
-      this.currentVal = this.value
-    },
     methods: {
+      hh() {
+        return true
+      },
+      valueToArr(value) { //value 转为数组
+        let val = []
+        if (value instanceof Array) {
+          val = value
+        } else {
+          if (Number.isInteger(value)) {
+            val = [value]
+          } else if (value !== '') {
+            val = value.split(',')
+          }
+        }
+        this.currentVal = val
+      },
       chooseFn(val) {
         if (this.isradio) {
           this.currentVal = [val]
-          this.$emit('closePop')
+          this.hidePop()
+          this.updateVal()
         } else {
           if (val === 0) { //点击不限制其他选项自动取消
             this.currentVal = [0]
@@ -77,18 +90,21 @@
             let arr = deepClone(this.currentVal)
             let index = arr.indexOf(val)
             index < 0 ? arr.push(val) : arr.splice(index, 1)
-            let notLimit = arr.indexOf(0)
+            let notLimit = arr.indexOf(0) //判断是否选择了不限制，获取位置删除不限制选项
             notLimit > -1 ? arr.splice(notLimit, 1) : ''
             this.currentVal = deepClone(arr)
           } 
-        }
+        } 
       },
       save() {
-        this.$emit('input', this.currentVal)
+        this.updateVal()
         this.hidePop()
       },
       defalutValue() {
-        this.currentVal = this.value
+        this.valueToArr(this.value)
+      },
+      updateVal() {
+        this.$emit('input', this.currentVal.join(','))
       },
       hidePop() {
         this.$emit('closePop')
@@ -99,16 +115,7 @@
         this.showPop = val
       },
       value(val) {
-        this.currentVal = val
-      },
-      currentVal(val) {
-        if (this.isradio) {
-          this.$emit('input', val)
-        } else { //没有选择的时候默认为不限制
-          if (val.length === 0) {
-            val = [0]
-          }
-        }
+        this.valueToArr(val)
       }
     }
   }

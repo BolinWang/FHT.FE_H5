@@ -6,21 +6,21 @@
         <div>钱江西溪新座-西溪路550号</div>
       </cell>
       <cell title="板块" is-link value-align="left" @click.native="zoneShow = true">
-        <cell-value :value="zoneValue" :data="zoneList"></cell-value>
+        <cell-value :value="houseData.subdistrictInfo.zoneId" :data="zoneList"></cell-value>
       </cell>
-      <x-input title="楼幢名称" placeholder="请输入"></x-input>
+      <x-input title="楼幢名称" v-model="houseData.buildingName" placeholder="请输入"></x-input>
       <flexbox class="houseItem" wrap="wrap" :gutter="0">
         <flexbox-item :span="1/2">
-          <x-input :label-width="labelWidth" title="单元" placeholder="非必输"></x-input>
+          <x-input :label-width="labelWidth" v-model="houseData.unitCode" title="单元" placeholder="非必输"></x-input>
         </flexbox-item>
         <flexbox-item :span="1/2">
-          <x-input :label-width="labelWidth" title="房间号" placeholder="请输入"></x-input>
+          <x-input :label-width="labelWidth" v-model="houseData.houseNo" title="房间号" placeholder="请输入"></x-input>
         </flexbox-item>
         <flexbox-item :span="1/2">
-          <x-input :label-width="labelWidth" title="所在楼层" type="number" placeholder="请输入"></x-input>
+          <x-input :label-width="labelWidth" v-model="houseData.floorName" title="所在楼层" type="number" placeholder="请输入"></x-input>
         </flexbox-item>
         <flexbox-item :span="1/2">
-          <x-input :label-width="labelWidth" title="楼层总数" type="number" placeholder="请输入"></x-input>
+          <x-input :label-width="labelWidth" v-model="houseData.floorAmount" title="楼层总数" type="number" placeholder="请输入"></x-input>
         </flexbox-item>
         <flexbox-item :span="1/2">
           <popup-picker class="cellHeight labelWidth" title="户型" 
@@ -33,46 +33,46 @@
           </popup-picker>
         </flexbox-item>
         <flexbox-item :span="1/2">
-          <x-input :label-width="labelWidth" title="面积(㎡)" type="number" placeholder="请输入"></x-input>
+          <x-input :label-width="labelWidth" title="面积(㎡)" type="number" placeholder="请输入" v-model="houseData.houseArea"></x-input>
         </flexbox-item>
         <flexbox-item :span="1/2">
           <cell title="房屋朝向" class="cellHeight labelWidth" is-link @click.native="orientationsShow = true" value-align="left">
-            <cell-value :value="orientationsValue" :data="orientationsList"></cell-value>
+            <cell-value :value="houseData.houseDirection" :data="orientationsList"></cell-value>
           </cell>
         </flexbox-item>
         <flexbox-item :span="1/2">
           <cell title="装修程度" class="cellHeight labelWidth" is-link value-align="left" @click.native="decorationShow = true">
-            <cell-value :value="decorationValue" :data="decorationList"></cell-value>
+            <cell-value :value="houseData.decorationDegree" :data="decorationList"></cell-value>
           </cell>
         </flexbox-item>
       </flexbox>
-      <cell title="房间设施" is-link value-align="left" @click.native="houseFacilitiesShow = true">
-        <cell-value :value="houseFacilitiesValue" :data="houseFacilitiesList"></cell-value>
+      <cell :title="houseData.houseRentType === '1' ? '房间设施' : '公区设施'" is-link value-align="left" @click.native="houseFacilitiesShow = true">
+        <cell-value :value="houseData.facilityItems" :data="houseFacilitiesList"></cell-value>
       </cell>
       <cell title="所属房东" is-link class="black" value-align="left" @click.native="showLandlord = true">{{landlordName}}</cell>
     </group>
     <!-- 所属板块 -->
     <popup-self :data="zoneList" title="请选择板块" 
       :show="zoneShow" 
-      v-model="zoneValue" 
+      v-model="houseData.subdistrictInfo.zoneId"
       @closePop="closePop('zoneShow')">
     </popup-self>
     <!-- 房间朝向 -->
     <popup-self :data="orientationsList" title="房间朝向"
       :show="orientationsShow"
-      v-model="orientationsValue" 
+      v-model="houseData.houseDirection"
       @closePop="closePop('orientationsShow')">
     </popup-self>
     <!-- 装修程度 -->
     <popup-self :data="decorationList" title="装修程度"
       :show="decorationShow"
-      v-model="decorationValue" 
+      v-model="houseData.decorationDegree" 
       @closePop="closePop('decorationShow')">
     </popup-self>
     <!-- 房间设施 -->
     <popup-self :data="houseFacilitiesList" title="房间设施（多选）"
       :show="houseFacilitiesShow"
-      v-model="houseFacilitiesValue" 
+      v-model="houseData.facilityItems" 
       :isradio="false"
       @closePop="closePop('houseFacilitiesShow')">
     </popup-self>
@@ -117,6 +117,12 @@ export default {
     Popup,
     Search
   },
+  props: {
+    houseData: {
+      type: Object,
+      default: {}
+    }
+  },
   filters: {
     mobileStr(val) {
       return val ? plusXing(val, 3, 4) : ''
@@ -127,6 +133,7 @@ export default {
     this.decorationList = this.$store.state.datas.decoration
     this.houseFacilitiesList = this.$store.state.datas.houseFacilities
     this.getUnit()
+    this.dataFormat()
   },
   data() {
     return {
@@ -143,7 +150,7 @@ export default {
       orientationsValue: [],
       decorationShow:false,
       decorationList: [],
-      decorationValue: [],
+      decorationValue: '',
       houseFacilitiesShow: false,
       houseFacilitiesList: [],
       houseFacilitiesValue: [],
@@ -153,12 +160,18 @@ export default {
       showLandlord: false,
       landlordName: '',
       resultList: [
-        { name: '张三', mobile: 18912344321, area: '浦东' },
-        { name: '李四', mobile: 18912353344, area: '松江' },
+        { name: '张三', mobile: 18912344321, area: '浦东', orgOwnId: 1 },
+        { name: '李四', mobile: 18912353344, area: '松江', orgOwnId: 2 },
       ]
     }
   },
   methods: {
+    dataFormat() { //数据处理 保证下拉弹框可以正常显示
+      if (this.houseData.chamberCount && this.houseData.boardCount && this.houseData.toiletCount) {
+        this.unitValue = [String(this.houseData.chamberCount), String(this.houseData.boardCount), String(this.houseData.toiletCount)]
+      }
+     
+    },
     closePop(str) {
       this[str] = false
     },
@@ -179,9 +192,19 @@ export default {
     clickLi(index) {
       this.showLandlord = false
       this.landlordName = this.resultList[index].name
+      this.houseData.orgOwnId = this.resultList[index].orgOwnId
     },
     chooseMap(){
       this.$router.push({name: 'searchMap'})
+    }
+  },
+  watch: {
+    'unitValue'(val) {
+      if(val && val.length > 0) {
+        this.houseData.chamberCount = val[0]
+        this.houseData.boardCount = val[1]
+        this.houseData.toiletCount = val[2]
+      }
     }
   }
 }
