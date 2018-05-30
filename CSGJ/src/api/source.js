@@ -100,11 +100,8 @@ export function saveFollowInfoApi(params = {}) {
 // 获取房源信息
 export function getRoomDetailApi(params = {}) {
   return fetch({
-    url: '/api',
+    url: '/fangyuan/queryRoomDetail.htm',
     method: 'post',
-    data: {
-      method: 'saveFollowInfo',
-      params
-    }
+    data: params
   })
 }

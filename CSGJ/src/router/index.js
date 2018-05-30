@@ -79,7 +79,8 @@ export default new Router({
       path: '/workbench',
       component: _import('default'),
       children: [
-        { path: '', component: _import('workbench/index'), name: 'workbenchIndex' }
+				{ path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
+				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' }
       ]
     },
     {
