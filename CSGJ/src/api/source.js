@@ -96,3 +96,15 @@ export function saveFollowInfoApi(params = {}) {
     }
   })
 }
+
+// 获取房源信息
+export function getRoomDetailApi(params = {}) {
+  return fetch({
+    url: '/api',
+    method: 'post',
+    data: {
+      method: 'saveFollowInfo',
+      params
+    }
+  })
+}
