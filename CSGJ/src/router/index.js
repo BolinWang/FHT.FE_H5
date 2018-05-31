@@ -80,7 +80,9 @@ export default new Router({
       component: _import('default'),
       children: [
 				{ path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
-				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' }
+				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' },
+				{ path: 'rent-bill', component: _import('workbench/rentBill'), name: 'rentBill' },
+				{ path: 'rent-contract', component: _import('workbench/rentContract'), name: 'rentContract' }
       ]
     },
     {
