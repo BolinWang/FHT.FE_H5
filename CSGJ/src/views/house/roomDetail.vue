@@ -225,6 +225,7 @@ export default {
 		}
 	},
 	created() {
+		
 		getRoomDetailApi({
 			roomCode: '1234567890'
 		}).then((res) => {

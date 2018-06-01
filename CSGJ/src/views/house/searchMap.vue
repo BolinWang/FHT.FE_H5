@@ -1,14 +1,14 @@
 <template>
   <div style="height:100%">
     <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="0">
-      <x-header :left-options="{backText: ''}" slot="header" title="选择房源地址" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
+      <x-header :left-options="{backText: ''}" slot="header" title="选择房源地址" style="width:100%;position:absolute;left:0;top:0;z-index:100;" >
         <div class="search" solt="overwrite-title" @click="doSearch">
           搜索小区/公寓名称
           <i class="iconfont icon-sousuo"></i>
         </div>
-        <div slot="right">确定</div>
+        <div slot="right" @click="saveMapData">确定</div>
       </x-header>
-      <map-search :wordShow="wordShow" @changeShow="changeShow"></map-search>
+      <map-search v-model="mapSearchData" :wordShow="wordShow" @changeShow="changeShow"></map-search>
     </view-box>
   </div>
 </template>
@@ -21,10 +21,14 @@ export default {
     mapSearch
   },
   mounted() {
+    window['backUrl'] = () => {
+      return 'true'
+    }
   },
   data() {
     return {
-      wordShow: false
+      wordShow: false,
+      mapSearchData: {}
     }
   },
   methods: {
@@ -33,6 +37,10 @@ export default {
     },
     changeShow() {
       this.wordShow = false
+    },
+    saveMapData(){
+      this.$store.commit('updateMapData', this.mapSearchData)
+      this.$router.back(-1)
     }
   }
 }

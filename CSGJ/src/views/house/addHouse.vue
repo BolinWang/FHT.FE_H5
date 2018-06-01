@@ -10,11 +10,26 @@
         <x-button  type="primary" action-type="button" @click.native="saveData">确定</x-button>
       </div>
     </view-box>
+    <popup v-model="successShow" width="100%" height="100%">
+      <popup-header title="添加成功" class="successHead"></popup-header>
+      <msg title="房源录入成功">
+        <template slot="description">
+          立即完善<span style="color:#ff7100">交租方式、房源照片</span><br>
+          并发布到流量渠道可以第一时间出房哦！
+        </template>
+        <template slot="buttons">
+          <x-button type="primary">立即完善</x-button>
+          <x-button type="primary">继续录入</x-button>
+          <x-button type="default">返回</x-button>
+        </template>
+      </msg>
+      
+    </popup>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, XButton } from 'vux'
+import { Tab, TabItem, XButton, Popup, Msg, PopupHeader } from 'vux'
 import houseInfo from './components/houseInfo'
 import roomInfo from './components/roomInfo'
 
@@ -24,10 +39,14 @@ export default {
     TabItem,
     XButton,
     houseInfo,
-    roomInfo
+    roomInfo,
+    Popup,
+    Msg,
+    PopupHeader
   },
   activated() {
     this.houseData.houseRentType = this.$route.params.houseType
+    this.houseData.subdistrictInfo = this.$store.state.datas.mapSearchData
   },
   mounted() {
     window['backUrl'] = () => {
@@ -38,6 +57,7 @@ export default {
   data() {
     return {
       houseType: 1,
+      successShow: false,
       houseData: {
         buildingName: '',
         unitCode: '',
@@ -85,6 +105,5 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-  
   
 </style>

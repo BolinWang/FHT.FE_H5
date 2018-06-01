@@ -69,9 +69,9 @@ export default new Router({
           name: 'roomDetail'
         },
         {
-          path: 'photoDetail',
-          component: resolve => require(['@/views/house/photoDetail'], resolve),
-          name: 'photoDetail'
+          path: 'addSuccess/:houseType',
+          component: resolve => require(['@/views/house/addSuccess'], resolve),
+          name: 'addSuccess'
         }
       ]
     },

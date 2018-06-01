@@ -28,13 +28,17 @@ const datas = {
       { label: '餐桌', value: 10 }
     ],
     houseNature: [
-      { label: '独立卫生', value: 1 },
+      { label: '独立卫生间', value: 1 },
       { label: '独立阳台', value: 2 },
       { label: '独立厨房', value: 3 },
       { label: '带飘窗', value: 4 }
-    ]
+    ],
+    mapSearchData: {}
   },
   mutations: {
+    updateMapData(state, newVal) {
+      state.mapSearchData = newVal
+    }
   }
 }
 

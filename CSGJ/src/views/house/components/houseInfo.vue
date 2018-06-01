@@ -2,11 +2,14 @@
   <div>
     <group :label-width="labelWidth" class="noTop">
       <cell title="房源地址" is-link value-align="left" @click.native="chooseMap">
-        <div>浙江省/杭州市/西湖区</div>
-        <div>钱江西溪新座-西溪路550号</div>
+        <div v-if="!houseData.subdistrictInfo.provinceId">请选择</div>
+        <div v-else class="black">
+          <div>{{houseData.subdistrictInfo | areaStr}}</div>
+          <div>{{houseData.subdistrictInfo | addressStr}}</div>
+        </div>
       </cell>
       <cell title="板块" is-link value-align="left" @click.native="zoneShow = true">
-        <cell-value :value="houseData.subdistrictInfo.zoneId" :data="zoneList"></cell-value>
+        <cell-value :data="zoneList"></cell-value>
       </cell>
       <x-input title="楼幢名称" v-model="houseData.buildingName" placeholder="请输入"></x-input>
       <flexbox class="houseItem" wrap="wrap" :gutter="0">
@@ -52,11 +55,10 @@
       <cell title="所属房东" is-link class="black" value-align="left" @click.native="showLandlord = true">{{landlordName}}</cell>
     </group>
     <!-- 所属板块 -->
-    <popup-self :data="zoneList" title="请选择板块" 
-      :show="zoneShow" 
-      v-model="houseData.subdistrictInfo.zoneId"
+    <!-- <popup-self :data="zoneList" title="请选择板块" 
+      :show="zoneShow"
       @closePop="closePop('zoneShow')">
-    </popup-self>
+    </popup-self> -->
     <!-- 房间朝向 -->
     <popup-self :data="orientationsList" title="房间朝向"
       :show="orientationsShow"
@@ -103,6 +105,7 @@ import { XInput, Flexbox, FlexboxItem, PopupPicker, Popup, Search, TransferDom }
 import cellValue from '@/components/cellValue'
 import popupSelf from '@/components/popupSelf'
 import { plusXing } from '@/utils'
+import { getAreaName } from '@/utils/areaName'
 export default {
   directives: {
     TransferDom
@@ -119,13 +122,18 @@ export default {
   },
   props: {
     houseData: {
-      type: Object,
       default: {}
     }
   },
   filters: {
     mobileStr(val) {
       return val ? plusXing(val, 3, 4) : ''
+    },
+    areaStr(val){
+      return getAreaName(val.provinceId, val.cityId, val.addrRegionId)
+    },
+    addressStr(val) {
+      return val.subdistrictAddress ? `${val.subdistrictName}-${val.subdistrictAddress}` : ''
     }
   },
   mounted() {
@@ -205,6 +213,9 @@ export default {
         this.houseData.boardCount = val[1]
         this.houseData.toiletCount = val[2]
       }
+    },
+    'houseData.subdistrictInfo'(val) {
+      this.houseData.subdistrictInfo = val
     }
   }
 }

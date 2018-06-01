@@ -10,10 +10,6 @@
         </div>
       </x-header>
       <house-list :data="[1, 2]"></house-list>
-      <div @click="tooo" style="width:100px;height:50px;background:red">hh</div>
-      {{imgSrc}}
-      <input type="file" @change="showImg" id="fileinput" class="inputfile" multiple accept="image/*;" capture="camera">
-      <img :src="imgSrc" alt="">
       <footers :selectedIndex="1" slot="bottom"></footers>
       <actionsheet 
         v-model="showAdd" 
