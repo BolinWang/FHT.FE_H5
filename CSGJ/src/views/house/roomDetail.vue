@@ -1,20 +1,22 @@
 <template>
   <div style="height: 100%">
-		<view-box ref="viewBox" v-if="bannerList.length">
+		<view-box ref="viewBox">
 			<x-header class="room-header" :left-options="{backText: ''}">
 				<div slot="right" class="room-header-share">
 					<i class="iconfont icon-share1"></i>
 				</div>
 			</x-header>
-			<swiper :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
-				<swiper-item class="swiper-demo-img" v-for="(item, index) in bannerList" :key="index">
-					<img :src="item.src" @click="photoViewOptions.index = index; $refs.pswp.openPhotoView()">
-				</swiper-item>
-				<div class="swiper-title">
-					<span>{{bannerList[curBannerIndex].title}}</span>
-					<span>{{curBannerIndex + 1}}/{{bannerList.length}}</span>
-				</div>
-			</swiper>
+			<div class="room-banner-container">
+				<swiper v-if="bannerList.length" :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
+					<swiper-item class="swiper-demo-img" v-for="(item, index) in bannerList" :key="index">
+						<img :src="item.src" @click="photoViewOptions.index = index; $refs.pswp.openPhotoView()">
+					</swiper-item>
+					<div class="swiper-title">
+						<span>{{bannerList[curBannerIndex].title}}</span>
+						<span>{{curBannerIndex + 1}}/{{bannerList.length}}</span>
+					</div>
+				</swiper>
+			</div>
 			<div class="room-info">
 				<div class="room-info-row">
 					<div class="row-icon">
@@ -263,6 +265,10 @@ export default {
 			font-size: 24px;
 			line-height: 1;
 		}
+	}
+	.room-banner-container {
+		width: 360px;
+		height: 270px;
 	}
 	.room-banner {
 		width: 360px;
