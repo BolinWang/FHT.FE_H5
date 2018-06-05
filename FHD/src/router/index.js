@@ -33,6 +33,11 @@ export default new Router({
       path: '/sourceFollow/:guestSourceId',
       name: 'sourceFollow',
       component: _import('sourceFollow')
+    },
+    {
+      path: '/reminder',
+      name: 'reminder',
+      component: _import('reminder')
     }
   ]
 })

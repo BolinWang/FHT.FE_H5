@@ -2,45 +2,60 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-16 14:13:09
+ * @Last Modified time: 2018-06-04 13:46:59
  */
 
 <template>
   <div style="height:100%">
-    <view-box ref="viewBox" body-padding-top="46px" >   
-      <x-header title="客源管理" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
-        <x-icon slot="overwrite-left" type="ios-search-strong" style="fill:#fff;position:relative;top:-8px;left:-3px;" size="30" @click.native="setFocus"></x-icon>
-        <x-icon slot="right" @click.native="toAdd" type="ios-plus-outline" style="fill:#fff;position:relative;top:-8px;right:-3px;font-weight:700" size="30"></x-icon>
-      </x-header>
-      <div class="search">
-        <search 
-        v-show="searchShow" 
-        :auto-fixed="false" 
-        v-model="keyWord" 
-        ref="search"
-        placeholder="姓名/手机" 
-        @on-submit="searchParam"
-        @on-clear="clearSearch"
-        @on-cancel="clearSearch"></search>
+    <view-box ref="viewBox" >   
+      <div class="searchPop">
+        <div class="popTop">
+          <ul class="tab">
+            <li :class="{active: tabIndex === 0}" @click="tabIndex = 0">未签约租客</li>
+            <li :class="{active: tabIndex === 1}" @click="tabIndex = 1">已签约租客</li>
+          </ul>
+          <div class="cancel" @click="addGuest">
+            <i class="iconfont icon-xinjian1"></i>
+          </div>
+        </div>
+        <div class="popSearch">
+          <search :auto-fixed="false"
+            v-model="keyword"
+            @on-change="keywordSearch"
+            placeholder="姓名/手机号码">
+          </search>
+        </div> 
       </div>
-      <scroll :pullUpLoad="false" @pullingDown="pullingDown" :data="listData">
-        <ul class="userNav">
-          <li v-for="(item, key) in listData" @click="toDetail(item)" :key="key">
-            <div class="userLeft">
-              <div class="line">
-                <div class="name ellipsis">{{item.name}}</div>
-                <div class="gender">{{item.gender | genderStr}}</div>
-              </div>
-              <div class="mobile">{{item.mobile}}</div>
+      <scroll>
+        <ul class="guestNav">
+          <li>
+            <div class="line">
+              <span class="name">张三</span>
+              <span class="gender">先生</span>
+              <span class="userStatus">低</span>
             </div>
-            <div :class="['userStatus', item.intentionality == 1 ? 'success' : item.intentionality == 3 ? 'warn' : '']">
-              {{item.intentionality | statusStr}}
-              </div>
-            <div class="userRight">{{item | listStatus}}</div>
-            <i class="iconfont icon-youjiantou"></i>
+            <div class="line">
+              <div class="mobile">13812341234</div>
+              <div class="watchTime">已带看 <span class="text-danger">0</span> 次</div>
+            </div>
+            <div class="line rightIcon borderTop">
+              最后操作时间：2018/05/21 12:12:12
+            </div>
           </li>
-          <div class="clearfix"></div>
-          <i class="iconfont icon-wushuju" v-show="listShow"></i>
+          <li>
+            <div class="line">
+              <span class="name">张三</span>
+              <span class="gender girl">女士</span>
+              <span class="userStatus statusColor2">中</span>
+            </div>
+            <div class="line">
+              <div class="mobile">13812341234</div>
+              <div class="watchTime">已带看 <span class="text-danger">0</span> 次</div>
+            </div>
+            <div class="line rightIcon borderTop">
+              最后操作时间：2018/05/21 12:12:12
+            </div>
+          </li>
         </ul>
       </scroll>
       <footers :selectedIndex="3" slot="bottom"></footers>
@@ -61,107 +76,92 @@ export default {
     Search
   },
   mounted() {
-    this.searchParam()
   },
   filters: {
-    genderStr(val) {
-      const gender = ['先生', '女士']
-      return val ? gender[val - 1] : '先生'
-    },
-    statusStr(val) {
-      const status = ['低', '中', '高']
-      return val ? status[val - 1] : '中'
-    },
-    listStatus(val) {
-      let statusStr = ''
-      switch (val.status) {
-        case 0:
-          statusStr = '新增'
-          break
-        case 1:
-          const arr = ['', '电话-意向中', '电话-约带看', '电话-已签约', '电话-无效']
-          statusStr = val.statusType ? arr[val.statusType] : '未知状态'
-          break
-        case 2:
-          statusStr = val.statusType ? '带看-带看中' : '未知状态'
-          break
-        case 3:
-          const arrs = ['', '结束带看-未签约', '结束带看-已签约']
-          statusStr = val.statusType ? arrs[val.statusType] : '未知状态'
-          break
-        default:
-          statusStr = '未知状态'
-      }
-      return statusStr
-    }
+    
   },
   data() {
     return {
-      userName: '',
-      keyWord: '',
-      listShow: false,
-      searchShow: false,
-      listData: []
+      tabIndex: 0,
+      keyword: '',
+      show: false
     }
   },
   methods: {
-    setFocus () {
-      this.searchShow = true
-      let self = this
-      setTimeout(function(){
-        self.$refs.search.setFocus()
-      },20)
+    keywordSearch() {
       
     },
-    pullingDown() { //下拉刷新
-      this.searchParam()
-    },
-    clearSearch() {
-      this.keyWord = ''
-      this.searchParam()
-      this.searchShow = false
-    },
-    toDetail(item) {
-      this.$router.push({name: 'sourceDetail', params: {guestSourceId: item.guestSourceId}})
-    },
-    searchParam() {
-      let param = {
-        pageNo: 1,
-        pageSize: 20,
-        keyword: this.keyWord
-      }
-      queryListByPageApi(param).then(res => {
-        if (res.data && res.data.content) {
-          this.listData = res.data.content || []
-          this.listShow = this.listData.length > 0 ? false : true
-        }
-      }).catch(res => {
-        this.$vux.toast.text(res.message)
-      })
-    },
-    toAdd() {
-      this.$router.push({name: 'addSource', params: {guestSourceId: 0}})
+    addGuest() {
+      this.$router.push({name: 'addSource', params: {guestSourceId: 1}})
     }
   }
 }
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-  .left {
-    float: left;
+  .popTop {
+    .cancel {
+      line-height: 50px;
+    }
   }
-  .right {
-    float: right;
+  .guestNav {
+    li {
+      padding: 12px 0 0 12px;
+      min-height: 100px;
+      width: 100%;
+      float: left;
+      margin-bottom: 2px;
+      background: #fff;
+      color: #999;
+      .line {
+        min-height: 28px;
+        line-height: 28px;
+      }
+      .name {
+        font-size: 14px;
+        color: #000;
+      }
+      .gender {
+        width: 40px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 4px;
+        display: inline-block;
+        border: 1px solid #259B24;
+        color: #259B24;
+      }
+      .girl {
+        border-color: #FF9800;
+        color: #FF9800;
+      }
+      .userStatus {
+        width: 20px;
+        height: 20px;
+        display: block;
+        text-align: center;
+        line-height: 20px;
+        color: #fff;
+        float: right;
+        margin-right: 12px;
+        background: #259B24;
+      }
+      .statusColor1 {
+        background: #4680FF;
+      }
+      .statusColor2 {
+        background: #FF9800;
+      }
+      .mobile {
+        float: left;
+      }
+      .watchTime {
+        float: right;
+        margin-right: 12px;
+      }
+      .borderTop {
+        border-top: 1px solid #ddd;
+      }
+    }
   }
-  .tabNav {
-    margin-top:10px;
-  }
-  .search {
-    width: 100%;
-    position: absolute;
-    top:0;
-    left: 0;
-    z-index: 111;
-  }
-
 </style>

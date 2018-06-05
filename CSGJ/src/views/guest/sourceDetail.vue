@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-30 15:28:42
+ * @Last Modified time: 2018-06-05 14:55:51
  */
 
 <template>
@@ -15,60 +15,77 @@
       slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
         <span slot="right">编辑</span>
       </x-header>
-      <div class="line top10">
-        <div class="labelText">姓名：</div>
-        <div class="inputs">{{userForm.name}}</div>
-        <div class="gender" v-show="userForm.mobile">{{userForm.gender | genderStr}}</div>
+      <div class="guestStatus">
+        <div>
+          <span>已签约</span>
+          <span>2018/08/01 12:00:00</span>
+          <span>操作员：李四</span>
+        </div>
+        <div class="roomName">天天小区-3幢-1单元-2楼-203号房间A</div>
       </div>
-      <div class="line" @click="callMobile(userForm.mobile)">
-        <div class="labelText">手机号码：</div>
-        <div class="inputs">{{userForm.mobile}}</div>
-        <i class="iconfont icon-dianhua" v-show="userForm.mobile"></i>
-      </div>
-      <div class="line" v-for="(item, index) in userForm.guestSourceAreas" :key="index">
-        <div class="labelText">{{index === 0 ? '需求区域：' : ''}}</div>
-        <div class="inputs">{{item | areaStr}}</div>
-        <div class="clear"></div>
-      </div>
-      <div class="line">
-        <div class="labelText">来源：</div>
-        <div class="inputs">{{userForm | listStatus}}</div>
-      </div>
-      <div class="line">
-        <div class="labelText">价格：</div>
-        <div class="inputs">{{userForm | priceStatus}}</div>
-      </div>
-      <div class="line">
-        <div class="labelText">类型：</div>
-        <div class="inputs">{{userForm.type | typeStatus}}</div>
-      </div>
-      <div class="line" v-if="userForm.type === 2">
-        <div class="labelText">要求：</div>
-        <div class="inputs">{{userForm.requirement | requireStatus}}</div>
-      </div>
-      <div class="line">
-        <div class="labelText">意向度：</div>
-        <div class="inputs">{{userForm.intentionality | statusStr}}</div>
-      </div>
-      <div class="center">跟进记录</div>
-      <ul class="statusList">
-        <li v-for="(item, key) in followInfos" :key="key">
-          <div>
-            <div class="statusText">{{item | followStr}}</div>
-            <div class="statusUser">{{item.userName || '未知操作人'}}</div>
-            <div class="statusTime">{{item.followDate}}</div>
+      <div class="guestInfo">
+        <div class="userInfo">
+          <div class="half">
+            <span>姓名：张三</span>
+            <span class="gender">先生</span>
           </div>
-          <div class="desc" v-if="item.remark">备注：{{item.remark}}</div>
+          <div class="half">
+            <span>手机号码：13812341234 <i class="iconfont"></i></span>
+          </div>
+          <div class="half">
+            <span>来源：网络-58个人</span>
+          </div>
+          <div class="half">
+            <span>意向度：<span>高</span></span>
+          </div>
+        </div>
+        <div class="askInfo">
+          <div class="line">
+            <div class="half">
+              房源类型：合租
+            </div>
+            <div class="half">
+              月租金：<span class="text-danger">1000.00 ~ 2000.00</span>
+            </div>
+          </div>
+          <div class="line">
+            房源要求：
+            <span>独卫</span>
+            <span>厨房</span>
+            <span>阳台</span>
+            <span>飘窗</span>
+          </div>
+          <div class="line">
+            位置需求（1）： 杭州市-西湖区-黄龙
+          </div>
+        </div>
+      </div>
+      <tab>
+        <tab-item selected>跟进记录（5）</tab-item>
+        <tab-item>带看记录（2）</tab-item>
+      </tab>
+      <ul class="recordNav">
+        <li>
+          <div class="line">
+            <span>2018/08/01 12:00:00</span>
+            <span>李四</span>
+            <span>电话跟进</span>
+          </div>
+          <div class="line">
+            备注：预约5号下午3点看房
+          </div>
         </li>
-        <div class="clear"></div>
       </ul>
       <div slot="bottom" class="bottomDiv">
         <flexbox :gutter="0">
-          <flexbox-item >
-            <x-button class="primary-btn" action-type="button" @click.native="sign">签约</x-button>
+          <flexbox-item class="btn-box">
+            <div class="btn-item text-warning">跟进</div>
           </flexbox-item>
-          <flexbox-item>
-            <x-button type="primary" action-type="button" @click.native="changeStatus">跟进</x-button>
+          <flexbox-item class="btn-box">
+            <div class="btn-item text-success">带看</div>
+          </flexbox-item>
+          <flexbox-item class="btn-box">
+            <div class="btn-item blue">签约</div>
           </flexbox-item>
         </flexbox>
       </div>
@@ -77,7 +94,7 @@
 </template>
 
 <script>
-import { XButton, Flexbox, FlexboxItem } from 'vux'
+import { XButton, Flexbox, FlexboxItem, Tab, TabItem } from 'vux'
 import scroll from '@/components/scroll'
 import { detailApi } from '@/api/source'
 
@@ -86,7 +103,9 @@ export default {
     XButton,
     scroll,
     Flexbox, 
-    FlexboxItem
+    FlexboxItem,
+    Tab, 
+    TabItem
   },
   mounted() {
     window['backUrl'] = () => {
@@ -175,20 +194,20 @@ export default {
   },
   methods: {
     getDetail() {
-      let param = {
-        guestSourceId: parseInt(this.$route.params.guestSourceId)
-      }
-      detailApi(param).then(res => {
-        if (res.data && typeof res.data === 'object') {
-          this.userForm = Object.assign(this.userForm, res.data)
-          this.followInfos = res.data.followInfos
-        }
-      }).catch(res => {
-        this.$vux.toast.text(res.message)
-      })
+      // let param = {
+      //   guestSourceId: parseInt(this.$route.params.guestSourceId)
+      // }
+      // detailApi(param).then(res => {
+      //   if (res.data && typeof res.data === 'object') {
+      //     this.userForm = Object.assign(this.userForm, res.data)
+      //     this.followInfos = res.data.followInfos
+      //   }
+      // }).catch(res => {
+      //   this.$vux.toast.text(res.message)
+      // })
     },
     callMobile(mobile) {
-      if (mobile) {
+      if (mobile && window.call) {
         window.call.callAction(mobile)
       }
     },
@@ -209,114 +228,20 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-   * {
-    box-sizing: border-box;
+  .btn-box {
+    padding: 10px 0;
+    background: #fff;
+    &:last-child {
+      .btn-item {
+        border-right: none;
+      }
+    }
   }
-  .left {
-    float: left;
-  }
-  .right {
-    float: right;
-  }
-  .relative {
-    position: relative;
-  }
-  .positionRight {
-    position: absolute;
-    right: 10px;
-    color: #ccc;
-  }
-  .top10 {
-    margin-top: 10px;
-  }
-  .center {
+  .btn-item {
+    width: 100%;
+    height: 100%;
     text-align: center;
-    line-height: 70px;
-    border-top:1px solid #ddd;
-    font-size: 0.4rem;
-    color: #666;
-  }
-  .gender {
-    padding: 0px 10px;
-    color: #fff;
-    background: #4680FF;
-    position: absolute;
-    line-height: 40px;
-    font-size: 0.3rem;
-    top: 8px;
-    left:350px;
-  }
-  .clear {
-    clear: both;
-  }
-  ul.statusList {
-    width: 100%;
-    margin-bottom: 100px;
-    li {
-      .left;
-      width: 100%;
-      margin-bottom: 15px;
-      background: #fff;
-      padding: 20px 0;
-      line-height: 30px;
-      min-height: 30px;
-      text-align: center;
-      .statusText {
-        width: 3rem;
-        border-right: 1px solid #ccc;
-        text-align: left;
-        padding-left: 20px;
-        .left;
-      }
-      .statusUser {
-        width: 2.5rem;
-        .left;
-        border-right: 1px solid #ccc;
-      }
-      .statusTime {
-        .left;
-        width: 4.5rem;
-      }
-      .desc {
-        width: 100%;
-        text-align: left;
-        padding-top: 20px;
-        line-height: 40px;
-        color: #666;
-        .left;
-        padding-left: 20px;
-      }
-    }
-  }
-  .line {
-    width: 100%;
-    min-height: 60px;
-    line-height: 60px;
-    padding-left: 20px;
-    // border-bottom: 1px solid #eee;
-    font-size: 0.35rem;
-    position: relative;
-    .labelText {
-      width: 160px;
-      height: 60px;
-      text-align: right;
-      padding-right: 10px;
-      .left;
-    }
-    .icon-dianhua {
-      color:rgb(56, 224, 40);
-      left: 380px;
-      top:0;
-      position: absolute;
-    }
-    .inputs {
-      .left;
-      border:none;
-      background: none;
-      padding: 15px 0;
-      line-height: 30px;
-      width: 500px;
-      font-size: 0.35rem;
-    }
+    border-right: 1px solid #D9D9D9;
+    font-size: 14px; 
   }
 </style>

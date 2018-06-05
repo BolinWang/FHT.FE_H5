@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:33:54 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:33:54 
+ */
+
 <template>
   <div v-show="data.length > 0">
     <tab :scroll-threshold="7" v-if="showTab">

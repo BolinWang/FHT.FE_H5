@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:36:28 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:36:28 
+ */
+
 <template>
   <div style="height:100%;background:#fff">
     <div class="searchPop" :class="{bgcolor: tabIndex === 1}">
@@ -333,60 +340,7 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-  .search {
-    width: 300px;
-    height: 30px;
-    line-height: 30px;
-    padding-left: 30px;
-    border-radius: 5px;
-    background-color: rgba(112, 161, 255, 1);
-    position: relative;
-    top: -5px;
-    &:after{
-      content: '\e60a';
-      font-family: "iconfont";
-      position: absolute;
-      left: 10px;
-    }
-  }
   
-  .popTop {
-    width: 100%;
-    height: 55px;
-    background-color: #4680FF;
-    ul.tab {
-      padding-left: 60px;
-      line-height: 35px;
-      li {
-        font-size: 16px;
-        padding: 5px;
-        color: #ddd;
-        text-align: center;
-        float: left;
-        border-bottom: 2px solid #4680FF;
-        &:first-child {
-          margin-right: 50px;
-        }
-      }
-      .active {
-        border-bottom: 2px solid #fff;
-        color: #fff;
-        font-size: 18px;
-      }
-    }
-    .cancel {
-      color: #fff;
-      width: 50px;
-      float: right;
-      font-size: 14px;
-      text-align: center;
-      line-height: 55px;
-    }
-  }
-  .bgcolor {
-    height: 100%;
-    background: #4680FF;
-  }
   .searchGroup {
     .line {
       width:  100%;

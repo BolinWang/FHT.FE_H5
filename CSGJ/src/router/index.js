@@ -67,11 +67,6 @@ export default new Router({
           path: 'roomDetail',
           component: resolve => require(['@/views/house/roomDetail'], resolve),
           name: 'roomDetail'
-        },
-        {
-          path: 'addSuccess/:houseType',
-          component: resolve => require(['@/views/house/addSuccess'], resolve),
-          name: 'addSuccess'
         }
       ]
     },
@@ -79,7 +74,7 @@ export default new Router({
       path: '/workbench',
       component: _import('default'),
       children: [
-				{ path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
+	      { path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
 				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' },
 				{ path: 'rent-bill', component: _import('workbench/rentBill'), name: 'rentBill' },
 				{ path: 'rent-contract', component: _import('workbench/rentContract'), name: 'rentContract' }

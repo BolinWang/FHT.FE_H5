@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:36:21 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:36:21 
+ */
+
 <template>
   <div style="height: 100%">
 		<view-box ref="viewBox">
@@ -78,8 +85,8 @@
 				<div class="room-options-item" @click="showPayRentWay = true">交租方式</div>
 			</div>
 			<div class="room-options">
-				<div class="room-options-item">房间照片</div>
-				<div class="room-options-item">公区照片</div>
+				<div class="room-options-item" @click="toAppPage(1)">房间照片</div>
+				<div class="room-options-item" @click="toAppPage(3)">公区照片</div>
 			</div>
 			<div class="room-footer">
 				<template v-if="roomInfo.status == 4">
@@ -219,6 +226,26 @@ export default {
 		},
 		handleRelease() {
 			console.log(this.roomInfo.releaseStatus);
+		},
+		toAppPage(type) {
+			let appObj = {
+				roomId: 101,
+				housingType: 2,
+				picType: type,
+				housePublicStatus:2,
+				picList: [{
+					picUrl: 'http://imgtest.memorhome.com/20170424102823070962',
+					picName: '房间',
+					picTag: '房间'
+				},{
+					picUrl: 'http://imgtest.memorhome.com/20170424102823070962',
+					picName: '飘窗',
+					picTag: '飘窗'
+				}],
+				picPlace: ['房间', '独立卫生间', '独立厨房', '独立阳台', '独立客厅', '飘窗']
+			}
+			console.log(JSON.stringify(appObj))
+			window.JSRoom.takeRoomPhoto(JSON.stringify(appObj))
 		}
 	},
 	filters: {
@@ -227,28 +254,30 @@ export default {
 		}
 	},
 	created() {
-		
-		getRoomDetailApi({
-			roomCode: '1234567890'
-		}).then((res) => {
-			let roomInfo = res.data;
-			this.orgName = roomInfo.orgName;
-			this.orgMobile = roomInfo.orgMobile;
-			this.roomName = roomInfo.roomName;
-			this.roomCode = roomInfo.roomCode;
-			this.roomAddr = roomInfo.roomAddr;
-			this.roomStatus = roomInfo.roomStatus;
-			this.pushStatus = roomInfo.pushStatus;
-			let picList = [].concat(roomInfo.roomPictures, roomInfo.housePictures);
-			picList.forEach((v, i) => {
-				this.bannerList.push({
-					src: v.url,
-					title: v.tags,
-					w: 600,
-					h: 400
-				})
-			})
-		}).catch(err => {console.log(err)})
+		window['refreshPage'] = () => {
+			this.$router.go(0)
+		}
+		// getRoomDetailApi({
+		// 	roomCode: '1234567890'
+		// }).then((res) => {
+		// 	let roomInfo = res.data;
+		// 	this.orgName = roomInfo.orgName;
+		// 	this.orgMobile = roomInfo.orgMobile;
+		// 	this.roomName = roomInfo.roomName;
+		// 	this.roomCode = roomInfo.roomCode;
+		// 	this.roomAddr = roomInfo.roomAddr;
+		// 	this.roomStatus = roomInfo.roomStatus;
+		// 	this.pushStatus = roomInfo.pushStatus;
+		// 	let picList = [].concat(roomInfo.roomPictures, roomInfo.housePictures);
+		// 	picList.forEach((v, i) => {
+		// 		this.bannerList.push({
+		// 			src: v.url,
+		// 			title: v.tags,
+		// 			w: 600,
+		// 			h: 400
+		// 		})
+		// 	})
+		// }).catch(err => {console.log(err)})
 	}
 }
 </script>

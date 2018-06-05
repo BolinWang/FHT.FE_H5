@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:34:16 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:34:16 
+ */
+
 <template>
   <div style="height:100%;">
     <view-box ref="viewBox" body-padding-top="46px" >

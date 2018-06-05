@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-17 09:18:37
+ * @Last Modified time: 2018-06-04 17:05:20
  */
 
 <template>
@@ -10,15 +10,15 @@
     <view-box ref="viewBox" body-padding-top="46px" >   
       <x-header :title="pageTitle" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
       </x-header>
-      <group class="noTop" label-width="90px" label-margin-right="0" ref="userForm">
+      <group class="noTop" label-width="80px" label-margin-right="0" ref="userForm">
         <x-input title="姓名" v-model="userForm.name" placeholder="请输入姓名" required type="text" class="rightWarn">
-          <checker slot="right" v-model="userForm.gender" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+          <checker slot="right" v-model="userForm.gender" default-item-class="demo1-item" :radio-required="true" selected-item-class="demo1-item-selected">
             <checker-item :value="1">先生</checker-item><checker-item :value="2">女士</checker-item>
           </checker>
         </x-input>
-        <x-input title="手机" v-model="userForm.mobile" is-type="china-mobile" placeholder="请输入手机号" required type="number" ></x-input>
+        <x-input title="手机号码" v-model="userForm.mobile" is-type="china-mobile" placeholder="请输入手机号" required type="number" ></x-input>
         <popup-picker
-          title="来源"
+          title="客户来源"
           placeholder="请选择"
           value-text-align="left"
           v-model="sourceValue"
@@ -28,30 +28,22 @@
           @on-change="changeSource"
           :data="sourceList">
         </popup-picker>
-        <cell :title="key === 0 ? '需求区域' : ' '" 
-          is-link 
-          :class="{black: typeof item === 'object'}"
-          value-align="left" 
-          v-for="(item, key) in userForm.guestSourceAreas" 
-          :key="key"
-          @click.native="addressFn(key)">
-          {{[item, key] | addressFilter}}
-        </cell>
-        <x-address style="display:none;" 
-          :list="addressData" 
-          raw-value
-          title="请选择城市"
-          v-model="addressValue"
-          @on-shadow-change="cityChange"
-          @on-hide="changeAddress"
-          :show.sync="showAddress"></x-address>
-        <popup-picker style="display:none"
-          :show="plateShow" 
-          :data="plateList"
-          v-model="plateValue"
-          @on-hide="plateHide"></popup-picker>
+        <div class="relative borderTop" v-for="(item, index) in userForm.guestSourceAreas" :key="index">
+          <popup-picker 
+            :title="`位置需求(${index + 1})`" 
+            :data="addressList"
+            v-model="item.id"
+            placeholder="请选择区域板块"
+            value-text-align="left"
+            show-name
+            @on-hide="hideSource"
+            :columns="3">
+          </popup-picker>
+          <div v-show="item.id.length > 0" class="delSource" @click="delSource(index)">删除</div>
+        </div>
+        
         <popup-picker
-          title="价格"
+          title="月租金范围"
           :data="priceList"
           v-model="priceValue"
           placeholder="请选择价格"
@@ -59,21 +51,32 @@
           :display-format="formatPrice"
           @on-change="changePrice">
         </popup-picker>
-        <cell title="类型" value-align="left">
-          <checker v-model="userForm.type" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-            <checker-item :value="1">整租</checker-item><checker-item :value="2">合租</checker-item>
-          </checker>
-        </cell>
-        <cell title="需求(多选)" value-align="left" v-show="userForm.type === 2">
-          <checker v-model="userForm.requirement" type="checkbox" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-            <checker-item :value="1">独厨</checker-item>
-            <checker-item :value="2">独卫</checker-item>
-          </checker>
-        </cell>
+        <popup-picker
+          title="房源类型"
+          placeholder="请选择"
+          value-text-align="left"
+          v-model="houseTypeValue"
+          :columns="1"
+          show-name
+          :data="houseTypeList">
+        </popup-picker>
+        <div v-show="houseTypeValue[0] === '2'">
+          <flexbox wrap="wrap" :gutter="0">
+            <flexbox-item 
+              v-for="(v, k) in roomNatureList" 
+              :key="k" :span="1/4" class="natureItem" 
+              :class="{active: userForm.requirement.indexOf(v.value) !== -1}"
+              @click.native="natureFn(v.value)">
+              {{v.label}}
+            </flexbox-item>
+          </flexbox>
+        </div>
+        
         <cell title="意向度" value-align="left">
-          
-          <checker v-model="userForm.intentionality" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-            <checker-item :value="1">低</checker-item><checker-item :value="2">中</checker-item><checker-item :value="3">高</checker-item>
+          <checker v-model="userForm.intentionality" default-item-class="intentionality-item" selected-item-class="intentionality-item-selected" :radio-required="true">
+            <checker-item :value="1">低</checker-item>
+            <checker-item :value="2">中</checker-item>
+            <checker-item :value="3">高</checker-item>
           </checker>
         </cell>
       </group>
@@ -85,7 +88,8 @@
 </template>
 
 <script>
-import { XInput, XButton, Checker, CheckerItem, PopupPicker, XAddress, ChinaAddressV4Data, Value2nameFilter, Rater } from 'vux'
+import { XInput, XButton, Checker, CheckerItem, PopupPicker, Flexbox, FlexboxItem, ChinaAddressV4Data } from 'vux'
+import cellValue from '@/components/cellValue'
 import { saveOrUpdateApi, plateApi, detailApi } from '@/api/source'
 import { deepClone, valFormat } from '@/utils'
 
@@ -96,10 +100,9 @@ export default {
     Checker,
     CheckerItem,
     PopupPicker,
-    XAddress, 
-    ChinaAddressV4Data, 
-    Value2nameFilter,
-    Rater
+    Flexbox, 
+    FlexboxItem,
+    cellValue
   },
   mounted() {
     this.guestSourceId = parseInt(this.$route.params.guestSourceId)
@@ -107,6 +110,7 @@ export default {
       this.pageTitle = '编辑客源'
       this.getData()
     }
+    this.roomNatureList = this.$store.state.datas.houseNature
   },
   filters: {
     addressFilter([item, index]) {
@@ -132,6 +136,7 @@ export default {
   data() {
     return {
       pageTitle: '新增客源',
+      roomNatureList: [],
       userForm: {
         name: '',
         gender: 1,
@@ -139,23 +144,22 @@ export default {
         intentionality: 2,
         source: [],
         sourceType: '',
-        guestSourceAreas: ['', '', ''],
+        guestSourceAreas: [{
+          id: []
+        }],
         priceMin: '',
         priceMax: '',
         type: 1,
-        requirement: [1, 2]
+        requirement: []
       },
+      addressList: ChinaAddressV4Data,
+      houseTypeValue: ['2'],
+      houseTypeList: [
+        {name: '整租', value: '1'},
+        {name: '合租', value: '2'},
+      ],
       guestSourceId: 0,
-      addressId: [],
-      cityName: [],
-      showAddress: false,
-      plateShow: false,
       sourceValue: [],
-      plateList: [],
-      addressIndex: 0,
-      plateValue: [],
-      addressData: ChinaAddressV4Data,
-      addressValue: [],
       priceValue: [],
       sourceList: [
         {
@@ -280,6 +284,18 @@ export default {
           })
         }
       }).catch(res => {})
+    },
+    delSource(index) {
+      this.userForm.guestSourceAreas[index].id = []
+    },
+    hideSource(closeType) {
+      if (closeType && this.userForm.guestSourceAreas.length < 3) {
+        this.userForm.guestSourceAreas.push({id: []})
+      }
+    },
+    natureFn(value) {
+      let start = this.userForm.requirement.indexOf(value)
+      start > -1 ? this.userForm.requirement.splice(start, 1) : this.userForm.requirement.push(value)
     },
     formatSource(val) {
       let str = ''
@@ -454,47 +470,81 @@ export default {
   .relative {
     position: relative;
   }
+  .borderTop {
+    border-top: 1px solid #D9D9D9;
+  }
+  .delSource {
+    position: absolute;
+    width: 40px;
+    height: 24px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 4px;
+    border: 1px solid #E51C23;
+    color: #E51C23;
+    background: #fff;
+    right: 12px;
+    top: 6px;
+  }
   .positionRight {
     position: absolute;
     right: 10px;
     color: #ccc;
   }
   .genderBox {
-    width: 200px;
+    width: 100px;
+  }
+  .natureItem {
+    border-bottom: none;
   }
   .demo1-item {
-    border: 1px solid #4680FF;
-    height: 52px;
-    line-height: 50px;
+    width: 36px;
+    height: 23px;
+    line-height: 22px;
+    font-size: 12px;
     text-align: center;
-    width: 80px;
-    font-size: 28px;
+    background: #fff;
     color: #4680FF;
+    border: 1px solid #4680FF;
   }
   .demo1-item-selected {
+    color: #fff;
+    background: #4680FF;
+  }
+  .intentionality-item {
+    border: 1px solid #4680FF;
+    height: 24px;
+    line-height: 23px;
+    text-align: center;
+    width: 70px;
+    font-size: 12px;
+    color: #4680FF;
+    border-radius: 4px;
+  }
+  .intentionality-item-selected {
     border:1px solid #4680FF;
     background: #4680FF;
     color:#fff;
   }
   .line {
     width: 100%;
-    min-height: 80px;
-    line-height: 80px;
-    padding-left: 20px;
+    min-height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
     border-bottom: 1px solid #eee;
     font-size: 0.35rem;
     background: #fff;
     position: relative;
     .labelText {
-      width: 160px;
-      height: 80px;
+      width: 80px;
+      height: 40px;
       .left;
     }
     .textArea {
       .left;
-      line-height: 50px;
-      padding: 15px 0;
-      width: 500px;
+      line-height: 25px;
+      padding: 8px 0;
+      width: 250px;
       color: #999;
       font-size: 0.35rem;
     }
@@ -502,9 +552,9 @@ export default {
       .left;
       border:none;
       background: none;
-      padding: 15px 0;
-      line-height: 50px;
-      width: 500px;
+      padding: 8px 0;
+      line-height: 25px;
+      width: 250px;
       font-size: 0.35rem;
       &:focus{
         border: none;
@@ -512,17 +562,17 @@ export default {
       }
     }
     .price {
-      width: 200px;
+      width: 100px;
     }
     .section {
       display: inline-block;
       .left;
       text-align: center;
-      width: 60px;
+      width: 30px;
     }
     .status {
       .left;
-      width: 500px;
+      width: 250px;
     }
   }
 </style>

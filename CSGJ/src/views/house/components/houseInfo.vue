@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:33:41 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:33:41 
+ */
+
 <template>
   <div>
     <group :label-width="labelWidth" class="noTop">

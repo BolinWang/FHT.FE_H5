@@ -1,3 +1,10 @@
+/*
+ * @Author: chenxing 
+ * @Date: 2018-06-05 10:34:03 
+ * @Last Modified by:   chenxing 
+ * @Last Modified time: 2018-06-05 10:34:03 
+ */
+
 <template>
   <div >
     <group :label-width="labelWidth" class="noTop" v-for="(item, key) in houseData.rooms" :key="key" style="margin-top: 5px">
@@ -147,32 +154,7 @@ export default {
       height: 41PX;
     }
   }
-  .natureItem {
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border: 1PX solid #D9D9D9;
-    border-left: none;
-    position: relative;
-    &:last-child {
-      border-right: none;
-    }
-    &:after{
-      content:'\e79e';
-      position: absolute;
-      right: -3px;
-      bottom: -7px;
-      font-size: 30px;
-      font-family: 'iconfont';
-      color: #D9D9D9;
-    }
-  }
-  .active {
-    color: #FF9800;
-    &:after {
-      color: #FF9800;
-    }
-  }
+  
   .flexBtn {
     height: 40px;
     line-height: 40px;
