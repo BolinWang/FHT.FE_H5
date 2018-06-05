@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-15 19:59:56
+ * @Last Modified time: 2018-05-30 15:28:42
  */
 
 <template>
@@ -209,9 +209,6 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-  .primary-btn {
-    color: #4680FF;
-  }
    * {
     box-sizing: border-box;
   }

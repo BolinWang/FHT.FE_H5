@@ -16,15 +16,14 @@ export default new Router({
     },
     {
       path: '/landlord',
-      component: _import('default'),
+      component: resolve => require(['@/views/default'], resolve),
       children: [
         { path: '', component: _import('landlord/index'), name: 'landlordIndex' },
         { path: 'person', component: _import('landlord/person'), name: 'person' },
         {
           name: 'company',
           path: 'company',
-          component: () => import('../views/landlord/company')
-          // component: resolve => { require(['../views/landlord/company'], resolve) }
+          component: resolve => { require(['@/views/landlord/company'], resolve) }
         },
         { path: 'bindingCard', component: _import('landlord/bindingCard'), name: 'bindingCard' }
       ]
@@ -49,13 +48,10 @@ export default new Router({
         {
           path: 'searchMap',
           component: resolve => require(['@/views/house/searchMap'], resolve),
-          name: 'searchMap',
-          meta: {
-            keepAlive: false // 需要被缓存
-          }
+          name: 'searchMap'
         },
         {
-          path: 'addHouse',
+          path: 'addHouse/:houseType',
           component: resolve => require(['@/views/house/addHouse'], resolve),
           name: 'addHouse',
           meta: {
@@ -63,7 +59,7 @@ export default new Router({
           }
         },
         {
-          path: 'editHouse',
+          path: 'editHouse/:houseType',
           component: resolve => require(['@/views/house/editHouse'], resolve),
           name: 'editHouse'
         },
@@ -73,9 +69,9 @@ export default new Router({
           name: 'roomDetail'
         },
         {
-          path: 'photoDetail',
-          component: resolve => require(['@/views/house/photoDetail'], resolve),
-          name: 'photoDetail'
+          path: 'addSuccess/:houseType',
+          component: resolve => require(['@/views/house/addSuccess'], resolve),
+          name: 'addSuccess'
         }
       ]
     },
@@ -83,7 +79,10 @@ export default new Router({
       path: '/workbench',
       component: _import('default'),
       children: [
-        { path: '', component: _import('workbench/index'), name: 'workbenchIndex' }
+				{ path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
+				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' },
+				{ path: 'rent-bill', component: _import('workbench/rentBill'), name: 'rentBill' },
+				{ path: 'rent-contract', component: _import('workbench/rentContract'), name: 'rentContract' }
       ]
     },
     {

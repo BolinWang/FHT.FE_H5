@@ -5,7 +5,7 @@
         <i slot="overwrite-left"></i>
         <div slot="right" @click="loginOut">退出</div>
       </x-header>
-      <group >
+      <group class="noTop">
         <cell title="修改密码" is-link link="/mine/password"></cell>
       </group>
       <footers :selectedIndex="4" slot="bottom"></footers>

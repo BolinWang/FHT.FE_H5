@@ -1,42 +1,51 @@
 <template>
   <div v-show="data.length > 0">
     <tab :scroll-threshold="7" v-if="showTab">
-      <tab-item selected>全部</tab-item>
-      <tab-item>空房</tab-item>
-      <tab-item>已出租</tab-item>
-      <tab-item>保留中</tab-item>
-      <tab-item>缺图</tab-item>
-      <tab-item>有图</tab-item>
+      <tab-item v-for="(item, index) in statusList" 
+        :key="index" 
+        :selected="index === 0"
+        @on-item-click="toSearch(item.value)">{{item.name}}
+      </tab-item>
     </tab>
-    <scroll :pullDownRefresh="false" :pullUpLoad="false">
+    <div style="height:430px">
+      <scroll :pullDownRefresh="false" @pullingUp="pullUploadFn" ref="scroll" :data="data">
       <ul class="houseNav">
-        <li v-for="(itme, index) in data" :key="index" @click="toDetail"> 
+        <li v-for="(item, index) in data" :key="index" @click="toDetail"> 
           <div class="houseTitle">
-            <div class="left">天天小区-19-1单元-4楼-401号</div>
-            <div class="right">3间</div>
+            <div class="left" v-html="item.name"></div>
           </div>
           <div class="houseDetail">
-            <div class="detailImg" :class="{hasImg: index === 0, noImg: index !== 0}">
-              <x-img src="http://cdn.baletoo.cn/Uploads/housephoto/869/868498/oss_5a5ed2dc87a40.jpg@!380_280.png" class="houseImg"></x-img>
+            <div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
+              <x-img :src="item.imageUrl" class="houseImg"></x-img>
             </div>
-            
             <div class="detailRight">
               <div>
-                <div class="roomName">401号房间A</div>
-                <div class="roomStatus">在住</div>
+                <div class="roomStatus" 
+                :class="{color2: item.status === 2, color7: item.status === 7, color9: item.status === 9}">{{item.status | statusStr}}</div>
               </div>
-              <div class="area">朝南 30㎡</div>
-              <div>
-                <span class="feature">独卫</span>
-                <span class="feature">厨房</span>
-                <span class="feature">阳台</span>
+              <div class="flex">
+                <div class="area">{{item.roomDirection | directionStr}} {{item.roomArea || 0}}㎡</div>
+                <div v-if="item.houseRentType === 2" class="featureDiv">
+                  <span class="feature" 
+                    v-for="(v, k) in item.roomAttributes.split(',')" 
+                    :key="k"
+                    v-show="v">
+                    {{v | attrStr}}
+                  </span>
+                </div>
+                <div v-else class="featureDiv">
+                  <span class="feature">{{item.chamberCount || 0}}室{{item.boardCount || 0}}厅{{item.toiletCount || 0}}卫</span>
+                </div>
               </div>
+              
             </div>
             
           </div>
         </li>
       </ul>
     </scroll>
+    </div>
+    
   </div>
 </template>
 
@@ -61,15 +70,53 @@ export default {
       default: true,
     }
   },
+  filters: {
+    statusStr(val) {
+      /*
+      * 空房对应原来的可用
+      */
+      const statusList = ['', '未启用租务', '空房', '下单未入住', '在住', '维修', '空脏','保留中', '预定', '已出租', '装修中']
+      return statusList[val]
+    },
+    directionStr(val) {
+      const directionList = ['未知朝向', '朝南', '朝北', '朝东', '朝西', '东南', '西南', '东北', '西北']
+      return directionList[val]
+    },
+    attrStr(val) {
+      const attrList = ['', '独卫', '阳台', '厨房', '飘窗']
+      return attrList[val] || ''
+    }
+  },
   mounted() {
+
   },
   data() {
     return {
+      statusList: [
+        { name: '全部', value: 0 },
+        { name: '空房', value: 2 },
+        { name: '已出租', value: 4 },
+        { name: '保留中', value: 7 },
+        { name: '缺图', value: 0 },
+        { name: '有图', value: 0 },
+      ]
     }
   },
   methods: {
     toDetail() {
       this.$router.push({name: 'roomDetail'})
+    },
+    toSearch(key) {
+      this.$emit('searchStatus', key)
+    },
+    pullUploadFn() {
+      console.log(1)
+      let self = this
+      setTimeout(function(){
+        console.log(self.$refs.scroll)
+        self.$refs.scroll.forceUpdate()
+      }, 2000)
+      
     }
   },
   watch: {
@@ -113,6 +160,7 @@ export default {
           position: relative;
           float: left;
           overflow: hidden;
+          border: 1px solid #ddd;
           .houseImg {
             width: 100%;
             height: 100%;
@@ -142,37 +190,69 @@ export default {
             content:'无图';
             color:#E51C23;
           }
+          &:before {
+            content: '\e620';
+            font-family: 'iconfont';
+            position: absolute;
+            font-size: 40px;
+            color: #ddd;
+            left: 30%;
+            top: 10%;
+          }
         }
         .detailRight {
           width: 212px;
           height: 84px;
           float: right;
           border-bottom: 1px solid #ddd;
+          padding-bottom: 10px;
           .roomName {
             font-size: 14px;
+            height: 22px;
             color: #101010;
             width: 80%;
             float: left;
           }
           .roomStatus {
-            width: 15%;
-            float: right;
+            float: left;
+            width: 100%;
+            height: 25px;
+            text-align: right;
             color: #4680FF;
             font-size: 14px;
           }
           .area {
             font-size: 12px;
             color: #999;
-            line-height: 35px;
+            line-height: 20px;
           }
           .feature {
-            padding: 3px 8px;
+            padding: 0px 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             color: #999;
+            float: left;
+            margin: 5px 5px 5px 0;
           }
         }
       }
+    }
+    .flex {
+      display: flex;
+      width: 100%;
+      height: 55px;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-content: flex-end;
+    }
+    .color2 {
+      color: #999990 !important;
+    }
+    .color7 {
+      color: #FF9800 !important;
+    }
+    .color9 {
+      color: #259B24 !important;
     }
   }
 </style>

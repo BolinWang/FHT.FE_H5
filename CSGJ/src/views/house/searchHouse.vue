@@ -10,12 +10,13 @@
       </div>
       <div class="popSearch" v-show="tabIndex === 0">
         <search :auto-fixed="false" 
-          cancel-text=" " 
+          cancel-text=" "
+          v-model="keyword"
           @on-change="keywordSearch"
           placeholder="小区名/房间号/房东">
         </search>
         <div>
-          <house-list :data="searchData"></house-list>
+          <house-list :data="searchData" @searchStatus="searchStatus"></house-list>
         </div> 
       </div>
       <div class="searchGroup" v-show="tabIndex === 1">
@@ -27,7 +28,7 @@
         </div>
         <div class="line">
           <div class="labelTitle">小区名称</div>
-          <input type="text" v-model="searchParam.area" class="cellRight isInput" placeholder="请输入">
+          <input type="text" v-model="searchParam.keyword" class="cellRight isInput" placeholder="请输入">
         </div>
         <div class="line" >
           <div class="labelTitle">房间户型</div>
@@ -57,7 +58,7 @@
               :class="{'checked': item.checked}"
               v-for="(item, index) in checkList"
               @click="item.checked = !item.checked"
-              v-show="searchParam.houseType === '2' || index === 4"
+              v-show="searchParam.houseRentType === '2' || index === 4"
               :key="index">
               {{item.label}}
             </li>
@@ -79,11 +80,11 @@
     ></popup-picker>
     <!-- 选择月租金 -->
     <div v-transfer-dom>
-      <alert v-model="rentShow" 
+      <alert v-model="rentShow"
         title="月租金范围"
         >
         <div class="alertBox">
-          <input class="alertInput" type="number" v-model="searchParam.minPrice" placeholder="最低价">
+          <input class="alertInput" type="number" v-model="searchParam.minPrice" placeholder="最低价" >
           <span class="alertSpan">——</span>
           <input class="alertInput" type="number" v-model="searchParam.maxPrice" placeholder="最高价">
           <div class="clearfix"></div>
@@ -120,7 +121,7 @@
         </x-header>
         <div style="padding-top: 46px">
           <div class="resultNum">符合条件匹配共 <span class="red">{{resultList.length}}</span> 间</div>
-          <house-list :data="resultList" :showTab="false"></house-list>
+          <house-list :data="resultList" :showTab="false" @searchMore="searchMore"></house-list>
         </div>
       </popup>
     </div>
@@ -130,6 +131,8 @@
 <script>
 import { Tab, TabItem, Popup, TransferDom, Search, debounce, XButton, PopupPicker, Alert } from 'vux'
 import scroll from '@/components/scroll'
+import { houseApi } from '@/api/source'
+import { deepClone } from '@/utils'
 import houseList from './components/houseList'
 import popupSelf from '@/components/popupSelf'
 import cellValue from '@/components/cellValue'
@@ -167,6 +170,11 @@ export default {
       return str
     }
   },
+  created() {
+    let defalutOrient = this.$store.state.datas.orientations
+    let addOrient = [{ label: '不限制', value: 0 }]
+    this.orientationsList = addOrient.concat(defalutOrient)
+  },
   data() {
     return {
       searchShow: false,
@@ -176,19 +184,30 @@ export default {
       unitShow: false,
       showResult: false,
       orientationsShow: false,
-      tabIndex: 1,
+      statusList: [],
+      tabIndex: 0,
       show: false,
+      keyword: '',
+      pageNo: 1,
       searchData: [],
-      resultList: [1, 2],
+      resultList: [],
       typeValue: ['2'],
       zoneValue: [0],
       unitValue: [0],
       orientationsValue: [0],
       searchParam: {
-        area: '',
-        houseType: '2',
+        highlightKeword: true,
+        zoneId: '',
+        keyword: '',
+        chamberCounts: [{
+          min: '',
+          max: ''
+        }],
         minPrice: '',
-        maxPrice: ''
+        maxPrice: '',
+        houseRentType: '2',
+        roomAttributeList: [],
+        statusList: [2]
       },
       typeList: [[
         { name: '整租', value: '1' },
@@ -199,7 +218,7 @@ export default {
         { label: '独立阳台', value: 2, checked: false },
         { label: '独立厨房', value: 3, checked: false },
         { label: '飘窗', value: 4, checked: false },
-        { label: '空房', value: 5, checked: true }
+        { label: '空房', value: 0, checked: true }
       ],
       zoneList: [
         { label: '不限制', value: 0 },
@@ -216,17 +235,30 @@ export default {
         { label: '5室', value: 5 },
         { label: '5室以上', value: 6 }
       ],
-      orientationsList: [
-        { label: '不限制', value: 0 },
-        { label: '朝南', value: 1 },
-        { label: '朝北', value: 2},
-        { label: '朝东', value: 3 },
-        { label: '朝西', value: 4 },
-        { label: '东南', value: 5 },
-        { label: '西南', value: 6 },
-        { label: '东北', value: 7 },
-        { label: '西北', value: 8 }
-      ]
+      orientationsList: []
+    }
+  },
+  watch: {
+    'unitValue'(val) {
+      if (val === '0') {
+        this.searchParam.chamberCounts = [{
+          min: '',
+          max: ''
+        }]
+      } else if (val === '6') {
+        this.searchParam.chamberCounts = [{
+          min: 6,
+          max: ''
+        }]
+      } else {
+        this.searchParam.chamberCounts = [{
+          min: val,
+          max: val
+        }]
+      }
+    },
+    'typeValue'(val) {
+      this.searchParam.houseRentType = val[0]
     }
   },
   methods: {
@@ -237,7 +269,7 @@ export default {
       this.$router.push({name: 'houseIndex'})
     },
     keywordSearch: debounce(function(){
-      this.searchData = [1, 2, 3] 
+      this.searchHouse()
     }, 500),
     changeType(val) { //修改房源类型
       this.searchParam.houseType = val[0]
@@ -249,10 +281,52 @@ export default {
       this[show] = false
     },
     searchFn() {
-      this.showResult = true
+      this.searchParam.roomAttributeList = []
+      this.checkList.map(val => {
+        if (val.value === 0) { //空房是房间状态 单独处理
+          this.searchParam.statusList = val.checked ? [2] : []
+        } else {
+          if (this.searchParam.houseRentType === '2') { //只有合租才有独卫这些属性
+            val.checked ? this.searchParam.roomAttributeList.push(val.value) : ''
+          }
+        }
+      })
+      houseApi(deepClone(this.searchParam)).then(res => {
+        this.resultList = res.result || []
+        this.showResult = true
+      }).catch()
+    },
+    searchMore() {
+      this.pageNo++
+      this.postData()
     },
     hideResult() {
       this.showResult = false
+    },
+    postData(param) {
+      param.pageNo = this.pageNo
+      houseApi(param).then(res => {
+        let resList = res.result || []
+        if (param.pageNo === 1) {
+          this.searchData = resList
+        } else {
+          this.searchData = this.searchData.concat(resList)
+        }
+      }).catch()
+    },
+    searchHouse() {
+      let param = {
+        keyword: this.keyword,
+        statusList: this.statusList,
+        highlightKeword: true,
+        // tags: ['FHD']
+      }
+      this.pageNo = 1
+      this.postData(param)
+    },
+    searchStatus(val) {
+      this.statusList = val === 0 ? [] : [val]
+      this.searchHouse()
     }
   }
 }
@@ -413,7 +487,9 @@ export default {
       line-height: 36px;
       padding-left: 5px;
       border-radius: 4px;
+      font-size: 14px;
       border: 1px solid #ddd;
+      outline: none;
       float: left; 
       text-align: center;
     }

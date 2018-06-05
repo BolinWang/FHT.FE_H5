@@ -11,11 +11,11 @@ export default function(value, list, delimiter) {
   let rs = map(value, (one, index) => {
     if (list.length && Object.prototype.toString.call(list[0]) === '[object Array]') {
       return find(list[index], item => {
-        return item.value === one
+        return item.value === one || String(item.value) === one
       })
     } else {
       return find(list, item => {
-        return item.value === one
+        return item.value === one || String(item.value) === one
       })
     }
   })

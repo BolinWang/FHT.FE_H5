@@ -1,235 +1,163 @@
 <template>
-  <div style="height:100%">
-		<x-header class="room-header" :left-options="{backText: ''}">
-			<div slot="right" class="room-header-share">
-				<i class="iconfont icon-share1"></i>
-			</div>
-		</x-header>
-		<swiper :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
-			<swiper-item class="swiper-demo-img" v-for="(item, index) in demo01_list" :key="index">
-				<img :src="item.src" @click="openPhotoSwipe(index)">
-			</swiper-item>
-			<div class="swiper-title">
-				<span>{{demo01_list[curBannerIndex].title}}</span>
-				<span>{{curBannerIndex + 1}}/{{demo01_list.length}}</span>
-			</div>
-		</swiper>
-		<div class="room-info">
-			<div class="room-info-row">
-				<div class="row-icon">
-					<i class="iconfont icon-fangyuan"></i>
+  <div style="height: 100%">
+		<view-box ref="viewBox">
+			<x-header class="room-header" :left-options="{backText: ''}">
+				<div slot="right" class="room-header-share">
+					<i class="iconfont icon-share1"></i>
 				</div>
-				<div class="row-container">
-					<div>天天小区-19-1单元-4楼-401号房间A</div>
-					<div>
-						<XButton plain class="empty-btn success" v-if="roomInfo.status == 0">已出租</XButton>
-						<XButton plain class="empty-btn loading" v-else-if="roomInfo.status == 1">下单中</XButton>
-						<XButton plain class="empty-btn loading" v-else-if="roomInfo.status == 2">在住</XButton>
-						<XButton plain class="empty-btn hold" v-else-if="roomInfo.status == 3">保留中</XButton>
-						<XButton plain class="empty-btn" v-else>空房</XButton>
-					</div>
-				</div>
-			</div>
-			<div class="room-info-row">
-				<div class="row-icon">
-					<i class="iconfont icon-fenlei"></i>
-				</div>
-				<div class="row-container">
-					<div>
-						<p>地址：杭海路663-6号</p>
-						<p>房间编号：200012345</p>
-					</div>
-				</div>
-			</div>
-			<div class="room-info-row">
-				<div class="row-icon">
-					<i class="iconfont icon-yonghu"></i>
-				</div>
-				<div class="row-container">
-					<div>房东：张三</div>
-					<div class="tel">
-						电话号码：138****1234
-						<i class="iconfont icon-dianhua"></i>
-					</div>
-				</div>
-			</div>
-			<div class="room-info-row">
-				<div class="row-icon">
-					<i class="iconfont icon-share"></i>
-				</div>
-				<div class="row-container" v-if="roomInfo.releaseStatus == 0">
-					<div>房源推广发布<XButton plain class="status-btn">未发布</XButton></div>
-					<div class="apply-btn" @click="handleRelease">申请发布</div>
-				</div>
-				<div class="row-container" v-else-if="roomInfo.releaseStatus == 1">
-					<div>房源推广发布<XButton plain class="status-btn loading">申请中</XButton></div>
-					<div class="apply-btn" @click="handleRelease">撤销发布</div>
-				</div>
-				<div class="row-container" v-else>
-					<div>房源推广发布<XButton plain class="status-btn success">已发布</XButton></div>
-				</div>
-			</div>
-		</div>
-		<div class="room-options">
-			<div class="room-options-item">编辑</div>
-			<div class="room-options-item" @click="showPayRentWay = true">交租方式</div>
-		</div>
-		<div class="room-options">
-			<div class="room-options-item">房间照片</div>
-			<div class="room-options-item">公区照片</div>
-		</div>
-		<div class="room-footer">
-			<template v-if="roomInfo.status == 4">
-				<div class="footer-item">保留房间</div>
-				<div class="footer-item active">设置已出租</div>
-			</template>
-			<div class="footer-item active" v-else-if="roomInfo.status == 0">设为空房</div>
-			<div class="footer-item active" v-else-if="roomInfo.status == 3">取消保留中</div>
-		</div>
-		<Popup v-model="showPayRentWay" position="right" width="100%" class="payRentWay-modal">
-			<x-header :left-options="{backText: '', preventGoBack: true}" @on-click-back="showPayRentWay = false">
-				交租方式
 			</x-header>
-			<div v-if="roomInfo.type == '分散式'">
-				<div class="joint-item" v-for="item in roomInfoList" :key="item.id">
-					<div class="joint-item-title">
-						请设置<span>{{item.name}}</span>{{item.direction}}，{{item.size}}
-						<div class="tag" v-for="(o, i) in item.equipment" :key="i">{{o}}</div>
+			<div class="room-banner-container">
+				<swiper v-if="bannerList.length" :aspect-ratio="270/360" class="room-banner" :show-dots="false" @on-index-change="changeIndex" :loop="true" :auto="true">
+					<swiper-item class="swiper-demo-img" v-for="(item, index) in bannerList" :key="index">
+						<img :src="item.src" @click="photoViewOptions.index = index; $refs.pswp.openPhotoView()">
+					</swiper-item>
+					<div class="swiper-title">
+						<span>{{bannerList[curBannerIndex].title}}</span>
+						<span>{{curBannerIndex + 1}}/{{bannerList.length}}</span>
 					</div>
-					<div class="joint-item-value">
-						<div class="payRentWay-item">
-							<div class="payRentWay-item-title">月租金</div>
-							<div class="payRentWay-item-value">
-								<input type="number" placeholder="请输入" v-model="item.monthRent">
-							</div>
+				</swiper>
+			</div>
+			<div class="room-info">
+				<div class="room-info-row">
+					<div class="row-icon">
+						<i class="iconfont icon-fangyuan"></i>
+					</div>
+					<div class="row-container">
+						<div>{{roomName}}</div>
+						<div>
+							<XButton plain class="empty-btn success" v-if="roomStatus == 0">已出租</XButton>
+							<XButton plain class="empty-btn loading" v-else-if="roomStatus == 1">下单中</XButton>
+							<XButton plain class="empty-btn loading" v-else-if="roomStatus == 2">在住</XButton>
+							<XButton plain class="empty-btn hold" v-else-if="roomStatus == 3">保留中</XButton>
+							<XButton plain class="empty-btn" v-else>空房</XButton>
 						</div>
-						<div class="payRentWay-item">
-							<div class="payRentWay-item-title">押金</div>
-							<div class="payRentWay-item-value">
-								<input type="number" placeholder="请输入" v-model="item.deposit">
-							</div>
+					</div>
+				</div>
+				<div class="room-info-row">
+					<div class="row-icon">
+						<i class="iconfont icon-fenlei"></i>
+					</div>
+					<div class="row-container">
+						<div>
+							<p>地址：{{roomAddr}}</p>
+							<p>房间编号：{{roomCode}}</p>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div v-else>
-				<div class="payRentWay-item">
-					<div class="payRentWay-item-title">月租金</div>
-					<div class="payRentWay-item-value">
-						<input type="number" placeholder="请输入">
+				<div class="room-info-row">
+					<div class="row-icon">
+						<i class="iconfont icon-yonghu"></i>
+					</div>
+					<div class="row-container">
+						<div>房东：{{orgName}}</div>
+						<div class="tel">
+							电话号码：{{orgMobile | mobileFormat}}
+							<i class="iconfont icon-dianhua"></i>
+						</div>
 					</div>
 				</div>
-				<div class="payRentWay-item">
-					<div class="payRentWay-item-title">押金</div>
-					<div class="payRentWay-item-value">
-						<input type="number" placeholder="请输入">
+				<div class="room-info-row">
+					<div class="row-icon">
+						<i class="iconfont icon-share"></i>
+					</div>
+					<div class="row-container" v-if="pushStatus == 0">
+						<div>房源推广发布<XButton plain class="status-btn">未发布</XButton></div>
+						<div class="apply-btn" @click="handleRelease">申请发布</div>
+					</div>
+					<div class="row-container" v-else-if="pushStatus == 1">
+						<div>房源推广发布<XButton plain class="status-btn loading">申请中</XButton></div>
+						<div class="apply-btn" @click="handleRelease">撤销发布</div>
+					</div>
+					<div class="row-container" v-else>
+						<div>房源推广发布<XButton plain class="status-btn success">已发布</XButton></div>
 					</div>
 				</div>
 			</div>
-			<div class="payRentWay-footer fixedBottm" @click="savePayRentWay">
-				保存
+			<div class="room-options">
+				<div class="room-options-item">编辑</div>
+				<div class="room-options-item" @click="showPayRentWay = true">交租方式</div>
 			</div>
-		</Popup>
-		<!-- Root element of PhotoSwipe. Must have class pswp. -->
-		<div ref="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-			<!-- Background of PhotoSwipe.
-					It's a separate element as animating opacity is faster than rgba(). -->
-			<div class="pswp__bg"></div>
-
-			<!-- Slides wrapper with overflow:hidden. -->
-			<div class="pswp__scroll-wrap">
-
-				<!-- Container that holds slides.
-						PhotoSwipe keeps only 3 of them in the DOM to save memory.
-						Don't modify these 3 pswp__item elements, data is added later on. -->
-				<div class="pswp__container">
-						<div class="pswp__item"></div>
-						<div class="pswp__item"></div>
-						<div class="pswp__item"></div>
-				</div>
-
-				<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-				<div class="pswp__ui pswp__ui--hidden">
-
-					<div class="pswp__top-bar">
-
-						<!--  Controls are self-explanatory. Order can be changed. -->
-
-						<div class="pswp__counter"></div>
-
-						<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-						<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-						<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-						<!-- element will get class pswp__preloader--active when preloader is running -->
-						<div class="pswp__preloader">
-							<div class="pswp__preloader__icn">
-								<div class="pswp__preloader__cut">
-									<div class="pswp__preloader__donut"></div>
+			<div class="room-options">
+				<div class="room-options-item">房间照片</div>
+				<div class="room-options-item">公区照片</div>
+			</div>
+			<div class="room-footer">
+				<template v-if="roomInfo.status == 4">
+					<div class="footer-item">保留房间</div>
+					<div class="footer-item active">设置已出租</div>
+				</template>
+				<div class="footer-item active" v-else-if="roomInfo.status == 0">设为空房</div>
+				<div class="footer-item active" v-else-if="roomInfo.status == 3">取消保留中</div>
+			</div>
+			<Popup v-model="showPayRentWay" position="right" width="100%" class="payRentWay-modal">
+				<x-header :left-options="{backText: '', preventGoBack: true}" @on-click-back="showPayRentWay = false">
+					交租方式
+				</x-header>
+				<div v-if="roomInfo.type == '分散式'">
+					<div class="joint-item" v-for="item in roomInfoList" :key="item.id">
+						<div class="joint-item-title">
+							请设置<span>{{item.name}}</span>{{item.direction}}，{{item.size}}
+							<div class="tag" v-for="(o, i) in item.equipment" :key="i">{{o}}</div>
+						</div>
+						<div class="joint-item-value">
+							<div class="payRentWay-item">
+								<div class="payRentWay-item-title">月租金</div>
+								<div class="payRentWay-item-value">
+									<input type="number" placeholder="请输入" v-model="item.monthRent">
+								</div>
+							</div>
+							<div class="payRentWay-item">
+								<div class="payRentWay-item-title">押金</div>
+								<div class="payRentWay-item-value">
+									<input type="number" placeholder="请输入" v-model="item.deposit">
 								</div>
 							</div>
 						</div>
 					</div>
-
-					<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-						<div class="pswp__share-tooltip"></div>
-					</div>
-
-					<div class="pswp__caption">
-						<div class="pswp__caption__center"></div>
-					</div>
-
 				</div>
-
-			</div>
-
-		</div>
+				<div v-else>
+					<div class="payRentWay-item">
+						<div class="payRentWay-item-title">月租金</div>
+						<div class="payRentWay-item-value">
+							<input type="number" placeholder="请输入">
+						</div>
+					</div>
+					<div class="payRentWay-item">
+						<div class="payRentWay-item-title">押金</div>
+						<div class="payRentWay-item-value">
+							<input type="number" placeholder="请输入">
+						</div>
+					</div>
+				</div>
+				<div class="payRentWay-footer fixedBottm" @click="savePayRentWay">
+					保存
+				</div>
+			</Popup>
+			<PhotoView ref="pswp" :photoList="bannerList" :options="photoViewOptions">
+			</PhotoView>
+		</view-box>
   </div>
 </template>
 
 <script>
 import { XButton, Popup, Swiper, SwiperItem } from 'vux'
-import PhotoSwipe from 'photoswipe/dist/photoswipe.js'
-import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js'
-import 'photoswipe/dist/photoswipe.css'
-import 'photoswipe/dist/default-skin/default-skin.css'
+import PhotoView from '@/components/photoView'
+import { getRoomDetailApi } from '@/api/source'
 export default {
   components: {
 		XButton,
 		Popup,
 		Swiper,
-		SwiperItem
+		SwiperItem,
+		PhotoView
   },
   mounted() {
-
+		// this.$refs.pswp.openPhotoView()
   },
   data() {
     return {
 			showPayRentWay: false,
-			demo01_list: [
-				{
-					url: 'javascript:',
-					src: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg',
-					title: '送你一朵fua',
-					w: 600,
-					h: 400
-				}, {
-					url: 'javascript:',
-					src: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
-					title: '送你一辆车',
-					w: 600,
-					h: 400
-				}, {
-					url: 'javascript:',
-					src: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg', // 404
-					title: '送你一次旅行',
-					fallbackImg: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg',
-					w: 600,
-					h: 400
-				}
-			],
+			bannerList: [],
 			roomInfo: {
 				releaseStatus: 0,	// 0.未发布 1.申请中 2.已发布
 				type: '集中式',
@@ -261,7 +189,21 @@ export default {
 					deposit: ''
 				}
 			],
-			curBannerIndex: 0
+			curBannerIndex: 0,
+			photoViewOptions: {
+				index: 0,
+				history: false,
+				loop: false,
+				captionEl: false,
+				tapToToggleControls: false
+			},
+			orgName: '',
+			orgMobile: '',
+			roomName: '',
+			roomCode: '',
+			roomAddr: '',
+			roomStatus: 0,
+			pushStatus: 0
     }
   },
   methods: {
@@ -277,15 +219,37 @@ export default {
 		},
 		handleRelease() {
 			console.log(this.roomInfo.releaseStatus);
-		},
-		openPhotoSwipe(i) {
-			let options = {
-        index: i,
-        loop: false
-      };
-			new PhotoSwipe( this.$refs.pswp, PhotoSwipeUI_Default, this.demo01_list, options).init();
 		}
-  }
+	},
+	filters: {
+		mobileFormat(mobile) {
+			return mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+		}
+	},
+	created() {
+		
+		getRoomDetailApi({
+			roomCode: '1234567890'
+		}).then((res) => {
+			let roomInfo = res.data;
+			this.orgName = roomInfo.orgName;
+			this.orgMobile = roomInfo.orgMobile;
+			this.roomName = roomInfo.roomName;
+			this.roomCode = roomInfo.roomCode;
+			this.roomAddr = roomInfo.roomAddr;
+			this.roomStatus = roomInfo.roomStatus;
+			this.pushStatus = roomInfo.pushStatus;
+			let picList = [].concat(roomInfo.roomPictures, roomInfo.housePictures);
+			picList.forEach((v, i) => {
+				this.bannerList.push({
+					src: v.url,
+					title: v.tags,
+					w: 600,
+					h: 400
+				})
+			})
+		}).catch(err => {console.log(err)})
+	}
 }
 </script>
 
@@ -301,6 +265,10 @@ export default {
 			font-size: 24px;
 			line-height: 1;
 		}
+	}
+	.room-banner-container {
+		width: 360px;
+		height: 270px;
 	}
 	.room-banner {
 		width: 360px;
@@ -526,5 +494,8 @@ export default {
 			color: #fff;
 			background-color: #4680ff;
 		}
+	}
+	.heihei {
+		background: #ff0000;
 	}
 </style>

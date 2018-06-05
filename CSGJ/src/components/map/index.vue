@@ -3,7 +3,6 @@
     <div id="mapDiv">
       <i class="iconfont icon-ditubiaodianb mapIcon" v-show="showIcon"></i>
       <baidu-map class="map" :center="center" :zoom="zoom" @ready="mapReady">
-        <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="false" :autoLocation="true" @locationSuccess="locationSuccess"></bm-geolocation>
       </baidu-map>
     </div>
     <div class="mapBox">
@@ -11,8 +10,8 @@
         <inline-loading></inline-loading>
       </div>
       <div class="mapLine" v-show="searchList.length > 0">
-        <div class="title blue ellipsis">{{searchList[current] ? searchList[current].title : ''}}</div>
-        <div class="address ellipsis">{{searchList[current] ? searchList[current].address : ''}}</div>
+        <div class="title blue ellipsis">{{currentData ? currentData.subdistrictName : ''}}</div>
+        <div class="address ellipsis">{{currentData ? currentData.subdistrictAddress : ''}}</div>
         <div class="mapEdit" @click="editData">自定义</div>
       </div>
       <div class="scrollDiv">
@@ -41,10 +40,10 @@
         :show-bottom-border="false"
         @on-click-left="editShow = false"
         @on-click-right="editSave"></popup-header>
-        <group gutter="0" title="当前选择位置信息" label-width="90px">
-          <selector title="区域" :options="optList" v-model="areaValue" :value-map="valueMap" ref="area"></selector>
-          <x-textarea title="小区名称" ref="editTitle" v-model="currentData.title" :show-counter="false" :rows="1" autosize></x-textarea>
-          <x-textarea title="小区地址" v-model="currentData.address" :show-counter="false" ref="editAddress" :rows="1" autosize></x-textarea>
+        <group gutter="0" title="当前选择位置信息" label-width="70px">
+          <popup-picker value-text-align="left" title="区域" :data="optList" :popup-style="{'z-index': 502}" show-name v-model="areaValue" :columns="1"></popup-picker>
+          <x-textarea title="小区名称" ref="editTitle" v-model="currentData.subdistrictName" :show-counter="false" :rows="1" autosize></x-textarea>
+          <x-textarea title="小区地址" v-model="currentData.subdistrictAddress" :show-counter="false" ref="editAddress" :rows="1" autosize></x-textarea>
         </group>
       </popup>
     </div>
@@ -82,7 +81,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { Search, XInput, InlineLoading, PopupHeader, Popup, TransferDom, Selector, XTextarea, debounce } from 'vux'
+  import { Search, XInput, InlineLoading, PopupHeader, Popup, TransferDom, Selector, XTextarea, debounce, PopupPicker } from 'vux'
   import cityData from '../cityData/cityData'
   import scroll from '@/components/scroll'
   export default {
@@ -98,12 +97,16 @@
       PopupHeader, 
       Popup,
       Selector,
-      XTextarea
+      XTextarea,
+      PopupPicker
     },
     props: {
       wordShow: {
         type: Boolean,
         default: false
+      },
+      value: {
+        default: {}
       }
     },
     watch: {
@@ -112,12 +115,11 @@
         this.$nextTick(() => {
           val ? this.$refs.wordSearch.setFocus() : ''
         })
-      
       }
     },
     data() {
       return {
-        center: {lng: 0, lat: 0},
+        center: { lat: 0, lng: 0 },
         zoom: 18,
         showIcon: false,
         BmapObj: '',
@@ -125,10 +127,14 @@
         searchList: [],
         keywordList: [],
         keyword: '',
-        valueMap: ['value','label'],
         currentData: {
-          title: '',
-          address: ''
+          provinceId: '',
+          cityId: '',
+          addrRegionId: '',
+          subdistrictName: '',
+          subdistrictAddress: '',
+          longitude: '',
+          latitude: ''
         },
         nowCityName: '', //当前城市
         nowAreaName: '', //当前区域
@@ -140,20 +146,33 @@
         showLoading: false,
         editShow: false,
         optList: [],
-        areaValue: {}
+        areaValue: []
       }
+    },
+    mounted() {
+      window['locationStatusInAndroid'] = (data) => {
+        let obj = JSON.parse(data)
+        this.center = {
+          lng: obj.location.longitude,
+          lat: obj.location.latitude
+        }
+        let point = new BMap.Point(obj.location.longitude, obj.location.latitude)
+        this.getCenterData(point)
+      }
+      if(window.JSRunAs) {
+        window.JSRunAs.getLocation()
+      } 
     },
     methods: {
       editSave() {
         this.editShow = false
+        console.log(this.currentData)
       },
       debounceSearch: debounce(function(){
         this.searchParam()
       }, 500),
       searchParam() { //关键字搜索
-        // forceLocal表示是否将搜索范围约束在当前城市
-        // this.local.search(this.keyword, {forceLocal:true})
-        this.local.searchNearby(this.keyword, this.center, 10000);
+        this.local.searchNearby(this.keyword, this.center, 10000)
       },
       hideSearch() {
         this.$emit('changeShow')
@@ -167,53 +186,69 @@
       clickOne(index) {
         this.current = index
         this.center = this.searchList[index].point
+        this.combineData(this.searchList[index])
       },
       editData() { //自定义当前数据
-        this.currentData = this.searchList[this.current]
-        this.getAreaData()
         this.editShow = true
         this.$nextTick(() => {
           this.$refs.editAddress.updateAutosize()
           this.$refs.editTitle.updateAutosize()
         })
       },
-      getAreaData(){ //获取城市下面的区域
-        let provinceName = this.currentData.province
-        let cityName = this.currentData.city
-        if (this.nowCityName === cityName) {
+      combineData(item) { //获取当前选择的数据
+
+        this.currentData.subdistrictName = item.title
+        this.currentData.subdistrictAddress = item.address
+        this.currentData.longitude = item.point.lng
+        this.currentData.latitude = item.point.lat
+
+        if (this.nowCityName === item.city) { //城市没有切换就不用重新获取
+          this.optList.map((y, x) => { //切换对应的区域即可
+            if (y.name === this.nowAreaName) {
+              this.currentData.addrRegionId = y.value
+              this.areaValue = [String(y.value)]
+            }
+          })
+          this.updateData()
           return 
         }
-        if (provinceName && cityName) {
-          this.nowCityName = cityName
+        if (item.province && item.city) {
+          this.nowCityName = item.city
           cityData.map((v, k) => {
-            if (v.label === provinceName || v.label.indexOf(provinceName) !== -1) {
+            if (v.label === item.province || v.label.indexOf(item.province) !== -1) {
+              this.currentData.provinceId = v.value
               v.children.map((n, m) => { 
-                if (n.label === cityName || n.label.indexOf(cityName) !== -1) {
-                  this.optList = n.children
+                if (n.label === item.city || n.label.indexOf(item.city) !== -1) {
+                  this.currentData.cityId = n.value
+                  let arr = []
                   n.children.map((y, x) => { //获取当前所属的区域
+                    arr.push({name: y.label, value: String(y.value)})
                     if (y.label === this.nowAreaName) {
-                      this.areaValue = y.value
+                      this.currentData.addrRegionId = y.value
+                      this.areaValue = [String(y.value)]
                     }
                   })
+                  this.optList = arr
                 }
               })
             }
           })
+          this.updateData()
         }
       },
-      locationSuccess({point, addressComponent, marker}) { //手动定位成功后获取当前数据
-        this.getCenterData(point)
-        //地图默认的比例不是自己设置的估计在10左右，但是获取出来的又是18 如果设置的跟之前一样他不会修改所以在17和18来回设置保证可以设置成功
-        this.zoom = this.zoom === 18 ? 17 : 18
+      updateData() {
+        this.$emit('input', this.currentData)
       },
       getCenterData(point) { //查询附近的房子
         let self = this
         this.showLoading = true
         self.searchList = []
         this.geoc.getLocation(point, function(rs){ // 获取所在的区
-          self.nowAreaName = rs.addressComponents.district
-          self.local.searchNearby('房', point, 100);
-        });  
+          if(rs) {
+            self.nowAreaName = rs.addressComponents.district
+            self.local.searchNearby('房', point, 100)
+          }
+        })
       },
       mapReady({BMap, map}) { //地图加载完成
         let self = this
@@ -222,15 +257,17 @@
         this.geolocation = new BMap.Geolocation()
         this.geoc = new BMap.Geocoder();	
         this.showIcon = true
-        // 自动定位当前位置
-        this.geolocation.getCurrentPosition(function(r){
-          if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            self.center = r.point
-            self.getCenterData(r.point)
-          }
-        },{enableHighAccuracy: true,
-        SDKLocation: true})
-        
+        if (!window.JSRunAs) { //非APP里面调用定位
+          //自动定位当前位置
+          this.geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+              self.center = r.point
+              self.getCenterData(self.center)
+            }
+          },{enableHighAccuracy: true,
+          SDKLocation: true})
+        }
+
         // 拖拽完成触发
         map.addEventListener("touchend", function(e){ 
           setTimeout(function(){
@@ -259,6 +296,7 @@
                 self.$refs.scroll.scrollTo(0, 0)
                 self.current = 0
                 self.showCurrent = true
+                self.combineData(arr[0])
               }
               
             }

@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:09:49
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-25 10:04:28
+ * @Last Modified time: 2018-05-30 10:46:44
  */
 module.exports = {
   NODE_ENV: '"development"',

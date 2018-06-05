@@ -3,9 +3,7 @@
     <div class="scroll-content">
       <div ref="listWrapper">
         <slot>
-          <ul class="list-content">
-            <li @click="clickItem($event,item)" class="list-item" v-for="item in data">{{item}}</li>
-          </ul>
+          
         </slot>
       </div>
       <slot name="pullup"
@@ -17,7 +15,7 @@
             <span>{{pullUpTxt}}</span>
           </div>
           <div class="after-trigger" v-else>
-            <loading></loading>
+            <inline-loading></inline-loading>
           </div>
         </div>
       </slot>
@@ -35,7 +33,7 @@
         </div>
         <div class="after-trigger" v-else>
           <div v-if="isPullingDown" class="loading">
-            <loading></loading>
+            <inline-loading></inline-loading>
           </div>
           <div v-else><span>{{refreshTxt}}</span></div>
         </div>
@@ -46,7 +44,7 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-  import Loading from '../loading/loading.vue'
+  import { InlineLoading } from 'vux'
   import Bubble from '../bubble/bubble.vue'
   import { getRect } from '@/utils/dom'
 
@@ -91,7 +89,7 @@
         type: null,
         default: () => {
           return {
-            threshold: 90,
+            threshold: 50,
             stop: 40
           }
         }
@@ -293,7 +291,7 @@
       }
     },
     components: {
-      Loading,
+      InlineLoading,
       Bubble
     }
   }
