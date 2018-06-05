@@ -2,25 +2,25 @@
   <div class="img-list">
     <ul>
       <li v-for="(item, index) in cropperList" :key="index">
-        <span @click="deleteImg(index)">x</span>  
-        <p><img :src="item.src"  class="preview-img" alt="" @click="$preview.open(index, cropperList, options)"></p>
+        <span @click="deleteImg(index)" class="iconfont">&#xe601;</span>  
+        <p><img :src="item.src"  class="preview-img" alt="" @click="defaultImgList(index)"></p>
       </li>
-      <li>
+      <div v-show="uploadParam.isShowUploadBtn" class="showUploadBtn" @click="chooseImg">
         <img src="../../assets/upload.png" alt="" class="icon-upload">
-        <input type="file" 
+        <!-- <input type="file" 
           class="file-upload" 
           multiple  
-          @change="uploadImg($event)">
-      </li>
+          @change="uploadImg($event)"> -->
+      </div>
     </ul>
     <div class="img-cropper" v-show="isCropper">
       <imgCropper
-        :currentImg="currentImg"
-        :uploadParam = "uploadParam"
-        @isCroppered="isCroppered"
-        @emitCropperData="emitCropperData"
-      >
-      </imgCropper>
+      :currentImg="currentImg"
+      :uploadParam = "uploadParam"
+      @isCroppered="isCroppered"
+      @emitCropperData="emitCropperData"
+    >
+    </imgCropper>
     </div>
   </div>
 </template>
@@ -32,7 +32,8 @@ import bus from './bus'
   export default {
     name: 'upload',
     props: {
-      uploadParam: {}
+      uploadParam: {},
+      cropperList: ''
     },
     components: {
       imgCropper
@@ -47,23 +48,19 @@ import bus from './bus'
           tapToClose: true
         },
         currentImg: '',
-        isCropper: false,
-        cropperList: [],
-        cropperData: {},
-        list: [{
-          src: 'https://placekitten.com/600/400',
-          w: 600,
-          h: 400,
-          imageName: 'miao'
-        }, {
-          src: 'https://placekitten.com/1200/900',
-          w: 1200,
-          h: 900,
-          imageName: 'miao2'
-        }]
+        isCropper: false
+        // cropperList: [],
       }
     },
     methods: {
+      deleteImg (index) {
+        window.getPicUrl()
+        // this.cropperList.splice(index, 1)
+      },
+      chooseImg () {
+        // this.$vux.toast.text('ss')
+        window.JSIdentity.takeIdentityPhoto()
+      },
       // 裁剪后图片
       emitCropperData(img = {}) {
         console.log(img, 'img')
@@ -73,8 +70,25 @@ import bus from './bus'
       isCroppered (isCrop) {
         this.isCropper = isCrop
       },
-      deleteImg (index) {
-        this.cropperList.splice(index,1)
+      async defaultImgList (index) {
+        const readFileAsync = (el) => new Promise(resolve => {
+          let _img = new Image()
+          _img.src = el.src
+          _img.onload = () => {
+            resolve({
+              w: _img.width,
+              h: _img.height,
+              src: el.src,
+              imageName: el.imageName
+            })
+          }
+        })
+        const newArr = []
+        for (let i = 0; i < this.cropperList.length; i++) {
+          console.log(newArr)
+          newArr.push(await readFileAsync(this.cropperList[i]))
+        }
+        this.$preview.open(index, newArr)
       },
         /* 选择图片 */
       async uploadImg(e) {
@@ -89,10 +103,12 @@ import bus from './bus'
             console.log('读取异常....')
           }
           reader.onload = e => {
+            console.log(e.target.result)
             const src = (typeof e.target.result === 'object')
               // 把Array Buffer转化为blob 如果是base64不需要
               ? window.URL.createObjectURL(new Blob([e.target.result]))
               : e.target.result
+            console.log(src)
             let imageName = ''
             if (!file.name) {
               imageName = ''
@@ -144,23 +160,50 @@ import bus from './bus'
     },
     mounted () {
       let self = this
+      setTimeout(() => {
+        console.log(self.cropperList)
+      }, 3000);
+      console.log(self.cropperList)
+    
+      
       bus.$on('editImg', data => {
         self.$preview.close()
         self.isCropper = true
         this.currentImg = data
       })
+      window.getPicUrl = (data) => {
+        console.log(this)
+        // let obj = JSON.parse(data)
+        // self.cropperList.push({src: "https://fh-mjgy-test.oss-cn-hangzhou.aliyuncs.com/20180605142509958016"})
+      }
     }
   }
 </script>
 
-<style scoped>
+<style rel="stylesheet/less" lang="less" scoped>
+@font-face {
+  font-family: 'iconfont';  /* project id 640228 */
+  src: url('//at.alicdn.com/t/font_640228_vum2hy4mnx7uv7vi.eot');
+  src: url('//at.alicdn.com/t/font_640228_vum2hy4mnx7uv7vi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_640228_vum2hy4mnx7uv7vi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_640228_vum2hy4mnx7uv7vi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_640228_vum2hy4mnx7uv7vi.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
 .img-list{
-  width: 100%;
+  width: 100vw;
 }
 .img-list ul {
   display: flex;
-  flex-flow: row wrap;
-  list-style:none
+  // flex-flow: row wrap;
+  list-style:none;
+  width: 100%;
 }
 .img-list ul li{
   width: 20%;
@@ -169,28 +212,27 @@ import bus from './bus'
   position: relative;
   border: 1px solid #ccc;
   margin-left: 10px;
-  box-sizing: border-box;
 }
-
 .img-list ul li p{
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-  width: 100%;
-  height: 100%;
   overflow: hidden;
 }
 .img-list ul li span{
   position: absolute;
-  top: -13px;
-  right: -4px;
-  z-index: 99999;
+  top: -12px;
+  right: -7px;
+  z-index: 1000;
 }
-.img-list ul li:last-child{
-  border: none
+.showUploadBtn{
+  width: 20%;
+  height: 0;
+  padding-bottom: 20%;
+  position: relative;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+}
+.showUploadBtn img{
+  width: 100%;
+  height: 100%;
 }
 .img-list .file-upload{
   margin:0;
@@ -203,7 +245,7 @@ import bus from './bus'
   width: 100%;
   /* height: 100%; */
 }
-.img-list ul li:not(:last-child) img{
+.img-list ul li img{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -211,6 +253,7 @@ import bus from './bus'
 }
 .icon-upload{
   color: #ccc;
+  width: 50%;
   position:absolute;
   left:0;
   top: 0;
@@ -219,11 +262,9 @@ import bus from './bus'
   margin: auto;
 }
 .img-cropper{
-  position: fixed;
+  position: absolute;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  top:0;
-  left:0;
-  z-index: 999999999;
 }
 </style>
