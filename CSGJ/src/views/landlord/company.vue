@@ -3,42 +3,54 @@
     <view-box ref="viewBox" body-padding-top="46px" >
       <x-header title="新增房东(企业)" slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
       </x-header>
-      <p  class="check-not-pass" v-show="checkStatus === 0">审核未通过，具体原因</p>
+      <p  class="check-not-pass" v-show="firmForm.status === 2">审核未通过，{{firmForm.auditReasons}}</p>
       <group class="noTop" label-width="80px">
-        <x-input title="企业名称" required v-model="userForm.name" placeholder="请输入"></x-input>
-        <x-input title="社会统一信用代码" required v-model="userForm.cardNo" placeholder="请输入"></x-input>
-        <x-input title="企业法人" required v-model="userForm.businessEntity" placeholder="请输入"></x-input>
-        <x-input title="出房费率" class="redInput" readonly v-model="userForm.fee" placeholder="请输入"></x-input>
-        <x-input title="企业联系人" class="redInput" readonly v-model="userForm.concatPerson" placeholder="请输入">
-           <i class="iconfont icon-zhaoxiangji" slot="right" @click.prevent="photo" v-show="checkStatus===0 || 3"></i>
+        <x-input title="企业名称" required v-model="firmForm.businessName" placeholder="请输入"></x-input>
+        <x-input title="社会统一信用代码" required v-model="firmForm.unifiedSocialCreditCode" placeholder="请输入"></x-input>
+        <x-input title="企业法人" required v-model="firmForm.businessEntity" placeholder="请输入"></x-input>
+        <x-input title="出房费率" class="redInput" readonly v-model="firmForm.splitFree" placeholder="请输入"></x-input>
+        <x-input title="企业联系人" class="redInput" readonly v-model="firmForm.concatPerson" placeholder="请输入">
+           <i class="iconfont icon-zhaoxiangji" slot="right" @click.prevent="photo" v-show="firmForm.status==2"></i>
         </x-input>
-        <x-input v-if="checkStatus===2"  title="身份证号码" class="redInput" readonly v-model="plusXingCard" placeholder="请输入"></x-input>
-        <x-input v-else title="身份证号码" class="redInput" readonly v-model="userForm.IDCard" placeholder="请输入"></x-input>
-        <x-input title="手机号码" class="redInput" readonly v-model="userForm.mobile" placeholder="请输入"></x-input>
-        <x-input title="备注" class="redInput" readonly v-model="userForm.desc" placeholder="最多10个字"></x-input>
-        <!-- <x-input title="银行卡类型" class="redInput" readonly v-model="userForm.fee" placeholder="请输入"></x-input> -->
-        <selector title="银行卡类型"  v-model="userForm.cardType" :options="bankCardType" :min="0" @on-change="getbankType"></selector>
+        <x-input v-if="firmForm.status===1"  title="身份证号码" class="redInput" readonly v-model="plusXingCard" placeholder="请输入"></x-input>
+        <x-input v-else title="身份证号码" class="redInput" readonly v-model="firmForm.IDCard" placeholder="请输入"></x-input>
+        <x-input title="手机号码" class="redInput" readonly v-model="firmForm.mobile" placeholder="请输入"></x-input>
+        <x-input title="备注" class="redInput" readonly v-model="firmForm.remark" placeholder="最多10个字"></x-input>
+        <x-input v-if="firmForm.status===0"   title="银行卡类型" class="redInput" readonly v-model="firmForm.bankCardType" placeholder="请输入"></x-input>
+        <selector v-else title="银行卡类型"  :options="bankCardType" :min="0" @on-change="getbankType"></selector>
 
-        <selector v-if="checkStatus===4" title="开户银行"  v-model="userForm.cardType" :options="bankCardType" :min="0"></selector>
-        <!-- <x-input v-else title="开户名" class="redInput" readonly v-model="userForm.accountName" placeholder="请输入"></x-input> -->
-        <x-input v-else-if="checkStatus===2" title="开户人身份证2" class="redInput" readonly v-model="plusXingAccountIDCard" placeholder="请输入"></x-input>
-        <x-input v-else title="开户人身份证" class="redInput" readonly v-model="userForm.accountIDCard" placeholder="请输入"></x-input>
-        <x-input title="银行卡号" class="redInput" readonly v-model="userForm.bankCard" placeholder="请输入"></x-input>
+        <selector v-if="firmForm.status===4" title="开户银行"  v-model="firmForm.cardType" :options="bankCardType" :min="0"></selector>
+        <!-- <x-input v-else title="开户名" class="redInput" readonly v-model="firmForm.accountName" placeholder="请输入"></x-input> -->
+        <x-input v-else-if="firmForm.status===1" title="开户人身份证1" class="redInput" readonly v-model="plusXingaccountIDcardNum" placeholder="请输入"></x-input>
+        <x-input v-else title="开户人身份证" class="redInput" readonly v-model="firmForm.accountIDcardNum" placeholder="请输入"></x-input>
+        <x-input title="银行卡号" class="redInput" readonly v-model="firmForm.bankCard" placeholder="请输入"></x-input>
         <cell title="企业营业执照">
-          <img-upload :uploadParam="uploadParam"></img-upload>
+          <img-upload 
+          :uploadParam="uploadParam"
+          :cropperList = firmForm.businessLicenceImageUrl
+          ></img-upload>
+        </cell>
+        <cell title="联系人身份证">
+          <img-upload 
+          :uploadParam="uploadParam"
+          :cropperList = firmForm.idImageUrl
+          ></img-upload>
+        </cell>
+      <cell title="平台代理收租服务">
+          <img-upload 
+          :uploadParam="uploadParam"
+          :cropperList = firmForm.hourseAgreementUrl
+          ></img-upload>
         </cell>
         <cell title="房源发布和租客引流服务">
-          <img-upload :uploadParam="uploadParam"></img-upload>
-        </cell>
-      <cell title="房源发布和租客引流服务">
-          <img-upload :uploadParam="uploadParam"></img-upload>
-        </cell>
-        <cell title="房源发布和租客引流服务">
-          <img-upload :uploadParam="uploadParam"></img-upload>
+          <img-upload 
+          :uploadParam="uploadParam"
+          :cropperList = firmForm.drainageServiceUrl
+          ></img-upload>
         </cell>
       </group>
       <div slot="bottom" class="bottomDiv">
-        <x-button disabled type="primary" action-type="button" v-if="checkStatus === 1">{{statusBtn}}</x-button>
+        <x-button disabled type="primary" action-type="button" v-if="firmForm.status === 0">{{statusBtn}}</x-button>
         <x-button type="primary" action-type="button" v-else @click.native="toSave">{{statusBtn}}</x-button>
       </div>
     </view-box>
@@ -64,23 +76,48 @@ export default {
     Selector
   },
   mounted() {
+    let routerParams = this.$route.params
+    console.log(routerParams, 'routerParams')
+    // let self = this
+    // TODO getCheckDetial
+    // if (!routerParams.id) {
+    //   console.log('缺少id')
+    //   return false
+    // }
+    // getCheckDetial(routerParams.id).then(res => {
+    //   if (res && res.success) {
+    //     self.firmForm = res.data
+          // if (res.data.status === 1) {
+          //   this.uploadParam.isShowUploadBtn = false
+          // }
+    //   }
+    // })
   },
   data() {
     return {
-      checkStatus: 1, // 0:未通过，1:审核中，2:通过，3:新增企业个人银行, 4:对公银行，5：对公审核中
-      userForm: {
-        name: '前端牛逼有限公司',
-        cardNo: '32132132321', // 社会信用代码
+      // firmForm.status: 1, // 0:未通过，1:审核中，2:通过，3:新增企业个人银行, 4:对公银行，5：对公审核中
+      firmForm: {
+        status: 1, //0-待审核,1-审核成功,2-审核失败
+        type: 2, // 1：个人，2：企业
+        businessName: '前端牛逼有限公司',
+        unifiedSocialCreditCode: '32132132321', // 社会信用代码
         businessEntity: '张三', //企业法人
-        fee: '35%',
+        splitFree: '35%',
         concatPerson: '李四', // 企业联系人
         IDCard: '61912338298329321321321',
         mobile: '1332323223',
-        desc: '',
+        remark: '',
         cardType: '1',
+        auditReasons: '你太丑了',
         accountName: '王五', // 开户名
-        accountIDCard: 3213213213213, // 开户人身份证
-        bankCard: 343232323 // 银行卡号
+        accountIDcardNum: 3213213213213, // 开户人身份证
+        bankCard: 343232323, // 银行卡号
+        sex: 1,
+        bankCardType: '个人',
+        drainageServiceUrl: [{src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'}],
+        idImageUrl: [{src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'}],
+        hourseAgreementUrl: [{src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'}],
+        businessLicenceImageUrl: [{src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'}, {src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'},{src: 'http://www.w3school.com.cn/i/eg_tulip.jpg'}]
       },
       bankType: 1, // 1:对公，2:私人
       bankCardType: [{
@@ -108,19 +145,20 @@ export default {
   },
   computed: {
     statusBtn () {
-      let status = this.checkStatus
-      return status === 0 ? '重新提交申请' : status === 1 ? '审核中' : ''
+      let status = this.firmForm.status
+      console.log(this.firmForm.status, 'status')
+      return status === 2 ? '重新提交申请' : status === 0 ? '审核中' : ''
     },
     plusXingCard: {
       get: function () {
-        return plusXing(this.userForm.IDCard, 6, 4)
+        return plusXing(this.firmForm.IDCard, 6, 4)
       },
       set: function () {
       }
     },
-    plusXingAccountIDCard: {
+    plusXingaccountIDcardNum: {
       get: function () {
-        return plusXing(this.userForm.accountIDCard, 6, 4)
+        return plusXing(this.firmForm.accountIDcardNum, 6, 4)
       },
       set: function () {
       }
@@ -131,10 +169,16 @@ export default {
       this.$vux.toast.text('fuck')
     },
     photo() {
-      this.userForm.name = '你爸爸'
+      this.firmForm.businessName = '你爸爸'
     },
     getbankType (value) {
-      this.checkStatus = value == 1 ? 4 : 3
+      // let currentStatus = this.firmForm.status
+      // if (value == 2) {
+      //   this.firmForm.status = 3
+      // } else {
+      //   this.firmForm.status = currentStatus
+      // }
+      // this.firmForm.status = value == 1 ? 4 : 3
     }
   }
 }

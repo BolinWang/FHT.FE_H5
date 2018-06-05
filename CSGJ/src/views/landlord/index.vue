@@ -6,8 +6,8 @@
         <i class="iconfont icon-xinjian1" slot="right" @click="addNew"></i>
       </x-header>
       <tab>
-        <tab-item selected @on-item-click="activeIndex = 0">已审核</tab-item>
-        <tab-item @on-item-click="activeIndex = 1">处理中</tab-item>
+        <tab-item selected @on-item-click="onItemClick">已审核</tab-item>
+        <tab-item @on-item-click="onItemClick">处理中</tab-item>
       </tab>
       <scroll :pullUpLoad="false" @pullingDown="pullingDown" :data="listData">
         <ul class="userInfoNav" :class="{action: activeIndex === 1}">
@@ -95,7 +95,7 @@ export default {
     Actionsheet
   },
   mounted() {
-    this.searchParam()
+    // this.searchParam()
   },
   filters: {
     typeStr(val) {
@@ -118,12 +118,13 @@ export default {
       searchData: [],
       listData: [{
         id: 1,
-        type: 1,
+        type: 1, // 类别 1-个人,2-企业
         name: '张三',
-        desc: '哈哈哈',
+        desc: '哈哈哈', // 备注
         mobile: 18912344321,
         hasCard: false,
-        status: 1
+        status: 1,
+        auditReason: ''
       },{
         id: 2,
         type: 2,
@@ -143,6 +144,11 @@ export default {
         this.$refs.houseSearch.setFocus()
       })
     },
+    onItemClick (index) {
+      this.activeIndex = index
+      let classify = index == 0 ? 2 : 1
+      // this.searchParam(classify)
+    },
     keywordSearch: debounce(function(){
      this.searchData = this.listData
     }, 500),
@@ -154,14 +160,25 @@ export default {
 
     },
     toDetail(item) {
+      console.log(item)
+      let path = item.type === 1 ? '/person' : '/company'
+      let name = item.type === 1 ? 'person' : 'company'
       this.$router.push({
-        path: '/person', 
-        name: 'person',
+        path: path, 
+        name: name,
         params: item
       })
     },
-    searchParam() {
-      
+    searchParam(classify = 2) {
+      let self = this
+      let params = {
+        classify: classify,
+        pageSize: 10,
+        pageNum: 1
+      }
+      getCheckList(params).then(res => {
+        self.listData = res.data
+      })
     },
     addNew() { //新增
       this.showAdd = true

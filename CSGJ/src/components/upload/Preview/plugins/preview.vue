@@ -45,16 +45,19 @@
   import PhotoSwipe from 'photoswipe/dist/photoswipe'
   import UI from 'photoswipe/dist/photoswipe-ui-default'
   import bus from '../../bus'
+  import 'photoswipe/dist/photoswipe.css';
+  import 'photoswipe/dist/default-skin/default-skin.css';
+  
 
   export default {
     data() {
       return {
         defaultOptions: {
-          captionEl: true,
-          bgOpacity: 0.8,
-          fullscreenEl: true,
-          history: false,
-          shareEl: false,
+          // captionEl: true,
+          // bgOpacity: 0.8,
+          // fullscreenEl: true,
+          // history: false,
+          // shareEl: false,
           tapToClose: true,
           isClickableElement: function (el) {
             return /edit_img/.test(el.className)
@@ -90,9 +93,9 @@
 </script>
 
 <style>
-  @import 'photoswipe/dist/photoswipe.css';
-  /* @import 'photoswipe/dist/default-skin/default-skin.css'; */
-  
+  .pswp__counter{
+    display: block !important;
+  }
   .pswp__caption{
     display: flex;
   }
