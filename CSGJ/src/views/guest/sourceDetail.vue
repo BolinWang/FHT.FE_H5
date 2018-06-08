@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-05 14:55:51
+ * @Last Modified time: 2018-06-06 11:14:45
  */
 
 <template>
@@ -13,34 +13,34 @@
       :left-options="{preventGoBack: true}"
       @on-click-back="goBack"
       slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
-        <span slot="right">编辑</span>
+        <div slot="right">编辑</div>
       </x-header>
       <div class="guestStatus">
         <div>
-          <span>已签约</span>
-          <span>2018/08/01 12:00:00</span>
-          <span>操作员：李四</span>
+          <span class="statusSpan">已签约</span>
+          <span class="time">2018/08/01 12:00:00</span>
+          <span class="right editUser">操作员：李四</span>
         </div>
-        <div class="roomName">天天小区-3幢-1单元-2楼-203号房间A</div>
+        <div class="roomName text-danger">天天小区-3幢-1单元-2楼-203号房间A</div>
       </div>
       <div class="guestInfo">
-        <div class="userInfo">
+        <div class="userInfo flex">
           <div class="half">
-            <span>姓名：张三</span>
+            <span>姓名：张三 </span>
             <span class="gender">先生</span>
           </div>
           <div class="half">
-            <span>手机号码：13812341234 <i class="iconfont"></i></span>
+            <span>手机号码：13812341234 <i class="iconfont icon-dianhua"></i></span>
           </div>
           <div class="half">
             <span>来源：网络-58个人</span>
           </div>
           <div class="half">
-            <span>意向度：<span>高</span></span>
+            <span>意向度：<span class="purpose">高</span></span>
           </div>
         </div>
         <div class="askInfo">
-          <div class="line">
+          <div class="line flex">
             <div class="half">
               房源类型：合租
             </div>
@@ -48,7 +48,7 @@
               月租金：<span class="text-danger">1000.00 ~ 2000.00</span>
             </div>
           </div>
-          <div class="line">
+          <div class="line resourceDiv">
             房源要求：
             <span>独卫</span>
             <span>厨房</span>
@@ -58,23 +58,50 @@
           <div class="line">
             位置需求（1）： 杭州市-西湖区-黄龙
           </div>
+          <div class="line">
+            位置需求（2）： 杭州市-西湖区-黄龙
+          </div>
+          <div class="line">
+            位置需求（3）： 杭州市-西湖区-黄龙
+          </div>
         </div>
       </div>
       <tab>
-        <tab-item selected>跟进记录（5）</tab-item>
-        <tab-item>带看记录（2）</tab-item>
+        <tab-item selected @on-item-click="handler(0)">跟进记录（5）</tab-item>
+        <tab-item @on-item-click="handler(1)">带看记录（2）</tab-item>
       </tab>
-      <ul class="recordNav">
+      <ul class="recordNav" v-show="current === 0">
         <li>
           <div class="line">
-            <span>2018/08/01 12:00:00</span>
-            <span>李四</span>
-            <span>电话跟进</span>
+            <span>2018/08/01 12:00:00 李四</span>
+            <span class="right recordStatus">电话跟进</span>
+          </div>
+        </li>
+        <li>
+          <div class="line">
+            <span>2018/08/01 12:00:00 李四</span>
+            <span class="right recordStatus">电话跟进</span>
           </div>
           <div class="line">
             备注：预约5号下午3点看房
           </div>
         </li>
+        <li>
+          <div class="line">
+            <span>2018/08/01 12:00:00 李四</span>
+            <span class="right recordStatus">电话跟进</span>
+          </div>
+        </li>
+      </ul>
+      <ul class="recordNav" v-show="current === 1">
+        <li>
+          <div class="line">
+            <span>2018/08/01 李四</span>
+          </div>
+          <div class="blue">天天小区-3幢-1单元-2楼-203号房间A</div>
+          <div class="blue">天天小区-3幢-1单元-2楼-203号房间A</div>
+        </li>
+        
       </ul>
       <div slot="bottom" class="bottomDiv">
         <flexbox :gutter="0">
@@ -188,23 +215,14 @@ export default {
         source: '',
         sourceType: ''
       },
+      current: 0,
       sessionId: '',
       followInfos: []
     }
   },
   methods: {
     getDetail() {
-      // let param = {
-      //   guestSourceId: parseInt(this.$route.params.guestSourceId)
-      // }
-      // detailApi(param).then(res => {
-      //   if (res.data && typeof res.data === 'object') {
-      //     this.userForm = Object.assign(this.userForm, res.data)
-      //     this.followInfos = res.data.followInfos
-      //   }
-      // }).catch(res => {
-      //   this.$vux.toast.text(res.message)
-      // })
+     
     },
     callMobile(mobile) {
       if (mobile && window.call) {
@@ -217,11 +235,8 @@ export default {
     edit() {
       this.$router.push({name: 'addSource', params: {guestSourceId: this.$route.params.guestSourceId}})
     },
-    changeStatus() {
-      this.$router.push({name: 'sourceFollow', params: {guestSourceId: this.$route.params.guestSourceId}})
-    },
-    sign() {
-      this.$router.push({name: 'signContract', params: {guestSourceId: this.$route.params.guestSourceId}})
+    handler(val) {
+      this.current = val
     }
   }
 }
@@ -243,5 +258,99 @@ export default {
     text-align: center;
     border-right: 1px solid #D9D9D9;
     font-size: 14px; 
+  }
+  .guestStatus {
+    padding-left: 12px;
+    padding-top: 6px;
+    color: #666;
+    font-size: 12px;
+    background: #fff;
+    margin-bottom: 3px;
+    .statusSpan {
+      border-radius: 4px;
+      display: inline-block;
+      padding: 0px 9px;
+      background: #4680FF;
+      color: #fff;
+    }
+    .time {
+      padding-left: 10px;
+    }
+    .editUser {
+      padding-right: 12px;
+    }
+    .roomName {
+      line-height: 30px;
+    }
+  }
+  .flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .guestInfo {
+    background: #fff;
+    padding-left: 12px;
+    color: #666;
+    margin-bottom: 3px;
+    line-height: 22px;
+    .icon-dianhua {
+      color: #FF9800;
+      position: relative;
+      top: 2px;
+    }
+    .userInfo {
+      border-bottom: 1px solid #D9D9D9;
+      padding: 5px 0;
+    }
+    .half {
+      width: 50%;
+      height: 24px;
+      line-height: 24px;
+    }
+    .gender {
+      padding: 2px 8px;
+      border: 1px solid #259B24;
+      color: #259B24;
+      border-radius: 4px;
+    }
+    .purpose {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      display: inline-block;
+      color: #fff;
+      background: #FF9800;
+    }
+  }
+  .resourceDiv {
+    span {
+      padding: 2px 8px;
+      border: 1px solid #4680FF;
+      color: #4680FF;
+      border-radius: 4px;
+      margin-right: 5px;
+    }
+  }
+  .recordNav {
+    padding-left: 12px;
+    border-bottom: 1px solid #D9D9D9;
+    background: #fff;
+    li {
+      font-size: 12px;
+      width: 100%;
+      border-bottom: 1px solid #D9D9D9;
+      color: #666;
+      padding: 7px 0;
+      line-height: 20px;
+      &:last-child {
+        border-bottom: none;
+      }
+      .recordStatus {
+        padding-right: 12px;
+        color: #4680FF;
+      }
+    }
   }
 </style>

@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-04-28 15:25:48
+ * @Last Modified time: 2018-06-08 14:55:04
  */
 <template>
   <div>
@@ -64,8 +64,8 @@
         </div>
       </popup>
     </div>
-    <div class="line">
-      <x-textarea title="备注   " v-model="userForm.remark" placeholder="请输入备注" :height="20" :rows="1" autosize></x-textarea>
+    <div class="line descWidth">
+      <x-textarea title="备注" :max="100" v-model="userForm.remark" placeholder="请输入备注" :height="20" :rows="1" autosize></x-textarea>
     </div>
     <div class="fixedBottm" v-show="fixedFlag">
       <button type="button" class="btn" @click="saveData">完成</button>
@@ -317,39 +317,40 @@ export default {
   }
   .positionRight {
     position: absolute;
-    right: 10px;
+    right: 5px;
     color: #ccc;
   }
   .genderBox {
-    width: 200px;
-    top:10px;
+    width: 100px;
+    top: 5px;
   }
   .textCenter {
     text-align: center;
   }
   .line {
     width: 100%;
-    min-height: 80px;
-    line-height: 80px;
-    padding-left: 20px;
+    min-height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
     border-bottom: 1px solid #eee;
     font-size: 0.35rem;
     background: #fff;
     position: relative;
+    float: left;
     .weui-cell {
-      line-height: 40px;
+      line-height: 20px;
       padding-left: 0;
     }
     .labelText {
-      width: 160px;
-      height: 80px;
+      width: 80px;
+      height: 40px;
       .left;
     }
     .textArea {
       .left;
-      line-height: 50px;
-      padding: 15px 0;
-      width: 500px;
+      line-height: 25px;
+      padding: 8px 0;
+      width: 250px;
       color: #999;
       font-size: 0.35rem;
     }
@@ -357,9 +358,9 @@ export default {
       .left;
       border:none;
       background: none;
-      padding: 15px 0;
-      line-height: 50px;
-      width: 500px;
+      padding: 8px 0;
+      line-height: 25px;
+      width: 250px;
       font-size: 0.35rem;
       &:focus{
         border: none;
@@ -369,27 +370,27 @@ export default {
     .heightAuto {
       // height: auto;
       // min-height: 80px;
-      padding: 5px;
-      height: 80px;
-      line-height: 70px;
+      padding: 2px;
+      height: 40px;
+      line-height: 35px;
       // overflow-y:visible;
       resize: none;
     }
     .status {
       .left;
-      width: 500px;
-      margin-top: 10px;
+      width: 250px;
+      margin-top: 5px;
     }
   }
   .searchBox {
-    width: 590px;
+    width: 295px;
     .searchNav {
       width: 100%;
-      padding: 20px 20px;
+      padding: 10px;
       li {
         width: 100%;
-        height: 80px;
-        line-height: 80px;
+        height: 40px;
+        line-height: 40px;
         .left;
       }
     }

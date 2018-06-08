@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-09 17:45:04
+ * @Last Modified time: 2018-06-07 18:51:33
  */
 <template>
   <div>
@@ -220,49 +220,49 @@ export default {
   }
   .positionRight {
     position: absolute;
-    right: 10px;
+    right: 5px;
     color: #ccc;
   }
   .top10 {
-    margin-top: 10px;
+    margin-top: 5px;
   }
   .center {
     text-align: center;
-    line-height: 70px;
+    line-height: 35px;
     border-top:1px solid #ddd;
     font-size: 0.4rem;
     color: #666;
   }
   .gender {
-    padding: 0px 10px;
+    padding: 0px 5px;
     color: #fff;
     background: #4680FF;
     position: absolute;
-    line-height: 40px;
+    line-height: 20px;
     font-size: 0.3rem;
-    top: 8px;
-    left:350px;
+    top: 4px;
+    left:175px;
   }
   .clear {
     clear: both;
   }
   ul.statusList {
     width: 100%;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     li {
       .left;
       width: 100%;
-      margin-bottom: 15px;
+      margin-bottom: 7px;
       background: #fff;
-      padding: 20px 0;
-      line-height: 30px;
-      min-height: 30px;
+      padding: 10px 0;
+      line-height: 15px;
+      min-height: 15px;
       text-align: center;
       .statusText {
         width: 3rem;
         border-right: 1px solid #ccc;
         text-align: left;
-        padding-left: 20px;
+        padding-left: 10px;
         .left;
       }
       .statusUser {
@@ -277,32 +277,32 @@ export default {
       .desc {
         width: 100%;
         text-align: left;
-        padding-top: 20px;
-        line-height: 40px;
+        padding-top: 10px;
+        line-height: 20px;
         color: #666;
         .left;
-        padding-left: 20px;
+        padding-left: 10px;
       }
     }
   }
   .line {
     width: 100%;
-    min-height: 60px;
-    line-height: 60px;
-    padding-left: 20px;
+    min-height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
     border-bottom: 1px solid #eee;
     font-size: 0.35rem;
     position: relative;
     .labelText {
-      width: 160px;
-      height: 60px;
+      width: 80px;
+      height: 30px;
       text-align: right;
-      padding-right: 10px;
+      padding-right: 5px;
       .left;
     }
     .icon-dianhua {
       color:rgb(56, 224, 40);
-      left: 380px;
+      left: 190px;
       top:0;
       position: absolute;
     }
@@ -310,9 +310,9 @@ export default {
       .left;
       border:none;
       background: none;
-      padding: 15px 0;
-      line-height: 30px;
-      width: 500px;
+      padding: 7px 0;
+      line-height: 15px;
+      width: 250px;
       font-size: 0.35rem;
     }
   }

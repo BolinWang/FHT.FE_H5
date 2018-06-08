@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-15 11:12:32
+ * @Last Modified time: 2018-06-08 14:45:13
  */
 <template>
   <div>
@@ -16,7 +16,7 @@
       <div class="labelText">姓名</div>
       <input class="inputs" v-model="userForm.name" type="text" placeholder="请输入姓名">
       <div class="genderBox positionRight">
-        <checker v-model="userForm.gender" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+        <checker v-model="userForm.gender" default-item-class="demo1-item" selected-item-class="demo1-item-selected" :radio-required="true">
           <checker-item :value="1">先生</checker-item>
           <checker-item :value="2">女士</checker-item>
         </checker>
@@ -77,7 +77,7 @@
     <div class="line">
       <div class="labelText">类型</div>
       <div class="status">
-        <checker v-model="userForm.type" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+        <checker v-model="userForm.type" default-item-class="demo1-item" selected-item-class="demo1-item-selected" :radio-required="true">
           <checker-item :value="1">整租</checker-item>
           <checker-item :value="2">合租</checker-item>
         </checker>
@@ -86,7 +86,7 @@
     <div class="line" v-show="userForm.type === 2">
       <div class="labelText">要求(多选)</div>
       <div class="status">
-        <checker v-model="userForm.requirement" type="checkbox" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+        <checker v-model="userForm.requirement" type="checkbox" default-item-class="demo1-item" selected-item-class="demo1-item-selected" :radio-required="true">
           <checker-item :value="1">独厨</checker-item>
           <checker-item :value="2">独卫</checker-item>
         </checker>
@@ -95,7 +95,7 @@
     <div class="line">
       <div class="labelText">意向度</div>
       <div class="status">
-        <checker v-model="userForm.intentionality" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
+        <checker v-model="userForm.intentionality" default-item-class="demo1-item" selected-item-class="demo1-item-selected" :radio-required="true">
           <checker-item :value="1">低</checker-item>
           <checker-item :value="2">中</checker-item>
           <checker-item :value="3">高</checker-item>
@@ -526,18 +526,18 @@ export default {
   }
   .positionRight {
     position: absolute;
-    right: 10px;
+    right: 5px;
     color: #ccc;
   }
   .genderBox {
-    width: 200px;
+    width: 100px;
   }
   .demo1-item {
     border: 1px solid #ccc;
-    height: 50px;
-    line-height: 50px;
+    height: 25px;
+    line-height: 25px;
     text-align: center;
-    width: 90px;
+    width: 45px;
   }
   .demo1-item-selected {
     border:1px solid #4680FF;
@@ -546,23 +546,23 @@ export default {
   }
   .line {
     width: 100%;
-    min-height: 80px;
-    line-height: 80px;
-    padding-left: 20px;
+    min-height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
     border-bottom: 1px solid #eee;
     font-size: 0.35rem;
     background: #fff;
     position: relative;
     .labelText {
-      width: 160px;
-      height: 80px;
+      width: 80px;
+      height: 40px;
       .left;
     }
     .textArea {
       .left;
-      line-height: 50px;
-      padding: 15px 0;
-      width: 500px;
+      line-height: 25px;
+      padding: 7px 0;
+      width: 250px;
       color: #999;
       font-size: 0.35rem;
     }
@@ -570,9 +570,9 @@ export default {
       .left;
       border:none;
       background: none;
-      padding: 15px 0;
-      line-height: 50px;
-      width: 500px;
+      padding: 7px 0;
+      line-height: 25px;
+      width: 250px;
       font-size: 0.35rem;
       &:focus{
         border: none;
@@ -580,17 +580,17 @@ export default {
       }
     }
     .price {
-      width: 200px;
+      width: 100px;
     }
     .section {
       display: inline-block;
       .left;
       text-align: center;
-      width: 60px;
+      width: 30px;
     }
     .status {
       .left;
-      width: 500px;
+      width: 250px;
     }
   }
 </style>

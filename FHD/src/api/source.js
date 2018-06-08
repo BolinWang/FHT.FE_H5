@@ -6,7 +6,7 @@ const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www'
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
-    url: '/flying/guestSource/',
+    url: '/bop/flying/guestSource/',
     method: 'post',
     data: {
       method: 'queryListByPage',
@@ -17,7 +17,7 @@ export function queryListByPageApi(params = {}) {
 // 查询房源
 export function saveOrUpdateApi(params = {}) {
   return fetch({
-    url: '/flying/guestSource/',
+    url: '/bop/flying/guestSource/',
     method: 'post',
     data: {
       method: 'saveOrUpdate',
@@ -31,7 +31,6 @@ export function getApi(params = {}) {
   return fetch({
     url: hmsUrl,
     method: 'post',
-    isHms: true,
     data: {
       method: 'cityManagers',
       params
@@ -64,7 +63,7 @@ export function getUserNameApi(params = {}) {
 // 查询板块信息
 export function plateApi(params = {}) {
   return fetch({
-    url: '/house/region/',
+    url: '/bop/house/region/',
     method: 'post',
     data: {
       method: 'query.region.zone',
@@ -76,7 +75,7 @@ export function plateApi(params = {}) {
 // 查询客源详情
 export function detailApi(params = {}) {
   return fetch({
-    url: '/flying/guestSource/',
+    url: '/bop/flying/guestSource/',
     method: 'post',
     data: {
       method: 'detail',
@@ -88,11 +87,32 @@ export function detailApi(params = {}) {
 // 客源更进
 export function saveFollowInfoApi(params = {}) {
   return fetch({
-    url: '/flying/guestSource/',
+    url: '/bop/flying/guestSource/',
     method: 'post',
     data: {
       method: 'saveFollowInfo',
       params
     }
+  })
+}
+
+// 获取房东列表
+export function queryTempOrg(params = {}) {
+  return fetch({
+    url: 'http://test-flying-api.mdguanjia.com/api/user/queryTempOrg',
+    method: 'post',
+    notId: true,
+    data: {
+      method: 'queryTempOrg',
+      params
+    }
+  })
+}
+
+export function search(params = {}) {
+  return fetch({
+    url: 'https://dev.mdguanjia.com/search/fhd/estate/search',
+    method: 'post',
+    data: params
   })
 }

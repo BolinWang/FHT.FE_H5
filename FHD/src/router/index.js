@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const _import = require('./_import')
+import _import from './_import'
 Vue.use(Router)
 
 export default new Router({
@@ -12,32 +12,52 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: _import('sourceList')
+      component: resolve => require(['@/views/workbench'], resolve)
     },
     {
-      path: '/sourceList/:sessionId',
+      path: '/sourceList',
       name: 'sourceList',
-      component: _import('sourceList')
+      component: resolve => require(['@/views/sourceList'], resolve)
     },
     {
       path: '/addSource/:guestSourceId',
       name: 'addSource',
-      component: _import('addSource')
+      component: resolve => require(['@/views/addSource'], resolve)
     },
     {
       path: '/sourceDetail/:guestSourceId',
       name: 'sourceDetail',
-      component: _import('sourceDetail')
+      component: resolve => require(['@/views/sourceDetail'], resolve)
     },
     {
       path: '/sourceFollow/:guestSourceId',
       name: 'sourceFollow',
-      component: _import('sourceFollow')
+      component: resolve => require(['@/views/sourceFollow'], resolve)
     },
     {
       path: '/reminder',
       name: 'reminder',
-      component: _import('reminder')
+      component: resolve => require(['@/views/reminder'], resolve)
+    },
+    {
+      path: '/workbench',
+      name: 'workbench',
+      component: resolve => require(['@/views/workbench'], resolve)
+    },
+    {
+      path: '/house',
+      name: 'house',
+      component: resolve => require(['@/views/house'], resolve)
+    },
+    {
+      path: '/searchHouse',
+      name: 'searchHouse',
+      component: resolve => require(['@/views/searchHouse'], resolve)
+    },
+    {
+      path: '/landlord',
+      name: 'landlord',
+      component: resolve => require(['@/views/landlord'], resolve)
     }
   ]
 })

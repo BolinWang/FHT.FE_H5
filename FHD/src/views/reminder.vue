@@ -2,25 +2,15 @@
  * @Author: chenxing 
  * @Date: 2018-06-05 11:13:00 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-05 13:59:15
+ * @Last Modified time: 2018-06-07 14:36:05
  */
 
 <template>
 	<div>
-    <sticky>
-      <tab custom-bar-width="8em">
-        <tab-item selected @on-item-click="changeTable">催缴账单</tab-item>
-        <tab-item @on-item-click="changeTable">未放款账单</tab-item>
-      </tab>
-    </sticky>
-    <div class="scrollDiv" v-show="tabIndex == 0">
+    <div class="scrollDiv">
       <div class="rent-bill-item" v-for="(item, index) in dataList" :key="index">
         <div class="item-head">
           <p>房间：{{item.roomName}}</p>
-          <p class="item-flex">
-            <span>房东：{{item.fangdong}}</span>
-            <span @click="callMobile(item.mobile)"><i class="iconfont icon-dianhua text-warning" ></i>手机号码：{{item.mobile | mobileStr}}</span>
-          </p>
         </div>
         <div class="item-body">
           <p>账单号：{{item.billNo}}</p>
@@ -39,33 +29,10 @@
         </div>
         <div class="item-foot item-flex">
           <span class="blue" @click="callMobile(item.guestMobile)">电话催缴</span>
-          <span class="blue" :class="{disabled: item.status === 2}" @click="message(item)">{{item.status === 2 ? '今日已催' : '短信催缴'}}</span>
+          <span class="blue" @click="message(item)">催租跟进</span>
         </div>
       </div>
-    </div>
-    <div class="scrollDiv" v-show="tabIndex == 1">
-      <div class="rent-bill-item" v-for="(item, index) in dataList" :key="index">
-        <div class="item-head">
-          <p>房间：{{item.roomName}}</p>
-          <p class="item-flex">
-            <span>房东：{{item.fangdong}}</span>
-            <span><i class="iconfont icon-dianhua text-warning"></i>手机号码：{{item.mobile | mobileStr}}</span>
-          </p>
-        </div>
-        <div class="item-body">
-          <p>账单号：{{item.billNo}}</p>
-          <p class="item-flex">
-            <span>账单名称：{{item.billName}}</span>
-            <span>账单金额：{{item.billPrice}}</span>
-          </p>
-          <p>支付时间：{{item.time}}</p>
-        </div>
-        <div class="item-foot item-flex">
-          <span class="text-danger">重新放款</span>
-        </div>
-      </div>
-    </div>
-    
+    </div>    
   </div>
 </template>
 
@@ -163,12 +130,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .scrollDiv {
-    // height: 1090px;
-    // overflow-y: auto;
-  }
 	.rent-bill-item {
-		margin-bottom: 12px;
+		margin-bottom: 6px;
 		color: #333;
     background-color: #fff;
     &:last-child {
@@ -176,28 +139,28 @@ export default {
     }
 		.item-head {
 			position: relative;
-			padding: 12px 24px;
+			padding: 6px 12px;
 			&::after {
 				content: "";
 				position: absolute;
 				bottom: 0;
-				left: 24px;
+				left: 12px;
 				right: 0;
 				height: 0;
 				border-bottom: 1px solid #ccc;
 			}
 			.iconfont {
 				position: absolute;
-				top: 10px;
+				top: 5px;
 				left: 0;
-				width: 40px;
-				font-size: 32px;
+				width: 20px;
+				font-size: 16px;
 				line-height: 1;
 			}
 		}
 		.item-body {
 			position: relative;
-			padding: 12px 24px;
+			padding: 6px 12px;
 			&::after {
 				content: "";
 				position: absolute;
@@ -209,7 +172,7 @@ export default {
 			}
 		}
 		.item-foot {
-			padding: 12px 0;
+			padding: 6px 0;
 			span {
 				position: relative;
 				text-align: center;
@@ -219,7 +182,7 @@ export default {
 					top: 0;
 					left: 0;
 					width: 0;
-					height: 38px;
+					height: 19px;
 					border-right: 1px solid #ccc;
 				}
 				&:only-child::before {
@@ -230,7 +193,7 @@ export default {
 		.item-flex {
 			display: flex;
       align-items: center;
-      line-height: 48px;
+      line-height: 24px;
 			span {
 				flex: 1;
 				&:last-child {

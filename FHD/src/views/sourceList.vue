@@ -2,96 +2,76 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-08 11:19:41
+ * @Last Modified time: 2018-06-08 11:21:13
  */
 <template>
-  <div>
-    <sticky>
-      <div class="header">
-        <h2>{{userName}}</h2>
-        <h3>欢迎登陆城市管家</h3>
-        <div class="head-rightBtn" @click="loginOut">退出</div>
+  <div style="height:100%;">
+    <view-box ref="viewBox" body-padding-top="46px">
+      <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;" title="意向客源" :left-options="{showBack: false}">
+        <div slot="right" class="addIcon" @click="toAdd">
+          <i class="iconfont icon-xinjian1" ></i>
+        </div>
+      </x-header>
+      <sticky scroll-box="vux_view_box_body">
+        <div class="searchGray">
+          <search :auto-fixed="false" 
+            v-model="keyWord" 
+            placeholder="姓名/手机" 
+            @on-submit="searchGuest"
+            @on-clear="clearSearch"
+            @on-cancel="clearSearch">
+          </search>
+        </div>
+      </sticky>
+      <div class="sourceScroll">
+        <scroll :data="listData" ref="scroll" :pullDownRefresh="false" @pullingUp="moreData">
+          <ul class="userNav">
+            <li v-for="(item, key) in listData" @click="toDetail(item)" :key="key">
+              <div class="userLeft">
+                <div class="line">
+                  <div class="name ellipsis">{{item.name}}</div>
+                  <div class="gender">{{item.gender | genderStr}}</div>
+                </div>
+                <div class="mobile">{{item.mobile}}</div>
+              </div>
+              <div :class="['userStatus', item.intentionality == 1 ? 'success' : item.intentionality == 3 ? 'warn' : '']">
+                {{item.intentionality | statusStr}}
+                </div>
+              <div class="userRight">{{item | listStatus}}</div>
+              <i class="iconfont icon-youjiantou"></i>
+            </li>
+            <div class="clearfix"></div>
+            <i class="iconfont icon-wushuju" v-show="listShow"></i>
+          </ul>
+        </scroll>
       </div>
-    </sticky>
-    <div>
-      <tab class="tabNav" bar-position="top">
-        <tab-item :selected="active === 0" @on-item-click="tabChange">房源</tab-item>
-        <tab-item :selected="active === 1" @on-item-click="tabChange">客源</tab-item>
-      </tab>
-    </div>
-    <div v-show="active === 1" class="searchDiv">
-      <search :auto-fixed="false" 
-        v-model="keyWord" 
-        placeholder="姓名/手机" 
-        @on-submit="searchParam"
-        @on-clear="clearSearch"
-        @on-cancel="clearSearch">
-      </search>
-    </div>
-    <ul class="userNav" v-show="active == 0" style="margin-top:10px">
-      <li v-for="(item, key) in userList" @click="runAs(item)" :key="key">
-        <div class="userLeft">
-          <div class="name width100">{{item.relateName}}</div>
-          <div class="mobile width100">{{item.relateMobile}}</div>
-        </div>
-        <i class="iconfont icon-youjiantou"></i>
-      </li>
-      <i class="iconfont icon-wushuju" v-show="userShow"></i>
-    </ul>
-    <ul class="userNav" v-show="active == 1">
-      <li v-for="(item, key) in listData" @click="toDetail(item)" :key="key">
-        <div class="userLeft">
-          <div class="line">
-            <div class="name ellipsis">{{item.name}}</div>
-            <div class="gender">{{item.gender | genderStr}}</div>
-          </div>
-          <div class="mobile">{{item.mobile}}</div>
-        </div>
-        <div :class="['userStatus', item.intentionality == 1 ? 'success' : item.intentionality == 3 ? 'warn' : '']">
-          {{item.intentionality | statusStr}}
-          </div>
-        <div class="userRight">{{item | listStatus}}</div>
-        <i class="iconfont icon-youjiantou"></i>
-      </li>
-      <div class="clearfix"></div>
-      <i class="iconfont icon-wushuju" v-show="listShow"></i>
-    </ul>
-    <div class="fixedBottm" v-show="active === 1 && fixedFlag">
-      <button type="button" class="btn" @click="toAdd">新增客源</button>
-    </div>
+      
+      <footers :selectedIndex="3" slot="bottom"></footers>
+    </view-box>
   </div>
 </template>
 
 <script>
 import { Sticky, Tab, TabItem, Search } from 'vux'
-import { queryListByPageApi, getApi, getUserNameApi } from '@/api/source'
+import footers from '@/components/footer'
+import { queryListByPageApi, getApi } from '@/api/source'
+import scroll from '@/components/scroll'
 
 export default {
+  name: 'source-list',
   components: {
     Sticky,
     Tab,
     TabItem,
-    Search
+    Search,
+    scroll,
+    footers
   },
   mounted() {
-    const bodyHeight = document.body.clientHeight
-    window.onresize = () => {
-      let newHeight = document.body.clientHeight
-      if (bodyHeight > newHeight) {
-        this.fixedFlag = false
-      } else {
-        this.fixedFlag = true
-      }
-    }
-    this.sessionId = this.$route.params.sessionId
-    if (this.sessionId) {
-      localStorage.setItem('sessionId', this.sessionId)
-    }
     window['backUrl'] = () => {
       return 'false'
     }
     this.searchParam()
-    this.getUserName()
   },
   filters: {
     genderStr(val) {
@@ -130,22 +110,21 @@ export default {
       userName: '',
       keyWord: '',
       active: 1,
+      pageNo: 1,
       listData: [],
       userList: [],
-      fixedFlag: true,
       userShow: false,
       listShow: false
     }
   },
   methods: {
-    loginOut() {
-      this.$vux.confirm.show({
-        title: '提示',
-        content: '确定退出当前账号吗？',
-        onConfirm() {
-          window.JSLogout.logOutAction()
-        }
-      })
+    moreData() {
+      this.pageNo++
+      this.searchParam()
+    },
+    searchGuest() {
+      this.pageSize = 1
+      this.searchParam()
     },
     clearSearch() {
       this.keyWord = ''
@@ -154,50 +133,28 @@ export default {
     toDetail(item) {
       this.$router.push({name: 'sourceDetail', params: {guestSourceId: item.guestSourceId}})
     },
-    tabChange(index) {
-      this.active = index
-      if (index === 0) {
-        this.houseSearch()
-      } else {
-        this.searchParam()
-      }
-    },
     runAs(item) {
       JSRunAs.runAsAction(item.relateMobile)
     },
-    getUserName() {
-      const param = {
-        sessionId: this.sessionId
-      }
-      getUserNameApi(param).then(res => {
-        if (res.data) {
-          this.userName = res.data.name || ''
-        }
-      }).catch(res => {})
-    },
-    houseSearch() {
-      const param = {
-        sessionId: this.sessionId
-      }
-      getApi(param).then(res => {
-        if (res.data && res.data.cityManagers) {
-          this.userList = res.data.cityManagers || []
-          this.userShow = this.userList.length > 0 ? false : true
-        }
-      }).catch(res => {
-        this.$vux.toast.text(res.message)
-      })
-    },
     searchParam() {
       let param = {
-        pageNo: 1,
+        pageNo: this.pageNo,
         pageSize: 20,
         keyword: this.keyWord
       }
       queryListByPageApi(param).then(res => {
         if (res.data && res.data.content) {
-          this.listData = res.data.content || []
-          this.listShow = this.listData.length > 0 ? false : true
+          if (this.pageNo === 1) {
+            this.listData = res.data.content || []
+            this.listShow = this.listData.length > 0 ? false : true
+          } else {
+            if (res.data.content.length > 0) {
+              this.listData = this.listData.concat(res.data.content)
+            } else {
+              this.$refs.scroll.forceUpdate()
+            }
+          }
+          
         }
       }).catch(res => {
         this.$vux.toast.text(res.message)
@@ -217,37 +174,37 @@ export default {
   .right {
     float: right;
   }
-  .tabNav {
-    margin-top:10px;
+  .sourceScroll {
+    height: 494px;
   }
   .userNav {
-    padding-bottom: 100px;
+    font-size: 12px;
     li {
       width: 100%;
       float: left;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       position: relative;
-      padding: 10px 30px;
+      padding: 5px 15px;
       box-sizing: border-box;
       background-color: #fff;
       display:flex;/*Flex布局*/
       align-items:center;/*指定垂直居中*/
       .icon-youjiantou {
         position: absolute;
-        right: 10px;
+        right: 5px;
         color: #ccc;
-        top: 25px;
+        top: 12px;
       }
       .userLeft {
-        width: 300px;
-        line-height: 40px;
+        width: 150px;
+        line-height: 20px;
         .left;
         .name{
-          width: 140px;
+          width: 70px;
           .left;
         }
         .gender{
-          width: 100px;
+          width: 50px;
           .left;
         }
         .mobile {
@@ -259,10 +216,10 @@ export default {
       }
       .userStatus {
         .left;
-        width: 40px;
-        height: 40px;
+        width: 20px;
+        height: 20px;
         background: #4680FF;
-        line-height: 44px;
+        line-height: 22px;
         text-align: center;
         color:#fff;
       }
@@ -273,25 +230,25 @@ export default {
         background: rgb(56, 224, 40);
       }
       .userRight {
-        width: 340px;
+        width: 170px;
         text-align: center;
-        line-height: 60px;
-        padding-right: 10px;
+        line-height: 30px;
+        padding-right: 5px;
         .right;
       }
     }
   }
   .addList { 
     position:fixed;
-    width: 100px;
-    height: 100px;
-    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    bottom: 25px;
     left:50%;
-    margin-left: -50px;
+    margin-left: -25px;
     color: #4680FF;
     z-index: 3;
     i {
-      font-size: 100px;
+      font-size: 50px;
     }
   }
 </style>
