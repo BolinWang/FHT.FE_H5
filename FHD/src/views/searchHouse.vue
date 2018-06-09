@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 18:16:30
+ * @Last Modified time: 2018-06-09 16:57:15
  */
 <template>
   <div style="height:100%;">
@@ -73,7 +73,6 @@ export default {
       searchData: {
         pageNo: 1,
         pageSize: 20,
-        housingType: 2,
         adminKeyword: '',
         estateName: ''
       },
