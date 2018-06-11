@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 17:07:43
+ * @Last Modified time: 2018-06-11 19:35:30
  */
 <template>
   <div style="height:100%;">
@@ -80,7 +80,7 @@ export default {
     getData() {
       const userData = JSON.parse(localStorage.getItem('userData')) || {}
       axios({
-        url: 'http://flying-api.mdguanjia.com/api/user/queryTempOrg',
+        url: 'https://flying-api.mdguanjia.com/api/user/queryTempOrg',
         method: 'post',
         data: {
           sessionId: userData.sessionId
