@@ -80,7 +80,7 @@ export default {
     getData() {
       const userData = JSON.parse(localStorage.getItem('userData')) || {}
       axios({
-        url: 'http://test-flying-api.mdguanjia.com/api/user/queryTempOrg',
+        url: 'http://flying-api.mdguanjia.com/api/user/queryTempOrg',
         method: 'post',
         data: {
           sessionId: userData.sessionId
