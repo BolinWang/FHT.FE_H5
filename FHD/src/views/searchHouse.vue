@@ -68,6 +68,12 @@ export default {
       return val ? plusXing(val, 3, 4) : ''
     }
   },
+  mounted() {
+    window['backUrl'] = () => {
+      this.cancelSearch()
+      return 'true'
+    }
+  },
   data() {
     return {
       searchData: {

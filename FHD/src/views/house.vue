@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 17:22:13
+ * @Last Modified time: 2018-06-11 12:01:24
  */
 <template>
   <div style="height:100%;">
@@ -13,7 +13,7 @@
         </div>          
       </div>
       <div class="resultScroll">
-        <scroll :data="houseList" ref="scroll" :pullDownRefresh="false" @pullingUp="moreData">
+        <scroll :data="houseList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
           <ul class="houseNav">
               <li v-for="(item, index) in houseList" :key="index" @click="toHouse(item)">
               <div class="blue">
@@ -55,6 +55,9 @@ export default {
   },
   created() {
     this.getData()
+    window['backUrl'] = () => {
+      return 'false'
+    }
   },
   data() {
     return {
@@ -85,6 +88,10 @@ export default {
     },
     moreData(){
       this.pageNo++
+      this.getData()
+    },
+    refreshData() {
+      this.pageNo = 1
       this.getData()
     },
     toHouse(item) {

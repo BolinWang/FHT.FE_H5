@@ -15,7 +15,7 @@
         :pullUpLoad="pullUpLoad"
         :isPullUpLoad="isPullUpLoad"
       >
-        <div class="pullup-wrapper" v-if="pullUpLoad">
+        <div class="pullup-wrapper" v-if="pullUpLoad && showText">
           <div class="before-trigger" v-if="!isPullUpLoad && data.length > 0">
             <span>{{pullUpTxt}}</span>
           </div>
@@ -35,7 +35,7 @@
       :isPullingDown="isPullingDown"
       :bubbleY="bubbleY"
     >
-      <div ref="pulldown" class="pulldown-wrapper" :style="pullDownStyle" v-if="pullDownRefresh">
+      <div ref="pulldown" class="pulldown-wrapper" :style="pullDownStyle" v-if="pullDownRefresh && showText">
         <div class="before-trigger" v-if="beforePullDown">
           <bubble :y="bubbleY"></bubble>
         </div>
@@ -107,7 +107,7 @@
         default: () => {
           return {
             threshold: 0,
-            txt: {more: '加载更多', noMore: '我是有底线的'}
+            txt: {more: '', noMore: '我是有底线的'}
           }
         }
       },
@@ -139,7 +139,8 @@
         isPullUpLoad: false,
         pullUpDirty: true,
         pullDownStyle: '',
-        bubbleY: 0
+        bubbleY: 0,
+        showText: false
       }
     },
     computed: {
@@ -160,6 +161,7 @@
     mounted() {
       setTimeout(() => {
         this.initScroll()
+        this.showText = true
       }, 20)
     },
     methods: {

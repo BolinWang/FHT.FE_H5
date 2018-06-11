@@ -20,13 +20,6 @@
         </search>
       </div>
       <ul class="landlordNav">
-        <!-- <li>
-          <div class="name">安卓调试用</div>
-          <div>
-            <span @click="callMobile('13014708126')">{{'13014708126' | mobileStr}} <i class="iconfont icon-dianhua blue"></i></span>
-            <span class="right blue" @click="addHouse('13014708126')">录入房源</span>
-          </div>
-        </li> -->
         <li v-for="(item, index) in orgList" :key="index">
           <div class="name">{{item.orgName}}</div>
           <div>
@@ -55,6 +48,9 @@ export default {
   },
   created() {
     this.getData()
+    window['backUrl'] = () => {
+      return 'false'
+    }
   },
   filters: {
     mobileStr(val) {

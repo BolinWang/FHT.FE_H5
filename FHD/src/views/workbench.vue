@@ -50,6 +50,11 @@ export default {
     }
     
   },
+  mounted() {
+    window['backUrl'] = () => {
+      return 'false'
+    }
+  },
   data() {
     return {
       userData: {}
