@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-11 19:35:30
+ * @Last Modified time: 2018-06-11 20:09:45
  */
 <template>
   <div style="height:100%;">
@@ -36,7 +36,6 @@
 <script>
 import { Search, debounce } from 'vux'
 import footers from '@/components/footer'
-import { queryTempOrg } from '@/api/source'
 import { plusXing, deepClone } from '@/utils'
 import axios from 'axios'
 

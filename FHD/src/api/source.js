@@ -96,22 +96,9 @@ export function saveFollowInfoApi(params = {}) {
   })
 }
 
-// 获取房东列表
-export function queryTempOrg(params = {}) {
-  return fetch({
-    url: 'http://test-flying-api.mdguanjia.com/api/user/queryTempOrg',
-    method: 'post',
-    notId: true,
-    data: {
-      method: 'queryTempOrg',
-      params
-    }
-  })
-}
-
 export function search(params = {}) {
   return fetch({
-    url: 'https://dev.mdguanjia.com/search/fhd/estate/search',
+    url: 'https://www.mdguanjia.com/search/fhd/estate/search',
     method: 'post',
     data: params
   })
