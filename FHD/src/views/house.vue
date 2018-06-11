@@ -138,9 +138,9 @@ export default {
   }
   .searchHead {
     width: 100%;
-    height: 46px;
-    padding: 0px 40px;
-    padding-top: 10px;
+    height: 46PX;
+    padding: 0px 40PX;
+    padding-top: 10PX;
     background: #4680FF;
     position: absolute;
     top: 0;
@@ -148,8 +148,8 @@ export default {
   }
   .search {
     width: 100%;
-    height: 30px;
-    line-height: 30px;
+    height: 30PX;
+    line-height: 30PX;
     border-radius: 5px;
     background-color: rgba(112, 161, 255, 1);
     text-align: center;
