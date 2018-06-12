@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-12 18:10:21
+ * @Last Modified time: 2018-06-12 18:14:30
  */
 <template>
   <div style="height:100%;">
@@ -41,7 +41,7 @@ import { search } from '@/api/source'
 import { plusXing } from '@/utils'
 import scroll from '@/components/scroll'
 import axios from 'axios'
-const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
+const leiUrl = process.env.ENV_CONFIG !== 'dev' ? 'test-flying-api' : 'flying-api'
 export default {
   name: 'house',
   directives: {
@@ -83,7 +83,7 @@ export default {
       return new Promise((resolve, reject) => {
         const userData = JSON.parse(localStorage.getItem('userData')) || {}
         axios({
-          url: `https//${leiUrl}.mdguanjia.com/api/manager/queryManageArea`,
+          url: `https://${leiUrl}.mdguanjia.com/api/manager/queryManageArea`,
           method: 'post',
           data: {
             sessionId: userData.sessionId
@@ -98,16 +98,14 @@ export default {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
-        }).then(res => {
-          
+        }).then(res => { 
           if (res.data.success && res.data.data.length > 0) {
             res.data.data.map(val => {
               this.areaList.push(val.areaId)
             })
-            localStorage.setItem('areaData', JSON.stringify(res.data.data))
-            resolve(res)
+            localStorage.setItem('areaData', JSON.stringify(res.data.data)) 
           }
-          
+          resolve(res)
         }).catch(req => {
           reject(req)
         })
