@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 // 部分接口是之前hms下面不是BOP
 const hmsUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'api') + '.mdguanjia.com/hms/api/hmsuser'
 // 搜索引擎的url
-const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search/room/search'
+const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search'
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
@@ -41,7 +41,7 @@ export function getApi(params = {}) {
 /* 房源列表 */
 export function houseApi(params = {}) {
   return fetch({
-    url: searchUrl,
+    url: searchUrl + '/room/search',
     method: 'post',
     isSearch: true,
     data: params
@@ -98,8 +98,9 @@ export function saveFollowInfoApi(params = {}) {
 
 export function search(params = {}) {
   return fetch({
-    url: 'https://www.mdguanjia.com/search/fhd/estate/search',
+    url: searchUrl + '/fhd/estate/search',
     method: 'post',
     data: params
   })
 }
+

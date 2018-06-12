@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-11 20:09:45
+ * @Last Modified time: 2018-06-12 16:48:10
  */
 <template>
   <div style="height:100%;">
@@ -38,6 +38,7 @@ import { Search, debounce } from 'vux'
 import footers from '@/components/footer'
 import { plusXing, deepClone } from '@/utils'
 import axios from 'axios'
+const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
 
 export default {
   name: 'landlord',
@@ -79,7 +80,7 @@ export default {
     getData() {
       const userData = JSON.parse(localStorage.getItem('userData')) || {}
       axios({
-        url: 'https://flying-api.mdguanjia.com/api/user/queryTempOrg',
+        url: `https://${leiUrl}.mdguanjia.com/api/user/queryTempOrg`,
         method: 'post',
         data: {
           sessionId: userData.sessionId

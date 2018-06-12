@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 14:45:13
+ * @Last Modified time: 2018-06-12 16:00:46
  */
 <template>
   <div>
@@ -26,7 +26,7 @@
       <div class="labelText">手机号码</div>
       <input class="inputs" v-model="userForm.mobile" type="number" placeholder="请输入手机号码">
     </div>
-    <div class="line" v-for="(item, key) in userForm.guestSourceAreas" @click="addressFn(key)" >
+    <div class="line" v-for="(item, key) in userForm.guestSourceAreas" @click="addressFn(key)" :key="key">
       <div class="labelText">{{key === 0 ? '需求区域' : ''}}</div>
       <div class="textArea ellipsis" :class="{black: typeof item === 'object'}">{{[item, key] | addressFilter}}</div>
       <div class="positionRight">

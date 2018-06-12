@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-11 12:01:24
+ * @Last Modified time: 2018-06-12 16:46:57
  */
 <template>
   <div style="height:100%;">
@@ -11,6 +11,9 @@
         <div class="search" @click="toSearch">
           小区/公寓/房东/房东手机号码
         </div>          
+      </div>
+      <div v-transfer-dom>
+        <loading :show="showLoading" text="数据加载中"></loading>
       </div>
       <div class="resultScroll">
         <scroll :data="houseList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
@@ -32,19 +35,20 @@
 </template>
 
 <script>
-import { Sticky, Tab, TabItem, Search } from 'vux'
+import { Loading, TransferDom } from 'vux'
 import footers from '@/components/footer'
 import { search } from '@/api/source'
 import { plusXing } from '@/utils'
 import scroll from '@/components/scroll'
-
+import axios from 'axios'
+const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
 export default {
   name: 'house',
+  directives: {
+    TransferDom
+  },
   components: {
-    Sticky,
-    Tab,
-    TabItem,
-    Search,
+    Loading,
     footers,
     scroll
   },
@@ -54,7 +58,11 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.getArea().then(res => {
+      this.getData()
+    }).catch(rej => {
+      this.$vux.toast.text('系统出错啦')
+    }) 
     window['backUrl'] = () => {
       return 'false'
     }
@@ -62,19 +70,58 @@ export default {
   data() {
     return {
       houseList: [],
-      pageNo: 1
+      pageNo: 1,
+      showLoading: false,
+      areaList: []
     }
   },
   methods: {
     toSearch() {
       this.$router.push({name: 'searchHouse'})
     },
+    getArea() {
+      return new Promise((resolve, reject) => {
+        const userData = JSON.parse(localStorage.getItem('userData')) || {}
+        axios({
+          url: `http://${leiUrl}.mdguanjia.com/api/manager/queryManageArea`,
+          method: 'post',
+          data: {
+            sessionId: userData.sessionId
+          },
+          transformRequest: [function (data) {
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          
+          if (res.data.success && res.data.data.length > 0) {
+            res.data.data.map(val => {
+              this.areaList.push(val.areaId)
+            })
+            localStorage.setItem('areaData', JSON.stringify(res.data.data))
+            resolve(res)
+          }
+          
+        }).catch(req => {
+          reject(req)
+        })
+      })  
+    },
     getData() {
+      this.showLoading = true
       let param = {
         pageNo: this.pageNo,
-        pageSize: 20
+        pageSize: 20,
+        regionIds: this.areaList
       }
       search(param).then(res => {
+        this.showLoading = false
         if (this.pageNo === 1) {
           this.houseList = res.result
         } else {
@@ -84,7 +131,9 @@ export default {
             this.$refs.scroll.forceUpdate()
           }
         }
-      }).catch(rep => {})
+      }).catch(rep => {
+        this.showLoading = false
+      })
     },
     moreData(){
       this.pageNo++

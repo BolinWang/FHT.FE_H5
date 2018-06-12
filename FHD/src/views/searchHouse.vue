@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-09 16:57:15
+ * @Last Modified time: 2018-06-12 16:41:06
  */
 <template>
   <div style="height:100%;">
@@ -11,6 +11,7 @@
         <div slot="right" @click="cancelSearch">取消</div>
       </x-header>
       <group class="noTop" label-width="90px">
+        <popup-picker title="所在区域" v-model="areaValue" :data="[areaList]" value-text-align="left" show-name placeholder="请选择"></popup-picker>
         <x-input title="小区/公寓" v-model="searchData.estateName" placeholder="请输入"></x-input>
         <x-input title="房东/手机号" v-model="searchData.adminKeyword" placeholder="请输入"></x-input>
       </group>
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-import { Search, XInput, XButton, Popup, TransferDom, PopupHeader } from 'vux'
+import { Search, XInput, XButton, Popup, TransferDom, PopupHeader, PopupPicker } from 'vux'
 import { plusXing, deepClone } from '@/utils'
 import { search } from '@/api/source'
 import scroll from '@/components/scroll'
@@ -61,7 +62,8 @@ export default {
     XButton,
     PopupHeader,
     Popup,
-    scroll
+    scroll,
+    PopupPicker
   },
   filters: {
     mobileStr(val) {
@@ -73,6 +75,13 @@ export default {
       this.cancelSearch()
       return 'true'
     }
+    const areaData = JSON.parse(localStorage.getItem('areaData')) || []
+    areaData.map(val => {
+      this.areaList.push({
+        name: val.areaName,
+        value: String(val.areaId)
+      })
+    })
   },
   data() {
     return {
@@ -80,14 +89,29 @@ export default {
         pageNo: 1,
         pageSize: 20,
         adminKeyword: '',
-        estateName: ''
+        estateName: '',
+        regionIds: []
       },
+      areaValue: ['0'],
       resultList: [],
-      resultShow: false
+      resultShow: false,
+      areaList: [{
+        name: '不限',
+        value: '0'
+      }]
     }
   },
   methods: {
     searchParam() {
+      let newArr = []
+      if (this.areaValue[0] === '0') {
+        this.areaList.map(val => {
+          val.value !== '0' ?  newArr.push(Number(val.value)) : ''
+        })
+      } else {
+        newArr.push(Number(this.areaValue[0]))
+      }
+      this.searchData.regionIds = newArr
       search(this.searchData).then(res => {
         if (this.searchData.pageNo === 1) {
           this.resultShow = true
