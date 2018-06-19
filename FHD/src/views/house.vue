@@ -1,8 +1,8 @@
 /*
- * @Author: chenxing 
- * @Date: 2018-04-23 17:40:16 
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-12 18:16:21
+ * @Author: chenxing
+ * @Date: 2018-04-23 17:40:16
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-06-19 16:59:22
  */
 <template>
   <div style="height:100%;">
@@ -10,7 +10,7 @@
       <div class="searchHead" slot="header">
         <div class="search" @click="toSearch">
           小区/公寓/房东/房东手机号码
-        </div>          
+        </div>
       </div>
       <div v-transfer-dom>
         <loading :show="showLoading" text="数据加载中"></loading>
@@ -23,7 +23,7 @@
                 <span v-if="item.housingType === 1" class="houseTypeSpan">集</span>
                 {{item.estateName}}
               </div>
-              <div class="rightIcon">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}}</div>
+              <div class="rightIcon"><span @click="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}} <i class="iconfont icon-dianhua blue"></i></span></div>
               <div>共{{item.totalRoomCount}}间，空房{{item.vacantRoomCount}}间</div>
             </li>
           </ul>
@@ -62,7 +62,7 @@ export default {
       this.getData()
     }).catch(rej => {
       this.$vux.toast.text('系统出错啦')
-    }) 
+    })
     window['backUrl'] = () => {
       return 'false'
     }
@@ -98,18 +98,18 @@ export default {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
-        }).then(res => { 
+        }).then(res => {
           if (res.data.success && res.data.data.length > 0) {
             res.data.data.map(val => {
               this.areaList.push(val.areaId)
             })
-            localStorage.setItem('areaData', JSON.stringify(res.data.data)) 
+            localStorage.setItem('areaData', JSON.stringify(res.data.data))
           }
           resolve(res)
         }).catch(req => {
           reject(req)
         })
-      })  
+      })
     },
     getData() {
       this.showLoading = true
@@ -140,11 +140,16 @@ export default {
     refreshData() {
       this.pageNo = 1
       this.getData()
+		},
+		callMobile(mobile) {
+      if (mobile && window.call) {
+        window.call.callAction(mobile)
+      }
     },
     toHouse(item) {
       if (window.HouseResouse) { //安卓方法
         window.HouseResouse.gotoRoomList(JSON.stringify(item))
-      } 
+      }
     }
   }
 }
