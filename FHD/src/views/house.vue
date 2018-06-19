@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-23 17:40:16
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-06-19 16:59:22
+ * @Last Modified time: 2018-06-19 17:21:18
  */
 <template>
   <div style="height:100%;">
@@ -18,12 +18,12 @@
       <div class="resultScroll">
         <scroll :data="houseList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
           <ul class="houseNav">
-              <li v-for="(item, index) in houseList" :key="index" @click="toHouse(item)">
+            <li v-for="(item, index) in houseList" :key="index" @click="toHouse(item)">
               <div class="blue">
                 <span v-if="item.housingType === 1" class="houseTypeSpan">集</span>
                 {{item.estateName}}
               </div>
-              <div class="rightIcon"><span @click="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}} <i class="iconfont icon-dianhua blue"></i></span></div>
+              <div class="rightIcon"><span @click.stop="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}} <i class="iconfont icon-dianhua blue"></i></span></div>
               <div>共{{item.totalRoomCount}}间，空房{{item.vacantRoomCount}}间</div>
             </li>
           </ul>
