@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-23 17:40:16
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-06-19 17:21:18
+ * @Last Modified time: 2018-06-19 17:45:39
  */
 <template>
   <div style="height:100%;">
@@ -23,7 +23,11 @@
                 <span v-if="item.housingType === 1" class="houseTypeSpan">集</span>
                 {{item.estateName}}
               </div>
-              <div class="rightIcon"><span @click.stop="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}} <i class="iconfont icon-dianhua blue"></i></span></div>
+              <div class="rightIcon">
+								<span style="display:inline-block" @click.stop="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}}
+									<i class="iconfont icon-dianhua blue"></i>
+								</span>
+							</div>
               <div>共{{item.totalRoomCount}}间，空房{{item.vacantRoomCount}}间</div>
             </li>
           </ul>
