@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-21 16:26:10
+ * @Last Modified time: 2018-06-21 17:10:52
  */
 <template>
   <div style="height:100%;">
@@ -87,7 +87,7 @@ export default {
       return new Promise((resolve, reject) => {
         const userData = JSON.parse(localStorage.getItem('userData')) || {}
         axios({
-          url: `https://${leiUrl}.mdguanjia.com/api/manager/queryManageArea`,
+          url: `https://${leiUrl}.mdguanjia.com/api/user/queryManageArea`,
           method: 'post',
           data: {
             sessionId: userData.sessionId
