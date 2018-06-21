@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-15 19:46:50
+ * @Last Modified time: 2018-06-13 15:39:53
  */
 <template>
   <div class="height100">
@@ -14,76 +14,51 @@
       slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
       </x-header>
       <group class="noTop" label-width="90px">
-        <cell title="跟进时间" value-align="left" @click.native="showPlugin" class="black" is-link>{{userForm.followDate}}</cell>
+        <datetime
+          v-model="userForm.followDate"
+          format="YYYY-MM-DD HH:mm"
+          year-row="{value}年"
+          month-row="{value}月"
+          day-row="{value}日"
+          hour-row="{value}时"
+          minute-row="{value}分"
+          value-text-align="left"
+          placeholder="请选择时间"
+          title="跟进时间">
+        </datetime>
         <popup-picker
           title="跟进方式"
           placeholder="请选择"
           value-text-align="left"
           v-model="typeValue"
-          :display-format="formatList"
-          :columns="2" 
+          show-name
+          :columns="1" 
           ref="source"
-          @on-hide="followHide"
-          :data="list">
+          :data="followList">
         </popup-picker>
-        <cell title="带看房源" 
-          v-show="searchFlag" 
-          value-align="left" 
-          is-link class="black"
-          @click.native="showSearch = true">{{nameStr}}</cell>
         <x-textarea title="备注" v-model="userForm.remark" placeholder="请输入备注" :height="20" :rows="1" autosize></x-textarea>
       </group>
       <div slot="bottom" class="bottomDiv">
         <x-button type="primary" action-type="button" @click.native="saveData">确定</x-button>
       </div>
     </view-box>
-    <div v-transfer-dom>
-      <popup v-model="showSearch" 
-        position="right"
-        @on-hide="searchHide">
-        <div class="searchBox">
-          <div class="searchDiv">
-            <search 
-              :auto-fixed="false" 
-              v-model="keyword" 
-              placeholder="搜索房源"
-              @on-change="debounceSearch" 
-              @on-submit="searchParam">
-            </search>
-            <ul class="searchNav">
-              <li class="ellipsis
-              " v-for="(item, index) in searchList"
-                :key=index
-                @click="chooseHouse(item)">
-                {{item.city}}-{{item.name}}
-              </li>
-              <li class="textCenter" v-show="noData">未查询到数据</li>
-            </ul>
-          </div>
-        </div>
-      </popup>
-    </div>
     
   </div>
 </template>
 
 <script>
-import {  PopupPicker, Popup, TransferDom, Search, XTextarea, dateFormat, debounce, XButton } from 'vux'
+import {  PopupPicker, XTextarea, dateFormat, XButton, Datetime } from 'vux'
 import { houseApi, saveFollowInfoApi } from '@/api/source'
 import { deepClone } from '@/utils'
 export default {
   name: 'source-follow',
-  directives: {
-    TransferDom
-  },
   components: {
     PopupPicker,
-    Popup,
     XTextarea,
-    Search,
-    XButton
+    XButton,
+    Datetime
   },
-  mounted() {
+  created() {
     window['backUrl'] = () => {
       this.goBack()
       return 'true'
@@ -99,6 +74,7 @@ export default {
         modeType: '',
         remark: ''
       },
+      dateVal: [],
       noData: false,
       keyword: '',
       searchFlag: false,
@@ -111,58 +87,16 @@ export default {
       roomCode: '',
       typeValue: [],
       searchList: [],
-      list: [
-        {
-          name: '电话',
-          value: '1',
-          parent: 0
-        },
-        {
-          name: '带看',
-          value: '2',
-          parent: 0
-        },
-        {
-          name: '结束带看',
-          value: '3',
-          parent: 0
-        },
-        {
-          name: '意向中',
-          value: '1',
-          parent: '1'
-        },
-        {
-          name: '约带看',
-          value: '2',
-          parent: '1'
-        },
-        {
-          name: '已签约',
-          value: '3',
-          parent: '1'
-        },
-        {
-          name: '无效',
-          value: '4',
-          parent: '1'
-        },
-        {
-          name: '带看中',
-          value: '1',
-          parent: '2'
-        },
-        {
-          name: '未签约',
-          value: '1',
-          parent: '3'
-        },
-        {
-          name: '已签约',
-          value: '2',
-          parent: '3'
-        }
-      ]
+      followList: [{
+        name: '接待',
+        value: '1'
+      },{
+        name: '电话',
+        value: '2'
+      },{
+        name: '网络联系',
+        value: '3'
+      }]
     }
   },
   methods: {
@@ -181,75 +115,16 @@ export default {
       }
       return str
     },
-    followHide(flag) {
-      this.followShow = false
-      if (flag) {
-        if (this.typeValue[0] === '3') {
-          this.searchFlag = true
-        } else {
-          this.searchFlag = false
-        }
-      }
-    },
-    showPlugin() {
-      let self = this.userForm
-      this.$vux.datetime.show({
-        cancelText: '取消',
-        confirmText: '确定',
-        format: 'YYYY-MM-DD HH:mm',
-        yearRow: '{value}年',
-        monthRow: '{value}月',
-        dayRow: '{value}日',
-        hourRow: '{value}时',
-        minuteRow: '{value}分',
-        onConfirm(val) {
-          self.followDate = val
-        }
-      })
-    },
-    searchHide() {
-      this.searchList = []
-      this.keyword = ''
-      this.noData = false
-    },
-    debounceSearch: debounce(function(){
-      this.searchParam()
-    }, 500),
-    searchParam(val) {
-      if (this.keyword === ''){
-        this.searchList = []
-        return false
-      }
-      const param = {
-        pageSize: 10,
-        pageNo: 1,
-        tags: ['fhd'],
-        keyword: this.keyword
-      }
-      houseApi(param).then(res => {
-        if (res.result && res.result.length > 0) {
-          this.searchList = deepClone(res.result)
-          this.noData = false
-        } else {
-          this.noData = true
-          this.searchList = []
-        }
-      }).catch(res => {})
-    },
     goBack() {
       this.$router.push({name: 'sourceDetail', params: {guestSourceId: this.guestSourceId}})
-    },
-    chooseHouse(item) {
-      this.nameStr = item.name
-      this.roomName = item.roomName
-      this.roomCode = item.roomCode
-      this.showSearch = false
     },
     msg(val) {
       this.$vux.toast.text(val)
     },
     saveData() {
       let param = deepClone(this.userForm)
+      console.log(param)
+      return
       if (param.followDate === '') {
         this.msg('请选择时间')
         return false
@@ -342,12 +217,9 @@ export default {
       }
     }
     .heightAuto {
-      // height: auto;
-      // min-height: 80px;
       padding: 5px;
       height: 80px;
       line-height: 70px;
-      // overflow-y:visible;
       resize: none;
     }
     .status {

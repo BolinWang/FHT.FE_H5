@@ -40,6 +40,11 @@ export default new Router({
       component: resolve => require(['@/views/reminder'], resolve)
     },
     {
+      path: '/reminderDetail',
+      name: 'reminderDetail',
+      component: resolve => require(['@/views/reminderDetail'], resolve)
+    },
+    {
       path: '/workbench',
       name: 'workbench',
       component: resolve => require(['@/views/workbench'], resolve)

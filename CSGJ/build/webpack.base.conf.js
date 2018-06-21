@@ -14,6 +14,12 @@ let webpackConfig = {
   entry: {
     app: './src/main.js'
   },
+  // externals: {  
+  //   'vue': 'vue',  
+  //   'vue-router': 'vue-router',  
+  //   'vuex': 'vuex',  
+  //   'axios': 'axios'  
+  // },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -86,10 +92,6 @@ module.exports = vuxLoader.merge(webpackConfig, {
       if (sourcePath.indexOf('vux/src/components') > -1) {
         source = source.replace(/px/g, 'PX')
       }
-      // // 自定义的全局样式大部分不需要转换
-      // if (sourcePath.indexOf('App.vue') > -1) {
-      //   source = source.replace(/px/g, 'PX').replace(/-1PX/g, '-1px')
-			// }
       return source
     }
   }, {

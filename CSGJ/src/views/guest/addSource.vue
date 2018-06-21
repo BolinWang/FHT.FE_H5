@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-04 17:05:20
+ * @Last Modified time: 2018-06-13 15:50:23
  */
 
 <template>
@@ -94,6 +94,7 @@ import { saveOrUpdateApi, plateApi, detailApi } from '@/api/source'
 import { deepClone, valFormat } from '@/utils'
 
 export default {
+  name: 'add-source',
   components: {
     XButton,
     XInput,
@@ -108,7 +109,7 @@ export default {
     this.guestSourceId = parseInt(this.$route.params.guestSourceId)
     if (this.guestSourceId !== 0) {
       this.pageTitle = '编辑客源'
-      this.getData()
+      // this.getData()
     }
     this.roomNatureList = this.$store.state.datas.houseNature
   },

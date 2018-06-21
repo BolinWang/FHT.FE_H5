@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-12 18:16:21
+ * @Last Modified time: 2018-06-13 09:58:14
  */
 <template>
   <div style="height:100%;">
@@ -61,7 +61,7 @@ export default {
     this.getArea().then(res => {
       this.getData()
     }).catch(rej => {
-      this.$vux.toast.text('系统出错啦')
+      this.$vux.toast.text('获取区域失败')
     }) 
     window['backUrl'] = () => {
       return 'false'
@@ -98,7 +98,7 @@ export default {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
-        }).then(res => { 
+        }).then(res => {
           if (res.data.success && res.data.data.length > 0) {
             res.data.data.map(val => {
               this.areaList.push(val.areaId)

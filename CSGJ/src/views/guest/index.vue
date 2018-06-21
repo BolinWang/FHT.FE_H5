@@ -2,13 +2,13 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-04 13:46:59
+ * @Last Modified time: 2018-06-13 14:35:21
  */
 
 <template>
   <div style="height:100%">
-    <view-box ref="viewBox" >   
-      <div class="searchPop">
+    <view-box ref="viewBox" body-padding-top="101px">   
+      <div class="searchPop" slot="header">
         <div class="popTop">
           <ul class="tab">
             <li :class="{active: tabIndex === 0}" @click="tabIndex = 0">未签约租客</li>
@@ -28,7 +28,7 @@
       </div>
       <scroll>
         <ul class="guestNav">
-          <li>
+          <li @click="toDetail(1)">
             <div class="line">
               <span class="name">张三</span>
               <span class="gender">先生</span>
@@ -91,6 +91,9 @@ export default {
     keywordSearch() {
       
     },
+    toDetail(id) {
+      this.$router.push({name: 'sourceDetail', params: {guestSourceId: 1}})
+    },
     addGuest() {
       this.$router.push({name: 'addSource', params: {guestSourceId: 1}})
     }
@@ -99,6 +102,11 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
+  .searchPop {
+    position: absolute;
+    width: 100%;
+    top: 0;
+  }
   .popTop {
     .cancel {
       line-height: 50px;

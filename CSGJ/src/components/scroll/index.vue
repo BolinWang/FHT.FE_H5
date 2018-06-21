@@ -1,3 +1,8 @@
+/*
+* pullDownRefresh 下拉刷新 pullUpLoad 上拉加载， 默认全部开启
+* pullingUp上拉加载的方法，pullingDown下拉刷新的方法
+* forceUpdate结束刷新
+*/
 <template>
   <div ref="wrapper" class="list-wrapper">
     <div class="scroll-content">
@@ -10,12 +15,15 @@
         :pullUpLoad="pullUpLoad"
         :isPullUpLoad="isPullUpLoad"
       >
-        <div class="pullup-wrapper" v-if="pullUpLoad">
-          <div class="before-trigger" v-if="!isPullUpLoad">
+        <div class="pullup-wrapper" v-if="pullUpLoad && showText">
+          <div class="before-trigger" v-if="!isPullUpLoad && data.length > 0">
             <span>{{pullUpTxt}}</span>
           </div>
+          <div class="before-trigger" v-else-if="!isPullUpLoad && data.length === 0">
+            <span>未查询到数据</span>
+          </div>
           <div class="after-trigger" v-else>
-            <inline-loading></inline-loading>
+            <inline-loading></inline-loading>数据加载中
           </div>
         </div>
       </slot>
@@ -27,7 +35,7 @@
       :isPullingDown="isPullingDown"
       :bubbleY="bubbleY"
     >
-      <div ref="pulldown" class="pulldown-wrapper" :style="pullDownStyle" v-if="pullDownRefresh">
+      <div ref="pulldown" class="pulldown-wrapper" :style="pullDownStyle" v-if="pullDownRefresh && showText">
         <div class="before-trigger" v-if="beforePullDown">
           <bubble :y="bubbleY"></bubble>
         </div>
@@ -99,7 +107,7 @@
         default: () => {
           return {
             threshold: 0,
-            txt: {more: '加载更多', noMore: '我是有底线的'}
+            txt: {more: '', noMore: '我是有底线的'}
           }
         }
       },
@@ -131,7 +139,8 @@
         isPullUpLoad: false,
         pullUpDirty: true,
         pullDownStyle: '',
-        bubbleY: 0
+        bubbleY: 0,
+        showText: false
       }
     },
     computed: {
@@ -152,6 +161,7 @@
     mounted() {
       setTimeout(() => {
         this.initScroll()
+        this.showText = true
       }, 20)
     },
     methods: {

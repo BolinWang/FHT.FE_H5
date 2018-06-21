@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-19 17:09:35 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-10 10:06:33
+ * @Last Modified time: 2018-06-13 13:35:24
  */
 
 'use strict'
@@ -43,7 +43,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
     productionSourceMap: false,
     devtool: '#source-map',
     productionGzip: false,

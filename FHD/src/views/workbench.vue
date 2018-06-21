@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 15:00:47
+ * @Last Modified time: 2018-06-14 15:26:56
  */
 <template>
   <div style="height:100%;">
@@ -17,8 +17,8 @@
         <div class="loginOut" @click="loginOut">退出</div>
       </div>
       <group class="noTop">
-        <cell title="租房(催缴)账单" is-link>
-          敬请期待
+        <cell title="租房(催缴)账单" is-link @click.native="toBill">
+          10笔<span class="text-danger">（1笔逾期）</span>
         </cell>
       </group>
       <footers :selectedIndex="0" slot="bottom"></footers>
@@ -28,17 +28,12 @@
 </template>
 
 <script>
-import { Sticky, Tab, TabItem, Search } from 'vux'
 import footers from '@/components/footer'
 import { getUserNameApi } from '@/api/source'
 
 export default {
   name: 'workbench',
   components: {
-    Sticky,
-    Tab,
-    TabItem,
-    Search,
     footers
   },
   created() {
@@ -71,6 +66,9 @@ export default {
           }
         }
       })
+    },
+    toBill() {
+      this.$router.push({name: 'reminder'})
     }
   }
 }

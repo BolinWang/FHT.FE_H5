@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-05-15 11:07:11 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-06 11:14:45
+ * @Last Modified time: 2018-06-13 16:01:45
  */
 
 <template>
@@ -105,10 +105,10 @@
       </ul>
       <div slot="bottom" class="bottomDiv">
         <flexbox :gutter="0">
-          <flexbox-item class="btn-box">
+          <flexbox-item class="btn-box" @click.native="toFollow">
             <div class="btn-item text-warning">跟进</div>
           </flexbox-item>
-          <flexbox-item class="btn-box">
+          <flexbox-item class="btn-box" @click.native="toWatch">
             <div class="btn-item text-success">带看</div>
           </flexbox-item>
           <flexbox-item class="btn-box">
@@ -126,6 +126,7 @@ import scroll from '@/components/scroll'
 import { detailApi } from '@/api/source'
 
 export default {
+  name: 'source-detail',
   components: {
     XButton,
     scroll,
@@ -237,6 +238,12 @@ export default {
     },
     handler(val) {
       this.current = val
+    },
+    toFollow() {
+      this.$router.push({name: 'sourceFollow', params: {guestSourceId: this.$route.params.guestSourceId}})
+    },
+    toWatch() {
+      this.$router.push({name: 'sourceWatch', params: {guestSourceId: this.$route.params.guestSourceId}})
     }
   }
 }

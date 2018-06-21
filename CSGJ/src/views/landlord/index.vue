@@ -215,6 +215,7 @@ export default {
         .userType {
           width: 40px;
           height: 20px;
+          line-height: 18px;
           border: 1px solid #259B24;
           border-radius: 4px;
           color: #259B24;

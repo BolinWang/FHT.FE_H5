@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-05-16 11:04:00
+ * @Last Modified time: 2018-06-13 15:49:50
  */
 <template>
   <div class="height100">
@@ -56,6 +56,7 @@ import { houseApi } from '@/api/source'
 import { deepClone } from '@/utils'
 
 export default {
+  name: 'sign-contract',
   directives: {
     TransferDom
   },

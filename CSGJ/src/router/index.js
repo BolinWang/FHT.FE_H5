@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const _import = require('./_import')
 Vue.use(Router)
 
 export default new Router({
@@ -12,20 +11,32 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: _import('landlord/index')
+      component: resolve => require(['@/views/landlord/index'], resolve)
     },
     {
       path: '/landlord',
       component: resolve => require(['@/views/default'], resolve),
       children: [
-        { path: '', component: _import('landlord/index'), name: 'landlordIndex' },
-        { path: 'person', component: _import('landlord/person'), name: 'person' },
+        {
+          path: '',
+          component: resolve => require(['@/views/landlord/index'], resolve),
+          name: 'landlordIndex'
+        },
+        {
+          path: 'person',
+          component: resolve => require(['@/views/landlord/person'], resolve),
+          name: 'person'
+        },
         {
           name: 'company',
           path: 'company',
           component: resolve => { require(['@/views/landlord/company'], resolve) }
         },
-        { path: 'bindingCard', component: _import('landlord/bindingCard'), name: 'bindingCard' }
+        {
+          path: 'bindingCard',
+          component: resolve => require(['@/views/landlord/bindingCard'], resolve),
+          name: 'bindingCard'
+        }
       ]
     },
     {
@@ -72,31 +83,80 @@ export default new Router({
     },
     {
       path: '/workbench',
-      component: _import('default'),
+      component: resolve => require(['@/views/default'], resolve),
       children: [
-	      { path: '', component: _import('workbench/index'), name: 'workbenchIndex' },
-				{ path: 'achievement-ranking', component: _import('workbench/achievementRanking'), name: 'achievementRanking' },
-				{ path: 'rent-bill', component: _import('workbench/rentBill'), name: 'rentBill' },
-				{ path: 'rent-contract', component: _import('workbench/rentContract'), name: 'rentContract' }
+        {
+          path: '',
+          component: resolve => require(['@/views/workbench/index'], resolve),
+          name: 'workbenchIndex'
+        },
+        {
+          path: 'achievement-ranking',
+          component: resolve => require(['@/views/workbench/achievementRanking'], resolve),
+          name: 'achievementRanking'
+        },
+        {
+          path: 'rent-bill',
+          component: resolve => require(['@/views/workbench/rentBill'], resolve),
+          name: 'rentBill'
+        },
+        {
+          path: 'rent-contract',
+          component: resolve => require(['@/views/workbench/rentContract'], resolve),
+          name: 'rentContract'
+        }
       ]
     },
     {
       path: '/guest',
-      component: _import('default'),
+      component: resolve => require(['@/views/default'], resolve),
       children: [
-        { path: '', component: _import('guest/index'), name: 'sourceList' },
-        { path: 'addSource/:guestSourceId', component: _import('guest/addSource'), name: 'addSource' },
-        { path: 'sourceDetail/:guestSourceId', component: _import('guest/sourceDetail'), name: 'sourceDetail' },
-        { path: 'sourceFollow/:guestSourceId', component: _import('guest/sourceFollow'), name: 'sourceFollow' },
-        { path: 'signContract/:guestSourceId', component: _import('guest/signContract'), name: 'signContract' }
+        {
+          path: '',
+          component: resolve => require(['@/views/guest/index'], resolve),
+          name: 'sourceList'
+        },
+        {
+          path: 'addSource/:guestSourceId',
+          component: resolve => require(['@/views/guest/addSource'], resolve),
+          name: 'addSource'
+        },
+        {
+          path: 'sourceDetail/:guestSourceId',
+          component: resolve => require(['@/views/guest/sourceDetail'], resolve),
+          name: 'sourceDetail'
+        },
+        {
+          path: 'sourceFollow/:guestSourceId',
+          component: resolve => require(['@/views/guest/sourceFollow'], resolve),
+          name: 'sourceFollow'
+        },
+        {
+          path: 'sourceWatch/:guestSourceId',
+          component: resolve => require(['@/views/guest/sourceWatch'], resolve),
+          name: 'sourceWatch'
+        },
+        {
+          path: 'signContract/:guestSourceId',
+          component: resolve => require(['@/views/guest/signContract'], resolve),
+          name: 'signContract'
+        }
       ]
     },
     {
       path: '/mine',
-      component: _import('default'),
+      component: resolve => require(['@/views/default'], resolve),
       children: [
-        { path: '', component: _import('mine/index'), name: 'mineIndex' },
-        { path: 'password', component: _import('mine/password'), name: 'password' }
+        {
+          path: '',
+          component: resolve => require(['@/views/mine/index'], resolve),
+          name: 'mineIndex'
+        },
+        {
+          path: 'password',
+          component: resolve => require(['@/views/mine/password'], resolve),
+          name: 'password'
+        }
       ]
     }
   ]
