@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-13 09:58:14
+ * @Last Modified time: 2018-06-21 16:26:10
  */
 <template>
   <div style="height:100%;">
@@ -10,7 +10,7 @@
       <div class="searchHead" slot="header">
         <div class="search" @click="toSearch">
           小区/公寓/房东/房东手机号码
-        </div>          
+        </div>
       </div>
       <div v-transfer-dom>
         <loading :show="showLoading" text="数据加载中"></loading>
@@ -18,12 +18,16 @@
       <div class="resultScroll">
         <scroll :data="houseList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
           <ul class="houseNav">
-              <li v-for="(item, index) in houseList" :key="index" @click="toHouse(item)">
+            <li v-for="(item, index) in houseList" :key="index" @click="toHouse(item)">
               <div class="blue">
                 <span v-if="item.housingType === 1" class="houseTypeSpan">集</span>
                 {{item.estateName}}
               </div>
-              <div class="rightIcon">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}}</div>
+              <div class="rightIcon">
+								<span style="display:inline-block" @click.stop="callMobile(item.orgAdminMobile)">{{item.orgAdminName}} {{item.orgAdminMobile | mobileStr}}
+									<i class="iconfont icon-dianhua blue"></i>
+								</span>
+							</div>
               <div>共{{item.totalRoomCount}}间，空房{{item.vacantRoomCount}}间</div>
             </li>
           </ul>
@@ -103,13 +107,13 @@ export default {
             res.data.data.map(val => {
               this.areaList.push(val.areaId)
             })
-            localStorage.setItem('areaData', JSON.stringify(res.data.data)) 
+            localStorage.setItem('areaData', JSON.stringify(res.data.data))
           }
           resolve(res)
         }).catch(req => {
           reject(req)
         })
-      })  
+      })
     },
     getData() {
       this.showLoading = true
@@ -140,11 +144,16 @@ export default {
     refreshData() {
       this.pageNo = 1
       this.getData()
+		},
+		callMobile(mobile) {
+      if (mobile && window.call) {
+        window.call.callAction(mobile)
+      }
     },
     toHouse(item) {
       if (window.HouseResouse) { //安卓方法
         window.HouseResouse.gotoRoomList(JSON.stringify(item))
-      } 
+      }
     }
   }
 }
