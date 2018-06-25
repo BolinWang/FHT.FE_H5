@@ -2,23 +2,25 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-25 18:54:59
+ * @Last Modified time: 2018-06-25 19:13:44
  */
 <template>
   <div style="height:100%;">
     <view-box ref="viewBox" body-padding-top="46px">
       <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;" title="房东" :left-options="{showBack: false}">
       </x-header>
-      <div class="searchGray">
-        <search :auto-fixed="false" 
-          v-model="keyword" 
-          placeholder="姓名/手机"
-          @on-change="debounceSearch"
-          @on-submit="searchParam"
-          @on-clear="keyword = ''"
-          @on-cancel="clearSearch">
-        </search>
-      </div>
+      <sticky scroll-box="vux_view_box_body" :offset="46">
+        <div class="searchGray">
+          <search :auto-fixed="false" 
+            v-model="keyword" 
+            placeholder="姓名/手机"
+            @on-change="debounceSearch"
+            @on-submit="searchParam"
+            @on-clear="keyword = ''"
+            @on-cancel="clearSearch">
+          </search>
+        </div>
+      </sticky>
       <div v-transfer-dom>
         <loading :show="showLoading" text="数据加载中"></loading>
       </div>
@@ -37,7 +39,7 @@
 </template>
 
 <script>
-import { Search, debounce, Loading, TransferDom } from 'vux'
+import { Search, debounce, Loading, TransferDom, Sticky } from 'vux'
 import footers from '@/components/footer'
 import { plusXing, deepClone } from '@/utils'
 import axios from 'axios'
@@ -51,7 +53,8 @@ export default {
   components: {
     Search,
     footers,
-    Loading
+    Loading,
+    Sticky
   },
   created() {
     this.getData()
