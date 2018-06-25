@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-14 15:26:56
+ * @Last Modified time: 2018-06-25 18:30:27
  */
 <template>
   <div style="height:100%;">
@@ -17,8 +17,9 @@
         <div class="loginOut" @click="loginOut">退出</div>
       </div>
       <group class="noTop">
-        <cell title="租房(催缴)账单" is-link @click.native="toBill">
-          10笔<span class="text-danger">（1笔逾期）</span>
+        <cell title="租房(催缴)账单" is-link>
+          敬请期待
+          <!-- 10笔<span class="text-danger">（1笔逾期）</span> -->
         </cell>
       </group>
       <footers :selectedIndex="0" slot="bottom"></footers>
