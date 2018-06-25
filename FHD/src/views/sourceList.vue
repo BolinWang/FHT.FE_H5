@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-08 11:21:13
+ * @Last Modified time: 2018-06-25 18:58:38
  */
 <template>
   <div style="height:100%;">
@@ -23,6 +23,9 @@
           </search>
         </div>
       </sticky>
+      <div v-transfer-dom>
+        <loading :show="showLoading" text="数据加载中"></loading>
+      </div>
       <div class="sourceScroll">
         <scroll :data="listData" ref="scroll" :pullDownRefresh="false" @pullingUp="moreData">
           <ul class="userNav">
@@ -52,26 +55,31 @@
 </template>
 
 <script>
-import { Sticky, Tab, TabItem, Search } from 'vux'
+import { Sticky, Tab, TabItem, Search, Loading, TransferDom } from 'vux'
 import footers from '@/components/footer'
 import { queryListByPageApi, getApi } from '@/api/source'
 import scroll from '@/components/scroll'
 
 export default {
   name: 'source-list',
+  directives: {
+    TransferDom
+  },
   components: {
     Sticky,
     Tab,
     TabItem,
     Search,
     scroll,
-    footers
+    footers,
+    Loading, 
+    TransferDom
   },
   mounted() {
     window['backUrl'] = () => {
       return 'false'
     }
-    this.searchParam()
+    this.searchParam(true)
   },
   filters: {
     genderStr(val) {
@@ -113,6 +121,7 @@ export default {
       pageNo: 1,
       listData: [],
       userList: [],
+      showLoading: false,
       userShow: false,
       listShow: false
     }
@@ -136,13 +145,15 @@ export default {
     runAs(item) {
       JSRunAs.runAsAction(item.relateMobile)
     },
-    searchParam() {
+    searchParam(needLoading) {
       let param = {
         pageNo: this.pageNo,
         pageSize: 20,
         keyword: this.keyWord
       }
+      needLoading ? this.showLoading = true : ''
       queryListByPageApi(param).then(res => {
+        needLoading ? this.showLoading = false : ''
         if (res.data && res.data.content) {
           if (this.pageNo === 1) {
             this.listData = res.data.content || []
@@ -157,6 +168,7 @@ export default {
           
         }
       }).catch(res => {
+        needLoading ? this.showLoading = false : ''
         this.$vux.toast.text(res.message)
       })
     },

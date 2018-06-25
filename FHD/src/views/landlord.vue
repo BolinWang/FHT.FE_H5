@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-12 16:48:10
+ * @Last Modified time: 2018-06-25 18:54:59
  */
 <template>
   <div style="height:100%;">
@@ -19,6 +19,9 @@
           @on-cancel="clearSearch">
         </search>
       </div>
+      <div v-transfer-dom>
+        <loading :show="showLoading" text="数据加载中"></loading>
+      </div>
       <ul class="landlordNav">
         <li v-for="(item, index) in orgList" :key="index">
           <div class="name">{{item.orgName}}</div>
@@ -34,7 +37,7 @@
 </template>
 
 <script>
-import { Search, debounce } from 'vux'
+import { Search, debounce, Loading, TransferDom } from 'vux'
 import footers from '@/components/footer'
 import { plusXing, deepClone } from '@/utils'
 import axios from 'axios'
@@ -42,9 +45,13 @@ const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-ap
 
 export default {
   name: 'landlord',
+  directives: {
+    TransferDom
+  },
   components: {
     Search,
-    footers
+    footers,
+    Loading
   },
   created() {
     this.getData()
@@ -61,7 +68,8 @@ export default {
     return {
       keyword: '',
       orgList: [],
-      defaultData: []
+      defaultData: [],
+      showLoading: false
     }
   },
   methods: {
@@ -79,6 +87,7 @@ export default {
     },
     getData() {
       const userData = JSON.parse(localStorage.getItem('userData')) || {}
+      this.showLoading = true
       axios({
         url: `https://${leiUrl}.mdguanjia.com/api/user/queryTempOrg`,
         method: 'post',
@@ -96,11 +105,13 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(res => {
+        this.showLoading = false
         if (res.data.success) {
           this.orgList = res.data.data || []
           this.defaultData = deepClone(this.orgList)          
         } 
       }).catch(req => {
+        this.showLoading = false
         this.$vux.toast.text('系统出错啦')
       })
     },
