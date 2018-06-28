@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 10:12:44
+ * @Last Modified time: 2018-06-28 10:40:42
  */
 <template>
   <div style="height:100%;">
@@ -173,6 +173,6 @@ export default {
     }
   }
   .sourceScroll {
-    height: 530px;
+    height: 570px;
   }
 </style>

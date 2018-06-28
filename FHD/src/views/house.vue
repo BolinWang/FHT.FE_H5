@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-27 18:48:33
+ * @Last Modified time: 2018-06-28 10:47:50
  */
 <template>
   <div style="height:100%;">
@@ -125,7 +125,7 @@ export default {
       search(param).then(res => {
         this.showLoading = false
         if (this.pageNo === 1) {
-          this.houseList = res.result
+          this.houseList = res.result || []
         } else {
           if (res.result && res.result.length > 0) {
             this.houseList = this.houseList.concat(res.result)

@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 10:29:09
+ * @Last Modified time: 2018-06-28 10:41:26
  */
 <template>
   <div style="height:100%;">
@@ -88,7 +88,7 @@ export default {
       this.$router.push({name: 'message'})
     },
     toHelp() {
-      console.log(2)
+      window.location.href="https://mp.weixin.qq.com/s/-Th9Yo0DQMLKoWTEd7iQbA"
     }
   }
 }
