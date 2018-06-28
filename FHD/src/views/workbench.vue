@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 14:40:03
+ * @Last Modified time: 2018-06-28 16:11:58
  */
 <template>
   <div style="height:100%;">
@@ -26,6 +26,8 @@
           敬请期待
         </cell>
         <cell title="城市管家帮助文档" is-link @click.native="toHelp">
+        </cell>
+        <cell title="版本发布记录" is-link @click.native="toRecord">
         </cell>
       </group>
       <footers :selectedIndex="0" slot="bottom"></footers>
@@ -87,14 +89,20 @@ export default {
     toMsg() {
       this.$router.push({name: 'message'})
     },
-    toHelp() {
+    toApp(title, url) {
       const str = {
-        title: '帮助文档',
-        h5Url: 'https://mp.weixin.qq.com/s/jb5_mc3RYSgKqkAgyDNnmw'
+        title: title,
+        h5Url: url
       }
       if (window.workbench) {
         window.workbench.gotoHelpActivity(JSON.stringify(str))
       }
+    },
+    toHelp() {
+      this.toApp('帮助文档', 'https://mp.weixin.qq.com/s/jb5_mc3RYSgKqkAgyDNnmw')
+    },
+    toRecord() {
+      this.toApp('版本发布记录', 'https://mp.weixin.qq.com/s/ovuOQcIJre8rtZ-07Y9mNg')
     }
   }
 }
