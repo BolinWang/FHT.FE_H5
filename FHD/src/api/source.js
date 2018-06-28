@@ -1,8 +1,10 @@
 import fetch from '@/utils/fetch'
-// 部分接口是之前hms下面不是BOP
+// 客源接口是一个域名
 const hmsUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'api') + '.mdguanjia.com/hms/api/hmsuser'
-// 搜索引擎的url
+// 搜索接口是一个域名
 const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search'
+// 雷星星接口又是一个域名
+const leiUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api') + '.mdguanjia.com'
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
@@ -101,6 +103,31 @@ export function search(params = {}) {
     url: searchUrl + '/fhd/estate/search',
     method: 'post',
     data: params
+  })
+}
+
+// 查询未读消息数
+export function unreadRecords(params = {}) {
+  return fetch({
+    url: leiUrl + '/api/message',
+    method: 'post',
+    notId: true,
+    data: {
+      method: 'unreadRecords',
+      params
+    }
+  })
+}
+// 查询未读消息数
+export function msgList(params = {}) {
+  return fetch({
+    url: leiUrl + '/api/message',
+    method: 'post',
+    notId: true,
+    data: {
+      method: 'msgList',
+      params
+    }
   })
 }
 

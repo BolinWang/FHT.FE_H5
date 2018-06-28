@@ -62,6 +62,11 @@ export default new Router({
       path: '/landlord',
       name: 'landlord',
       component: resolve => require(['@/views/landlord'], resolve)
+    },
+    {
+      path: '/message',
+      name: 'message',
+      component: resolve => require(['@/views/message'], resolve)
     }
   ]
 })

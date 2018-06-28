@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-25 18:30:27
+ * @Last Modified time: 2018-06-28 10:29:09
  */
 <template>
   <div style="height:100%;">
@@ -10,16 +10,22 @@
       <div class="workbenchHead">
         <div class="userName">
           {{userData.name || '未知用户'}}
+          <div class="loginOut" @click="loginOut">退出</div>
+        </div>
+        <div class="message" @click="toMsg()">
+          <i class="iconfont icon-p-message"></i>
+          <badge :text="count" class="badgeIcon" v-show="count > 0"></badge>
         </div>
         <div class="welcome">
           欢迎登陆城市管家!
         </div>
-        <div class="loginOut" @click="loginOut">退出</div>
+        
       </div>
       <group class="noTop">
         <cell title="租房(催缴)账单" is-link>
           敬请期待
-          <!-- 10笔<span class="text-danger">（1笔逾期）</span> -->
+        </cell>
+        <cell title="城市管家帮助文档" is-link @click.native="toHelp">
         </cell>
       </group>
       <footers :selectedIndex="0" slot="bottom"></footers>
@@ -29,13 +35,15 @@
 </template>
 
 <script>
+import { Badge } from 'vux'
 import footers from '@/components/footer'
-import { getUserNameApi } from '@/api/source'
+import { unreadRecords } from '@/api/source'
 
 export default {
   name: 'workbench',
   components: {
-    footers
+    footers,
+    Badge
   },
   created() {
     this.userData = JSON.parse(localStorage.getItem('userData')) || {}
@@ -44,7 +52,11 @@ export default {
       localStorage.setItem('userData', data)
       this.userData = JSON.parse(data)
     }
-    
+    unreadRecords().then(res => {
+      this.count = res.data.count || 0
+    }).catch(err => {
+      this.$vux.toast.text(res.message)
+    })
   },
   mounted() {
     window['backUrl'] = () => {
@@ -53,7 +65,8 @@ export default {
   },
   data() {
     return {
-      userData: {}
+      userData: {},
+      count: 0
     }
   },
   methods: {
@@ -70,6 +83,12 @@ export default {
     },
     toBill() {
       this.$router.push({name: 'reminder'})
+    },
+    toMsg() {
+      this.$router.push({name: 'message'})
+    },
+    toHelp() {
+      console.log(2)
     }
   }
 }
@@ -101,9 +120,21 @@ export default {
       font-size: 12px;
       background: #fff;
       color: #4680FF;
+      display: inline-block;
+    }
+    .message {
       position: absolute;
-      top: 28px;
-      right: 10px;
+      top: 0px;
+      right: 30px;
+      width: 35px;
+      .iconfont {
+        font-size: 30px;
+      }  
+    }
+    .badgeIcon {
+      position: absolute;
+      top: 10px;
+      left: 20px;
     }
   }
 </style>
