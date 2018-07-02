@@ -4,7 +4,7 @@
 			<i class="iconfont icon-gongzuotai" slot="icon"></i>
 			<span slot="label">工作台</span>
 		</tabbar-item>
-		<tabbar-item :selected="selectedIndex === 1" link="/house">
+		<tabbar-item :selected="selectedIndex === 1" link="/houseList">
 			<i class="iconfont icon-fangyuan" slot="icon"></i>
 			<span slot="label">房源</span>
 		</tabbar-item>
@@ -22,18 +22,18 @@
 <script>
 	import { Tabbar, TabbarItem } from 'vux'
 	export default {
-		props: {
+	  props: {
 			selectedIndex: {
-				type: Number,
-				default: 0
-			}
+			type: Number,
+			default: 0
+		}
 		},
 		components: {
 			Tabbar,
 			TabbarItem
 		},
-		mounted(){
-			document.getElementsByTagName('body')[0].style.height = window.innerHeight+'px'
+		mounted() {
+			document.getElementsByTagName('body')[0].style.height = window.innerHeight + 'px'
 		}
 	}
 </script>
