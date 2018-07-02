@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 11:14:40
+ * @Last Modified time: 2018-06-29 15:15:36
  */
 
 import axios from 'axios'
@@ -28,7 +28,6 @@ service.interceptors.request.use(config => {
       config.data = Object.assign(config.data, defaultConfig)
     }
   } else {
-    console.log(1)
     if (!config.noAssign) {
       config.params = Object.assign(config.params, defaultConfig)
     }

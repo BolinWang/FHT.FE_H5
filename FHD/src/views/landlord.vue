@@ -2,14 +2,14 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-25 19:13:44
+ * @Last Modified time: 2018-07-02 09:54:46
  */
 <template>
   <div style="height:100%;">
     <view-box ref="viewBox" body-padding-top="46px">
       <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;" title="房东" :left-options="{showBack: false}">
       </x-header>
-      <sticky scroll-box="vux_view_box_body" :offset="46">
+      <sticky scroll-box="vux_view_box_body">
         <div class="searchGray">
           <search :auto-fixed="false" 
             v-model="keyword" 
