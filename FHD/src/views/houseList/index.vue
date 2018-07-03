@@ -204,7 +204,7 @@ export default {
     window['getMapData'] = (data) => {
 			// andriod返回数据 空房
 			if (data) {
-				_this.searchData.addressId = data
+				_this.searchData.regionAddressId = data
 				_this.topListParams.statusList[1].selected = true
 				_this.toSearch()
 			}
