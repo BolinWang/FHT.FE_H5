@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-03 15:23:42
+ * @Last Modified time: 2018-07-03 16:28:01
  */
 
 <template>
@@ -112,8 +112,10 @@ export default {
   },
   methods: {
 		// andriod 跳转详情页
-    toDetail() {
-
+    toDetail(item) {
+			if (window.HouseResouse) {
+        window.HouseResouse.gotoRoomDetail(JSON.stringify(item))
+      }
     }
   },
   watch: {

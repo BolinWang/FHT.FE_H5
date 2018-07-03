@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%;background:#fff">
     <view-box ref="viewBox" body-padding-top="46px" >
-      <x-header slot="header" v-if="!isAndriod" class="header_container" @click.native="clickHeader">
+      <x-header slot="header" v-if="isAndriod" class="header_container" @click.native="clickHeader">
 				<div class="search" slot="overwrite-left">
 					<search
 						placeholder='小区/公寓/房东/房东手机号码'
@@ -193,15 +193,20 @@ export default {
       this.toSearch()
     }).catch(rej => {
       this.$vux.toast.text('获取区域失败')
-    })
+		})
+
 		// 去安卓拿地图数据
 		this.isAndriod = false
 		this.paramsListClone = deepClone(this.paramsList)
 	},
   mounted() {
-    window['backUrl'] = (str) => {
-      this.$vux.toast.text(str)
-      return 'true'
+    window['getMapData'] = (data) => {
+			// andriod返回数据 空房
+			if (data) {
+				this.searchData.addressId = data
+				this.topListParams.statusList[1].selected = true
+				this.toSearch()
+			}
     }
   },
   data() {
@@ -628,11 +633,15 @@ export default {
 		},
 		// 安卓地图
     handleAndriodMap() {
-      console.log('andriod')
+      if (window.MapSearch) {
+        window.MapSearch.goToMap()
+      }
 		},
 		// 安卓返回
 		andriodBack() {
-			console.log('andriod')
+			if (window.MapSearch) {
+        window.MapSearch.goBack()
+      }
 		},
 		 moreData(){
       this.toSearch('more')
