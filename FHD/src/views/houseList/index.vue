@@ -1,14 +1,26 @@
 <template>
   <div style="height:100%;background:#fff">
     <view-box ref="viewBox" body-padding-top="46px" >
-      <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
-        <div class="search" slot="overwrite-left" @click="toSearch">
-          小区/公寓/房东/房东手机号码
-        </div>
-        <div slot="right" class="addIcon" @click="handleAndriodMap">
-          <i class="iconfont icon-xinjian1" ></i>
-        </div>
-      </x-header>
+      <x-header slot="header" v-if="!isAndriod" class="header_container" @click.native="clickHeader">
+				<div class="search" slot="overwrite-left">
+					<search
+						placeholder='小区/公寓/房东/房东手机号码'
+						v-model="searchData.keyword"
+						auto-scroll-to-top
+						@on-cancel="cancelKeyword"
+						@on-submit="toSearch"
+						ref="search">
+					</search>
+				</div>
+				<div slot="right" class="addIcon" @click="handleAndriodMap">
+					<img src="../../static/map.png">
+				</div>
+			</x-header>
+			<x-header class="header_container" v-else
+				:leftOptions="{preventGoBack: true, backText: '地图找房'}"
+				@on-click-back="andriodBack">
+				小区公寓名称哈哈哈哈哈哈
+			</x-header>
 			<div class="top-select">
 				<div class="select-item"
 					:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
@@ -20,7 +32,13 @@
 					<span class="select-icon"></span>
 				</div>
 			</div>
-      <house-list :data="roomDataList"></house-list>
+			<div v-transfer-dom><loading :show="showLoading" text="数据加载中"></loading></div>
+			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
+      	<house-list :data="roomDataList" v-if="roomDataList.length > 0"></house-list>
+				<div class="noData_content" v-else>
+					<p>暂无数据o(╥﹏╥)o</p>
+				</div>
+			</scroll>
       <footers :selectedIndex="1" slot="bottom"></footers>
 			<popup v-model="selectOptions[currentIndex].active"
 				position="top" class="select-list"
@@ -40,7 +58,7 @@
 						</group>
 						<flexbox class="pop_btn_group">
 							<flexbox-item>
-								<x-button @click.native="searchData = {}" style="background: #fff;">清空</x-button>
+								<x-button @click.native="clearParam" style="background: #fff;">清空</x-button>
 							</flexbox-item>
 							<flexbox-item :span="8">
 								<x-button :gradients="['#19D5FD','#1D62F0']" @click.native="searchParam">确定</x-button>
@@ -50,27 +68,27 @@
 					<!-- 有图？ -->
 					<div class="pop_item" v-else-if="currentIndex === 1">
 						<div class="pop_item-pic"
-							v-for="(item, index) in paramsList.hasPic" :key="index"
-							:class="{active: paramsList.hasPic[index].selected}"
-							@click="selectParams(paramsList.hasPic, index, 'hasPic')">
+							v-for="(item, index) in topListParams.hasPic" :key="index"
+							:class="{active: topListParams.hasPic[index].selected}"
+							@click="selectParams(topListParams.hasPic, index, 'hasPic')">
 							{{item.name}}
 						</div>
 					</div>
 					<!-- 房态 -->
 					<div class="pop_item" v-else-if="currentIndex === 2">
 						<div class="pop_item-pic"
-							v-for="(item, index) in paramsList.statusList" :key="index"
-							:class="{active: paramsList.statusList[index].selected}"
-							@click="selectParams(paramsList.statusList, index, 'statusList')">
+							v-for="(item, index) in topListParams.statusList" :key="index"
+							:class="{active: topListParams.statusList[index].selected}"
+							@click="selectParams(topListParams.statusList, index, 'statusList')">
 							{{item.name}}
 						</div>
 					</div>
 					<!-- 价格排序 -->
 					<div class="pop_item" v-else-if="currentIndex === 3">
 						<div class="pop_item-pic"
-							v-for="(item, index) in paramsList.sortType" :key="index"
-							:class="{active: paramsList.sortType[index].selected}"
-							@click="selectParams(paramsList.sortType, index, 'sortType')">
+							v-for="(item, index) in topListParams.sortType" :key="index"
+							:class="{active: topListParams.sortType[index].selected}"
+							@click="selectParams(topListParams.sortType, index, 'sortType')">
 							{{item.name}}
 						</div>
 					</div>
@@ -112,9 +130,9 @@
 						<group title="房间朝向">
 							<div class="pop_item_chamberCounts">
 								<span class="pop_item_tags"
-									v-for="(item, index) in paramsList.decorationDegrees" :key="index"
-									:class="{active_chamberCounts: paramsList.decorationDegrees[index].selected}"
-									@click="selectParams(paramsList.decorationDegrees, index, 'decorationDegrees')">
+									v-for="(item, index) in paramsList.roomDirection" :key="index"
+									:class="{active_chamberCounts: paramsList.roomDirection[index].selected}"
+									@click="selectParams(paramsList.roomDirection, index, 'roomDirection')">
 									{{item.name}}
 								</span>
 							</div>
@@ -131,7 +149,7 @@
 						</group>
 						<flexbox class="pop_btn_group">
 							<flexbox-item>
-								<x-button @click.native="searchData = {}" style="background: #fff;">清空</x-button>
+								<x-button @click.native="clearParam" style="background: #fff;">清空</x-button>
 							</flexbox-item>
 							<flexbox-item :span="8">
 								<x-button :gradients="['#19D5FD','#1D62F0']" @click.native="searchParam">确定</x-button>
@@ -146,26 +164,39 @@
 
 <script>
 import {
-	Tab, TabItem, XImg, Actionsheet, Cell,
-	Flexbox, FlexboxItem, Popup, XInput, XButton
+	Tab, TabItem, XImg, Actionsheet, Cell, Search,
+	Flexbox, FlexboxItem, Popup, XInput, XButton,
+	Loading, TransferDom
 } from 'vux'
 import footers from '@/components/footer'
+import scroll from "@/components/scroll"
 import houseList from './components/list'
 import {addClass, removeClass} from '@/utils/dom'
 import {houseApi} from '@/api/source'
+import {ObjectMap, deepClone} from '@/utils'
+import axios from 'axios'
+
+const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
 
 export default {
   components: {
-    footers,
-    Tab,
-    TabItem,
-    houseList,
-		Actionsheet,
-		Cell, Flexbox, FlexboxItem,
-		Popup, XInput, XButton
+    footers, Tab, TabItem, houseList,
+		Actionsheet, Loading, TransferDom,
+		Cell, Flexbox, FlexboxItem, scroll,
+		Popup, XInput, XButton, Search
 	},
+	directives: {
+    TransferDom
+  },
 	created() {
-		this.toSearch()
+		this.getArea().then(res => {
+      this.toSearch()
+    }).catch(rej => {
+      this.$vux.toast.text('获取区域失败')
+    })
+		// 去安卓拿地图数据
+		this.isAndriod = false
+		this.paramsListClone = deepClone(this.paramsList)
 	},
   mounted() {
     window['backUrl'] = (str) => {
@@ -175,9 +206,18 @@ export default {
   },
   data() {
     return {
+			totalPages: 1,
+			pageNo: 1,
+			pageSize: 5,
+      showLoading: false,
+      areaList: [], // 管辖地区
 			roomDataList: [], // 房源列表数据
 			currentIndex: 0, // 当前选项索引
 			searchData: {}, // 查询参数
+			/**
+			 * active: 选项激活状态
+			 * selected: 选项有选中
+			 */
       selectOptions: [
 				{
           text: "搜索",
@@ -205,10 +245,11 @@ export default {
 					selected: false
         }
 			],
-			paramsList: {
+			// 图片。状态。租金
+			topListParams: {
 				'hasPic': [{
 					name: '全部',
-					value: 0,
+					value: '',
 					selected: false
 				},
 				{
@@ -223,7 +264,7 @@ export default {
 				}],
 				'statusList': [{
 					name: '全部',
-					value: '1,2,3,4,5,6,7,8,9,10',
+					value: '',
 					selected: false
 				},{
 					name: '空房',
@@ -254,7 +295,10 @@ export default {
 					name: '从高到低',
 					value: 'desc',
 					selected: false
-				}],
+				}]
+			},
+			// 更多条件
+			paramsList: {
 				'chamberCounts': [{
 					name: '1室',
 					value: '1',
@@ -273,7 +317,24 @@ export default {
 					selected: false
 				},{
 					name: '4室以上',
-					value: '4+',
+					value: '999',
+					selected: false
+				}],
+				'roomDirection': [{
+					name: '朝南',
+					value: '1',
+					selected: false
+				},{
+					name: '朝北',
+					value: '2',
+					selected: false
+				},{
+					name: '朝东',
+					value: '3',
+					selected: false
+				},{
+					name: '朝西',
+					value: '4',
 					selected: false
 				}],
 				'housingType': [{
@@ -330,6 +391,46 @@ export default {
     }
   },
   methods: {
+		// 获取管辖地区
+		getArea() {
+      return new Promise((resolve, reject) => {
+        const userData = JSON.parse(localStorage.getItem('userData')) || {}
+        axios({
+          url: `https://${leiUrl}.mdguanjia.com/api/user/queryManageArea`,
+          method: 'post',
+          data: {
+            sessionId: userData.sessionId
+          },
+          transformRequest: [function (data) {
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          if (res.data.success && res.data.data.length > 0) {
+            res.data.data.map(val => {
+              this.areaList.push(val.areaId)
+            })
+            localStorage.setItem('areaData', JSON.stringify(res.data.data))
+          }
+          resolve(res)
+        }).catch(req => {
+          reject(req)
+        })
+      })
+		},
+		clickHeader() {
+			this.selectOptions[this.currentIndex].active = false
+		},
+		cancelKeyword() {
+			this.searchData.keyword = ''
+			this.toSearch()
+		},
 		// 控制mask top
 		popShow() {
 			addClass(document.querySelector('.vux-popup-mask'),'popMask')
@@ -339,9 +440,9 @@ export default {
 		},
 		// 下拉列表选项
 		showPopup(index) {
+			// 重新点击取消选项
 			if (this.selectOptions[index].active) {
 				this.selectOptions[index].active = false
-				this.searchData = {}
 				return false
 			}
 			this.currentIndex = index
@@ -350,42 +451,225 @@ export default {
 			})
 			this.selectOptions[index].active = true
 		},
-		// 选选项
+		// 选择选项
 		selectParams(list = [], index, type) {
-			if (type === 'chamberCounts' || type === 'roomAttributeList' || type === 'decorationDegrees') {
+			if (type === 'housingType') {
+				list.map((item) => {
+					item.selected = false
+				})
+				list[index].selected = true
+				let selectedItems_type = list.map((item) => {
+					return item.selected
+				})
+				// 非合租时，更改房间合租属性标签
+				if (list[index].value * 1 === 1 && selectedItems_type.length > 0) {
+					this.paramsList.roomAttributeList.map((item) => {
+						item.selected = false
+					})
+				}
+				this.selectOptions[this.currentIndex].selected = true
+				return false
+			}
+			if (type === 'chamberCounts' || type === 'roomAttributeList') {
 				list[index].selected = !list[index].selected
+				// 合租独有的属性
+				if (type === 'roomAttributeList') {
+					let selectedItems_attr = list.map((item) => {
+						return item.selected
+					})
+					// 选择合租属性时，更改房间类型为合租
+					if (selectedItems_attr.length > 0) {
+						this.paramsList.housingType.map((item) => {
+							item.selected = false
+						})
+						this.paramsList.housingType[0].selected = true
+					}
+				}
 				return false
 			}
 			list.map((item) => {
 				item.selected = false
 			})
 			list[index].selected = true
+			this.selectOptions[this.currentIndex].selected = true
+
+			// 更多选项中不要关闭popup
+			if (type !== 'housingType' && type !== 'roomDirection') {
+				// 选择后关闭popup
+				this.selectOptions[this.currentIndex].active = false
+				this.toSearch()
+			}
 		},
+		clearParam() {
+			// 精准搜索
+			if (this.currentIndex === 0) {
+				this.searchData.estateName = ''
+				this.searchData.adminKeyword = ''
+				this.searchData.roomNo = ''
+			} else {
+				this.searchData.minPrice = ''
+				this.searchData.maxPrice = ''
+				this.paramsList = deepClone(this.paramsListClone)
+			}
+		},
+		searchParam() {
+			// 精准搜索
+			if (this.currentIndex === 0) {
+				if (this.searchData.estateName || this.searchData.adminKeyword || this.searchData.roomNo){
+					this.selectOptions[this.currentIndex].selected = true
+				}
+			} else {
+				let totalItems = [
+					...this.paramsList.chamberCounts,
+					...this.paramsList.housingType,
+					...this.paramsList.roomDirection,
+					...this.paramsList.roomAttributeList
+				]
+				const selectedList = totalItems.filter((item) => {
+					return item.selected
+				})
+				if (selectedList.length > 0 || this.searchData.minPrice || this.searchData.maxPrice) {
+					this.selectOptions[this.currentIndex].selected = true
+				}
+			}
+			this.selectOptions[this.currentIndex].active = false
+			this.toSearch()
+		},
+		// // 连续数组组装
+		// continueArr(arr){
+		// 	if (!arr || arr.length === 0) {
+		// 		return undefined
+		// 	}
+		// 	let result = [], i = 0
+		// 	result[i] = [arr[0]]
+		// 	arr.reduce(function(prev, cur){
+		// 		cur - prev === 1 ? result[i].push(cur) : result[++i] = [cur]
+		// 		return cur
+		// 	})
+		// 	return result
+		// },
 		// 搜索
-    toSearch() {
-			let param = this.searchData
-      houseApi(param).then(res => {
+    toSearch(type) {
+			/**
+			 * 组装查询数据
+			 * @param searchData
+			 * @param topListParams 图片、状态、租金
+			 * @param paramsList
+			 */
+			if (type === 'more') {
+				this.pageNo ++
+			} else {
+				this.pageNo = 1
+			}
+			if (this.pageNo > this.totalPages) {
+				this.$refs.scroll.forceUpdate()
+				return false
+			}
+			this.showLoading = true
+			let searchData = this.searchData
+
+			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
+			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
+			let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
+			let topListParams = {
+				hasPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : false) : '',
+				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
+				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'asc',
+				orderBy: 'minRentPrice'
+			}
+			// 户型
+			let chamberCountsParam = this.paramsList.chamberCounts
+					.filter((item) => item.selected)
+					.map((item) => {
+						let mapObj = item.value * 1 === 999 ? {
+							'min': 5,
+							'max': '',
+						} : {
+							'min': item.value * 1,
+							'max': item.value * 1,
+						}
+						return mapObj
+					})
+			let housingTypeParam = this.paramsList.housingType.filter((item) => item.selected)
+		//	let decorationDegreesParam = this.paramsList.decorationDegrees.filter((item) => item.selected)
+			let roomDirectionParam = this.paramsList.roomDirection.filter((item) => item.selected)
+			let roomAttributeListParam = this.paramsList.roomAttributeList.filter((item) => item.selected)
+			let paramsList = {
+				chamberCounts: chamberCountsParam.length > 0 ? chamberCountsParam : undefined,
+				roomDirection: roomDirectionParam.length > 0 ? roomDirectionParam[0].value * 1 : undefined,
+			//	decorationDegrees: decorationDegreesParam.length > 0 ? decorationDegreesParam.map((item) => item.value * 1) : undefined,
+				roomAttributeList: roomAttributeListParam.length > 0 ? roomAttributeListParam.map((item) => item.value * 1) : undefined
+			}
+			// 房间类型
+			if (housingTypeParam.length > 0) {
+				paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
+			}
+      houseApi(ObjectMap({
+				pageNo: this.pageNo,
+				pageSize: this.pageSize,
+				areaList: this.areaList,
+				...searchData,
+				...topListParams,
+				...paramsList
+			})).then(res => {
+				this.showLoading = false
 				let resultData = res.result || []
-				this.roomDataList = resultData
-      }).catch(res => {})
-    },
+				if (this.pageNo === 1) {
+					this.totalPages = res.totalPages || 1
+          this.roomDataList = resultData
+        } else if (this.pageNo <= this.totalPages) {
+          this.roomDataList = this.roomDataList.concat(resultData)
+        } else {
+          this.$refs.scroll.forceUpdate()
+        }
+      }).catch(res => {
+				this.showLoading = false
+			})
+		},
+		// 安卓地图
     handleAndriodMap() {
       console.log('andriod')
-    }
+		},
+		// 安卓返回
+		andriodBack() {
+			console.log('andriod')
+		},
+		 moreData(){
+      this.toSearch('more')
+    },
+    refreshData() {
+      this.toSearch()
+		},
   }
 }
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
+	.noData_content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		line-height: 30px;
+		height: 150px;
+		color: #333;
+		font-size: 14px;
+	}
+	.header_container{
+		width:100%;
+		position:absolute;
+		left:0;
+		top:0;
+		z-index:100;
+	}
   .search {
     width: 300px;
     height: 100%;
-    line-height: 30px;
-    padding-left: 30px;
-    border-radius: 5px;
-    background-color: rgba(112, 161, 255, 1);
+		line-height: 30px;
+		padding-left: 0;
+    background-color: #4680ff;
     position: relative;
-    top: -5px;
+    top: -15px;
     &:after{
       content: '\e60a';
       font-family: "iconfont";
@@ -393,6 +677,7 @@ export default {
       left: 10px;
     }
 	}
+	.selected,
 	.active {
 		color: #4680ff;
 	}
@@ -471,6 +756,14 @@ export default {
 			}
 		}
 	}
+	.pop_container {
+		border-top: 1px solid #ddd;
+	}
+	.addIcon img {
+		width: 24px;
+		height: 24px;
+		vertical-align: middle;
+	}
 </style>
 
 <style rel="stylesheet/less" lang="less">
@@ -497,6 +790,18 @@ export default {
 		border-radius: 5px;
 		height: 30px;
 		line-height: 30px;
+	}
+}
+.header_container {
+	.vux-header-title {
+		font-size: 14px !important;
+		margin: 0 95px !important;
+	}
+	.weui-search-bar__label {
+		top: 0;
+	}
+	.weui-icon-clear {
+		color: #B2B2B2 !important;
 	}
 }
 </style>

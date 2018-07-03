@@ -1,8 +1,8 @@
 /*
- * @Author: chenxing 
- * @Date: 2018-04-23 17:40:16 
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 10:47:50
+ * @Author: chenxing
+ * @Date: 2018-04-23 17:40:16
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-07-03 15:10:29
  */
 <template>
   <div style="height:100%;">
@@ -66,7 +66,7 @@ export default {
       this.getData()
     }).catch(rej => {
       this.$vux.toast.text('获取区域失败')
-    }) 
+    })
     window['backUrl'] = () => {
       return 'false'
     }

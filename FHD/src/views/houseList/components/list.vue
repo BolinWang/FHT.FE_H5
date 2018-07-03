@@ -2,56 +2,53 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-02 20:18:51
+ * @Last Modified time: 2018-07-03 15:23:42
  */
 
 <template>
 	<div>
-		<div style="height:430px;">
-			<scroll :pullDownRefresh="false" @pullingUp="pullUploadFn" ref="scroll" :data="data">
-				<ul class="houseNav">
-					<li v-for="(item, index) in data" :key="index" @click="toDetail(item)">
-						<div class="houseTitle">
-							<div class="left" v-html="item.name"></div>
+		<div style="height:100%;">
+			<ul class="houseNav" v-if="data.length > 0">
+				<li v-for="(item, index) in data" :key="index" @click="toDetail(item)">
+					<div class="houseTitle">
+						<div class="left" v-html="item.name"></div>
+					</div>
+					<div class="houseDetail">
+						<div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
+							<x-img :src="item.imageUrl" class="houseImg"></x-img>
 						</div>
-						<div class="houseDetail">
-							<div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
-								<x-img :src="item.imageUrl" class="houseImg"></x-img>
+						<div class="detailRight flex">
+							<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+								<div class="roomPrice">
+									{{item.minRentPrice}} 元/月
+								</div>
+								<div class="roomStatus" :class="{
+									kongfang: statusMapData.kongfang.includes(item.status),
+									chuzu: statusMapData.chuzu.includes(item.status),
+									zaizhu: statusMapData.zaizhu.includes(item.status),
+									baoliu: statusMapData.baoliu.includes(item.status)
+								}">{{item.status | statusStr}}</div>
 							</div>
-							<div class="detailRight flex">
-								<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-									<div class="roomPrice">
-										{{item.minRentPrice}} 元/月
-									</div>
-									<div class="roomStatus" :class="{
-										kongfang: statusMapData.kongfang.includes(item.status),
-										chuzu: statusMapData.chuzu.includes(item.status),
-										zaizhu: statusMapData.zaizhu.includes(item.status),
-										baoliu: statusMapData.baoliu.includes(item.status)
-									}">{{item.status | statusStr}}</div>
-								</div>
-								<div class="featureDiv">
-									<span class="feature" v-for="(v, k) in item.featureList" :key="k" v-show="v">
-										{{v}}
-									</span>
-								</div>
-								<div class="featureDiv">
-									<span class="feature" v-for="(v, k) in item.roomFeatureList" :key="k" v-show="v">
-										{{v}}
-									</span>
-								</div>
+							<div class="featureDiv">
+								<span class="feature" v-for="(v, k) in item.featureList" :key="k" v-show="v">
+									{{v}}
+								</span>
+							</div>
+							<div class="featureDiv">
+								<span class="feature" v-for="(v, k) in item.roomFeatureList" :key="k" v-show="v">
+									{{v}}
+								</span>
 							</div>
 						</div>
-					</li>
-				</ul>
-			</scroll>
+					</div>
+				</li>
+			</ul>
 		</div>
 	</div>
 </template>
 
 <script>
-import { Tab, TabItem, XImg, Search } from "vux"
-import scroll from "@/components/scroll"
+import { Tab, TabItem, XImg } from "vux"
 
 const statusMapData = {
 	'kongfang': '1,2,5,6,10',
@@ -75,7 +72,7 @@ const attrList = ["", "独卫", "阳台", "厨房", "飘窗"]
 export default {
   name: "house-list",
   components: {
-    Tab, TabItem, scroll, XImg, Search
+    Tab, TabItem, XImg
   },
   props: {
     data: {
@@ -88,54 +85,35 @@ export default {
   },
   filters: {
     statusStr(val) {
-      /*
-      * 空房对应原来的可用
-      */
-      const statusList = [
-        "",
-        "未启用租务",
-        "空房",
-        "下单未入住",
-        "在住",
-        "维修",
-        "空脏",
-        "保留中",
-        "预定",
-        "已出租",
-        "装修中"
-      ];
-      return statusList[val]
+      const statusList = [{
+				name: '空房',
+				value: '1,2,5,6,10'
+			},{
+				name: '在住',
+				value: '3,4,8'
+			},{
+				name: '已出租',
+				value: '9'
+			},{
+				name: '保留中',
+				value: '7'
+			}]
+			let mapArr = statusList.filter((item) => {
+				return item.value.includes(val)
+			})
+			return mapArr.length > 0 ? mapArr[0].name : '空房'
     }
   },
   mounted() {},
   data() {
     return {
-			statusMapData,
-      statusList: [
-        { name: "全部", value: 0 },
-        { name: "空房", value: 2 },
-        { name: "已出租", value: 4 },
-        { name: "保留中", value: 7 },
-        { name: "缺图", value: 0 },
-        { name: "有图", value: 0 }
-      ]
-    };
+			statusMapData
+    }
   },
   methods: {
 		// andriod 跳转详情页
     toDetail() {
 
-    },
-    toSearch(key) {
-      this.$emit("searchStatus", key)
-    },
-    pullUploadFn() {
-      console.log(1)
-      let self = this
-      setTimeout(function() {
-        console.log(self.$refs.scroll)
-        self.$refs.scroll.forceUpdate()
-      }, 2000);
     }
   },
   watch: {
@@ -162,7 +140,7 @@ export default {
 
 <style rel="stylesheet/less" lang="less" scoped>
 .houseNav {
-  padding: 0 5px;
+  padding: 5px;
   li {
     width: 100%;
     .houseTitle {
