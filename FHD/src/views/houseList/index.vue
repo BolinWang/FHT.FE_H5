@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%;background:#fff">
     <view-box ref="viewBox" body-padding-top="46px" >
-      <x-header slot="header" v-if="isAndriod" class="header_container" @click.native="clickHeader">
+      <x-header slot="header" v-if="!isAndriod" class="header_container" @click.native="clickHeader">
 				<div class="search" slot="overwrite-left">
 					<search
 						placeholder='小区/公寓/房东/房东手机号码'
@@ -200,14 +200,18 @@ export default {
 		this.paramsListClone = deepClone(this.paramsList)
 	},
   mounted() {
+		let _this = this
     window['getMapData'] = (data) => {
 			// andriod返回数据 空房
 			if (data) {
-				this.searchData.addressId = data
-				this.topListParams.statusList[1].selected = true
-				this.toSearch()
+				_this.searchData.addressId = data
+				_this.topListParams.statusList[1].selected = true
+				_this.toSearch()
 			}
-    }
+		},
+		window['refreshPage'] = () => {
+			_this.toSearch()
+		}
   },
   data() {
     return {
