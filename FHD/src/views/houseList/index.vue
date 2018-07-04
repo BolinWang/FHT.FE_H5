@@ -645,17 +645,18 @@ export default {
 		},
 		// 安卓地图
     handleAndriodMap() {
+			console.log('map')
       if (window.MapSearch) {
         window.MapSearch.goToMap()
       }
 		},
 		// 安卓返回
 		andriodBack() {
-			if (window.MapSearch) {
-        window.MapSearch.goBack()
+			if (window.MapGoBack) {
+        window.MapGoBack.goBack()
       }
 		},
-		 moreData(){
+		moreData(){
       this.toSearch('more')
     },
     refreshData() {
