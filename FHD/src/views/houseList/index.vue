@@ -19,7 +19,7 @@
 			<x-header class="header_container" v-else
 				:leftOptions="{preventGoBack: true, backText: '地图找房'}"
 				@on-click-back="andriodBack">
-				小区公寓名称哈哈哈哈哈哈
+				{{regionAddressName}}
 			</x-header>
 			<div class="top-select">
 				<div class="select-item"
@@ -204,9 +204,12 @@ export default {
     window['getMapData'] = (data) => {
 			// andriod返回数据 空房
 			if (data) {
+				_this.isAndriod = true
 				_this.searchData.regionAddressId = data
 				_this.topListParams.statusList[1].selected = true
 				_this.toSearch()
+			} else {
+				_this.isAndriod = false
 			}
 		},
 		window['refreshPage'] = () => {
@@ -215,6 +218,7 @@ export default {
   },
   data() {
     return {
+			regionAddressName: '加载中...',
 			totalPages: 1,
 			pageNo: 1,
 			pageSize: 5,
@@ -623,6 +627,10 @@ export default {
 			})).then(res => {
 				this.showLoading = false
 				let resultData = res.result || []
+				if (this.isAndriod && resultData.length > 0) {
+					// 安卓地图返回小区
+					this.regionAddressName = resultData[0].regionAddressName
+				}
 				if (this.pageNo === 1) {
 					this.totalPages = res.totalPages || 1
           this.roomDataList = resultData
