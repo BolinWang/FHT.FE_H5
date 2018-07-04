@@ -202,6 +202,7 @@ export default {
   mounted() {
 		let _this = this
     window['getMapData'] = (data) => {
+			alert(data)
 			// andriod返回数据 空房
 			if (data && data != -999) {
 				_this.isAndriod = true
