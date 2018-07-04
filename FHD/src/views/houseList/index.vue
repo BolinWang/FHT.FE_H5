@@ -855,6 +855,10 @@ export default {
 			top: 0;
 		}
 	}
+	.vux-header-back,
+	.left-arrow {
+		margin-top: 13px;
+	}
 	&.vux-header{
 		padding: 3px 0;
 		.vux-header-right{
