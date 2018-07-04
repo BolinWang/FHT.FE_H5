@@ -198,20 +198,29 @@ export default {
 		// 去安卓拿地图数据
 		this.isAndriod = false
 		this.paramsListClone = deepClone(this.paramsList)
+		this.topListParamsClone = deepClone(this.topListParams)
 	},
   mounted() {
     window['getMapData'] = (data) => {
+			// 清空所有查询条件
+			this.searchData = {}
+			this.selectOptions.map((item) => {
+				item.selected = false
+				item.active = false
+			})
+			this.paramsList = deepClone(this.paramsListClone)
+			this.topListParams = deepClone(this.topListParamsClone)
+			this.currentIndex = 0
 			// andriod返回数据 空房
 			if (data && data != -999) {
 				this.isAndriod = true
+				this.currentIndex = 2
 				this.searchData.regionAddressId = data
 				this.topListParams.statusList[1].selected = true
-				this.selectOptions[2].active = true
+				this.selectOptions[this.currentIndex].selected = true
 			} else {
 				this.isAndriod = false
 				this.searchData.regionAddressId = ''
-				this.topListParams.statusList[1].selected = false
-				this.selectOptions[2].active = false
 			}
 			this.toSearch()
 		},
@@ -529,6 +538,7 @@ export default {
 			}
 		},
 		searchParam() {
+			this.selectOptions[this.currentIndex].selected = false
 			// 精准搜索
 			if (this.currentIndex === 0) {
 				if (this.searchData.estateName || this.searchData.adminKeyword || this.searchData.roomNo){
@@ -651,7 +661,7 @@ export default {
 			console.log('map')
       if (window.MapSearch) {
         window.MapSearch.goToMap()
-      }
+			}
 		},
 		// 安卓返回
 		andriodBack() {
