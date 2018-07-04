@@ -1,6 +1,17 @@
 <template>
   <div style="height:100%;background:#fff">
-    <view-box ref="viewBox" body-padding-top="46px" >
+		<div class="top-select">
+			<div class="select-item"
+				:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
+				v-for="(item, index) in selectOptions" :key="index"
+				@click="showPopup(index)">
+				<span class="select-text">
+					{{item.text}}
+				</span>
+				<span class="select-icon"></span>
+			</div>
+		</div>
+    <view-box ref="viewBox" body-padding-top="86px" >
       <x-header slot="header" v-if="!isAndriod" class="header_container" @click.native="clickHeader">
 				<div class="search" slot="overwrite-left">
 					<search
@@ -21,17 +32,6 @@
 				@on-click-back="andriodBack">
 				{{regionAddressName}}
 			</x-header>
-			<div class="top-select">
-				<div class="select-item"
-					:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
-					v-for="(item, index) in selectOptions" :key="index"
-					@click="showPopup(index)">
-					<span class="select-text">
-						{{item.text}}
-					</span>
-					<span class="select-icon"></span>
-				</div>
-			</div>
 			<div v-transfer-dom><loading :show="showLoading" text="数据加载中"></loading></div>
 			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
       	<house-list :data="roomDataList" v-if="roomDataList.length > 0"></house-list>
@@ -200,22 +200,19 @@ export default {
 		this.paramsListClone = deepClone(this.paramsList)
 	},
   mounted() {
-		let _this = this
     window['getMapData'] = (data) => {
-			this.$vux.toast.text(data)
 			// andriod返回数据 空房
 			if (data && data != -999) {
-				_this.isAndriod = true
-				_this.searchData.regionAddressId = data
-				_this.topListParams.statusList[1].selected = true
-				_this.toSearch()
+				this.isAndriod = true
+				this.searchData.regionAddressId = data
+				this.topListParams.statusList[1].selected = true
 			} else {
-				this.$vux.toast.text('1')
-				_this.isAndriod = false
+				this.isAndriod = false
 			}
+			this.toSearch()
 		},
 		window['refreshPage'] = () => {
-			_this.toSearch()
+			this.toSearch()
 		}
   },
   data() {
@@ -711,6 +708,10 @@ export default {
 		border-color: #4680ff;
 	}
 	.top-select {
+		position: absolute;
+		z-index: 101;
+		top: 46px;
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
