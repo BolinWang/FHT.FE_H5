@@ -210,6 +210,7 @@ export default {
 				_this.topListParams.statusList[1].selected = true
 				_this.toSearch()
 			} else {
+				this.$vux.toast.text('1')
 				_this.isAndriod = false
 			}
 		},
