@@ -206,8 +206,12 @@ export default {
 				this.isAndriod = true
 				this.searchData.regionAddressId = data
 				this.topListParams.statusList[1].selected = true
+				this.selectOptions[2].active = true
 			} else {
 				this.isAndriod = false
+				this.searchData.regionAddressId = ''
+				this.topListParams.statusList[1].selected = false
+				this.selectOptions[2].active = false
 			}
 			this.toSearch()
 		},
