@@ -703,8 +703,8 @@ export default {
 		line-height: 30px;
 		padding-left: 0;
     background-color: #4680ff;
-    position: relative;
-    top: -15px;
+		position: relative;
+		top: 0 !important;
     &:after{
       content: '\e60a';
       font-family: "iconfont";
@@ -723,7 +723,7 @@ export default {
 	}
 	.top-select {
 		position: absolute;
-		z-index: 101;
+		z-index: 500;
 		top: 46px;
 		width: 100%;
 		display: flex;
@@ -798,10 +798,19 @@ export default {
 	.pop_container {
 		border-top: 1px solid #ddd;
 	}
-	.addIcon img {
-		width: 24px;
-		height: 24px;
-		vertical-align: middle;
+	.addIcon {
+    width: 46px;
+    height: 46px;
+    text-align: center;
+		line-height: 46px;
+		top: 0;
+		left: 10px;
+    position: relative;
+  	img {
+			width: 24px;
+			height: 24px;
+			vertical-align: middle;
+		}
 	}
 </style>
 
@@ -836,11 +845,20 @@ export default {
 		font-size: 14px !important;
 		margin: 0 95px !important;
 	}
-	.weui-search-bar__label {
-		top: 0;
-	}
 	.weui-icon-clear {
 		color: #B2B2B2 !important;
+	}
+	.weui-search-bar {
+		padding: 8PX 10PX !important;
+		.weui-search-bar__label {
+			top: 0;
+		}
+	}
+	&.vux-header{
+		.vux-header-right,
+		.vux-header-left {
+			top: 0;
+		}
 	}
 }
 </style>
