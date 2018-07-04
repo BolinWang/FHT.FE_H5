@@ -203,7 +203,7 @@ export default {
 		let _this = this
     window['getMapData'] = (data) => {
 			// andriod返回数据 空房
-			if (data) {
+			if (data && data != -999) {
 				_this.isAndriod = true
 				_this.searchData.regionAddressId = data
 				_this.topListParams.statusList[1].selected = true
@@ -218,7 +218,7 @@ export default {
   },
   data() {
     return {
-			regionAddressName: '加载中...',
+			regionAddressName: '',
 			totalPages: 1,
 			pageNo: 1,
 			pageSize: 5,
