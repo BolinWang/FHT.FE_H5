@@ -699,17 +699,17 @@ export default {
 	}
   .search {
     width: 300px;
-    height: 100%;
+    height: 30px;
 		line-height: 30px;
 		padding-left: 0;
     background-color: #4680ff;
 		position: relative;
 		top: 0 !important;
     &:after{
-      content: '\e60a';
+      content: '';
       font-family: "iconfont";
       position: absolute;
-      left: 10px;
+      left: 0;
     }
 	}
 	.selected,
@@ -841,6 +841,7 @@ export default {
 	}
 }
 .header_container {
+	height: 46px;
 	.vux-header-title {
 		font-size: 14px !important;
 		margin: 0 95px !important;
@@ -849,13 +850,16 @@ export default {
 		color: #B2B2B2 !important;
 	}
 	.weui-search-bar {
-		padding: 8PX 10PX !important;
+		padding: 8px 10px !important;
 		.weui-search-bar__label {
 			top: 0;
 		}
 	}
 	&.vux-header{
-		.vux-header-right,
+		padding: 3px 0;
+		.vux-header-right{
+			top: 0;
+		}
 		.vux-header-left {
 			top: 0;
 		}
