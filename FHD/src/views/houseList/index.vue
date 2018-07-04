@@ -172,7 +172,7 @@ import footers from '@/components/footer'
 import scroll from "@/components/scroll"
 import houseList from './components/list'
 import {addClass, removeClass} from '@/utils/dom'
-import {houseApi} from '@/api/source'
+import {houseApi, recordUrlApi} from '@/api/source'
 import {ObjectMap, deepClone} from '@/utils'
 import axios from 'axios'
 
@@ -233,7 +233,7 @@ export default {
 			regionAddressName: '',
 			totalPages: 1,
 			pageNo: 1,
-			pageSize: 5,
+			pageSize: 20,
       showLoading: false,
       areaList: [], // 管辖地区
 			roomDataList: [], // 房源列表数据
@@ -526,16 +526,18 @@ export default {
 			}
 		},
 		clearParam() {
+			this.selectOptions[this.currentIndex].selected = false
 			// 精准搜索
 			if (this.currentIndex === 0) {
-				this.searchData.estateName = ''
-				this.searchData.adminKeyword = ''
-				this.searchData.roomNo = ''
+				this.$set(this.searchData, 'estateName', '')
+				this.$set(this.searchData, 'adminKeyword', '')
+				this.$set(this.searchData, 'roomNo', '')
 			} else {
-				this.searchData.minPrice = ''
-				this.searchData.maxPrice = ''
+				this.$set(this.searchData, 'minPrice', '')
+				this.$set(this.searchData, 'maxPrice', '')
 				this.paramsList = deepClone(this.paramsListClone)
 			}
+			this.toSearch()
 		},
 		searchParam() {
 			this.selectOptions[this.currentIndex].selected = false
@@ -617,7 +619,7 @@ export default {
 						return mapObj
 					})
 			let housingTypeParam = this.paramsList.housingType.filter((item) => item.selected)
-		//	let decorationDegreesParam = this.paramsList.decorationDegrees.filter((item) => item.selected)
+			//  let decorationDegreesParam = this.paramsList.decorationDegrees.filter((item) => item.selected)
 			let roomDirectionParam = this.paramsList.roomDirection.filter((item) => item.selected)
 			let roomAttributeListParam = this.paramsList.roomAttributeList.filter((item) => item.selected)
 			let paramsList = {
@@ -630,14 +632,15 @@ export default {
 			if (housingTypeParam.length > 0) {
 				paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
 			}
-      houseApi(ObjectMap({
+			let searchDataParams = ObjectMap({
 				pageNo: this.pageNo,
 				pageSize: this.pageSize,
 				areaList: this.areaList,
 				...searchData,
 				...topListParams,
 				...paramsList
-			})).then(res => {
+			})
+      houseApi(searchDataParams).then(res => {
 				this.showLoading = false
 				let resultData = res.result || []
 				if (this.isAndriod && resultData.length > 0) {
@@ -646,12 +649,16 @@ export default {
 				}
 				if (this.pageNo === 1) {
 					this.totalPages = res.totalPages || 1
-          this.roomDataList = resultData
+					this.roomDataList = resultData
+					this.$refs.scroll.scrollTo(0, 0, 500)
         } else if (this.pageNo <= this.totalPages) {
           this.roomDataList = this.roomDataList.concat(resultData)
         } else {
           this.$refs.scroll.forceUpdate()
-        }
+				}
+				recordUrlApi(searchDataParams).then(res => {
+					console.log('recordUrl')
+				}).catch(res => {})
       }).catch(res => {
 				this.showLoading = false
 			})

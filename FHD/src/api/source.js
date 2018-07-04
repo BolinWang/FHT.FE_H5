@@ -131,3 +131,17 @@ export function msgList(params = {}) {
     }
   })
 }
+
+// 记录搜索数据
+export function recordUrlApi(params = {}) {
+  return fetch({
+    url: leiUrl + '/api/search',
+		method: 'post',
+		v: '1.0',
+    notId: true,
+    data: {
+      method: 'recordUrl',
+      params
+    }
+  })
+}

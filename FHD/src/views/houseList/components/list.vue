@@ -2,14 +2,14 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-03 16:28:01
+ * @Last Modified time: 2018-07-04 17:49:56
  */
 
 <template>
 	<div>
 		<div style="height:100%;">
-			<ul class="houseNav" v-if="data.length > 0">
-				<li v-for="(item, index) in data" :key="index" @click="toDetail(item)">
+			<ul class="houseNav" v-if="listData.length > 0">
+				<li v-for="(item, index) in listData" :key="index" @click="toDetail(item)">
 					<div class="houseTitle">
 						<div class="left" v-html="item.name"></div>
 					</div>
@@ -103,11 +103,30 @@ export default {
 			})
 			return mapArr.length > 0 ? mapArr[0].name : '空房'
     }
-  },
+	},
+	created() {
+		this.listData = this.data
+		this.listData.map((item) => {
+			item.featureList = []
+			let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
+			let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
+			let roomArea = `${item.roomArea || 0}㎡`
+			let roomDirection = directionList[item.roomDirection]
+			let roomAttributes = item.roomAttributes.split(',').map((item) => {
+				return attrList[item]
+			})
+			item.roomFeatureList = [
+				roomDirection,
+				...roomAttributes
+			]
+			item.featureList = [roomGuard, roomType, roomArea]
+		})
+	},
   mounted() {},
   data() {
     return {
-			statusMapData
+			statusMapData,
+			listData: []
     }
   },
   methods: {
@@ -120,7 +139,7 @@ export default {
   },
   watch: {
     data(val = []) {
-      this.data.map((item) => {
+			val.map((item) => {
 				item.featureList = []
 				let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
 				let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
@@ -135,6 +154,7 @@ export default {
 				]
  				item.featureList = [roomGuard, roomType, roomArea]
 			})
+			this.listData = val
     }
   }
 }
