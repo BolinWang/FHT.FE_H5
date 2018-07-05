@@ -312,7 +312,7 @@ export default {
 				}],
 				'sortType': [{
 					name: '默认',
-					value: 'asc',
+					value: 'desc',
 					selected: false
 				},{
 					name: '从低到高',
@@ -605,7 +605,7 @@ export default {
 				hasPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
 				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
 				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
-				orderBy: 'createTime'
+				orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime',
 			}
 			// 户型
 			let chamberCountsParam = this.paramsList.chamberCounts
@@ -645,6 +645,7 @@ export default {
 			})
 			let toLei = deepClone(searchDataParams)
 			searchDataParams.regionIds = this.areaList
+			console.log(JSON.stringify(searchDataParams))
       houseApi(searchDataParams).then(res => {
 				type === 'more' ? '' : this.showLoading = false
 				let resultData = res.result || []
