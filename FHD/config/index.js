@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:09:35
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-04 13:47:52
+ * @Last Modified by: chenxing
+ * @Last Modified time: 2018-07-05 11:05:34
  */
 
 'use strict'
@@ -26,7 +26,7 @@ module.exports = {
       }
     },
     // host: 'localhost',
-    host: '192.168.5.163',
+    host: '0.0.0.0',
     port: 1314,
     autoOpenBrowser: true,
     errorOverlay: true,

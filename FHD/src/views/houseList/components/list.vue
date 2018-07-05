@@ -1,8 +1,8 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-04 17:49:56
+ * @Last Modified by: chenxing
+ * @Last Modified time: 2018-07-05 13:27:31
  */
 
 <template>
@@ -20,7 +20,7 @@
 						<div class="detailRight flex">
 							<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
 								<div class="roomPrice">
-									{{item.minRentPrice}} 元/月
+									{{item.minRentPrice > 0 ? `${item.minRentPrice} 元/月` : '暂无价格'}}
 								</div>
 								<div class="roomStatus" :class="{
 									kongfang: statusMapData.kongfang.includes(item.status),
@@ -176,13 +176,7 @@ export default {
       left: 6px;
       padding: 0 5px;
       background-color: rgba(242, 242, 242, 1);
-      .left {
-        width: 90%;
-      }
-      .right {
-        width: 10%;
-        text-align: right;
-      }
+      
     }
     .houseDetail {
       height: 84px;
