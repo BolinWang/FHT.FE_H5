@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 15:56:34
+ * @Last Modified time: 2018-07-05 19:58:54
  */
 
 <template>
@@ -14,8 +14,8 @@
 						<div>{{item.name}}</div>
 					</div>
 					<div class="houseDetail">
-						<div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
-              <img :src="item.imageUrl" class="houseImg" v-if="item.imageUrl">
+						<div class="detailImg" :class="{hasImg: item.roomImageUrl, noImg: !item.roomImageUrl}">
+              <img :src="item.roomImageUrl" class="houseImg" v-if="item.roomImageUrl">
 							<!-- <x-img :src="item.imageUrl" class="houseImg" container="#scroll_container"></x-img> -->
 						</div>
 						<div class="detailRight flex">

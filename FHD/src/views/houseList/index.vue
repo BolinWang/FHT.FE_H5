@@ -53,7 +53,7 @@
 							<x-input v-model="searchData.estateName" placeholder="小区/公寓"></x-input>
 						</group>
 						<group title="房东/房东手机号码">
-							<x-input v-model="searchData.adminKeyword" placeholder="房东/房东手机号码"></x-input>
+							<x-input v-model="searchData.adminNameOrMobile" placeholder="房东/房东手机号码"></x-input>
 						</group>
 						<group title="房间号">
 							<x-input v-model="searchData.roomNo" placeholder="房间号"></x-input>
@@ -531,7 +531,7 @@ export default {
 			// 精准搜索
 			if (this.currentIndex === 0) {
 				this.$set(this.searchData, 'estateName', '')
-				this.$set(this.searchData, 'adminKeyword', '')
+				this.$set(this.searchData, 'adminNameOrMobile', '')
 				this.$set(this.searchData, 'roomNo', '')
 			} else {
 				this.$set(this.searchData, 'minPrice', '')
@@ -544,7 +544,7 @@ export default {
 			this.selectOptions[this.currentIndex].selected = false
 			// 精准搜索
 			if (this.currentIndex === 0) {
-				if (this.searchData.estateName || this.searchData.adminKeyword || this.searchData.roomNo){
+				if (this.searchData.estateName || this.searchData.adminNameOrMobile || this.searchData.roomNo){
 					this.selectOptions[this.currentIndex].selected = true
 					this.searchData.keyword = ''
 				}
@@ -634,15 +634,17 @@ export default {
 			if (housingTypeParam.length > 0) {
 				paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
 			}
+			
 			let searchDataParams = ObjectMap({
 				pageNo: this.pageNo,
 				pageSize: this.pageSize,
-				areaList: this.areaList,
+				financeType: 1,
 				...searchData,
 				...topListParams,
 				...paramsList
 			})
-			console.log(JSON.stringify(searchDataParams))
+			let toLei = deepClone(searchDataParams)
+			searchDataParams.regionIds = this.areaList
       houseApi(searchDataParams).then(res => {
 				type === 'more' ? '' : this.showLoading = false
 				let resultData = res.result || []
@@ -650,10 +652,7 @@ export default {
 					// 安卓地图返回小区
 					this.regionAddressName = resultData[0].regionAddressName
 				}
-				// let self = this
-				// setTimeout(() => {
-				// 	self.$vux.loading.isVisible()
-				// },1000)
+
 				if (this.pageNo === 1) {
 					this.totalPages = res.totalPages || 1
 					this.roomDataList = resultData
@@ -663,7 +662,8 @@ export default {
         } else {
           this.$refs.scroll.forceUpdate()
 				}
-				recordUrlApi(searchDataParams).then(res => {
+				toLei.areaList = this.areaList
+				recordUrlApi(toLei).then(res => {
 					console.log('recordUrl')
 				}).catch(res => {})
       }).catch(res => {
