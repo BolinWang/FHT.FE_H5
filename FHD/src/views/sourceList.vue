@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-25 19:14:50
+ * @Last Modified time: 2018-07-05 14:29:44
  */
 <template>
   <div style="height:100%;">
@@ -26,7 +26,7 @@
       <div v-transfer-dom>
         <loading :show="showLoading" text="数据加载中"></loading>
       </div>
-      <div class="sourceScroll">
+      <div class="sourceScroll" v-if="listData.length > 0">
         <scroll :data="listData" ref="scroll" :pullDownRefresh="false" @pullingUp="moreData">
           <ul class="userNav">
             <li v-for="(item, key) in listData" @click="toDetail(item)" :key="key">
@@ -48,7 +48,9 @@
           </ul>
         </scroll>
       </div>
-      
+      <div class="noData_content" v-else>
+        <p>暂无数据o(╥﹏╥)o</p>
+      </div>
       <footers :selectedIndex="3" slot="bottom"></footers>
     </view-box>
   </div>

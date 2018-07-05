@@ -7,9 +7,7 @@
   <div ref="wrapper" class="list-wrapper">
     <div class="scroll-content">
       <div ref="listWrapper">
-        <slot>
-          
-        </slot>
+        <slot></slot>
       </div>
       <slot name="pullup"
         :pullUpLoad="pullUpLoad"

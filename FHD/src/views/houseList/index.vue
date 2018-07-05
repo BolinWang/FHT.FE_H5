@@ -32,8 +32,10 @@
 				@on-click-back="andriodBack">
 				{{regionAddressName}}
 			</x-header>
-			<div v-transfer-dom><loading :show="showLoading" text="数据加载中"></loading></div>
-			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData">
+				<div class="textAlign" style="line-height:30px" v-show="showLoading">
+					<inline-loading ></inline-loading> 数据加载中O(∩_∩)O~
+				</div>
+			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" 			@pullingDown="refreshData" id="scroll_container">
       	<house-list :data="roomDataList" v-if="roomDataList.length > 0"></house-list>
 				<div class="noData_content" v-else>
 					<p>暂无数据o(╥﹏╥)o</p>
@@ -166,7 +168,7 @@
 import {
 	Tab, TabItem, XImg, Actionsheet, Cell, Search,
 	Flexbox, FlexboxItem, Popup, XInput, XButton,
-	Loading, TransferDom
+	Loading, TransferDom, InlineLoading
 } from 'vux'
 import footers from '@/components/footer'
 import scroll from "@/components/scroll"
@@ -183,7 +185,7 @@ export default {
     footers, Tab, TabItem, houseList,
 		Actionsheet, Loading, TransferDom,
 		Cell, Flexbox, FlexboxItem, scroll,
-		Popup, XInput, XButton, Search
+		Popup, XInput, XButton, Search, InlineLoading
 	},
 	directives: {
     TransferDom
@@ -517,7 +519,6 @@ export default {
 			})
 			list[index].selected = true
 			this.selectOptions[this.currentIndex].selected = true
-
 			// 更多选项中不要关闭popup
 			if (type !== 'housingType' && type !== 'roomDirection') {
 				// 选择后关闭popup
@@ -545,6 +546,7 @@ export default {
 			if (this.currentIndex === 0) {
 				if (this.searchData.estateName || this.searchData.adminKeyword || this.searchData.roomNo){
 					this.selectOptions[this.currentIndex].selected = true
+					this.searchData.keyword = ''
 				}
 			} else {
 				let totalItems = [
@@ -588,22 +590,22 @@ export default {
 				this.pageNo ++
 			} else {
 				this.pageNo = 1
+				this.showLoading = true	
 			}
 			if (this.pageNo > this.totalPages) {
 				this.$refs.scroll.forceUpdate()
 				return false
 			}
-			this.showLoading = true
+			
 			let searchData = this.searchData
-
 			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
 			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
 			let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
 			let topListParams = {
-				hasPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : false) : '',
+				hasPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
 				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
-				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'asc',
-				orderBy: 'minRentPrice'
+				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
+				orderBy: 'createTime'
 			}
 			// 户型
 			let chamberCountsParam = this.paramsList.chamberCounts
@@ -640,17 +642,22 @@ export default {
 				...topListParams,
 				...paramsList
 			})
+			console.log(JSON.stringify(searchDataParams))
       houseApi(searchDataParams).then(res => {
-				this.showLoading = false
+				type === 'more' ? '' : this.showLoading = false
 				let resultData = res.result || []
 				if (this.isAndriod && resultData.length > 0) {
 					// 安卓地图返回小区
 					this.regionAddressName = resultData[0].regionAddressName
 				}
+				// let self = this
+				// setTimeout(() => {
+				// 	self.$vux.loading.isVisible()
+				// },1000)
 				if (this.pageNo === 1) {
 					this.totalPages = res.totalPages || 1
 					this.roomDataList = resultData
-					this.$refs.scroll.scrollTo(0, 0, 500)
+					this.$refs.scroll.scrollTo(0, 0)
         } else if (this.pageNo <= this.totalPages) {
           this.roomDataList = this.roomDataList.concat(resultData)
         } else {
@@ -660,12 +667,11 @@ export default {
 					console.log('recordUrl')
 				}).catch(res => {})
       }).catch(res => {
-				this.showLoading = false
+				type === 'more' ? '' : this.showLoading = false
 			})
 		},
 		// 安卓地图
     handleAndriodMap() {
-			console.log('map')
       if (window.MapSearch) {
         window.MapSearch.goToMap()
 			}
@@ -687,22 +693,16 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-	.noData_content {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		line-height: 30px;
-		height: 150px;
-		color: #333;
-		font-size: 14px;
-	}
 	.header_container{
 		width:100%;
 		position:absolute;
 		left:0;
 		top:0;
 		z-index:100;
+	}
+	.textAlign {
+		width: 100%;
+		text-align: center;
 	}
   .search {
     width: 300px;

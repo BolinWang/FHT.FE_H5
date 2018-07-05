@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 13:37:18
+ * @Last Modified time: 2018-07-05 15:56:34
  */
 
 <template>
@@ -15,7 +15,8 @@
 					</div>
 					<div class="houseDetail">
 						<div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
-							<x-img :src="item.imageUrl" class="houseImg"></x-img>
+              <img :src="item.imageUrl" class="houseImg" v-if="item.imageUrl">
+							<!-- <x-img :src="item.imageUrl" class="houseImg" container="#scroll_container"></x-img> -->
 						</div>
 						<div class="detailRight flex">
 							<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
