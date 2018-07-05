@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 13:27:31
+ * @Last Modified time: 2018-07-05 13:37:18
  */
 
 <template>
@@ -11,7 +11,7 @@
 			<ul class="houseNav" v-if="listData.length > 0">
 				<li v-for="(item, index) in listData" :key="index" @click="toDetail(item)">
 					<div class="houseTitle">
-						<div class="left" v-html="item.name"></div>
+						<div>{{item.name}}</div>
 					</div>
 					<div class="houseDetail">
 						<div class="detailImg" :class="{hasImg: item.imageUrl, noImg: !item.imageUrl}">
@@ -168,7 +168,7 @@ export default {
     .houseTitle {
       margin: 5px 0;
       width: 100%;
-      height: 28px;
+      min-height: 28px;
       line-height: 28px;
       border-radius: 4px;
       color: rgba(16, 16, 16, 1);
