@@ -229,6 +229,14 @@ export default {
 		window['refreshPage'] = () => {
 			this.toSearch()
 		}
+		window['backUrl'] = () => {
+			if (this.isAndriod) {
+				this.andriodBack()
+				return 'true'
+			} else {
+				return 'false'
+			}
+    }	
   },
   data() {
     return {
@@ -480,6 +488,7 @@ export default {
 		},
 		// 选择选项
 		selectParams(list = [], index, type) {
+			let isChecked = list[index].selected
 			if (type === 'housingType') {
 				list.map((item) => {
 					item.selected = false
@@ -517,7 +526,7 @@ export default {
 			list.map((item) => {
 				item.selected = false
 			})
-			list[index].selected = true
+			list[index].selected = !isChecked
 			this.selectOptions[this.currentIndex].selected = true
 			// 更多选项中不要关闭popup
 			if (type !== 'housingType' && type !== 'roomDirection') {
@@ -626,14 +635,17 @@ export default {
 			let roomAttributeListParam = this.paramsList.roomAttributeList.filter((item) => item.selected)
 			let paramsList = {
 				chamberCounts: chamberCountsParam.length > 0 ? chamberCountsParam : undefined,
-				roomDirection: roomDirectionParam.length > 0 ? roomDirectionParam[0].value * 1 : undefined,
+				roomDirections: roomDirectionParam.length > 0 ? [roomDirectionParam[0].value * 1] : undefined,
 			//	decorationDegrees: decorationDegreesParam.length > 0 ? decorationDegreesParam.map((item) => item.value * 1) : undefined,
 				roomAttributeList: roomAttributeListParam.length > 0 ? roomAttributeListParam.map((item) => item.value * 1) : undefined
 			}
 			// 房间类型
 			if (housingTypeParam.length > 0) {
 				paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
-			}
+				if (housingTypeParam[0].param === 'houseRentType') {
+					paramsList.housingType = 2
+				}
+			} 
 			
 			let searchDataParams = ObjectMap({
 				pageNo: this.pageNo,
