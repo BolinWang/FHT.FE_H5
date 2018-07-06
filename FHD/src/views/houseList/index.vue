@@ -657,7 +657,7 @@ export default {
 			})
 			let toLei = deepClone(searchDataParams)
 			searchDataParams.regionIds = this.areaList
-			console.log(JSON.stringify(searchDataParams))
+			// console.log(JSON.stringify(searchDataParams))
       houseApi(searchDataParams).then(res => {
 				type === 'more' ? '' : this.showLoading = false
 				let resultData = res.result || []
