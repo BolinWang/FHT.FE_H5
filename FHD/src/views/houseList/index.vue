@@ -611,7 +611,7 @@ export default {
 			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
 			let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
 			let topListParams = {
-				hasPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
+				hasRoomPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
 				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
 				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
 				orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime',
