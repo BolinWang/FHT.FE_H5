@@ -236,7 +236,7 @@ export default {
 			} else {
 				return 'false'
 			}
-    }	
+    }
   },
   data() {
     return {
@@ -599,13 +599,13 @@ export default {
 				this.pageNo ++
 			} else {
 				this.pageNo = 1
-				this.showLoading = true	
+				this.showLoading = true
 			}
 			if (this.pageNo > this.totalPages) {
 				this.$refs.scroll.forceUpdate()
 				return false
 			}
-			
+
 			let searchData = this.searchData
 			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
 			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
@@ -615,6 +615,10 @@ export default {
 				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
 				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
 				orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime',
+			}
+			// keyword和排序规则权重冲突
+			if (searchData.keyword) {
+				topListParams.orderBy = ''
 			}
 			// 户型
 			let chamberCountsParam = this.paramsList.chamberCounts
@@ -645,8 +649,8 @@ export default {
 				if (housingTypeParam[0].param === 'houseRentType') {
 					paramsList.housingType = 2
 				}
-			} 
-			
+			}
+
 			let searchDataParams = ObjectMap({
 				pageNo: this.pageNo,
 				pageSize: this.pageSize,

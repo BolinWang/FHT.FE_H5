@@ -1,8 +1,8 @@
 /*
- * @Author: chenxing 
- * @Date: 2018-04-19 17:09:49 
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-20 16:25:45
+ * @Author: chenxing
+ * @Date: 2018-04-19 17:09:49
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-07-07 16:05:36
  */
 module.exports = {
   NODE_ENV: '"development"',
