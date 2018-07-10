@@ -136,11 +136,39 @@ export function msgList(params = {}) {
 export function recordUrlApi(params = {}) {
   return fetch({
     url: leiUrl + '/api/search',
-		method: 'post',
-		v: '1.0',
+	  method: 'post',
+	  v: '1.0',
     notId: true,
     data: {
       method: 'recordUrl',
+      params
+    }
+  })
+}
+
+// 所属区域
+export function queryManageArea(params = {}) {
+  return fetch({
+    url: leiUrl + '/api/user/queryManageArea',
+	  method: 'post',
+	  v: '1.0',
+    notId: true,
+    data: {
+      method: 'queryManageArea',
+      params
+    }
+  })
+}
+
+// 房东列表
+export function queryTempOrg(params = {}) {
+  return fetch({
+    url: leiUrl + '/api/user/queryTempOrg',
+	  method: 'post',
+	  v: '1.0',
+    notId: true,
+    data: {
+      method: 'queryTempOrg',
       params
     }
   })

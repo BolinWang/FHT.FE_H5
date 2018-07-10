@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 13:55:12
+ * @Last Modified time: 2018-07-10 16:25:58
  */
 <template>
   <div style="height:100%;">
@@ -42,8 +42,7 @@
 import { Search, debounce, Loading, TransferDom, Sticky } from 'vux'
 import footers from '@/components/footer'
 import { plusXing, deepClone } from '@/utils'
-import axios from 'axios'
-const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
+import { queryTempOrg } from '@/api/source'
 
 export default {
   name: 'landlord',
@@ -89,34 +88,17 @@ export default {
       this.orgList = arr
     },
     getData() {
-      const userData = JSON.parse(localStorage.getItem('userData')) || {}
       this.showLoading = true
-      axios({
-        url: `https://${leiUrl}.mdguanjia.com/api/user/queryTempOrg`,
-        method: 'post',
-        data: {
-          sessionId: userData.sessionId
-        },
-        transformRequest: [function (data) {
-          let ret = ''
-          for (let it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).then(res => {
+      queryTempOrg().then(res => {
         this.showLoading = false
-        if (res.data.success) {
-          this.orgList = res.data.data || []
+        if (res.success) {
+          this.orgList = res.data || []
           this.defaultData = deepClone(this.orgList)          
         } 
       }).catch(req => {
         this.showLoading = false
         this.$vux.toast.text('系统出错啦')
-      })
+      })  
     },
     clearSearch() {
       this.keyword = ''

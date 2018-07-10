@@ -174,11 +174,8 @@ import footers from '@/components/footer'
 import scroll from "@/components/scroll"
 import houseList from './components/list'
 import {addClass, removeClass} from '@/utils/dom'
-import {houseApi, recordUrlApi} from '@/api/source'
+import {houseApi, recordUrlApi, queryManageArea} from '@/api/source'
 import {ObjectMap, deepClone} from '@/utils'
-import axios from 'axios'
-
-const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
 
 export default {
   components: {
@@ -429,34 +426,17 @@ export default {
 		// 获取管辖地区
 		getArea() {
       return new Promise((resolve, reject) => {
-        const userData = JSON.parse(localStorage.getItem('userData')) || {}
-        axios({
-          url: `https://${leiUrl}.mdguanjia.com/api/user/queryManageArea`,
-          method: 'post',
-          data: {
-            sessionId: userData.sessionId
-          },
-          transformRequest: [function (data) {
-            let ret = ''
-            for (let it in data) {
-              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-            }
-            return ret
-          }],
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(res => {
-          if (res.data.success && res.data.data.length > 0) {
+				queryManageArea().then(res => {
+					if (res.data.success && res.data.data.length > 0) {
             res.data.data.map(val => {
               this.areaList.push(val.areaId)
             })
             localStorage.setItem('areaData', JSON.stringify(res.data.data))
           }
           resolve(res)
-        }).catch(req => {
-          reject(req)
-        })
+				}).catch(rej => {
+					reject(req)
+				})
       })
 		},
 		clickHeader() {

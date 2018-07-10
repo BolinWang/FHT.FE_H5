@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-04 18:10:44
+ * @Last Modified by: chenxing
+ * @Last Modified time: 2018-07-10 16:14:52
  */
 
 import axios from 'axios'
@@ -17,7 +17,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
   const defaultConfig = {
-		version: '1.0',
+	  version: '1.0',
     timestamp: new Date().getTime(),
     sign: '8F4C4A8E9D850EDD9692DE38723D0543'
   }
