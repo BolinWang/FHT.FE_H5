@@ -147,14 +147,14 @@ export function recordUrlApi(params = {}) {
 }
 
 // 所属区域
-export function queryManageArea(params = {}) {
+export function queryManagerZone(params = {}) {
   return fetch({
-    url: leiUrl + '/api/user/queryManageArea',
+    url: leiUrl + '/api/user/queryManagerZone',
 	  method: 'post',
 	  v: '1.0',
     notId: true,
     data: {
-      method: 'queryManageArea',
+      method: 'queryManagerZone',
       params
     }
   })

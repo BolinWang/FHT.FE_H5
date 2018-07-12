@@ -174,7 +174,7 @@ import footers from '@/components/footer'
 import scroll from "@/components/scroll"
 import houseList from './components/list'
 import {addClass, removeClass} from '@/utils/dom'
-import {houseApi, recordUrlApi, queryManageArea} from '@/api/source'
+import {houseApi, recordUrlApi, queryManagerZone} from '@/api/source'
 import {ObjectMap, deepClone} from '@/utils'
 
 export default {
@@ -242,7 +242,7 @@ export default {
 			pageNo: 1,
 			pageSize: 20,
       showLoading: false,
-      areaList: [], // 管辖地区
+      zoneList: [], // 管辖地区
 			roomDataList: [], // 房源列表数据
 			currentIndex: 0, // 当前选项索引
 			searchData: {}, // 查询参数
@@ -426,16 +426,15 @@ export default {
 		// 获取管辖地区
 		getArea() {
       return new Promise((resolve, reject) => {
-				queryManageArea().then(res => {
-					if (res.data.success && res.data.data.length > 0) {
-            res.data.data.map(val => {
-              this.areaList.push(val.areaId)
+				queryManagerZone().then(res => {
+					if (res.success && res.data.length > 0) {
+            res.data.map(val => {
+              this.zoneList.push(val.zoneId)
             })
-            localStorage.setItem('areaData', JSON.stringify(res.data.data))
           }
           resolve(res)
 				}).catch(rej => {
-					reject(req)
+					reject(rej)
 				})
       })
 		},
@@ -640,8 +639,7 @@ export default {
 				...paramsList
 			})
 			let toLei = deepClone(searchDataParams)
-			searchDataParams.regionIds = this.areaList
-			// console.log(JSON.stringify(searchDataParams))
+			searchDataParams.zoneIds = this.zoneList
       houseApi(searchDataParams).then(res => {
 				type === 'more' ? '' : this.showLoading = false
 				let resultData = res.result || []
@@ -659,7 +657,7 @@ export default {
         } else {
           this.$refs.scroll.forceUpdate()
 				}
-				toLei.areaList = this.areaList
+				toLei.zoneList = this.zoneList
 				recordUrlApi(toLei).then(res => {
 					console.log('recordUrl')
 				}).catch(res => {})
