@@ -680,10 +680,14 @@ export default {
       }
 		},
 		moreData(){
-      this.toSearch('more')
+			if (this.zoneList.length > 0) {
+				this.toSearch('more')
+			}
     },
     refreshData() {
-      this.toSearch()
+			if (this.zoneList.length > 0) {
+				this.toSearch()
+			}
 		},
   }
 }
