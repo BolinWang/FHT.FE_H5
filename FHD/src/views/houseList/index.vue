@@ -241,7 +241,7 @@ export default {
 			totalPages: 1,
 			pageNo: 1,
 			pageSize: 20,
-      showLoading: false,
+			showLoading: false,
       zoneList: [], // 管辖地区
 			roomDataList: [], // 房源列表数据
 			currentIndex: 0, // 当前选项索引
@@ -576,6 +576,9 @@ export default {
 			 * @param topListParams 图片、状态、租金
 			 * @param paramsList
 			 */
+			if (this.zoneList.length === 0) { // 未查询到所属板块时 一律拦截
+				return false
+			}
 			if (type === 'more') {
 				this.pageNo ++
 			} else {
