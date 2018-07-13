@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-06-28 16:15:06
+ * @Last Modified time: 2018-07-13 15:11:42
  */
 <template>
   <div style="height:100%;">
@@ -28,6 +28,8 @@
         <cell title="城市管家帮助文档" is-link @click.native="toHelp">
         </cell>
         <cell title="版本发布记录" is-link @click.native="toRecord">
+        </cell>
+        <cell title="我要吐槽" is-link @click.native="toTalk">
         </cell>
       </group>
       <footers :selectedIndex="0" slot="bottom"></footers>
@@ -88,6 +90,11 @@ export default {
     },
     toMsg() {
       this.$router.push({name: 'message'})
+    },
+    toTalk() {
+      if (window.workbench) {
+        window.workbench.gotoFeedActivity()
+      }
     },
     toApp(title, url) {
       const str = {

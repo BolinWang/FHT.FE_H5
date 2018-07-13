@@ -191,7 +191,7 @@ export default {
 		this.getArea().then(res => {
       this.toSearch()
     }).catch(rej => {
-      this.$vux.toast.text('获取区域失败')
+      this.$vux.toast.text(rej.message)
 		})
 
 		// 去安卓拿地图数据
@@ -427,12 +427,14 @@ export default {
 		getArea() {
       return new Promise((resolve, reject) => {
 				queryManagerZone().then(res => {
-					if (res.success && res.data.length > 0) {
+					if (res.success && res.data && res.data.length > 0) {
             res.data.map(val => {
               this.zoneList.push(val.zoneId)
-            })
-          }
-          resolve(res)
+						})
+						resolve(res)
+          } else {
+						reject(res)
+					} 
 				}).catch(rej => {
 					reject(rej)
 				})
