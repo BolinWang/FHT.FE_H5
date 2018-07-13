@@ -191,7 +191,7 @@ export default {
 		this.getArea().then(res => {
       this.toSearch()
     }).catch(rej => {
-      this.$vux.toast.text(rej.message)
+      this.$vux.toast.text(rej.message || '未查询到所属板块')
 		})
 
 		// 去安卓拿地图数据
@@ -682,11 +682,15 @@ export default {
 		moreData(){
 			if (this.zoneList.length > 0) {
 				this.toSearch('more')
+			} else {
+				this.$refs.scroll.forceUpdate()
 			}
     },
     refreshData() {
 			if (this.zoneList.length > 0) {
 				this.toSearch()
+			} else {
+				this.$refs.scroll.forceUpdate()
 			}
 		},
   }
