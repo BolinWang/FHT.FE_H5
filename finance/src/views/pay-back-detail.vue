@@ -1,8 +1,8 @@
 /*
  * @Author: xiangting
  * @Date: 2018-07-13 16:49:49
- * @Last Modified by: xiangting
- * @Last Modified time: 2018-07-13 17:31:14
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-07-16 10:59:27
  */
 <template>
   <div class="container">
@@ -40,11 +40,11 @@
                  {{billDetail.refundStatus == '80' ? '已还款' : '未还款'}}
               </van-col>
             </van-row>
-            <van-row  v-if="payBackStatus == (1 || 3) ">
+            <van-row  v-if="payBackStatus === 1 || payBackStatus === 3">
               <van-col span="6" offset="1">逾期天数</van-col>
               <van-col span="10">{{billDetail.overdueDays}}</van-col>
             </van-row>
-            <van-row  v-if="payBackStatus == (1 || 3) ">
+            <van-row  v-if="payBackStatus === 1 || payBackStatus === 3">
               <van-col span="6" offset="1">逾期金额</van-col>
               <van-col span="10">{{feeChange(billDetail.overdueFee)}}</van-col>
             </van-row>
@@ -58,7 +58,7 @@
             </van-row>
             <van-row>
               <van-col span="6" offset="1">实际支付时间</van-col>
-              <van-col span="10">{{billDetail.actualPayment}}</van-col>
+              <van-col span="10">{{billDetail.realRepayDate}}</van-col>
             </van-row>
           </div>
         </van-col>
@@ -101,11 +101,11 @@ export default {
   },
   computed: {
     payBackStatus () {
-      if (this.refundStatus === '80') { // 已还款
-        return this.overdueDays ? 1 : 2 // 1逾期，2正常
+      if (this.billDetail.refundStatus === '80') { // 已还款
+        return this.billDetail.overdueDays ? 1 : 2 // 1逾期，2正常
       }
-      if (this.refundStatus === '00') { // 未还款
-        return this.overdueDays ? 3 : 4 // 3逾期，4正常
+      if (this.billDetail.refundStatus === '00') { // 未还款
+        return this.billDetail.overdueDays ? 3 : 4 // 3逾期，4正常
       }
     }
   },

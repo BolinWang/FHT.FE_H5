@@ -67,7 +67,13 @@ export default {
         this.$toast({message: '抱歉！不支持跨期支付，请先支付上一期费用', duration: 1000})
         return
       }
-      this.$router.push({name: 'detail', query: { externalOrderNo: this.externalOrderNo, periods: this.periods }})
+      this.$router.push({
+        name: 'detail',
+        query: {
+          externalOrderNo: this.externalOrderNo,
+          periods: item.refundPeriods
+        }
+      })
     }
   },
   mounted () {
