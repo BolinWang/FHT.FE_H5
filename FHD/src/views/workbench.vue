@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-13 15:11:42
+ * @Last Modified time: 2018-07-16 13:38:37
  */
 <template>
   <div style="height:100%;">
@@ -58,8 +58,8 @@ export default {
     }
     unreadRecords().then(res => {
       this.count = res.data.count || 0
-    }).catch(err => {
-      this.$vux.toast.text(res.message)
+    }).catch(rej => {
+      this.$vux.toast.text(rej.message)
     })
   },
   mounted() {

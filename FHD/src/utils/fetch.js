@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-13 14:39:18
+ * @Last Modified time: 2018-07-16 14:32:00
  */
 
 import axios from 'axios'
@@ -17,7 +17,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
   const defaultConfig = {
-	  version: '1.0',
+    version: '1.0',
     timestamp: new Date().getTime(),
     sign: '8F4C4A8E9D850EDD9692DE38723D0543'
   }
@@ -26,14 +26,14 @@ service.interceptors.request.use(config => {
     defaultConfig.sessionId = config.notId ? userData.sessionId : userData.id
     if (!config.noAssign) {
       config.data = Object.assign(config.data, defaultConfig)
-		}
-		if(config.v) {
-			config.data = {
-				...config.data,
-				v: config.v,
-				version: undefined
-			}
-		}
+    }
+    if (config.v) {
+      config.data = {
+        ...config.data,
+        v: config.v,
+        version: undefined
+      }
+    }
   } else {
     if (!config.noAssign) {
       config.params = Object.assign(config.params, defaultConfig)
@@ -51,6 +51,14 @@ service.interceptors.response.use(
     const res = response.data
     if (res.success) {
       return response.data
+    } else if (res.code === '1016') {
+      Vue.$vux.toast.text(res.message)
+      setTimeout(() => {
+        if (window.JSLogout) {
+          window.JSLogout.logOutAction()
+        }
+      }, 3000)
+      return Promise.reject(res)
     } else if (res.code !== '0') {
       if (res.code === '1011') {
         if (res.message === '无数据') {

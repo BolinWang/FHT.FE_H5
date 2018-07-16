@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-10 16:25:58
+ * @Last Modified time: 2018-07-16 13:37:17
  */
 <template>
   <div style="height:100%;">
@@ -97,7 +97,7 @@ export default {
         } 
       }).catch(req => {
         this.showLoading = false
-        this.$vux.toast.text('系统出错啦')
+        this.$vux.toast.text(req.message || '系统出错啦')
       })  
     },
     clearSearch() {
