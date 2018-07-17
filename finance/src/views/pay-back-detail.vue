@@ -102,10 +102,10 @@ export default {
   computed: {
     payBackStatus () {
       if (this.billDetail.refundStatus === '80') { // 已还款
-        return this.billDetail.overdueDays ? 1 : 2 // 1逾期，2正常
+        return this.billDetail.overdueDays > 0 ? 1 : 2 // 1逾期，2正常
       }
       if (this.billDetail.refundStatus === '00') { // 未还款
-        return this.billDetail.overdueDays ? 3 : 4 // 3逾期，4正常
+        return this.billDetail.overdueDays > 0 ? 3 : 4 // 3逾期，4正常
       }
     }
   },
