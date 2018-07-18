@@ -23,8 +23,19 @@
 						ref="search">
 					</search>
 				</div>
-				<div slot="right" class="addIcon" @click="handleAndriodMap">
-					<img src="../../static/map.png">
+				<div slot="right">
+					<flexbox style="justify-content: center;">
+						<flexbox-item>
+							<div class="addIcon" @click="handleAndriodMap">
+								<img src="../../static/map.png">
+							</div>
+						</flexbox-item>
+						<flexbox-item>
+							<div class="addIcon" @click="handleAddHouse">
+								<x-icon type="ios-plus-outline" size="30"></x-icon>
+							</div>
+						</flexbox-item>
+					</flexbox>
 				</div>
 			</x-header>
 			<x-header class="header_container" v-else
@@ -434,7 +445,7 @@ export default {
 						resolve(res)
           } else {
 						reject(res)
-					} 
+					}
 				}).catch(rej => {
 					reject(rej)
 				})
@@ -696,6 +707,12 @@ export default {
 				this.$refs.scroll.forceUpdate()
 			}
 		},
+		// 安卓添加房源
+		handleAddHouse() {
+			if (window.JSAddHouse) {
+        window.JSAddHouse.addHouseAction()
+      }
+		}
   }
 }
 </script>
@@ -713,7 +730,7 @@ export default {
 		text-align: center;
 	}
   .search {
-    width: 300px;
+    width: 266px;
     height: 30px;
 		line-height: 30px;
 		padding-left: 0;
@@ -726,6 +743,10 @@ export default {
       position: absolute;
       left: 0;
     }
+	}
+	.vux-x-icon {
+		fill: #fff;
+		vertical-align: middle;
 	}
 	.selected,
 	.active {
@@ -814,13 +835,11 @@ export default {
 		border-top: 1px solid #ddd;
 	}
 	.addIcon {
-    width: 46px;
-    height: 46px;
-    text-align: center;
 		line-height: 46px;
 		top: 0;
-		left: 10px;
-    position: relative;
+		left: inherit;
+		width: auto;
+		height: auto;
   	img {
 			width: 24px;
 			height: 24px;
