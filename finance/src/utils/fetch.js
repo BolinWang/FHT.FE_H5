@@ -1,11 +1,12 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
- * @Last Modified by: xiangting
- * @Last Modified time: 2018-07-12 11:31:59
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-07-20 15:21:37
  */
 
 import axios from 'axios'
+import { Toast } from 'vant'
 
 // 创建axios实例
 const service = axios.create({
@@ -49,6 +50,7 @@ service.interceptors.response.use(
           return response.data
         }
       }
+      Toast.fail(res.message || '未知错误，请联系管理员')
       return Promise.reject(res)
     } else {
       return response.data

@@ -7,30 +7,27 @@
       @click-left="back"
     />
     <van-row>
-        <van-col span="24" class="list" @click.native="toDetail(index, item)"   v-for="(item, index) in planList" :key="index">
-          <div class="list-top van-hairline--bottom">
-            <van-row>
-              <van-col span="4">第{{item.refundPeriods}}期</van-col>
-              <van-col span="10">租金金额 {{feeChange(item.repayAmt)}}</van-col>
-              <van-col span="6"  offset="5" class="status" :class="{active: item.refundStatus === '00'}">
-                {{item.refundStatus === '00' ? '未还款' : '已还款'}}
-              </van-col>
-            </van-row>
-          </div>
-          <div class="list-top">
-            <van-row>
-              <van-col span="10" class="time">还款时间 {{item.repayDate}}</van-col>
-              <van-col span="1"  offset="11">></van-col>
-            </van-row>
-          </div>
-          <div class="list-bottom"></div>
-        </van-col>
+      <van-col span="24" class="list" @click.native="toDetail(index, item)" v-for="(item, index) in planList" :key="index">
+        <section class="align-left">
+          <h2 class="period_title">第{{item.refundPeriods}}期</h2>
+          <van-cell-group>
+            <van-cell :value="feeChange(item.repayAmt)" icon="gold-coin" is-link>
+              <template slot="title">
+                <span class="van-cell-text">租金金额</span>
+                <van-tag :type="item.refundStatus | filterTags">{{item.refundStatus === '00' ? '未还款' : '已还款'}}</van-tag>
+              </template>
+            </van-cell>
+            <van-cell title="还款时间" :value="item.repayDate" icon="clock"></van-cell>
+          </van-cell-group>
+        </section>
+        <div class="list-bottom"></div>
+      </van-col>
     </van-row>
   </div>
 </template>
 
 <script>
-import {Button, NavBar, Row, Col, Toast} from 'vant'
+import {Button, NavBar, Row, Col, Toast, Cell, CellGroup, Icon, Tag} from 'vant'
 import {getPayPlanList} from '@/api/source'
 import {getQueryObject} from '@/utils/index'
 
@@ -41,24 +38,27 @@ export default {
     [Button.name]: Button,
     [Row.name]: Row,
     [Col.name]: Col,
-    [Toast.name]: Toast
+    [Toast.name]: Toast,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
+    [Icon.name]: Icon,
+    [Tag.name]: Tag
+  },
+  filters: {
+    filterTags (type) {
+      const tagsTypes = {
+        '80': 'success',
+        '00': 'danger'
+      }
+      return tagsTypes[type] || 'danger'
+    }
   },
   data () {
     return {
       doNotPay: [],
       periods: 1,
       externalOrderNo: 3,
-      planList: [{
-        refundPeriods: 2,
-        refundStatus: '80',
-        repayAmt: '20.15',
-        repayDate: '2016-09-25'
-      }, {
-        refundPeriods: 3,
-        refundStatus: '00',
-        repayAmt: '20.15',
-        repayDate: '2016-10-25'
-      }]
+      planList: []
     }
   },
   methods: {
@@ -98,13 +98,23 @@ export default {
 </script>
 
 <style scoped>
+.align-left {
+  text-align: left;
+}
+.period_title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(69,90,100,.6);
+  background: #f8f8f8;
+  padding: 8px 15px;
+}
 .container{
   background: #f8f8f8;
 }
 .list{
-  padding-left: 15px;
- margin-top: 3Px;
- background: #fff;
+  margin-top: 3Px;
+  background: #fff;
 }
 .list-top{
   line-height: 40px;
