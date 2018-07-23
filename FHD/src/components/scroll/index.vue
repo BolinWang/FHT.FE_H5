@@ -18,7 +18,7 @@
             <span>{{pullUpTxt}}</span>
           </div>
           <div class="before-trigger" v-else-if="!isPullUpLoad && data.length === 0">
-            <span>未查询到数据</span>
+            <span> </span>
           </div>
           <div class="after-trigger" v-else>
             <inline-loading></inline-loading>数据加载中

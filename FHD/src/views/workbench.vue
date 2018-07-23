@@ -2,7 +2,7 @@
  * @Author: chenxing 
  * @Date: 2018-04-23 17:40:16 
  * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-16 13:38:37
+ * @Last Modified time: 2018-07-23 15:49:20
  */
 <template>
   <div style="height:100%;">
@@ -32,7 +32,6 @@
         <cell title="我要吐槽" is-link @click.native="toTalk">
         </cell>
       </group>
-      <footers :selectedIndex="0" slot="bottom"></footers>
       
     </view-box>
   </div>

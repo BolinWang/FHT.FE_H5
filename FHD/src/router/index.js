@@ -59,6 +59,11 @@ export default new Router({
       component: resolve => require(['@/views/houseList/index'], resolve)
     },
     {
+      path: '/houseChoose',
+      name: 'houseChoose',
+      component: resolve => require(['@/views/houseChoose/index'], resolve)
+    },
+    {
       path: '/searchHouse',
       name: 'searchHouse',
       component: resolve => require(['@/views/searchHouse'], resolve)
