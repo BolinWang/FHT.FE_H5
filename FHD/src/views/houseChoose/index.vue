@@ -245,7 +245,7 @@ export default {
 				houseType: 2,
 				houseDirection: 1,
 				houseFeature: '1,2',
-				rentFee: 2,
+				rentFee: 0,
 				rentFeeName: '1500~2000'
 			}
 		}
@@ -280,6 +280,7 @@ export default {
 			default:
 				return
 		}
+		this.topListParams.statusList[1].selected = true //默认空房
 		this.paramsList.roomAttributeList.forEach(val => {
 			if (this.houseFeatureArr.indexOf(val.value) > -1) {
 				val.selected = true
@@ -519,7 +520,6 @@ export default {
 			if (window.JSLookRoomsInfo) {
 				window.JSLookRoomsInfo.lookRoomsInfoInfoAction(JSON.stringify(this.chooseList))
 			}
-			console.log(this.chooseList)
 		},
 		// 控制mask top
 		popShow() {

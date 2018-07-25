@@ -44,7 +44,7 @@ export function getApi(params = {}) {
 export function houseApi(params = {}) {
 	params.tags = ['fhd']
   return fetch({
-    url: searchUrl + '/room/search',
+    url: searchUrl + '/fhd/room/search',
     method: 'post',
     isSearch: true,
     data: params
