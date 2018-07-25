@@ -11,7 +11,7 @@
 				<span class="select-icon"></span>
 			</div>
 		</div>
-    <view-box ref="viewBox" body-padding-top="86px" >
+    <view-box ref="viewBox" body-padding-top="86px" body-padding-bottom="0px">
       <x-header slot="header" v-if="!isAndriod" class="header_container" @click.native="clickHeader">
 				<div class="search" slot="overwrite-left">
 					<search
@@ -52,7 +52,6 @@
 					<p>暂无数据o(╥﹏╥)o</p>
 				</div>
 			</scroll>
-      <footers :selectedIndex="1" slot="bottom"></footers>
 			<popup v-model="selectOptions[currentIndex].active"
 				position="top" class="select-list"
 				@on-show="popShow"
