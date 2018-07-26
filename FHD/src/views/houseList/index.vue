@@ -724,6 +724,9 @@ export default {
 		top:0;
 		z-index:100;
 	}
+	#scroll_container {
+		height: 450px;
+	}
 	.textAlign {
 		width: 100%;
 		text-align: center;
@@ -767,6 +770,7 @@ export default {
 		height: 40px;
 		padding: 10px 0;
 		font-size: 14px;
+		background: #fff;
 		border-bottom: 1px solid #ddd;
 		.select-item {
 			width: 70px;
