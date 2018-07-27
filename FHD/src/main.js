@@ -16,6 +16,11 @@ const vm = new Vue({
   components: { App }
 })
 
+if (window.JSUserInfo) {
+	const data = window.JSUserInfo.getHouseKeeperUserAction()
+	localStorage.setItem('userData', data)
+}
+
 Vue.use(vm)
 Vue.use(ConfirmPlugin)
 Vue.use(ToastPlugin)
