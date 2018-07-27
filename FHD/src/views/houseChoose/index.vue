@@ -10,7 +10,7 @@
             <div class="nav">
 							<span>{{askParam.rentFeeName}}</span>
 							<span>{{askParam.houseType | houseTypeStr}}</span>
-							<span>{{askParam.roomType}}室</span>
+							<span v-if="askParam.roomType">{{askParam.roomType}}室</span>
 							<span>{{askParam.houseDirection | houseDirectionStr}}</span>
 							<span v-for="(item, index) in houseFeatureArr" :key="index">
 								{{item | houseFeatureStr}}
@@ -249,6 +249,9 @@ export default {
 				rentFeeName: '1500~2000'
 			}
 		}
+		this.paramsListClone = deepClone(this.paramsList)
+		this.topListParamsClone = deepClone(this.topListParams)
+
 		// 客源带过来的搜索条件
 		this.houseFeatureArr = this.askParam.houseFeature.split(',')
 		if (this.houseFeatureArr[0] === '') {
@@ -496,7 +499,7 @@ export default {
 						resolve(res)
           } else {
 						reject(res)
-					} 
+					}
 				}).catch(rej => {
 					reject(rej)
 				})
@@ -525,7 +528,7 @@ export default {
 		popShow() {
 			const top = document.getElementById('scroll_container').offsetTop + 'px'
 			document.querySelector('.select-list').style.top = top
-			// addClass(document.querySelector('.vux-popup-mask'),'popMask')
+			addClass(document.querySelector('.vux-popup-mask'),'popMask')
 		},
 		popHide() {
 			removeClass(document.querySelector('.vux-popup-mask'),'popMask')
