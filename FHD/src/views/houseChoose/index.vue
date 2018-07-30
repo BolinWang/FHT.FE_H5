@@ -245,7 +245,7 @@ export default {
 				houseType: 1,
 				houseDirection: 1,
 				houseFeature: '',
-				rentFee: 0,
+				rentFee: 2,
 				rentFeeName: '1500~2000'
 			}
 		}
