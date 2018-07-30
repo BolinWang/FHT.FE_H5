@@ -106,13 +106,13 @@
 						<group title="月租金租金范围">
 							<flexbox>
 								<flexbox-item>
-									<x-input type="number" :show-clear="false" v-model="searchData.minPrice" placeholder="最小租金" style="padding-right: 0"></x-input>
+									<x-input :show-clear="false" v-model="searchData.minPrice" placeholder="最小租金" style="padding-right: 0"></x-input>
 								</flexbox-item>
 								<flexbox-item style="text-align: center;" :span="1">
 									一
 								</flexbox-item>
 								<flexbox-item>
-									<x-input type="number" :show-clear="false" v-model="searchData.maxPrice" placeholder="最大租金" style="padding-left: 0"></x-input>
+									<x-input :show-clear="false" v-model="searchData.maxPrice" placeholder="最大租金" style="padding-left: 0"></x-input>
 								</flexbox-item>
 							</flexbox>
 						</group>
