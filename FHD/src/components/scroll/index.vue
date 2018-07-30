@@ -330,7 +330,7 @@
         padding-left: 20px;
         border-bottom: 1px solid #e5e5e5;
       }
-        
+
     }
   }
 
@@ -344,14 +344,14 @@
     transition: all;
     .after-trigger {
       margin-top: 10px;
-    }  
+    }
   }
-    
+
   .pullup-wrapper{
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 16px 0;
-  } 
+  }
 </style>

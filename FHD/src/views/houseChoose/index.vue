@@ -33,7 +33,7 @@
 			<div class="textAlign" style="line-height:30px" v-show="showLoading">
 				<inline-loading ></inline-loading> 数据加载中O(∩_∩)O~
 			</div>
-			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" 			@pullingDown="refreshData" id="scroll_container">
+			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData" id="scroll_container">
       	<house-list :data="roomDataList" @getLength="getLength" v-if="roomDataList.length > 0" :cList="chooseList" ref="house"></house-list>
 				<div class="noData_content" v-else>
 					<p>暂无数据o(╥﹏╥)o</p>
@@ -241,10 +241,10 @@ export default {
 			this.askParam = JSON.parse(data)
 		} else {
 			this.askParam = {
-				roomType: 1,
-				houseType: 2,
+				roomType: '',
+				houseType: 1,
 				houseDirection: 1,
-				houseFeature: '1,2',
+				houseFeature: '',
 				rentFee: 0,
 				rentFeeName: '1500~2000'
 			}
@@ -778,7 +778,7 @@ export default {
 		z-index:100;
 	}
 	#scroll_container {
-		height: 436px;
+   height: calc(100vh - 36px)
 	}
 	.textAlign {
 		width: 100%;
