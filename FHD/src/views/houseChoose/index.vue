@@ -646,6 +646,7 @@ export default {
 			 * @param paramsList
 			 */
 			if (this.zoneList.length === 0) { // 未查询到所属板块时 一律拦截
+				this.$vux.toast.text('无板块')
 				return false
 			}
 			if (type === 'more') {
