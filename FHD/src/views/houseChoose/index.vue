@@ -8,7 +8,7 @@
           </flexbox-item>
           <flexbox-item>
             <div class="nav">
-							<span>{{askParam.rentFeeName}}</span>
+							<span v-if="askParam.rentFeeName && askParam.rentFeeName != '不限'">{{askParam.rentFeeName}}</span>
 							<span>{{askParam.houseType | houseTypeStr}}</span>
 							<span v-if="askParam.roomType">{{askParam.roomType}}室</span>
 							<span>{{askParam.houseDirection | houseDirectionStr}}</span>
@@ -245,8 +245,8 @@ export default {
 				houseType: 1,
 				houseDirection: 1,
 				houseFeature: '',
-				rentFee: 2,
-				rentFeeName: '1500~2000'
+				rentFee: 0,
+				rentFeeName: '不限'
 			}
 		}
 		this.paramsListClone = deepClone(this.paramsList)
@@ -646,7 +646,6 @@ export default {
 			 * @param paramsList
 			 */
 			if (this.zoneList.length === 0) { // 未查询到所属板块时 一律拦截
-				this.$vux.toast.text('无板块')
 				return false
 			}
 			if (type === 'more') {
@@ -659,8 +658,6 @@ export default {
 				this.$refs.scroll.forceUpdate()
 				return false
 			}
-
-			this.$vux.toast.text('阿法索')
 
 			let searchData = this.searchData
 			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
