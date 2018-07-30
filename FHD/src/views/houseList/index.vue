@@ -725,7 +725,7 @@ export default {
 		z-index:100;
 	}
 	#scroll_container {
-		height: 470px;
+		height: 490px;
 	}
 	.textAlign {
 		width: 100%;
