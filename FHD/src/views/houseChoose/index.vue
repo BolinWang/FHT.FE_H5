@@ -660,6 +660,8 @@ export default {
 				return false
 			}
 
+			this.$vux.toast.text('阿法索')
+
 			let searchData = this.searchData
 			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
 			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
