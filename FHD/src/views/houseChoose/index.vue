@@ -223,7 +223,7 @@ export default {
 	},
 	filters: {
 		houseTypeStr(val) {
-			const arr = ['整租', '合租', '公寓']
+			const arr = ['合租', '整租', '公寓']
 			return arr[val - 1] || '未知'
 		},
 		houseDirectionStr(val) {
@@ -270,18 +270,8 @@ export default {
 				val.selected = true
 			}
 		})
-		switch(this.askParam.houseType) {
-			case 1:
-				this.paramsList.housingType[1].selected = true
-				break;
-			case 2:
-				this.paramsList.housingType[0].selected = true
-				break;
-			case 3:
-				this.paramsList.housingType[2].selected = true
-				break;
-			default:
-				return
+		if (this.askParam.houseType > 0) {
+			this.paramsList.housingType[this.askParam.houseType - 1].selected = true
 		}
 		this.topListParams.statusList[1].selected = true //默认空房
 		this.paramsList.roomAttributeList.forEach(val => {
