@@ -19,15 +19,17 @@
           </flexbox-item>
         </flexbox>
 			</div>
-			<div class="top-select">
-				<div class="select-item"
-					:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
-					v-for="(item, index) in selectOptions" :key="index"
-					@click="showPopup(index)">
-					<span class="select-text">
-						{{item.text}}
-					</span>
-					<span class="select-icon"></span>
+			<div style="background: #fff;">
+				<div class="top-select">
+					<div class="select-item"
+						:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
+						v-for="(item, index) in selectOptions" :key="index"
+						@click="showPopup(index)">
+						<span class="select-text">
+							{{item.text}}
+						</span>
+						<span class="select-icon"></span>
+					</div>
 				</div>
 			</div>
 			<div class="textAlign" style="line-height:30px" v-show="showLoading">
