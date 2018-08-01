@@ -247,8 +247,10 @@ export default {
 				houseType: 1,
 				houseDirection: 1,
 				houseFeature: '',
-				rentFee: 0,
-				rentFeeName: '不限'
+				rentFee: -1, // -1自定义
+				rentFeeName: '1000~2000',
+				rentMin: 1000,
+				rentMax: 2000
 			}
 		}
 		this.paramsListClone = deepClone(this.paramsList)
@@ -259,7 +261,10 @@ export default {
 		if (this.houseFeatureArr[0] === '') {
 			this.houseFeatureArr = []
 		}
-		const price = priceList[this.askParam.rentFee]
+		const price = this.askParam.rentFee > -1 ? priceList[this.askParam.rentFee] : {
+			minPrice: this.askParam.rentMin,
+			maxPrice: this.askParam.rentMax
+		}
 		this.searchData.minPrice = price.minPrice
 		this.searchData.maxPrice = price.maxPrice
 		this.paramsList.chamberCounts.forEach(val => {
