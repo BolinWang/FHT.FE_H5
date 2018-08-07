@@ -233,7 +233,7 @@ export default {
 			return arr[val - 1] || '未知'
 		},
 		houseFeatureStr(val) {
-			const arr = ['独立厨房', '独卫', '独立阳台', '飘窗']
+			const arr = ['独卫', '独立阳台', '独立厨房', '带飘窗']
 			return arr[val - 1] || '未知'
 		}
 	},
@@ -246,7 +246,7 @@ export default {
 				roomType: '',
 				houseType: 1,
 				houseDirection: 1,
-				houseFeature: '',
+				houseFeature: '1',
 				rentFee: -1, // -1自定义
 				rentFeeName: '1000~2000',
 				rentMin: 1000,
