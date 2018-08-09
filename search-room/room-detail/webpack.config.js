@@ -68,7 +68,7 @@ module.exports = (options = {}) => ({
   },
   devServer: {
     host: 'localhost',
-    port: 8053,
+    port: 3344,
     proxy: {
       '/api': {
         target: 'https://api.mdguanjia.com/myhome/api/',
