@@ -623,9 +623,9 @@ export default {
         const res = result.data
         if(res.success){
           var shareData = {
-            title: '帮助中心',
+            title: '麦邻租房',
             share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
-            share_desc:'麦滴管家帮助中心'
+            share_desc: '麦邻生活租房平台'
           }
           var response = res.dataObject;
           wx.config({
