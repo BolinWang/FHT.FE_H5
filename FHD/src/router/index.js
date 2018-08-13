@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: resolve => require(['@/views/workbench'], resolve)
+      component: resolve => require(['@/views/houseList/index'], resolve)
     },
     {
       path: '/sourceList',

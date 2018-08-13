@@ -1,8 +1,8 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 19:58:54
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-08-13 09:48:37
  */
 
 <template>
@@ -15,8 +15,8 @@
 					</div>
 					<div class="houseDetail">
 						<div class="detailImg" :class="{hasImg: item.roomImageUrl, noImg: !item.roomImageUrl}">
+							<span class="isVrPic" v-if="item.isVr === 1">VR</span>
               <img :src="item.roomImageUrl" class="houseImg" v-if="item.roomImageUrl">
-							<!-- <x-img :src="item.imageUrl" class="houseImg" container="#scroll_container"></x-img> -->
 						</div>
 						<div class="detailRight flex">
 							<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -177,7 +177,7 @@ export default {
       left: 6px;
       padding: 0 5px;
       background-color: rgba(242, 242, 242, 1);
-      
+
     }
     .houseDetail {
       height: 84px;
@@ -293,7 +293,21 @@ export default {
 	// 在住
 	.zaizhu {
     background: #4680ff !important;
-  }
+	}
+	.isVrPic {
+		position: absolute;
+		top: 3px;
+		right: 3px;
+		color: #4680ff;
+		background: #efefef;
+		width: 30px;
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		border-radius: 5px;
+		opacity: 0.8;
+		font-weight: 700;
+	}
 }
 </style>
 
