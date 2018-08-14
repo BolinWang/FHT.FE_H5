@@ -6,7 +6,11 @@
         <p>当前版本过低</p>
         <p>赶紧升级APP来参与活动吧~</p>
       </article>
-      <button class="default btn_update" @click="updateMethod">立即升级</button>
+      <button class="default btn_update"
+        v-if="getAppParams.clientType !=  1 || getAppParams.lastAppVersion >= 355"
+        @click="updateMethod">
+        立即升级
+      </button>
     </div>
   </div>
 </template>
@@ -15,7 +19,26 @@
 export default {
   name: 'App',
   data () {
-    return {}
+    return {
+      getAppParams: {
+        lastAppVersion: 355
+      }
+    }
+  },
+  created () {
+    if (location.search) {
+      let getSearchParams = {}
+      let searchArr = location.search.slice(1).split('&')
+      for (let i = 0; i < searchArr.length; i++) {
+        if (searchArr[i].split('=')[1]) {
+          getSearchParams[searchArr[i].split('=')[0]] = unescape(searchArr[i].split('=')[1])
+        }
+      }
+      this.getAppParams = {
+        ...getSearchParams,
+        lastAppVersion: getSearchParams.version ? getSearchParams.version.split('.').join('') * 1 : 355
+      }
+    }
   },
   methods: {
     updateMethod () {
