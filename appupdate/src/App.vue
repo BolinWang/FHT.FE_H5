@@ -92,6 +92,8 @@ article p {
   color: #fff;
   font-weight: 700;
   font-size: 32px;
+  background-image: -webkit-linear-gradient(top,#ffb812,#fe8d07);
+  background-image: -moz-linear-gradient(top,#ffb812,#fe8d07);
   background-image: linear-gradient(top,#ffb812,#fe8d07);
   box-shadow: 3px 6px 3px #eee;
   border: 0 none;
