@@ -442,7 +442,7 @@ export default {
         this.apiAddr = searchObj['memorhomeHost'] || 'api';
         this.clientType = searchObj['clientType'] || 'h5';
         this.isIntel = searchObj['isIntel'];
-        this.keyID=searchObj['keyID'];
+        this.keyID=searchObj['key'];
         if(this.type && this.roomId){
           this.getRoomInfo();
         } else {
@@ -731,8 +731,8 @@ export default {
     console.log(this.keyID)
     if (this.keyID) {
 
-      let apiHost = this.memorhomeHost === 'api' ? 'flying-api' : 'test-flying-api'
-      this.sendReq(`https://${apiHost}.mdguanjia.com/api/share/open`, {
+      let apiHost = this.apiAddr === 'api' ? 'flying-api' : 'test-flying-api'
+      this.sendReq(`http://${apiHost}.mdguanjia.com/api/share/open`, {
         "params": {
           "key": this.keyID,
         }
