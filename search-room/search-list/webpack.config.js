@@ -50,7 +50,7 @@ module.exports = (options = {}) => ({
       names: ['vendor', 'manifest']
     }),
     new HtmlWebpackPlugin({
-      title: '麦邻生活',
+      title: '麦邻租房',
       template: resolve(__dirname, 'src/index.html'),
       favicon: resolve(__dirname, 'src/favicon.ico')
     })
@@ -61,7 +61,7 @@ module.exports = (options = {}) => ({
     }
   },
   devServer: {
-    host: '192.168.5.105',
+    host: '0.0.0.0',
     port: 8010,
     proxy: {
       '/api': {

@@ -1,7 +1,7 @@
 {
-  "name": "element-starter",
-  "description": "A Vue.js project",
-  "author": "yi.shyang@ele.me",
+  "name": "fht-search",
+  "description": "FHT rooms search Page",
+  "author": "FHT.FE",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --hot --env.dev",
@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "element-ui": "^2.0.0",
     "jsonp": "^0.2.1",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.2"
