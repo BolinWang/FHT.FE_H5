@@ -53,7 +53,10 @@
             <div class="room-info">
               <div class="room-name">{{item.name}}</div>
               <div class="room-layout">{{item.houseArea}} | {{item.houseType}} | {{item.decorationDegree}}</div>
-              <div class="room-price">{{item.price}}元/月起</div>
+              <div class="room-price">
+                <span style="font-size: 0.426667rem;">￥{{item.price}}</span>
+                <span>/月</span>
+              </div>
               <div class="room-address">
                 <div class="room-tags">
                   <span v-for="(tag, tagIndex) in item.showTagList"
@@ -684,8 +687,7 @@ export default {
           "decorationDegrees": this.decorationList.filter(item => item.isChecked).map(item => item.val),
           "chamberCounts": this.chamberList.filter(item => item.isChecked).map(item => item.range),
           "toiletCounts": this.toiletList.filter(item => item.isChecked).map(item => item.range),
-          "pageNo": this.pageNo,
-          hasVr: true
+          "pageNo": this.pageNo
       }).then((res) => {
         this.isLoading = false;
         if(res.data.code == 0){
@@ -1283,7 +1285,6 @@ body {
   .room-price {
     color: rgb(238, 117, 0);
     margin-bottom: 0.426667rem;
-    font-size: 0.426667rem;
   }
   .room-address {
     display: flex;

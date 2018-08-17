@@ -5,9 +5,9 @@
         <img :src="pic.src" alt="">
       </div>
       <div class="room-info">
-        <div class="room-name">{{roomName}}</div> 
-        <div class="room-layout">{{roomArea}}m²起 | {{houseType}} | {{decorationDegree}}</div> 
-        <div class="room-price">{{price}}元/月起</div> 
+        <div class="room-name">{{roomName}}</div>
+        <div class="room-layout">{{roomArea}}m²起 | {{houseType}} | {{decorationDegree}}</div>
+        <div class="room-price">{{price}}元/月起</div>
         <div class="room-address">{{address}}</div>
       </div>
 		</div>
@@ -41,8 +41,8 @@
       class="mj-picker"
       v-model="showPicker"
       position="bottom">
-      <mt-picker 
-        :slots="slots" 
+      <mt-picker
+        :slots="slots"
         @change="onValuesChange"
         :visibleItemCount="3"
         :showToolbar="true"
@@ -62,8 +62,8 @@
       <div class="checkCode-container">
         <div class="head">验证码将发送至</div>
         <div class="active phone">{{phone}}</div>
-        <mt-field 
-          v-model="captcha" 
+        <mt-field
+          v-model="captcha"
           placeholder="请输入验证码"
           :attr="{ maxlength: 6 }">
           <div @click="getCheckCode" :class="[sendCodeCount == 0 ? 'active' : '']">{{codeText}}</div>
@@ -84,7 +84,8 @@
           <div class="time-content">
             <div
               class="btn-box"
-              v-for="item in todayTime">
+              v-for="(item, index) in todayTime"
+              :key="index">
               <span class="btn btn-default" v-if="item.canChoose" @click="chooseTime(item)">{{item.time}}</span>
               <span class="btn btn-disabled" v-else>{{item.time}}</span>
             </div>
@@ -95,7 +96,8 @@
           <div class="time-content" :style="{marginBottom: 0}">
             <div
               class="btn-box"
-              v-for="item in nextDayTime">
+              v-for="(item, index) in nextDayTime"
+              :key="index">
               <span class="btn btn-default" v-if="item.canChoose" @click="chooseTime(item)">{{item.time}}</span>
               <span class="btn btn-disabled" v-else>{{item.time}}</span>
             </div>
@@ -156,7 +158,7 @@
         <p>服务终止后，“麦邻生活”平台没有义务为用户保留原帐号中或与之相关的信息，或转发未曾阅读或发送的信息给用户或第三方。无论因任何原因以任何方式终止服务，“麦邻生活”平台仍有权：（1）保存或不保存该用户的注册数据及以前的交易行为记录；（2）对于用户在服务终止前实施的违法或违约行为，“麦邻生活”平台保留追索。此外，您同意，“麦邻生活”平台不会就终止您接入“服务”而对您或任何第三者承担任何责任。</p>
         <h4 style="font-weight:700;">8. 服务的提供</h4>
         <p>本公司会尽一切努力为您提供最优质的服务，本公司保留在无须发出书面通知，仅在“麦邻生活”平台公示的情况下，暂时或永久地更改或停止部分或全部“服务”的权利。对于“麦邻生活”平台行使修改或中断服务的权利而造成损失的，”麦邻生活”平台不需对用户或任何第三方负责。</p>
-        <p>本公司有权修改或变更所提供的收费服务、收费标准、收费方式、服</p>务费及服务条款。“麦邻生活”平台在提供服务时，可能现在或日后对部分服务的用户开始收取一定的费用，如用户拒绝支付该等费用，则不能在收费开始后继续使用相关的服务。但“麦邻生活”平台将尽最大努力通过电邮或其他有效方式通知用户有关的修改或变更。</p>
+        <p>本公司有权修改或变更所提供的收费服务、收费标准、收费方式、服务费及服务条款。“麦邻生活”平台在提供服务时，可能现在或日后对部分服务的用户开始收取一定的费用，如用户拒绝支付该等费用，则不能在收费开始后继续使用相关的服务。但“麦邻生活”平台将尽最大努力通过电邮或其他有效方式通知用户有关的修改或变更。</p>
         <p>本公司会定期或不定期的对提供网络服务的平台和相关的设备进行检修或者维护。本公司不能随时预见到任何技术上的问题或其他困难。该等困难可能会导致数据损失或其他服务中断。为此，您明确理解和同意，您使用“服务”的风险由您自行承担。</p>
         <h4 style="font-weight:700;">9. 责任限制</h4>
         <p>您明确理解和同意，本公司不对因下述任一情况而导致的任何损害赔偿承担责任，包括但不限于利润、商誉、使用、数据等方面的损失或其它无形损失的损害赔偿 (无论本公司是否已被告知该等损害赔偿的可能性)：</p>
@@ -251,8 +253,8 @@ export default {
 
         if(values[1] && values[2]) {
           let time = picker.getValues();
-          this.pickerVal = time[0].year + '/' + time[0].month + '/' + time[0].date + 
-                              '(' + time[0].day + ') ' + time[1].hour + ':' + 
+          this.pickerVal = time[0].year + '/' + time[0].month + '/' + time[0].date +
+                              '(' + time[0].day + ') ' + time[1].hour + ':' +
                               time[2].minute;
         }
       }
@@ -407,7 +409,7 @@ export default {
       this.sendReq('https://' + this.apiAddr + '.mdguanjia.com/myhome/api/customer', {
         "v": "2.3",
         "method": "tenantBooking",
-        "params": { 
+        "params": {
           "devId": "5555998cccf2492db015c442f087f00a",
           "jpushId": "",
           "housingType": this.type,
@@ -426,7 +428,7 @@ export default {
             title: '预约成功',
             text: '已预约 <span style="color:#4680ff">' + this.selectedTime + '</span> 看房',
             buttons: [
-              { 
+              {
                 title: '知道了',
                 handler: () => { this.$modal.hide('dialog') }
               }
@@ -437,7 +439,7 @@ export default {
             title: '预约失败',
             text: res.data.message || '出了点小问题，请重试',
             buttons: [
-              { 
+              {
                 title: '知道了',
                 handler: () => { this.$modal.hide('dialog') }
               }
@@ -459,7 +461,7 @@ export default {
       this.sendReq('https://' + this.apiAddr + '.mdguanjia.com/myhome/api/estate', {
         "v": "3.1.0",
         "method": "intelligentTenantTime",
-        "params": { 
+        "params": {
           "devId": "5555998cccf2492db015c442f087f00a",
           "estateRoomTypeId": this.roomId
         }

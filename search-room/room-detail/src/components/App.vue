@@ -9,8 +9,10 @@
       <img v-if="picList.length == 1" :src="picList[0].src" alt="" @click="showPhoto(0)">
       <swiper :options="swiperOption" ref="picList" v-else>
         <swiper-slide
-          v-for="(item, index) in picList">
-          <img :src="item.src" alt="" @click="showPhoto(index)">
+          v-for="(item, index) in picList"
+          :key="index">
+          <span class="previewVr" v-if="item.vrUrl">VR</span>
+          <img :src="item.src" alt="" @click="showPhoto(index, item)">
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
@@ -51,9 +53,10 @@
           房间设施
         </div>
         <div class="facility-list">
-          <div 
+          <div
             class="facility-item"
-            v-for="(item, index) in showDeviceList">
+            v-for="(item, index) in showDeviceList"
+            :key="index">
             <div v-if="item.type == -1" @click="$modal.show('device-modal')">
               <img :src="require(`../assets/images/estate-service/more.png`)" alt="">
               <p>{{item.name}}</p>
@@ -72,9 +75,10 @@
             <span class="side-btn" v-if="publicDeviceList.length" @click="nowDevice=1">公共区域<i class="icon"></i></span>
           </div>
           <div class="facility-list">
-            <div 
+            <div
               class="facility-item"
-              v-for="(item, index) in showDeviceList">
+              v-for="(item, index) in showDeviceList"
+              :key="index">
               <div v-if="item.type == -1" @click="$modal.show('device-modal')">
                 <img :src="require(`../assets/images/device-${item.type}.png`)" alt="">
                 <p>{{item.name}}</p>
@@ -92,9 +96,10 @@
             <span class="side-btn" v-if="deviceList.length" @click="nowDevice=0">房间设施<i class="icon"></i></span>
           </div>
           <div class="facility-list">
-            <div 
+            <div
               class="facility-item"
-              v-for="(item, index) in showPublicDeviceList">
+              v-for="(item, index) in showPublicDeviceList"
+              :key="index">
               <div v-if="item.type == -1" @click="$modal.show('device-modal')">
                 <img :src="require(`../assets/images/device-${item.type}.png`)" alt="">
                 <p>{{item.name}}</p>
@@ -114,9 +119,10 @@
           生活服务
         </div>
         <div class="facility-list">
-          <div 
+          <div
             class="facility-item"
-            v-for="(item, index) in showServiceList">
+            v-for="(item, index) in showServiceList"
+            :key="index">
             <div v-if="item.type == -1" @click="$modal.show('service-modal')">
               <img :src="require(`../assets/images/estate-service/more.png`)" alt="">
               <p>{{item.name}}</p>
@@ -145,9 +151,10 @@
     <div class="room-intro" v-if="similarRoomList.length">
       <div class="room-intro-title">为您推荐</div>
       <ul class="similar-room-list">
-        <li 
+        <li
         class="similar-room-item"
-        v-for="item in similarRoomList">
+        v-for="(item, index) in similarRoomList"
+        :key="index">
           <a :href="`./?type=${type}&roomId=${item.id}`">
             <img :src="item.pic" alt="">
             <p>{{item.price}}元/月起</p>
@@ -164,8 +171,8 @@
       <span class="btn btn-primary" @click="$modal.show('booking-modal')">{{isIntel =='bolin' ? '自助看房' : '预约看房'}}</span>
       <span class="btn btn-info" @click="onlineOrder" v-show="clientType=='h5'">在线预订</span>
     </div>
-    <modal 
-      class="mj-modal payway-modal" 
+    <modal
+      class="mj-modal payway-modal device-modal"
       name="payway-modal"
       width="100%"
       height="100%">
@@ -175,9 +182,10 @@
       </div>
       <div class="modal-container">
         <ul>
-          <li 
+          <li
           class="modal-list-item payway-item"
-          v-for="item in payway">
+          v-for="(item, index) in payway"
+          :key="index">
             <div class="f-row">
               <span>{{item.name}}</span>
               <span>¥ {{item.price}} /月起</span>
@@ -189,8 +197,8 @@
         </ul>
       </div>
     </modal>
-    <modal 
-      class="mj-modal device-modal" 
+    <modal
+      class="mj-modal device-modal"
       name="device-modal"
       width="100%"
       height="100%">
@@ -200,9 +208,10 @@
       </div>
       <div class="modal-container">
         <ul>
-          <li 
-          class="modal-list-item"
-          v-for="item in deviceList"
+          <li
+            class="modal-list-item"
+            v-for="(item, index) in deviceList"
+            :key="index"
           >
             <div class="device-row">
               <span>{{item.name}}</span>
@@ -215,8 +224,8 @@
         </ul>
       </div>
     </modal>
-    <modal 
-      class="mj-modal device-modal" 
+    <modal
+      class="mj-modal device-modal"
       name="service-modal"
       width="100%"
       height="100%">
@@ -226,9 +235,10 @@
       </div>
       <div class="modal-container">
         <ul>
-          <li 
-          class="modal-list-item"
-          v-for="item in serviceList"
+          <li
+            class="modal-list-item"
+            v-for="(item, index) in serviceList"
+            :key="index"
           >
             <div class="device-row">
               <span>{{item.name}}</span>
@@ -242,12 +252,12 @@
     </modal>
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
     <div ref="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-        <!-- Background of PhotoSwipe. 
+        <!-- Background of PhotoSwipe.
              It's a separate element as animating opacity is faster than rgba(). -->
         <div class="pswp__bg"></div>
         <!-- Slides wrapper with overflow:hidden. -->
         <div class="pswp__scroll-wrap">
-            <!-- Container that holds slides. 
+            <!-- Container that holds slides.
                 PhotoSwipe keeps only 3 of them in the DOM to save memory.
                 Don't modify these 3 pswp__item elements, data is added later on. -->
             <div class="pswp__container">
@@ -269,7 +279,7 @@
                     </div>
                 </div>
                 <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div> 
+                    <div class="pswp__share-tooltip"></div>
                 </div>
                 <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
                 </button>
@@ -283,7 +293,7 @@
         </div>
     </div>
     <modal
-      class="mj-modal booking-modal" 
+      class="mj-modal booking-modal"
       name="booking-modal"
       width="100%"
       height="100%"
@@ -293,11 +303,11 @@
         <span class="back-btn" @click="$modal.hide('booking-modal')"></span>
         预约看房
       </div>
-      <booking-room 
+      <booking-room
         :type="type"
         :roomId="roomId"
-        :roomName="name" 
-        :pic="picList[0]" 
+        :roomName="name"
+        :pic="picList[0]"
         :price="price"
         :address="address"
         :houseType="houseType"
@@ -316,33 +326,10 @@
 import BookingRoom from './BookingRoom.vue'
 import { Toast } from 'mint-ui'
 import axios from 'axios'
+import defaultPic from '~/assets/images/room-default.jpg'
 
 const DecorationList = ['', '毛坯', '简装', '精装修', '豪华装'];
 const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '西南', '东北', '西北'];
-
-/* 检测IOS9+ */
-function isIOS9() {
-    //获取固件版本
-    var getOsv = function () {
-        var reg = /OS ((\d+_?){2,3})\s/;
-        if (navigator.userAgent.match(/iPad/i) || navigator.platform.match(/iPad/i) || navigator.userAgent.match(/iP(hone|od)/i) || navigator.platform.match(/iP(hone|od)/i)) {
-            var osv = reg.exec(navigator.userAgent);
-            if (osv.length > 0) {
-                return osv[0].replace('OS', '').replace('os', '').replace(/\s+/g, '').replace(/_/g, '.');
-            }
-        }
-        return '';
-    };
-    var osv = getOsv();
-    var osvArr = osv.split('.');
-    //初始化显示ios9引导
-    if (osvArr && osvArr.length > 0) {
-        if (parseInt(osvArr[0]) >= 9) {
-            return true
-        }
-    }
-    return false
-}
 
 export default {
   data() {
@@ -544,6 +531,20 @@ export default {
                 h: 560
               });
             });
+            if (this.picList.length === 0) {
+              this.picList.push({
+                src: defaultPic,
+                w: 750,
+                h: 560
+              });
+            } else if (o.vrUrl) {
+              this.picList.unshift({
+                src: this.picList[0].src,
+                w: 750,
+                h: 560,
+                vrUrl: o.vrUrl
+              });
+            }
             o.rentTypes.forEach((item, index) => {
               this.payway.push({
                 name: item.name,
@@ -587,7 +588,11 @@ export default {
         }).catch((err) => { console.log(err) });
       }
     },
-    showPhoto(i) {
+    showPhoto(i, item) {
+      if (item && item.vrUrl) {
+        location.href = item.vrUrl
+        return false
+      }
       var options = {
         index: i,
         loop: false
@@ -595,11 +600,7 @@ export default {
       this.openPhotoSwipe(this.$refs.pswp, this.picList, options);
     },
     onlineOrder() {
-      if(isIOS9()){
-        window.location.href = 'https://actlink.mdguanjia.com/appdownload/index.html?roomId='+this.roomId+'&housingType=' + this.type + '&clientType=' + this.clientType;
-      }else{
-        window.location.href = 'https://www.mdguanjia.com/appdownload/index.html?roomId='+this.roomId+'&housingType=' + this.type + '&clientType=' + this.clientType;
-      }
+      window.location.href = 'https://www.mdguanjia.com/appdownload/index.html?roomId='+this.roomId+'&housingType=' + this.type + '&clientType=' + this.clientType;
     },
     goBack() {
       history.go(-1);
@@ -793,7 +794,7 @@ html {
   line-height: 1;
 }
 body {
-  position: relative; 
+  position: relative;
   margin: 0;
   padding: 0;
   padding-bottom: 1.28rem;
@@ -803,7 +804,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 .fixed {
-  position: fixed; 
+  position: fixed;
   width: 100%;
 }
 .mj-head {
@@ -859,7 +860,6 @@ body {
   }
   .side-btn {
     font-weight: normal;
-    display: inline-block;
     float: right;
     margin-right: 0.4rem;
     font-size: 0.32rem;
@@ -1103,5 +1103,13 @@ body {
     left: 0;
     width: 100%;
   }
+}
+.previewVr {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 50;
+  color: #fff;
+  font-size: 0.426667rem;
 }
 </style>
