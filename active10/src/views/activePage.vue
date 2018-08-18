@@ -72,7 +72,6 @@ export default {
           JSON.stringify(initPageInfo)
         )
       }
-      this.$toast('fail', 'asfasf')
     }
   }
 }

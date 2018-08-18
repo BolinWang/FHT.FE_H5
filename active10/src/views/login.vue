@@ -17,6 +17,9 @@
         <van-button v-else slot="button" size="small" disabled>{{timerNum}}s后重新获取</van-button>
       </van-field>
     </van-cell-group>
+    <van-cell>
+      <van-button type="primary" @click="login" style="width: 100%;">登录</van-button>
+    </van-cell>
   </div>
 </template>
 
@@ -53,7 +56,11 @@ export default {
     }
   },
   created () {
-
+    // TODO development模拟登录态
+    // let testLogin = 'Jqes+f0ERc9NPU0h/LeqchUsEcEtwzNz2cvjbNeViB0KBu++5d…wBqHjALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8='
+    // setUserData({
+    //   sessionId: testLogin
+    // })
   },
   mounted () {
     this.$nextTick(function () {
@@ -66,6 +73,7 @@ export default {
         mobile: this.mobile,
         vcode: this.vcode
       }).then(response => {
+        console.log(response)
         setUserData({
           sessionId: response.sessionId
         })

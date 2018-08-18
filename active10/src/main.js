@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:44:52
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-17 17:44:27
+ * @Last Modified time: 2018-08-18 15:04:19
  */
 
 import Vue from 'vue'
@@ -14,6 +14,9 @@ import FastClick from 'fastclick'
 import { Toast } from 'vant'
 import { setUserData, getUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
+// development引用vconsole
+// eslint-disable-next-line
+process.env.NODE_ENV === 'development' && require('@/utils/vconsole').default
 
 FastClick.attach(document.body)
 Vue.config.productionTip = false
