@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:44:52
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-22 18:04:48
+ * @Last Modified time: 2018-08-23 15:34:46
  */
 
 import Vue from 'vue'
@@ -30,6 +30,7 @@ Vue.use(vm)
 /**
  * 挂载
  */
+Vue.prototype.$window = window
 Vue.prototype.$toast = (method, text = '...') => {
   if (method) {
     try {

@@ -47,7 +47,7 @@
               </article>
             </div>
           </div>
-          <div class="flex flex_center">
+          <div class="flex flex_center" v-else>
             <div class="ticket_wrapper">
               <div class="flex_item tips">恭喜您，领券成功！</div>
               <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
@@ -63,7 +63,9 @@
           </div>
           <!-- 广告位 当前是活动盒子 -->
           <section class="advert_box flex flex_center">
-            <img src="../assets/advert.jpg">
+            <div data-emmaBanner="a339334559" style="position: absolute;">
+              <img src="../assets/advert.jpg">
+            </div>
           </section>
           <!-- 活动规则 -->
           <section class="active_rules flex flex_center">
@@ -174,6 +176,21 @@ export default {
     let scene = document.getElementById('scene')
     let parallax = new Parallax(scene)
     console.log(parallax)
+    console.log(window.emma)
+    // 活动盒子
+    window.emma.config({
+      key: 'eacb7d079f7bc7104d1346e400291155',
+      debug: false,
+      test: false,
+      eventList: [ 'iconSmall', 'iconBig', 'banner' ]
+    })
+    window.emma.push({
+      'type': 'banner',
+      'event': 'bolin',
+      'position_key': 'a339334559',
+      'username': 'bolin',
+      'mobile': '15158864844'
+    })
   },
   methods: {
     /**
@@ -218,15 +235,22 @@ export default {
      * 登录
      */
     login () {
+      if (!this.mobile) {
+        this.$toast('fail', '请输入手机号')
+        return false
+      }
+      if (!this.vcode) {
+        this.$toast('fail', '请输入验证码')
+        return false
+      }
       loginApi.login({
         mobile: this.mobile,
         vcode: this.vcode
       }).then(response => {
-        console.log(response)
         setUserData({
           sessionId: response.sessionId
         })
-        this.$router.push('/activePage')
+        this.isLogin = true
       }).catch()
     },
     /**
@@ -359,14 +383,14 @@ export default {
           }
         }
         .btn_login {
+          /* autoprefixer: off */
+          background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
+          /* autoprefixer: on */
           height: 100px;
           font-size: 36px;
           border: 0 none;
           border-radius: 15px;
           color: #fff;
-          background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
-          background-image: -moz-linear-gradient(top, #ffc835, #fdab29);
-          background-image: linear-gradient(top, #ffc835, #fdab29);
         }
         .help_tips {
           font-size: 24px;
@@ -414,6 +438,7 @@ export default {
     }
     .advert_box {
       margin: 60px 0;
+      height: 246px;
       img {
         width: 620px;
         height: 246px;
