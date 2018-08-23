@@ -51,10 +51,13 @@
             <div class="ticket_wrapper">
               <div class="flex_item tips">恭喜您，领券成功！</div>
               <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
-              <div class="flex_item openticket">拆开查看 >></div>
+              <div class="flex_item openticket" @click="openticket">拆开查看 >></div>
               <section class="flex_item useTips">
                 <div>抵扣券已发送至账户：18883****38</div>
-                <div>下载麦邻租房APP -> 我家 -> 我的优惠券</div>
+                <div>
+                  <span v-if="!userInfo.isAPP">下载麦邻租房APP -> </span>
+                  我家 -> 我的优惠券
+                </div>
               </section>
             </div>
           </div>
@@ -83,6 +86,8 @@
         <section class="agreeTxt" v-html="agreeTxt"></section>
       </article>
     </van-popup>
+    <van-popup v-model="showTickets" class="popup_tickets" overlay-class="overlay_ticket">
+    </van-popup>
   </section>
 </template>
 
@@ -106,7 +111,7 @@ const initPageInfo = {
 }
 
 export default {
-  name: 'login',
+  name: 'activePage',
   components: {
     [Field.name]: Field,
     [Cell.name]: Cell,
@@ -121,8 +126,10 @@ export default {
       disabled: false,
       timerNum: 59,
       showUserAgree: false,
+      showTickets: false,
       agreeTxt: userAgreeMent,
       isLogin: false,
+      userInfo: {},
       rules_detail: [{
         title: '活动规则',
         list: [
@@ -161,6 +168,7 @@ export default {
     this.$nextTick(function () {
       getWxShareInfo(initPageInfo.shareData)
     })
+    // 重力感应实例化
     let scene = document.getElementById('scene')
     let parallax = new Parallax(scene)
     console.log(parallax)
@@ -200,8 +208,13 @@ export default {
           }
         }
       }
+      getUserDataFromLoacal.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
+      this.userInfo = getUserDataFromLoacal
       this.isLogin = getUserDataFromLoacal.sessionId
     },
+    /**
+     * 登录
+     */
     login () {
       loginApi.login({
         mobile: this.mobile,
@@ -214,6 +227,9 @@ export default {
         this.$router.push('/activePage')
       }).catch()
     },
+    /**
+     * 获取验证码
+     */
     getVcode () {
       if (!this.mobile) {
         this.$toast('fail', '请输入手机号')
@@ -238,6 +254,15 @@ export default {
         this.timerNum = 59
       })
     },
+    /**
+     * 查看优惠券
+     */
+    openticket () {
+      this.showTickets = true
+    },
+    /**
+     * 用户协议
+     */
     userAgree () {
       this.showUserAgree = true
     }
@@ -423,6 +448,15 @@ export default {
       }
     }
   }
+}
+.popup_tickets {
+  width: 624px;
+  height: 847px;
+  background: url('../assets/image_ticket__all.png') no-repeat center center;
+  background-size: cover;
+}
+.overlay_ticket {
+  background-color: rgba(0, 0, 0, 0.6)
 }
 .flex {
   display: flex;
