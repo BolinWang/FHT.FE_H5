@@ -16,6 +16,7 @@ body,
   width: 750px;
   overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 *,

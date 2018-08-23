@@ -1,13 +1,99 @@
 <template>
-  <div class="page_container">
-    活动
-  </div>
+  <section class="page_container">
+    <section>
+       <!-- 重力感应区域 -->
+      <div class="vr_container" id="scene">
+        <div data-depth="0.6">
+          <img
+            class="img_bg"
+            src="../assets/bg.jpg" alt="" />
+        </div>
+        <div data-depth="0.6">
+          <div class="active_animate">
+            <div class="animate_point">
+              <img src="../assets/image_house.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+       <!-- 活动信息 -->
+      <section class="active_info">
+        <div class="active_title"></div>
+        <div class="active_date">
+          <div class="flex flex_center">
+            <p class="content">活动时间：2018年9月4日-2018年10月4日</p>
+          </div>
+        </div>
+      </section>
+      <section class="bg_grid">
+        <section class="active_container">
+          <!-- 登录 -->
+          <div class="flex flex_center" v-if="!isLogin">
+            <div class="container">
+              <van-cell-group class="item_group" :border="false">
+                <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
+              </van-cell-group>
+              <van-cell-group class="item_group" :border="false">
+                <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number">
+                  <label slot="button" class="label_code" @click="getVcode" v-if="!disabled">获取验证码</label>
+                  <label slot="button" class="label_code" v-else>{{timerNum}}s后重发</label>
+                </van-field>
+              </van-cell-group>
+              <van-button size="large" class="btn_login" @click="login">立即领取</van-button>
+              <article>
+                <p class="help_tips">温馨提示：未注册麦邻租房账号的手机号，登录时将自动注册，且代表您已同意
+                  <span class="userAgree" @click="userAgree">《用户服务协议》</span>
+                </p>
+              </article>
+            </div>
+          </div>
+          <div class="flex flex_center">
+            <div class="ticket_wrapper">
+              <div class="flex_item tips">恭喜您，领券成功！</div>
+              <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
+              <div class="flex_item openticket">拆开查看 >></div>
+              <section class="flex_item useTips">
+                <div>抵扣券已发送至账户：18883****38</div>
+                <div>下载麦邻租房APP -> 我家 -> 我的优惠券</div>
+              </section>
+            </div>
+          </div>
+          <!-- 广告位 当前是活动盒子 -->
+          <section class="advert_box flex flex_center">
+            <img src="../assets/advert.jpg">
+          </section>
+          <!-- 活动规则 -->
+          <section class="active_rules flex flex_center">
+            <article>
+              <section class="rules_container" v-for="item in rules_detail" :key="item.title">
+                <div class="rules_title" :class="{title__ticket: item.isTicket}">
+                  <h4>{{item.title}}</h4>
+                </div>
+                <p class="rules_item" v-for="(rule, index) in item.list" :key="index">
+                  {{index * 1 + 1}}.{{rule}}
+                </p>
+              </section>
+            </article>
+          </section>
+        </section>
+      </section>
+    </section>
+    <van-popup v-model="showUserAgree" position="right">
+      <article>
+        <section class="agreeTxt" v-html="agreeTxt"></section>
+      </article>
+    </van-popup>
+  </section>
 </template>
 
 <script>
 import { getWxShareInfo } from '@/utils/wxshare'
-import { getUserData } from '@/utils/auth'
+import { setUserData, getUserData } from '@/utils/auth'
+import { Field, Cell, CellGroup, Button, Popup } from 'vant'
+import { loginApi } from '@/api/login'
 import Bridge from '@/utils/bridge'
+import Parallax from '@/utils/orienterParallax'
+import userAgreeMent from '@/utils/mlAgree'
 
 const initPageInfo = {
   title: '麦邻租房',
@@ -20,43 +106,64 @@ const initPageInfo = {
 }
 
 export default {
-  name: 'activePage',
+  name: 'login',
   components: {
-
+    [Field.name]: Field,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
+    [Button.name]: Button,
+    [Popup.name]: Popup
   },
   data () {
     return {
-
+      vcode: '',
+      mobile: '',
+      disabled: false,
+      timerNum: 59,
+      showUserAgree: false,
+      agreeTxt: userAgreeMent,
+      isLogin: false,
+      rules_detail: [{
+        title: '活动规则',
+        list: [
+          '本次活动仅限麦邻租房新注册用户领取1次，每个用户仅限使用其中1张；',
+          '本次租房抵扣券仅限用于抵扣非金融房源在线签约订单月租金；',
+          '每人每个房间订单仅限使用1张抵扣券；',
+          '租房抵扣券不可叠加使用，不得与其他优惠同时使用，不可兑现以及用于租房其他费用，消费抵扣后不予退还；',
+          '本次活动抵扣券使用限制城市（上海、杭州），领取不限制；',
+          '更多租房优惠活动咨询客服:400-882-7099；',
+          '本次活动最终解释权归麦邻租房所有；'
+        ]
+      }, {
+        title: '优惠券使用说明',
+        isTicket: true,
+        list: [
+          '仅限活动期间领取，自领取日起90天内有效，逾期作废；',
+          '满1000元-2999元月租金可抵扣50元；',
+          '满3000元-4999元月租金可抵扣150元；',
+          '满5000元-6999元月租金可抵扣300元；',
+          '满7000元-9999元月租金可抵扣500元；',
+          '满10000元以上月租金可抵扣1000元；'
+        ]
+      }]
     }
   },
   created () {
-    let userAgent = navigator.userAgent
-    let getUserDataFromLoacal = getUserData() || {}
-    // APP内
-    if (getUserDataFromLoacal.v && getUserDataFromLoacal.platform) {
-      // 未登录
-      if (!getUserDataFromLoacal.sessionId) {
-        if (userAgent.includes('fht-android')) {
-          // eslint-disable-next-line
-          MLActivityLogin.callAppLogin()
-        } else {
-          Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
-            window.location.href = './index.html'
-          })
-        }
-      }
-    // APP外
-    } else {
-      if (!getUserDataFromLoacal.sessionId) {
-        this.$router.push('/login')
-      }
-    }
+    // TODO development模拟登录态
+    let testLogin = 'Jqes+f0ERc9NPU0h/LeqchUsEcEtwzNz2cvjbNeViB0KBu++5d…wBqHjALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8='
+    setUserData({
+      sessionId: testLogin
+    })
+    this.initActive()
     this.initApp()
   },
   mounted () {
     this.$nextTick(function () {
       getWxShareInfo(initPageInfo.shareData)
     })
+    let scene = document.getElementById('scene')
+    let parallax = new Parallax(scene)
+    console.log(parallax)
   },
   methods: {
     /**
@@ -72,11 +179,259 @@ export default {
           JSON.stringify(initPageInfo)
         )
       }
+    },
+    /**
+     * 判断登录状态
+     */
+    initActive () {
+      let userAgent = navigator.userAgent
+      let getUserDataFromLoacal = getUserData() || {}
+      // APP内
+      if (getUserDataFromLoacal.v && getUserDataFromLoacal.platform) {
+        // 未登录
+        if (!getUserDataFromLoacal.sessionId) {
+          if (userAgent.includes('fht-android')) {
+            // eslint-disable-next-line
+            MLActivityLogin.callAppLogin()
+          } else {
+            Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
+              window.location.href = './index.html'
+            })
+          }
+        }
+      }
+      this.isLogin = getUserDataFromLoacal.sessionId
+    },
+    login () {
+      loginApi.login({
+        mobile: this.mobile,
+        vcode: this.vcode
+      }).then(response => {
+        console.log(response)
+        setUserData({
+          sessionId: response.sessionId
+        })
+        this.$router.push('/activePage')
+      }).catch()
+    },
+    getVcode () {
+      if (!this.mobile) {
+        this.$toast('fail', '请输入手机号')
+        return false
+      }
+      loginApi.getVcode({
+        mobile: this.mobile
+      }).then(response => {
+        this.$toast('success', '验证码已发送')
+        this.disabled = true
+        let timetimer = setInterval(() => {
+          this.timerNum--
+          if (this.timerNum <= 0) {
+            this.disabled = false
+            this.timerNum = 59
+            clearInterval(timetimer)
+          }
+        }, 1000)
+      }).catch((error) => {
+        console.log(error)
+        this.disabled = false
+        this.timerNum = 59
+      })
+    },
+    userAgree () {
+      this.showUserAgree = true
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+.page_container {
+  height: 100%;
+  background-color: #0e1125;
+  position: relative;
+  .vr_container {
+    flex: 1;
+    position: absolute;
+    width: 1200px;
+    height: 1400px;
+    overflow: hidden;
+    background-color: #0a0c21;
+    .img_bg {
+      width: 1200px;
+      height: 1400px;
+      position: absolute;
+      left: -225px;
+      top: -190px;
+      z-index: 99;
+    }
+  }
+  .active_animate {
+    position: relative;
+    left: 180px;
+    top: 560px;
+    .animate_point {
+      img {
+        width: 299px;
+        height: 135px;
+      }
+    }
+  }
+  .active_info {
+    height: 1210px;
+    .active_title {
+      background: url('../assets/title.png') no-repeat center center;
+      background-size: cover;
+      width: 750px;
+      height: 540px;
+      position: relative;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
+    .active_date {
+      position: relative;
+      z-index: 1000;
+      top: -145px;
+      width: 100%;
+      .content {
+        width: 570px;
+        border-radius: 29px;
+        background: rgba(0, 0, 0, 0.5);
+        font-size: 26px;
+        color: #fff;
+        line-height: 58px;
+        text-align: center;
+      }
+    }
+  }
+  .bg_grid {
+    background: url('../assets/bg_grid.jpg') repeat;
+    width: 750px;
+    position: relative;
+    z-index: 101;
+    .active_container {
+      position: relative;
+      z-index: 100;
+      top: -285px;
+      background: url('../assets/bg_form.png') no-repeat 0 0;
+      .container {
+        width: 625px;
+        .label_code {
+          padding-left: 20px;
+          border-left: 1px solid #ccc;
+        }
+        .item_group {
+          border-radius: 10px;
+          font-size: 28px;
+          .login_item {
+            padding: 30px;
+            line-height: 28px;
+            margin-bottom: 60px;
+            border-radius: 10px;
+          }
+        }
+        .btn_login {
+          height: 100px;
+          font-size: 36px;
+          border: 0 none;
+          border-radius: 15px;
+          color: #fff;
+          background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
+          background-image: -moz-linear-gradient(top, #ffc835, #fdab29);
+          background-image: linear-gradient(top, #ffc835, #fdab29);
+        }
+        .help_tips {
+          font-size: 24px;
+          color: #656cf8;
+          line-height: 48px;
+          margin-top: 30px;
+          .userAgree {
+            color: #fdac2a;
+            border-bottom: 1px solid #fdac2a;
+          }
+        }
+      }
+      .ticket_wrapper {
+        background: url('../assets/bg_ticket.png') no-repeat center center;
+        background-size: cover;
+        width: 632px;
+        height: 520px;
+        padding: 40px;
+        color: #7176ea;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-content: space-between;
+        align-items: center;
+        font-size: 24px;
+        .flex_item {
+          margin-bottom: 40px;
+          &:last-child {
+            margin-bottom: 0;
+            line-height: 40px;
+          }
+        }
+        .tips {
+          font-size: 36px;
+        }
+        .image_ticket {
+          width: 342px;
+          height: 146px;
+        }
+        .openticket {
+          color: #fdab2a;
+          border-bottom: 1px solid #fdab2a;
+        }
+      }
+    }
+    .advert_box {
+      margin: 60px 0;
+      img {
+        width: 620px;
+        height: 246px;
+      }
+    }
+  }
+  .agreeTxt {
+    width: 600px;
+    padding: 20px;
+  }
+  .active_rules {
+    color: #7176ea;
+    article {
+      width: 625px;
+    }
+    .rules_container{
+      margin-bottom: 82px;
+      .rules_title {
+        width: 140px;
+        background: rgba(36, 17, 106, 1);
+        height: 22px;
+        text-align: center;
+        &.title__ticket {
+          width: 240px;
+        }
+        h4 {
+          position: relative;
+          top: -22px;
+          font-size: 30px;
+        }
+      }
+      .rules_item {
+        font-size: 24px;
+      }
+    }
+  }
+}
+.flex {
+  display: flex;
+  &.flex_column{
+    flex-direction: column;
+  }
+  &.flex_center {
+    justify-content: center;
+  }
+}
 
 </style>

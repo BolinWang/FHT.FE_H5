@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <active-page></active-page>
   </div>
 </template>
 
 <script>
+import activePage from '@/views/activePage'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    activePage
+  }
 }
 </script>
 

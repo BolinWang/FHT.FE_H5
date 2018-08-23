@@ -17,8 +17,7 @@
     "normalize.css": "3.0.2",
     "store": "^2.0.12",
     "vant": "^1.1.16",
-    "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue": "^2.5.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
