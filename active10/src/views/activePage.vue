@@ -95,7 +95,7 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { setUserData, getUserData } from '@/utils/auth'
 import { Field, Cell, CellGroup, Button, Popup } from 'vant'
-import { loginApi } from '@/api/login'
+import { loginApi } from '@/api/avtivePage'
 import Bridge from '@/utils/bridge'
 import Parallax from '@/utils/orienterParallax'
 import userAgreeMent from '@/utils/mlAgree'
@@ -156,11 +156,13 @@ export default {
     }
   },
   created () {
-    // TODO development模拟登录态
-    let testLogin = 'Jqes+f0ERc9NPU0h/LeqchUsEcEtwzNz2cvjbNeViB0KBu++5d…wBqHjALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8='
-    setUserData({
-      sessionId: testLogin
-    })
+    // development模拟登录
+    if (process.env.NODE_ENV === 'development') {
+      let testLogin = 'Jqes+f0ERc9NPU0h/LeqchUsEcEtwzNz2cvjbNeViB0KBu++5d…wBqHjALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8='
+      setUserData({
+        sessionId: testLogin
+      })
+    }
     this.initActive()
     this.initApp()
   },
