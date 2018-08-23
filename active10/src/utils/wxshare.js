@@ -10,7 +10,7 @@ import { fetch } from '@/utils/fetch'
 const getWxShareInfo = (shareData = {
   title: '麦邻租房',
   introduction: '麦邻租房',
-  thumbnail: ''
+  thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png'
 }) => {
   fetch('https://www.mdguanjia.com/myhome/act/august/wechat.htm', {
     url: location.href.split('#')[0],

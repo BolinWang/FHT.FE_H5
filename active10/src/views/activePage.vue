@@ -28,7 +28,7 @@
       <section class="bg_grid">
         <section class="active_container">
           <!-- 登录 -->
-          <div class="flex flex_center" v-if="!isLogin">
+          <div class="flex flex_center" v-if="isLogin === false">
             <div class="container">
               <van-cell-group class="item_group" :border="false">
                 <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
@@ -47,24 +47,35 @@
               </article>
             </div>
           </div>
-          <div class="flex flex_center" v-else>
-            <div class="ticket_wrapper">
+          <div class="flex flex_center" v-else-if="isLogin === true">
+            <div class="ticket_wrapper" v-if="ticket_status === 1">
               <div class="flex_item tips">恭喜您，领券成功！</div>
               <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
               <div class="flex_item openticket" @click="openticket">拆开查看 >></div>
               <section class="flex_item useTips">
-                <div>抵扣券已发送至账户：18883****38</div>
+                <div>抵扣券已发送至账户：{{userInfo.mobile | filterMobile}}</div>
                 <div>
-                  <span v-if="!userInfo.isAPP">下载麦邻租房APP -> </span>
+                  <span v-if="!isAPP">下载麦邻租房APP -> </span>
                   我家 -> 我的优惠券
                 </div>
               </section>
             </div>
+            <!-- 抵扣券已抢完 -->
+            <div class="ticket_status" v-else-if="ticket_status === 2">
+              <img src="../assets/ticket_no.png" alt="" />
+            </div>
+            <!-- 活动已结束 -->
+            <div class="ticket_status" v-else>
+              <img src="../assets/ticket_finish.png" alt="" />
+            </div>
           </div>
           <!-- 广告位 当前是活动盒子 -->
           <section class="advert_box flex flex_center">
-            <div data-emmaBanner="a339334559" style="position: absolute;">
-              <img src="../assets/advert.jpg">
+            <div data-emmaBanner="a339334559" style="position: relative;" v-if="isLogin">
+              <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
+            </div>
+            <div v-else @click="returnClick">
+              <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
           </section>
           <!-- 活动规则 -->
@@ -97,20 +108,24 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { setUserData, getUserData } from '@/utils/auth'
 import { Field, Cell, CellGroup, Button, Popup } from 'vant'
-import { loginApi } from '@/api/avtivePage'
+import { customerApi } from '@/api/avtivePage'
 import Bridge from '@/utils/bridge'
 import Parallax from '@/utils/orienterParallax'
 import userAgreeMent from '@/utils/mlAgree'
+import { sensitiveInfo } from '@/utils'
 
 const initPageInfo = {
   title: '麦邻租房',
   shareData: {
-    title: '麦邻生活',
-    introduction: '麦邻生活',
+    title: '全城VR看房 2000元租房抵扣券免费领',
+    introduction: '点击免费领取',
     thumbnail: '',
-    linkUrl: ''
+    linkUrl: location.href
   }
 }
+
+const isDevelopment = process.env.NODE_ENV === 'development'
+let getUserDataFromLoacal = getUserData() || {}
 
 export default {
   name: 'activePage',
@@ -121,6 +136,11 @@ export default {
     [Button.name]: Button,
     [Popup.name]: Popup
   },
+  filters: {
+    filterMobile (val) {
+      return sensitiveInfo(val, 5, 2)
+    }
+  },
   data () {
     return {
       vcode: '',
@@ -130,8 +150,12 @@ export default {
       showUserAgree: false,
       showTickets: false,
       agreeTxt: userAgreeMent,
-      isLogin: false,
+      isLogin: null,
+      isAPP: false,
+      ticket_status: 1, // 1: 已领取 2: 已抢完 3: 活动结束
       userInfo: {},
+      isDevelopment,
+      active_endDate: '2018-10-04',
       rules_detail: [{
         title: '活动规则',
         list: [
@@ -158,15 +182,11 @@ export default {
     }
   },
   created () {
-    // development模拟登录
-    if (process.env.NODE_ENV === 'development') {
-      let testLogin = 'Jqes+f0ERc9NPU0h/LeqchUsEcEtwzNz2cvjbNeViB0KBu++5d…wBqHjALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8='
-      setUserData({
-        sessionId: testLogin
-      })
-    }
     this.initActive()
     this.initApp()
+    if (new Date().getTime() >= new Date(this.active_endDate).getTime()) {
+      this.ticket_status = 3
+    }
   },
   mounted () {
     this.$nextTick(function () {
@@ -184,15 +204,12 @@ export default {
       test: false,
       eventList: [ 'iconSmall', 'iconBig', 'banner' ]
     })
-    window.emma.push({
-      'type': 'banner',
-      'event': 'bolin',
-      'position_key': 'a339334559',
-      'username': 'bolin',
-      'mobile': '15158864844'
-    })
   },
   methods: {
+    returnClick () {
+      this.$toast('fail', '请先领取优惠券')
+      return false
+    },
     /**
      * 注册IOS/Andriod方法，获取页面信息
      */
@@ -212,11 +229,11 @@ export default {
      */
     initActive () {
       let userAgent = navigator.userAgent
-      let getUserDataFromLoacal = getUserData() || {}
       // APP内
       if (getUserDataFromLoacal.v && getUserDataFromLoacal.platform) {
         // 未登录
         if (!getUserDataFromLoacal.sessionId) {
+          this.isLogin = false
           if (userAgent.includes('fht-android')) {
             // eslint-disable-next-line
             MLActivityLogin.callAppLogin()
@@ -225,11 +242,54 @@ export default {
               window.location.href = './index.html'
             })
           }
+        } else {
+          this.getUserInfo(getUserDataFromLoacal.sessionId)
+        }
+      } else {
+        if (getUserDataFromLoacal.sessionId) {
+          this.getUserInfo(getUserDataFromLoacal.sessionId)
+        } else {
+          this.isLogin = false
         }
       }
-      getUserDataFromLoacal.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
-      this.userInfo = getUserDataFromLoacal
-      this.isLogin = getUserDataFromLoacal.sessionId
+      this.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
+    },
+    /**
+     * 获取用户信息
+     */
+    getUserInfo (sessionId) {
+      customerApi.getUserInfo({
+        sessionId
+      }).then(response => {
+        // 存储用户数据
+        this.userInfo = {
+          ...getUserDataFromLoacal,
+          sessionId,
+          mobile: response.data.mobile,
+          userName: response.data.customerName,
+          nickName: response.data.nickName,
+          gender: response.data.gender
+        }
+        setUserData({
+          ...this.userInfo
+        })
+        this.isLogin = true
+        this.initEmma()
+      }).catch((err) => {
+        console.log(err)
+        this.isLogin = false
+      })
+    },
+    initEmma () {
+      window.emma.push({
+        'type': 'banner',
+        'event': 'h5',
+        'position_key': 'a339334559',
+        'sex': this.userInfo.gender === 1 ? '男' : '女',
+        'username': this.userInfo.userName,
+        'mobile': this.userInfo.mobile,
+        'nickname': this.userInfo.nickName
+      })
     },
     /**
      * 登录
@@ -243,15 +303,19 @@ export default {
         this.$toast('fail', '请输入验证码')
         return false
       }
-      loginApi.login({
+      customerApi.login({
         mobile: this.mobile,
         vcode: this.vcode
       }).then(response => {
-        setUserData({
-          sessionId: response.sessionId
-        })
-        this.isLogin = true
-      }).catch()
+        // 获取用户信息
+        this.$toast('success', '登录成功')
+        this.disabled = false
+        this.timerNum = 59
+        this.getUserInfo(response.data.sessionId)
+      }).catch((err) => {
+        console.log(err)
+        this.isLogin = false
+      })
     },
     /**
      * 获取验证码
@@ -261,7 +325,7 @@ export default {
         this.$toast('fail', '请输入手机号')
         return false
       }
-      loginApi.getVcode({
+      customerApi.getVcode({
         mobile: this.mobile
       }).then(response => {
         this.$toast('success', '验证码已发送')
@@ -401,6 +465,12 @@ export default {
             color: #fdac2a;
             border-bottom: 1px solid #fdac2a;
           }
+        }
+      }
+      .ticket_status {
+        img {
+          width: 622px;
+          height: 212px;
         }
       }
       .ticket_wrapper {
