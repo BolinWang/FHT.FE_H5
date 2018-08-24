@@ -1,7 +1,7 @@
 {
-  "name": "active10",
+  "name": "vr",
   "version": "1.0.0",
-  "description": "for mailin actives",
+  "description": "for mailin vr",
   "author": "王玲波 <454949876@qq.com>",
   "private": true,
   "scripts": {
@@ -17,8 +17,8 @@
     "lib-flexible": "^0.3.2",
     "normalize.css": "3.0.2",
     "store": "^2.0.12",
-    "vconsole": "^3.2.0",
     "vant": "^1.1.16",
+    "vconsole": "^3.2.0",
     "vue": "^2.5.2"
   },
   "devDependencies": {
