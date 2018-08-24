@@ -114,7 +114,7 @@ import Parallax from '@/utils/orienterParallax'
 import userAgreeMent from '@/utils/mlAgree'
 import { sensitiveInfo } from '@/utils'
 
-const initPageInfo = {
+const initPageInfoData = {
   title: '麦邻租房',
   shareData: {
     title: '全城VR看房 2000元租房抵扣券免费领',
@@ -125,7 +125,7 @@ const initPageInfo = {
 }
 
 const isDevelopment = process.env.NODE_ENV === 'development'
-let getUserDataFromLoacal = getUserData() || {}
+let userAgent = navigator.userAgent.toLocaleLowerCase()
 
 export default {
   name: 'activePage',
@@ -182,21 +182,39 @@ export default {
     }
   },
   created () {
-    this.initActive()
-    this.initApp()
+    /**
+     * 获取App数据
+     */
+    let _this = this
+    if (userAgent.includes('fht-ios')) {
+      Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
+        console.log(responseData)
+        setUserData(responseData)
+        _this.initActive()
+        _this.initApp()
+      })
+    } else if (userAgent.includes('fht-android')) {
+      // eslint-disable-next-line
+      let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
+      setUserData(getAndriodData)
+      _this.initActive()
+      _this.initApp()
+    } else {
+      _this.initActive()
+      _this.initApp()
+    }
     if (new Date().getTime() >= new Date(this.active_endDate).getTime()) {
       this.ticket_status = 3
     }
   },
   mounted () {
-    this.$nextTick(function () {
-      getWxShareInfo(initPageInfo.shareData)
+    this.$nextTick(() => {
+      getWxShareInfo(initPageInfoData.shareData)
     })
     // 重力感应实例化
     let scene = document.getElementById('scene')
     let parallax = new Parallax(scene)
     console.log(parallax)
-    console.log(window.emma)
     // 活动盒子
     window.emma.config({
       key: 'eacb7d079f7bc7104d1346e400291155',
@@ -214,13 +232,15 @@ export default {
      * 注册IOS/Andriod方法，获取页面信息
      */
     initApp () {
-      Bridge.registerhandler('initPageInfo', (data, responseCallback) => {
-        responseCallback(initPageInfo)
-      })
-      if (navigator.userAgent.includes('fht-android')) {
+      if (userAgent.includes('fht-ios')) {
+        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
+          console.log('initPageInfo')
+          responseCallback(initPageInfoData)
+        })
+      } else if (userAgent.includes('fht-android')) {
         // eslint-disable-next-line
         SetupJsCommunication.initPageInfo(
-          JSON.stringify(initPageInfo)
+          JSON.stringify(initPageInfoData)
         )
       }
     },
@@ -228,8 +248,8 @@ export default {
      * 判断登录状态
      */
     initActive () {
-      let userAgent = navigator.userAgent
       // APP内
+      let getUserDataFromLoacal = getUserData() || {}
       if (getUserDataFromLoacal.v && getUserDataFromLoacal.platform) {
         // 未登录
         if (!getUserDataFromLoacal.sessionId) {
@@ -239,7 +259,7 @@ export default {
             MLActivityLogin.callAppLogin()
           } else {
             Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
-              window.location.href = './index.html'
+              window.location.href = window.location.href
             })
           }
         } else {
@@ -263,7 +283,7 @@ export default {
       }).then(response => {
         // 存储用户数据
         this.userInfo = {
-          ...getUserDataFromLoacal,
+          ...getUserData(),
           sessionId,
           mobile: response.data.mobile,
           userName: response.data.customerName,
