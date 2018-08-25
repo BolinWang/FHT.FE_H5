@@ -21,10 +21,11 @@ module.exports = {
   },
   postcss: [
     require('postcss-plugin-px2rem')({
-      rootValue: 750, // 这里对应的是750的设计图尺寸
-      selectorBlackList: [],
+      rootValue: 75,
+      unitPrecision: 5,
+      selectorBlackList: [/^canvas$/],
       mediaQuery: true,
-      propBlackList: [] // 如果要保持font-size不转换，替换为 ['font-size']
+      propBlackList: []
     })
   ]
 }

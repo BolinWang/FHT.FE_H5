@@ -8,7 +8,7 @@
             v-for="(item, index) in toolbarList"
             :key="item"
             @click="changeView(index)"
-            class="changeView" :class="[item, isActive === index ? 'on' : '']">
+            class="changeView needsclick" :class="[item, isActive === index ? 'on' : '']">
           </li>
         </ul>
       </div>
@@ -169,10 +169,6 @@ export default {
       })
     },
     renderVrPlayer (scenesData) {
-      window.player.on('view_change', () => {
-        this.isActive = window.player.view
-        console.log(window.player.view)
-      })
       let defaultOptions = {
         target: 'pano'
       }
@@ -202,6 +198,10 @@ export default {
       try {
         this.$nextTick(() => {
           window.player(defaultOptions)
+          window.player.on('view_change', () => {
+            this.isActive = window.player.view
+            console.log(window.player.view)
+          })
         })
       } catch (error) {
         this.$toast('Sorry: vr展示错误')
@@ -211,8 +211,6 @@ export default {
     changeView (index) {
       console.log('changeview')
       this.$nextTick(() => {
-        this.isActive = index
-        window.player.view = index
         window.player.view = index
       })
     }
@@ -221,27 +219,34 @@ export default {
 </script>
 
 <style lang="scss">
-.root_wrap,
-#pano {
+.root_wrap {
   height: 100%;
   width: 100%;
+  #pano {
+    height: 100%;
+    width: 100%;
+  }
+  .page_container {
+    width: 750px;
+    height: 100%;
+  }
 }
 
 .control-bar {
   position: absolute;
-  right: 0.4rem;
-  top: 8.986667rem;
+  right: 30px;
+  top: 600px;
   background: rgba(0, 0, 0, 0.4);
-  border-radius: 0.666667rem;
+  border-radius: 50px;
   z-index: 102;
 }
 .control-bar li {
-  background-size: 1.066667rem 1.066667rem;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 1.066667rem;
-  height: 1.066667rem;
-  margin: 0.266667rem 0;
+  width: 70px;
+  height: 70px;
+  margin: 20px 0;
 }
 .changeView {
   &.floorplan {
