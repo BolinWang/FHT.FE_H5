@@ -235,7 +235,7 @@ export default {
 .control-bar {
   position: absolute;
   right: 30px;
-  top: 600px;
+  top: 500px;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 50px;
   z-index: 102;
