@@ -451,7 +451,7 @@ export default {
         this.apiAddr = searchObj['memorhomeHost'] || 'api';
         this.clientType = searchObj['clientType'] || 'h5';
         this.isIntel = searchObj['isIntel'];
-        this.keyID=searchObj['key'];
+        this.keyID = searchObj['key'];
         if(this.type && this.roomId){
           this.getRoomInfo();
         } else {

@@ -217,7 +217,6 @@ export default {
           console.log('returnApp end')
         })
       } else if (userAgent.includes('fht-android')) {
-        console.log(userAgent)
         // eslint-disable-next-line
         SetupJsCommunication.jumpToNativePages(
           JSON.stringify({

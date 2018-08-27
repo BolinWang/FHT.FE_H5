@@ -267,7 +267,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      apiAddr: 'test',
+      apiAddr: 'api',
       curCityIndex: null,
       pageNo: 1,
       showPopupObj: {
