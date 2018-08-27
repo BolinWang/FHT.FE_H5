@@ -54,14 +54,14 @@
               <div class="room-name">{{item.name}}</div>
               <div class="room-layout">{{item.houseArea}} | {{item.houseType}} | {{item.decorationDegree}}</div>
               <div class="room-price">
-                <span style="font-size: 0.426667rem;">￥{{item.price}}</span>
-                <span>/月</span>
+                <span style="font-size: 0.533333rem; font-family: FuturaStd-Condensed;">￥{{item.price}}</span>
+                <span style="font-size: 0.266667rem;">/月</span>
               </div>
               <div class="room-address">
                 <div class="room-tags">
                   <span v-for="(tag, tagIndex) in item.showTagList"
                     :key="tagIndex"
-                    style="border: 1px solid; border-radius: 0.1rem; padding: 0 0.1rem;"
+                    style="border: 1px solid; border-radius: 0.1rem; padding: 0 0.1rem; margin-right: 0.1rem;"
                     :style="{color: tag.tagColor, borderColor: tag.tagColor}">
                     {{tag.tagName}}
                   </span>
@@ -230,7 +230,10 @@
           <div class="room-info">
             <div class="room-name">{{item.name}}</div>
             <div class="room-layout">{{item.houseArea}} | {{item.houseType}} | {{item.decorationDegree}}</div>
-            <div class="room-price">{{item.price}}元/月起</div>
+            <div class="room-price">
+              <span style="font-size: 0.533333rem; font-family: FuturaStd-Condensed;">￥{{item.price}}</span>
+              <span style="font-size: 0.266667rem;">/月</span>
+            </div>
             <div class="room-address">
               <div class="room-tags">
                 <span v-for="(tag, tagIndex) in item.showTagList"
@@ -264,7 +267,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      apiAddr: 'api',
+      apiAddr: 'test',
       curCityIndex: null,
       pageNo: 1,
       showPopupObj: {

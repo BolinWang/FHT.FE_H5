@@ -177,6 +177,7 @@ export default {
   created () {
     let url = location.search
     let theRequest = {}
+    let _this = this
     if (url.includes('?')) {
       let strs = url.substr(1).split('&')
       for (let i = 0; i < strs.length; i++) {
@@ -186,14 +187,14 @@ export default {
     this.getSearchParams = theRequest
     if (userAgent.includes('fht-ios')) {
       Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
-        this.appData = responseData
-        this.lastVersion = this.appData.v ? this.appData.v.split('.').join('') * 1 : 357
+        _this.appData = responseData
+        _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
       })
     } else if (userAgent.includes('fht-android')) {
       // eslint-disable-next-line
       let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
-      this.appData = getAndriodData
-      this.lastVersion = this.appData.v ? this.appData.v.split('.').join('') * 1 : 357
+      _this.appData = getAndriodData
+      _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
     }
   },
   mounted () {
@@ -207,12 +208,16 @@ export default {
   methods: {
     // 返回
     returnApp () {
+      console.log('returnApp start')
       if (userAgent.includes('fht-ios')) {
-        bridge.callHandler('jumpToNativePages', {
+        Bridge.callHandler('jumpToNativePages', {
           libCode: 5016,
           refresh: true
-        }, function responseCallback(responseData) {})
+        }, function responseCallback(responseData) {
+          console.log('returnApp end')
+        })
       } else if (userAgent.includes('fht-android')) {
+        console.log(userAgent)
         // eslint-disable-next-line
         SetupJsCommunication.jumpToNativePages(
           JSON.stringify({

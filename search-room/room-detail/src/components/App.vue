@@ -19,10 +19,25 @@
     </div>
     <div class="room-intro" v-if="price">
       <p class="room-price">
-        {{price}}元/月起
+        <span style="font-size: 0.533333rem; font-family: FuturaStd-Condensed;">￥{{price}}</span>
+        <span style="font-size: 0.266667rem;">/月</span>
         <span class="side-btn" @click="$modal.show('payway-modal')">付款方式<i class="icon"></i></span>
       </p>
       <p class="room-name">{{name}}</p>
+    </div>
+    <div class="activity_container" v-if="activityData.title">
+      <div class="flex_left">
+        <div class="activity_title">
+          <img src="../assets/images/activity_ticket.png" />
+          <div class="title">{{activityData.title}}</div>
+        </div>
+        <div class="activity_date">
+          活动时间：{{activityData.startTime}}-{{activityData.endTime}}
+        </div>
+      </div>
+      <div class="flex_right activityPage" @click="gotoActiviPage(activityData.url)">
+        <button class="btn btn_activity">{{activityData.rightButton}}</button>
+      </div>
     </div>
     <div class="room-intro" v-if="type==2 && houseType">
       <div class="room-intro-title">房源信息</div>
@@ -373,7 +388,8 @@ export default {
       isMuchWords: false,
       showMuchWords: false,
       showHead: false,
-      bodyFixed: false
+      bodyFixed: false,
+      activityData: {}
     }
   },
   computed: {
@@ -415,6 +431,12 @@ export default {
     }
   },
   methods: {
+    gotoActiviPage(url) {
+      if (!url) {
+        return false
+      }
+      window.location.href = url
+    },
     initRoomInfo() {
       if(location.search){
         let searchObj = {};
@@ -506,6 +528,7 @@ export default {
             this.coordinate.push(o.longitude);
             this.coordinate.push(o.latitude);
             this.isRent = o.hasRent || false;
+            this.activityData = o.activity || {}
           } else {
             Toast({
               message: res.data.message,
@@ -579,6 +602,7 @@ export default {
             this.coordinate.push(o.longitude);
             this.coordinate.push(o.latitude);
             this.isRent = o.hasRent || false;
+            this.activityData = o.activity || {}
           } else {
             Toast({
               message: res.data.message,
@@ -842,7 +866,7 @@ body {
 }
 .room-intro {
   padding: 0.48rem 0;
-  margin-left: 0.4rem;
+  margin: 0 0.4rem;
   border-bottom: 1px solid #f2f2f2;
   font-size: 0.373333rem;
   .room-intro-title {
@@ -952,8 +976,8 @@ body {
   }
   .map_content {
     width: 10.0rem;
-    height: 7.2rem;
-    margin-left: -0.4rem;
+    height: 5.333333rem;
+    margin: 0 -0.4rem;
   }
   .room-address {
     margin-bottom: 0.32rem;
@@ -986,6 +1010,44 @@ body {
   z-index: 50;
   top: 0.4rem;
   left: 0.4rem;
+}
+.activity_container {
+  margin: 0 0.4rem;
+  height: 64px;
+  border-bottom: 1px solid #f2f2f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .flex_left{
+    img {
+      width: 1.173333rem;
+      height: 0.48rem;
+    }
+    .activity_title {
+      color: #F63459;
+      font-size: 0.4rem;
+      display: flex;
+      .title {
+        margin-left: 0.266667rem;
+      }
+    }
+    .activity_date {
+      margin-top: 0.266667rem;
+      font-size: 0.266667rem;
+      color: #999;
+    }
+  }
+  .flex_right {
+    .btn_activity {
+      width: 1.92rem;
+      height: 0.746667rem;
+      line-height: 0.746667rem;
+      text-align: center;
+      color: #fff;
+      background: #F63459;
+      border-radius: 0.106667rem;
+    }
+  }
 }
 .back-btn {
   display: block;
