@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 16:09:03
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-23 17:59:01
+ * @Last Modified time: 2018-08-27 16:18:19
  */
 
 'use strict'
@@ -12,7 +12,6 @@ const prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   ENV_CONFIG: '"dev"',
-  BASE_API: '"https://dev.mdguanjia.com/activity/"',
-  ML_API: '"https://dev.mdguanjia.com/myhome/api/"'
+  BASE_API: '"https://dev.mdguanjia.com/myhome/api/"'
 })
 

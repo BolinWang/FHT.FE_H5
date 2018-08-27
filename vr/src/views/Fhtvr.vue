@@ -171,7 +171,7 @@ export default {
       getSearchParams: {},
       houseInfo: {},
       appData: {},
-      lastVersion: 357
+      lastVersion: 356
     }
   },
   created () {

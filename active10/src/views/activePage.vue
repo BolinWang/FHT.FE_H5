@@ -152,7 +152,7 @@ export default {
       agreeTxt: userAgreeMent,
       isLogin: null,
       isAPP: false,
-      ticket_status: 1, // 1: 已领取 2: 已抢完 3: 活动结束
+      ticket_status: 1, // 1: 已领取 2: 已抢完 3: 活动结束 4：其他
       userInfo: {},
       isDevelopment,
       active_endDate: '2018-10-04',
@@ -228,22 +228,7 @@ export default {
       this.$toast('fail', '请先领取优惠券')
       return false
     },
-    /**
-     * 注册IOS/Andriod方法，获取页面信息
-     */
-    initApp () {
-      if (userAgent.includes('fht-ios')) {
-        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
-          console.log('initPageInfo')
-          responseCallback(initPageInfoData)
-        })
-      } else if (userAgent.includes('fht-android')) {
-        // eslint-disable-next-line
-        SetupJsCommunication.initPageInfo(
-          JSON.stringify(initPageInfoData)
-        )
-      }
-    },
+
     /**
      * 判断登录状态
      */
@@ -274,6 +259,67 @@ export default {
       }
       this.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
     },
+
+    /**
+     * 注册IOS/Andriod方法，获取页面信息
+     */
+    initApp () {
+      if (userAgent.includes('fht-ios')) {
+        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
+          console.log('initPageInfo')
+          responseCallback(initPageInfoData)
+        })
+      } else if (userAgent.includes('fht-android')) {
+        // eslint-disable-next-line
+        SetupJsCommunication.initPageInfo(
+          JSON.stringify(initPageInfoData)
+        )
+      }
+    },
+
+    /**
+     * 优惠券状态
+     */
+    queryActivityStatus (sessionId) {
+      customerApi.activityCoupon({
+        sessionId,
+        activityCode: ''
+      }).then(response => {
+        this.isLogin = true
+        // 已领取过优惠券
+        if (response.data.coupons && response.data.coupons.length > 0) {
+          this.ticket_status = 1
+        } else {
+          this.getTickets(sessionId)
+        }
+        // true: active  false: end
+        if (!response.data.activityStatus) {
+          this.ticket_status = 3
+        }
+        // 领完了
+        if (!response.data.hasTicket) {
+          this.ticket_status = 2
+        }
+      }).catch((err) => {
+        this.$toast('fail', '服务器请求失败')
+        console.log(err)
+      })
+    },
+
+    /**
+     * 领取优惠券
+     */
+    getTickets (sessionId) {
+      customerApi.receiveCoupon({
+        sessionId,
+        activityCode: ''
+      }).then(response => {
+
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+
     /**
      * 获取用户信息
      */
@@ -293,13 +339,17 @@ export default {
         setUserData({
           ...this.userInfo
         })
-        this.isLogin = true
         this.initEmma()
+        this.queryActivityStatus(sessionId)
       }).catch((err) => {
         console.log(err)
         this.isLogin = false
       })
     },
+
+    /**
+     * 活动盒子
+     */
     initEmma () {
       window.emma.push({
         'type': 'banner',

@@ -2,14 +2,14 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-19 21:02:07
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-23 16:41:55
+ * @Last Modified time: 2018-08-27 16:19:48
  */
 
 import { fetch } from '@/utils/fetch'
 
 /* 登录获取sessionId */
 export const customerApi = {
-  requestUrl: `${process.env.ML_API}customer`,
+  requestUrl: 'customer',
   login (params = {}) {
     return fetch(customerApi.requestUrl, {
       method: 'loginByVcode',
@@ -29,6 +29,21 @@ export const customerApi = {
   getUserInfo (params = {}) {
     return fetch(customerApi.requestUrl, {
       method: 'getCustomerInfo',
+      params
+    })
+  },
+  /**
+   * 领取优惠券
+   */
+  receiveCoupon (params = {}) {
+    return fetch('coupon', {
+      method: 'receiveCoupon',
+      params
+    })
+  },
+  activityCoupon (params = {}) {
+    return fetch('coupon', {
+      method: 'activityCoupon',
       params
     })
   }
