@@ -709,7 +709,7 @@ export default {
               price: item.minRentPrice,
               address: item.address,
               type: item.type,
-              regionZone: `${item.region || ''} ${item.zone || ''}`,
+              regionZone: (item.region || '') + ' ' + (item.zone || ''),
               showTagList: item.showTagList || []
             })
           })
@@ -846,7 +846,9 @@ export default {
               price: item.minRentPrice.split('.')[0],
               address: item.address,
               fullRentType: item.isFullRent,
-              type: item.type
+              type: item.type,
+              regionZone: (item.region || '') + ' ' + (item.zone || ''),
+              showTagList: item.showTagList || []
             });
           });
         } else {
