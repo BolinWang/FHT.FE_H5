@@ -71,7 +71,7 @@
           </div>
           <!-- 广告位 当前是活动盒子 -->
           <section class="advert_box flex flex_center">
-            <div data-emmaBanner="a339334559" style="position: relative;" v-if="isLogin">
+            <div data-emmaBanner="2926d6a9a2" style="position: relative;" v-if="isLogin">
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
             <div v-else @click="returnClick">
@@ -283,22 +283,24 @@ export default {
     queryActivityStatus (sessionId) {
       customerApi.activityCoupon({
         sessionId,
-        activityCode: ''
+        activityCode: 'MJGY20180904'
       }).then(response => {
         this.isLogin = true
         // 已领取过优惠券
+        if (!response.data) {
+          this.$toast('fail', '服务器返回无数据')
+          return false
+        }
         if (response.data.coupons && response.data.coupons.length > 0) {
           this.ticket_status = 1
+        } else if (!response.data.hasTicket) {
+          // 领完了
+          this.ticket_status = 2
+        } else if (response.data.activityStatus) {
+          // true: end  false: active
+          this.ticket_status = 3
         } else {
           this.getTickets(sessionId)
-        }
-        // true: active  false: end
-        if (!response.data.activityStatus) {
-          this.ticket_status = 3
-        }
-        // 领完了
-        if (!response.data.hasTicket) {
-          this.ticket_status = 2
         }
       }).catch((err) => {
         this.$toast('fail', '服务器请求失败')
@@ -312,7 +314,7 @@ export default {
     getTickets (sessionId) {
       customerApi.receiveCoupon({
         sessionId,
-        activityCode: ''
+        couponActivityCode: 'MJGY20180904'
       }).then(response => {
 
       }).catch((err) => {

@@ -73,11 +73,11 @@
             v-for="(item, index) in showDeviceList"
             :key="index">
             <div v-if="item.type == -1" @click="$modal.show('device-modal')">
-              <img :src="require(`../assets/images/estate-service/more.png`)" alt="">
+              <img :src="require(`../assets/images/estate-service/more.png`)" alt="" />
               <p>{{item.name}}</p>
             </div>
             <div v-else>
-              <img :src="require(`../assets/images/estate-service/${item.type}.png`)" alt="">
+              <img :src="require(`../assets/images/estate-service/${item.type}.png`)" alt="" />
               <p>{{item.name}}</p>
             </div>
           </div>
@@ -584,10 +584,12 @@ export default {
               });
             })
             o.storeServices.forEach((item, index) => {
-              this.serviceList.push({
-                type: item.code,
-                name: item.name
-              });
+              if (item.code) {
+                this.serviceList.push({
+                  type: item.code,
+                  name: item.name
+                });
+              }
             })
 
             this.price = o.rentPrice;
