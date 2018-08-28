@@ -316,8 +316,9 @@ export default {
         sessionId,
         couponActivityCode: 'MJGY20180904'
       }).then(response => {
-
+        this.$toast('success', '领取成功')
       }).catch((err) => {
+        this.$toast('fail', '领取优惠券失败')
         console.log(err)
       })
     },
@@ -356,7 +357,7 @@ export default {
       window.emma.push({
         'type': 'banner',
         'event': 'h5',
-        'position_key': 'a339334559',
+        'position_key': '2926d6a9a2',
         'sex': this.userInfo.gender === 1 ? '男' : '女',
         'username': this.userInfo.userName,
         'mobile': this.userInfo.mobile,
@@ -380,7 +381,6 @@ export default {
         vcode: this.vcode
       }).then(response => {
         // 获取用户信息
-        this.$toast('success', '登录成功')
         this.disabled = false
         this.timerNum = 59
         this.getUserInfo(response.data.sessionId)
