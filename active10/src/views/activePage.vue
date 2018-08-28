@@ -65,8 +65,12 @@
               <img src="../assets/ticket_no.png" alt="" />
             </div>
             <!-- 活动已结束 -->
-            <div class="ticket_status" v-else>
+            <div class="ticket_status" v-else-if="ticket_status === 3">
               <img src="../assets/ticket_finish.png" alt="" />
+            </div>
+            <!-- 老用户不能参加 -->
+            <div class="ticket_status" v-else>
+              <img src="../assets/ticket_user.png" alt="" />
             </div>
           </div>
           <!-- 广告位 当前是活动盒子 -->
@@ -75,7 +79,7 @@
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
             <div v-else class="emma_wrap" @click="returnClick">
-              <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
+              <img src="../assets/advert.jpg" alt="" />
             </div>
           </section>
           <!-- 活动规则 -->
@@ -107,7 +111,7 @@
 <script>
 import { getWxShareInfo } from '@/utils/wxshare'
 import { setUserData, getUserData } from '@/utils/auth'
-import { Field, Cell, CellGroup, Button, Popup } from 'vant'
+import { Field, Cell, CellGroup, Button, Popup, Dialog } from 'vant'
 import { customerApi } from '@/api/avtivePage'
 import Bridge from '@/utils/bridge'
 import Parallax from '@/utils/orienterParallax'
@@ -134,7 +138,8 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    [Dialog.name]: Dialog
   },
   filters: {
     filterMobile (val) {
@@ -155,11 +160,10 @@ export default {
       ticket_status: 1, // 1: 已领取 2: 已抢完 3: 活动结束 4：其他
       userInfo: {},
       isDevelopment,
-      active_endDate: '2018-10-04',
       rules_detail: [{
         title: '活动规则',
         list: [
-          '本次活动仅限麦邻租房新注册用户领取1次，每个用户仅限使用其中1张；',
+          '本次活动仅限活动期间内麦邻租房新注册用户领取1次，每个用户仅限使用其中1张；',
           '本次租房抵扣券仅限用于抵扣非金融房源在线签约订单月租金；',
           '每人每个房间订单仅限使用1张抵扣券；',
           '租房抵扣券不可叠加使用，不得与其他优惠同时使用，不可兑现以及用于租房其他费用，消费抵扣后不予退还；',
@@ -202,9 +206,6 @@ export default {
     } else {
       _this.initActive()
       _this.initApp()
-    }
-    if (new Date().getTime() >= new Date(this.active_endDate).getTime()) {
-      this.ticket_status = 3
     }
   },
   mounted () {
@@ -287,12 +288,18 @@ export default {
       }).then(response => {
         this.isLogin = true
         let resData = response.data
-        // 已领取过优惠券
         if (!resData) {
           this.$toast('fail', '服务器返回无数据')
           return false
         }
-        if (resData.coupons && resData.coupons.length > 0) {
+        if (!resData.isNewUser) {
+          // 老用户不能参加
+          this.ticket_status = 4
+          Dialog.alert({
+            message: '您不是活动期间内新注册的用户<br>无法参与哦！'
+          }).then(() => {})
+        } else if (resData.coupons && resData.coupons.length > 0) {
+          // 已领取过优惠券
           this.ticket_status = 1
         } else if (!resData.hasTicket) {
           // 领完了
