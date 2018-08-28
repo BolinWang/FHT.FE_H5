@@ -2,18 +2,18 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:44:52
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-25 09:55:47
+ * @Last Modified time: 2018-08-28 15:20:09
  */
 
 import Vue from 'vue'
 import App from './App'
 import 'lib-flexible/flexible'
-// import 'normalize.css/normalize.css'
+import 'normalize.css/normalize.css'
 // import FastClick from 'fastclick'
 import { Toast } from 'vant'
 // development引用vconsole
 // eslint-disable-next-line
-process.env.NODE_ENV === 'development' && require('@/utils/vconsole').default
+process.env.NODE_ENV !== 'production' && require('@/utils/vconsole').default
 
 // FastClick.attach(document.body)
 Vue.config.productionTip = false

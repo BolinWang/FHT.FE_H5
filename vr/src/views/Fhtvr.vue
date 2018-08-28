@@ -1,5 +1,5 @@
 <template>
-  <div class="root_wrap">
+  <div class="root_wrap" @click="showHouseInfo = false">
     <section id="pano"></section>
     <section class="page_container">
       <div class="infomation_top">
@@ -10,7 +10,7 @@
           <div class="houseInfo"
             v-if="houseInfo.houseName"
             :class="{on: showHouseInfo, noSlider: getSearchParams.houseType != 2}"
-            @click="houseInfoSlider">
+            @click.stop="houseInfoSlider">
             <div class="houseInfo_title">{{houseInfo.houseName}}</div>
           </div>
           <div class="houseInfo_slider" v-show="showHouseInfo">
@@ -62,12 +62,12 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { playerVrApi } from '@/api/vr'
 import Bridge from '@/utils/bridge'
-import { Icon } from 'vant'
+import { Icon, Toast } from 'vant'
 
 const initPageInfoData = {
   title: '麦邻租房',
   shareData: {
-    title: '全城VR看房',
+    title: '全城VR看房，了解一下！',
     introduction: '麦邻租房',
     thumbnail: '',
     linkUrl: location.href
@@ -146,11 +146,13 @@ let testData = {
 /* eslint */
 
 let userAgent = navigator.userAgent.toLocaleLowerCase()
+let toastFunc = null
 
 export default {
   name: 'Fhtvr',
   components: {
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Toast.name]: Toast
   },
   filters: {
     filterDegree (val) {
@@ -175,6 +177,12 @@ export default {
     }
   },
   created () {
+    toastFunc = Toast.loading({
+      duration: 0,
+      forbidClick: true,
+      loadingType: 'spinner',
+      message: '参数获取中...'
+    })
     let url = location.search
     let theRequest = {}
     let _this = this
@@ -255,14 +263,28 @@ export default {
       }
     },
     initPlayer () {
+      Toast.clear(toastFunc)
       if (!this.getSearchParams.houseType || !this.getSearchParams.roomId) {
         this.$toast('fail', '参数配置无效')
         return false
       }
+      toastFunc = Toast.loading({
+        duration: 0,
+        forbidClick: true,
+        loadingType: 'spinner',
+        message: '数据获取中...'
+      })
       playerVrApi.getVrData({
         roomId: this.getSearchParams.roomId,
         houseType: this.getSearchParams.houseType
       }).then((response) => {
+        Toast.clear(toastFunc)
+        toastFunc = Toast.loading({
+          duration: 0,
+          forbidClick: true,
+          loadingType: 'spinner',
+          message: 'VR渲染中...'
+        })
         this.renderVrPlayer(response.data)
       }).catch(err => {
         console.log(err)
@@ -296,6 +318,7 @@ export default {
         this.$toast('fail', 'Sorry: 无vr场景')
         return false
       }
+      Toast.clear(toastFunc)
       try {
         this.$nextTick(() => {
           window.player(defaultOptions)
