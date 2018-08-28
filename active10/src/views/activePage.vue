@@ -71,10 +71,10 @@
           </div>
           <!-- 广告位 当前是活动盒子 -->
           <section class="advert_box flex flex_center">
-            <div data-emmaBanner="2926d6a9a2" style="position: relative;" v-if="isLogin">
+            <div data-emmaBanner="a339334559" class="emma_wrap" v-if="isLogin">
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
-            <div v-else @click="returnClick">
+            <div v-else class="emma_wrap" @click="returnClick">
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
           </section>
@@ -210,18 +210,18 @@ export default {
   mounted () {
     this.$nextTick(() => {
       getWxShareInfo(initPageInfoData.shareData)
+      // 活动盒子
+      window.emma.config({
+        key: 'eacb7d079f7bc7104d1346e400291155',
+        debug: false,
+        test: false,
+        eventList: [ 'iconSmall', 'iconBig', 'banner' ]
+      })
     })
     // 重力感应实例化
     let scene = document.getElementById('scene')
     let parallax = new Parallax(scene)
     console.log(parallax)
-    // 活动盒子
-    window.emma.config({
-      key: 'eacb7d079f7bc7104d1346e400291155',
-      debug: false,
-      test: false,
-      eventList: [ 'iconSmall', 'iconBig', 'banner' ]
-    })
   },
   methods: {
     returnClick () {
@@ -286,17 +286,18 @@ export default {
         activityCode: 'MJGY20180904'
       }).then(response => {
         this.isLogin = true
+        let resData = response.data
         // 已领取过优惠券
-        if (!response.data) {
+        if (!resData) {
           this.$toast('fail', '服务器返回无数据')
           return false
         }
-        if (response.data.coupons && response.data.coupons.length > 0) {
+        if (resData.coupons && resData.coupons.length > 0) {
           this.ticket_status = 1
-        } else if (!response.data.hasTicket) {
+        } else if (!resData.hasTicket) {
           // 领完了
           this.ticket_status = 2
-        } else if (response.data.activityStatus) {
+        } else if (resData.activityStatus) {
           // true: end  false: active
           this.ticket_status = 3
         } else {
@@ -356,13 +357,14 @@ export default {
     initEmma () {
       window.emma.push({
         'type': 'banner',
-        'event': 'h5',
-        'position_key': '2926d6a9a2',
+        'event': 'logged',
+        'position_key': 'a339334559',
         'sex': this.userInfo.gender === 1 ? '男' : '女',
-        'username': this.userInfo.userName,
-        'mobile': this.userInfo.mobile,
-        'nickname': this.userInfo.nickName
+        'username': this.userInfo.userName || 'h5',
+        'mobile': this.userInfo.mobile || 'h5',
+        'nickname': this.userInfo.nickName || 'h5'
       })
+      console.log('emma')
     },
     /**
      * 登录
@@ -581,9 +583,14 @@ export default {
     .advert_box {
       margin: 60px 0;
       height: 246px;
-      img {
+      .emma_wrap {
+        position: relative;
         width: 620px;
         height: 246px;
+        img {
+          width: 620px;
+          height: 246px;
+        }
       }
     }
   }
