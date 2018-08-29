@@ -30,17 +30,19 @@
           <!-- 登录 -->
           <div class="flex flex_center" v-if="isLogin === false">
             <div class="container">
-              <van-cell-group class="item_group" :border="false">
-                <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
-              </van-cell-group>
-              <van-cell-group class="item_group" :border="false">
-                <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number">
-                  <label slot="button" class="label_code" @click="getVcode" v-if="!disabled">获取验证码</label>
-                  <label slot="button" class="label_code" v-else>{{timerNum}}s后重发</label>
-                </van-field>
-              </van-cell-group>
-              <van-button size="large" class="btn_login" @click="login">立即领取</van-button>
-              <article>
+              <div class="login_field" v-if="!isAPP">
+                <van-cell-group class="item_group" :border="false">
+                  <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
+                </van-cell-group>
+                <van-cell-group class="item_group" :border="false">
+                  <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number">
+                    <label slot="button" class="label_code" @click="getVcode" v-if="!disabled">获取验证码</label>
+                    <label slot="button" class="label_code" v-else>{{timerNum}}s后重发</label>
+                  </van-field>
+                </van-cell-group>
+              </div>
+              <van-button size="large" class="btn_login" @click="loginMethod">立即领取</van-button>
+              <article v-if="!isAPP">
                 <p class="help_tips">温馨提示：未注册麦邻租房账号的手机号，登录时将自动注册，且代表您已同意
                   <span class="userAgree" @click="userAgree">《用户服务协议》</span>
                 </p>
@@ -48,6 +50,10 @@
             </div>
           </div>
           <div class="flex flex_center" v-else-if="isLogin === true">
+            <!-- APP内未领取新用户-->
+            <div class="ticket_status" v-if="isAPP && !ticket_status">
+              <van-button size="large" class="btn_login" @click="loginMethod">立即领取</van-button>
+            </div>
             <div class="ticket_wrapper" v-if="ticket_status === 1">
               <div class="flex_item tips">恭喜您，领券成功！</div>
               <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
@@ -69,13 +75,13 @@
               <img src="../assets/ticket_finish.png" alt="" />
             </div>
             <!-- 老用户不能参加 -->
-            <div class="ticket_status" v-else>
+            <div class="ticket_status" v-else-if="ticket_status === 4">
               <img src="../assets/ticket_user.png" alt="" />
             </div>
           </div>
           <!-- 广告位 当前是活动盒子 -->
           <section class="advert_box flex flex_center">
-            <div data-emmaBanner="a339334559" class="emma_wrap" v-if="isLogin">
+            <div :data-emmaBanner="positionKey" class="emma_wrap" v-if="isLogin">
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
             <div v-else class="emma_wrap" @click="returnClick">
@@ -155,11 +161,12 @@ export default {
       showUserAgree: false,
       showTickets: false,
       agreeTxt: userAgreeMent,
-      isLogin: null,
-      isAPP: false,
-      ticket_status: 1, // 1: 已领取 2: 已抢完 3: 活动结束 4：其他
-      userInfo: {},
+      isLogin: null, // 是否已登录
+      isAPP: false, // 是否APP内
+      ticket_status: null, // 1: 已领取 2: 已抢完 3: 活动结束 4：老用户
+      userInfo: {}, // 用户信息
       isDevelopment,
+      positionKey: 'a339334559', // 活动盒子positionkey
       rules_detail: [{
         title: '活动规则',
         list: [
@@ -234,31 +241,14 @@ export default {
      * 判断登录状态
      */
     initActive () {
-      // APP内
       let getUserDataFromLoacal = getUserData() || {}
-      if (getUserDataFromLoacal.v && getUserDataFromLoacal.platform) {
-        // 未登录
-        if (!getUserDataFromLoacal.sessionId) {
-          this.isLogin = false
-          if (userAgent.includes('fht-android')) {
-            // eslint-disable-next-line
-            MLActivityLogin.callAppLogin()
-          } else {
-            Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
-              window.location.href = window.location.href
-            })
-          }
-        } else {
-          this.getUserInfo(getUserDataFromLoacal.sessionId)
-        }
-      } else {
-        if (getUserDataFromLoacal.sessionId) {
-          this.getUserInfo(getUserDataFromLoacal.sessionId)
-        } else {
-          this.isLogin = false
-        }
-      }
       this.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
+      // 未登录
+      if (!getUserDataFromLoacal.sessionId) {
+        this.isLogin = false
+      } else {
+        this.getUserInfo(getUserDataFromLoacal.sessionId)
+      }
     },
 
     /**
@@ -307,8 +297,6 @@ export default {
         } else if (resData.activityStatus) {
           // true: end  false: active
           this.ticket_status = 3
-        } else {
-          this.getTickets(sessionId)
         }
       }).catch((err) => {
         this.$toast('fail', '服务器请求失败')
@@ -320,11 +308,16 @@ export default {
      * 领取优惠券
      */
     getTickets (sessionId) {
+      if (!sessionId) {
+        this.$toast('fail', '无登录用户信息')
+        return false
+      }
       customerApi.receiveCoupon({
         sessionId,
         couponActivityCode: 'MJGY20180904'
       }).then(response => {
         this.$toast('success', '领取成功')
+        this.ticket_status = 1
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -365,7 +358,7 @@ export default {
       window.emma.push({
         'type': 'banner',
         'event': 'logged',
-        'position_key': 'a339334559',
+        'position_key': this.positionKey,
         'sex': this.userInfo.gender === 1 ? '男' : '女',
         'username': this.userInfo.userName || 'h5',
         'mobile': this.userInfo.mobile || 'h5',
@@ -376,7 +369,23 @@ export default {
     /**
      * 登录
      */
-    login () {
+    loginMethod () {
+      if (this.isAPP) {
+        if (userAgent.includes('fht-android')) {
+          // eslint-disable-next-line
+          MLActivityLogin.callAppLogin()
+        } else if (userAgent.includes('fht-ios')) {
+          Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
+            window.location.href = window.location.href
+          })
+        } else {
+          console.log('H5')
+        }
+        if (!this.ticket_status) {
+          this.getTickets(this.userInfo.sessionId)
+        }
+        return false
+      }
       if (!this.mobile) {
         this.$toast('fail', '请输入手机号')
         return false
@@ -385,6 +394,9 @@ export default {
         this.$toast('fail', '请输入验证码')
         return false
       }
+      this.login()
+    },
+    login () {
       customerApi.login({
         mobile: this.mobile,
         vcode: this.vcode
