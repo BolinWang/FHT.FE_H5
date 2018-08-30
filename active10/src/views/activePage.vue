@@ -214,7 +214,7 @@ export default {
       _this.initActive()
       _this.initApp()
     }
-    window.refreshPage = function() {
+    window.refreshPage = function () {
       window.location.href = window.location.href
     }
   },

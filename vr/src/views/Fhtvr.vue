@@ -80,9 +80,9 @@ let testData = {
   "code": "0",
   "message": "操作成功",
   "data": {
-    cover:"//media.csimum.com/97f7f6b52b9141b6925b0976e2aca940/data/preview.jpg",
+    cover:"//media.csimum.com/e6afe30c32984ff9a839ecdb0b06dc0e/data/preview.jpg",
     "modelType": "3d",
-    model3d: "//media.csimum.com/97f7f6b52b9141b6925b0976e2aca940/v1/meta.js",
+    model3d: "//media.csimum.com/more/e6afe30c32984ff9a839ecdb0b06dc0e/meta.js",
     "model25d+": "25d+时存在",
     "houseInfo": {
       "roomCode": "房间编号",
