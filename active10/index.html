@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>麦邻租房</title>
+    <title>麦邻租房-全城VR看房</title>
   </head>
   <body>
     <div id="app-box"></div>
-    <script src="https://emma-sdk.huodonghezi.com/dist/js/emma.js"></script>
+    <script src="//emma-sdk.huodonghezi.com/dist/js/emma.js"></script>
     <script>
       (function() {
-        document.getElementById('fht_baidu_tj') && document.getElementById('fht_baidu_tj').remove()
+        document.getElementById('fht_baidu_tj_act10') && document.getElementById('fht_baidu_tj_act10').remove()
         let hm = document.createElement('script')
-        hm.src = ''
-        hm.id = 'fht_baidu_tj'
+        hm.src = "https://hm.baidu.com/hm.js?85264c4fd0fb74ba6477632e3d581d8b"
+        hm.id = 'fht_baidu_tj_act10'
         let s = document.getElementsByTagName('script')[0]
         s.parentNode.insertBefore(hm, s)
       })()

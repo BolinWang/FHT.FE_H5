@@ -51,7 +51,7 @@
           </div>
           <div class="flex flex_center" v-else-if="isLogin === true">
             <!-- APP内未领取新用户-->
-            <div class="ticket_status" v-if="isAPP && !ticket_status">
+            <div class="container ticket_status" v-if="isAPP && !ticket_status">
               <van-button size="large" class="btn_login" @click="loginMethod">立即领取</van-button>
             </div>
             <div class="ticket_wrapper" v-if="ticket_status === 1">
@@ -129,7 +129,7 @@ const initPageInfoData = {
   shareData: {
     title: '全城VR看房 2000元租房抵扣券免费领',
     introduction: '点击免费领取',
-    thumbnail: '',
+    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
     linkUrl: location.href
   }
 }
@@ -166,7 +166,7 @@ export default {
       ticket_status: null, // 1: 已领取 2: 已抢完 3: 活动结束 4：老用户
       userInfo: {}, // 用户信息
       isDevelopment,
-      positionKey: 'a339334559', // 活动盒子positionkey
+      positionKey: '5e946959c9', // 活动盒子positionkey
       rules_detail: [{
         title: '活动规则',
         list: [
@@ -206,13 +206,16 @@ export default {
       })
     } else if (userAgent.includes('fht-android')) {
       // eslint-disable-next-line
-      let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
+      let getAndriodData = JSON.parse(window.SetupJsCommunication.getParamsFromNative())
       setUserData(getAndriodData)
       _this.initActive()
       _this.initApp()
     } else {
       _this.initActive()
       _this.initApp()
+    }
+    window.refreshPage = function() {
+      window.location.href = window.location.href
     }
   },
   mounted () {
@@ -260,9 +263,12 @@ export default {
           console.log('initPageInfo')
           responseCallback(initPageInfoData)
         })
+        Bridge.registerHandler('refreshPage', (data, responseCallback) => {
+          window.location.href = window.location.href
+        })
       } else if (userAgent.includes('fht-android')) {
         // eslint-disable-next-line
-        SetupJsCommunication.initPageInfo(
+        window.SetupJsCommunication.initPageInfo(
           JSON.stringify(initPageInfoData)
         )
       }
@@ -297,6 +303,8 @@ export default {
         } else if (resData.activityStatus) {
           // true: end  false: active
           this.ticket_status = 3
+        } else if (!this.isAPP) {
+          this.getTickets(sessionId)
         }
       }).catch((err) => {
         this.$toast('fail', '服务器请求失败')
@@ -371,17 +379,31 @@ export default {
      */
     loginMethod () {
       if (this.isAPP) {
-        if (userAgent.includes('fht-android')) {
-          // eslint-disable-next-line
-          MLActivityLogin.callAppLogin()
-        } else if (userAgent.includes('fht-ios')) {
-          Bridge.callHandler('loginAction', {}, function responseCallback (responseData) {
-            window.location.href = window.location.href
-          })
+        if (!this.isLogin) {
+          // 未登录调用登录方法
+          let bridgeParam = {
+            libCode: 5001,
+            refresh: true
+          }
+          if (userAgent.includes('fht-android')) {
+            // eslint-disable-next-line
+            try {
+              console.log(bridgeParam)
+              window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+            } catch (error) {
+              this.$toast('fail', 'Andriod调用失败')
+              console.log(error)
+            }
+          } else if (userAgent.includes('fht-ios')) {
+            Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+              console.log(responseData)
+              window.location.href = window.location.href
+            })
+          } else {
+            console.log('H5')
+          }
         } else {
-          console.log('H5')
-        }
-        if (!this.ticket_status) {
+          // 已登录获取优惠券
           this.getTickets(this.userInfo.sessionId)
         }
         return false
