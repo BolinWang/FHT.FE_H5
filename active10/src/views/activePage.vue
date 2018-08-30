@@ -51,7 +51,7 @@
           </div>
           <div class="flex flex_center" v-else-if="isLogin === true">
             <!-- APP内未领取新用户-->
-            <div class="container ticket_status" v-if="isAPP && !ticket_status">
+            <div class="container ticket_status" v-if="isAPP && (!ticket_status || (ticket_status === 4 && !showNotNewUser))">
               <van-button size="large" class="btn_login" @click="loginMethod">立即领取</van-button>
             </div>
             <div class="ticket_wrapper" v-if="ticket_status === 1">
@@ -75,7 +75,7 @@
               <img src="../assets/ticket_finish.png" alt="" />
             </div>
             <!-- 老用户不能参加 -->
-            <div class="ticket_status" v-else-if="ticket_status === 4">
+            <div class="ticket_status" v-else-if="(!isAPP && ticket_status === 4) || showNotNewUser">
               <img src="../assets/ticket_user.png" alt="" />
             </div>
           </div>
@@ -164,6 +164,7 @@ export default {
       isLogin: null, // 是否已登录
       isAPP: false, // 是否APP内
       ticket_status: null, // 1: 已领取 2: 已抢完 3: 活动结束 4：老用户
+      showNotNewUser: false, // 显示老用户view
       userInfo: {}, // 用户信息
       isDevelopment,
       positionKey: '5e946959c9', // 活动盒子positionkey
@@ -291,9 +292,6 @@ export default {
         if (!resData.isNewUser) {
           // 老用户不能参加
           this.ticket_status = 4
-          Dialog.alert({
-            message: '您不是活动期间内新注册的用户<br>无法参与哦！'
-          }).then(() => {})
         } else if (resData.coupons && resData.coupons.length > 0) {
           // 已领取过优惠券
           this.ticket_status = 1
@@ -403,6 +401,14 @@ export default {
             console.log('H5')
           }
         } else {
+          if (this.isAPP && this.ticket_status === 4) {
+            Dialog.alert({
+              message: '您不是活动期间内新注册的用户<br>无法参与哦！'
+            }).then(() => {
+              this.showNotNewUser = true
+            })
+            return false
+          }
           // 已登录获取优惠券
           this.getTickets(this.userInfo.sessionId)
         }

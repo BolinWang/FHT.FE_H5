@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:44:52
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-28 15:20:09
+ * @Last Modified time: 2018-08-30 14:49:07
  */
 
 import Vue from 'vue'
@@ -13,7 +13,7 @@ import 'normalize.css/normalize.css'
 import { Toast } from 'vant'
 // development引用vconsole
 // eslint-disable-next-line
-process.env.NODE_ENV !== 'production' && require('@/utils/vconsole').default
+process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
 
 // FastClick.attach(document.body)
 Vue.config.productionTip = false
