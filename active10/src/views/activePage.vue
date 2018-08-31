@@ -104,6 +104,9 @@
         </section>
       </section>
     </section>
+    <section class="footer fixed" v-if="!isAPP && ticket_status === 1">
+      <van-button size="large" class="btn_downloadApp" @click="downloadAPP">前往VR看房使用抵扣券</van-button>
+    </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
         <section class="agreeTxt" v-html="agreeTxt"></section>
@@ -481,6 +484,12 @@ export default {
      */
     userAgree () {
       this.showUserAgree = true
+    },
+    downloadAPP () {
+      if (this.isAPP) {
+        return false
+      }
+      window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
     }
   }
 }
@@ -693,6 +702,25 @@ export default {
   }
   &.flex_center {
     justify-content: center;
+  }
+}
+.fixed {
+  position: fixed;
+}
+.footer {
+  bottom: 0;
+  z-index: 9999;
+  width: 750px;
+  .btn_downloadApp {
+    /* autoprefixer: off */
+    background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
+    /* autoprefixer: on */
+    border: 0 none;
+    border-radius: 0;
+    font-size: 28px;
+    color: #fff;
+    height: 90px;
+    line-height: 90px;
   }
 }
 
