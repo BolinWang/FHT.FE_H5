@@ -163,6 +163,8 @@ export default {
       agreeTxt: userAgreeMent,
       isLogin: null, // 是否已登录
       isAPP: false, // 是否APP内
+      app_ios: false,
+      app_andriod: false,
       ticket_status: null, // 1: 已领取 2: 已抢完 3: 活动结束 4：老用户
       showNotNewUser: false, // 显示老用户view
       userInfo: {}, // 用户信息
@@ -194,26 +196,29 @@ export default {
     }
   },
   created () {
+    // 字符串查找不用includes  IOS8不兼容
+    this.app_ios = userAgent.indexOf('fht-ios') > -1
+    this.app_andriod = userAgent.indexOf('fht-android') > -1
     /**
      * 获取App数据
      */
     let _this = this
-    if (userAgent.includes('fht-ios')) {
+    if (this.app_ios === true) {
       Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
         console.log(responseData)
         setUserData(responseData)
         _this.initActive()
         _this.initApp()
       })
-    } else if (userAgent.includes('fht-android')) {
+    } else if (this.app_andriod === true) {
       // eslint-disable-next-line
       let getAndriodData = JSON.parse(window.SetupJsCommunication.getParamsFromNative())
       setUserData(getAndriodData)
-      _this.initActive()
-      _this.initApp()
+      this.initActive()
+      this.initApp()
     } else {
-      _this.initActive()
-      _this.initApp()
+      this.initActive()
+      this.initApp()
     }
     window.refreshPage = function () {
       window.location.href = window.location.href
@@ -259,7 +264,7 @@ export default {
      * 注册IOS/Andriod方法，获取页面信息
      */
     initApp () {
-      if (userAgent.includes('fht-ios')) {
+      if (this.app_ios === true) {
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')
           responseCallback(initPageInfoData)
@@ -267,7 +272,7 @@ export default {
         Bridge.registerHandler('refreshPage', (data, responseCallback) => {
           window.location.href = window.location.href
         })
-      } else if (userAgent.includes('fht-android')) {
+      } else if (this.app_andriod === true) {
         // eslint-disable-next-line
         window.SetupJsCommunication.initPageInfo(
           JSON.stringify(initPageInfoData)
@@ -383,7 +388,7 @@ export default {
             libCode: 5001,
             refresh: true
           }
-          if (userAgent.includes('fht-android')) {
+          if (this.app_andriod === true) {
             // eslint-disable-next-line
             try {
               console.log(bridgeParam)
@@ -392,7 +397,7 @@ export default {
               this.$toast('fail', 'Andriod调用失败')
               console.log(error)
             }
-          } else if (userAgent.includes('fht-ios')) {
+          } else if (this.app_ios === true) {
             Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
               console.log(responseData)
               window.location.href = window.location.href

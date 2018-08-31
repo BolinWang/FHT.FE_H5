@@ -145,7 +145,7 @@ let testData = {
 }
 /* eslint */
 
-let userAgent = navigator.userAgent.toLocaleLowerCase()
+let userAgent = window.navigator.userAgent.toLocaleLowerCase()
 let toastFunc = null
 
 export default {
@@ -173,58 +173,73 @@ export default {
       getSearchParams: {},
       houseInfo: {},
       appData: {},
-      lastVersion: 356
+      lastVersion: 356,
+      app_ios: false,
+      app_andriod: false
     }
   },
   created () {
+    console.log(userAgent)
     toastFunc = Toast.loading({
       duration: 0,
       forbidClick: true,
       loadingType: 'spinner',
       message: '参数获取中...'
     })
-    let url = location.search
+    // 字符串查找不用includes  IOS8不兼容
+    this.app_ios = userAgent.indexOf('fht-ios') > -1
+    this.app_andriod = userAgent.indexOf('fht-android') > -1
+
+    let searchUrl = window.location.search
     let theRequest = {}
     let _this = this
-    if (url.includes('?')) {
-      let strs = url.substr(1).split('&')
-      for (let i = 0; i < strs.length; i++) {
-        theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+    try {
+      if (searchUrl.indexOf('?') > -1) {
+        let strs = searchUrl.substr(1).split('&')
+        for (let i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+        }
       }
-    }
-    this.getSearchParams = theRequest
-    if (userAgent.includes('fht-ios')) {
-      Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
-        _this.appData = responseData
-        _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
-      })
-    } else if (userAgent.includes('fht-android')) {
-      // eslint-disable-next-line
-      let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
-      _this.appData = getAndriodData
-      _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
+      this.getSearchParams = theRequest
+      if (this.app_ios === true) {
+        Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
+          _this.appData = responseData
+          _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
+        })
+      } else if (this.app_andriod === true) {
+        // eslint-disable-next-line
+        let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
+        this.appData = getAndriodData
+        this.lastVersion = this.appData.v ? this.appData.v.split('.').join('') * 1 : 357
+      }
+    } catch (error) {
+      Toast.clear(toastFunc)
+      console.log(error)
     }
   },
   mounted () {
     this.$nextTick(() => {
       getWxShareInfo(initPageInfoData.shareData)
-      this.initApp()
-      this.initPlayer()
-      // this.renderVrPlayer(testData.data)
+      try {
+        this.initApp()
+        this.initPlayer()
+        // this.renderVrPlayer(testData.data)
+      } catch (error) {
+        console.log(error)
+      }
     })
   },
   methods: {
     // 返回
     returnApp () {
-      console.log('returnApp start')
-      if (userAgent.includes('fht-ios')) {
+      if (this.app_ios === true) {
         Bridge.callHandler('jumpToNativePages', {
           libCode: 5016,
           refresh: true
         }, function responseCallback(responseData) {
           console.log('returnApp end')
         })
-      } else if (userAgent.includes('fht-android')) {
+      } else if (this.app_andriod === true) {
         // eslint-disable-next-line
         SetupJsCommunication.jumpToNativePages(
           JSON.stringify({
@@ -248,12 +263,12 @@ export default {
      * 注册IOS/Andriod方法，获取页面信息
      */
     initApp () {
-      if (userAgent.includes('fht-ios')) {
+      if (this.app_ios === true) {
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')
           responseCallback(initPageInfoData)
         })
-      } else if (userAgent.includes('fht-android')) {
+      } else if (this.app_andriod === true) {
         // eslint-disable-next-line
         SetupJsCommunication.initPageInfo(
           JSON.stringify(initPageInfoData)
