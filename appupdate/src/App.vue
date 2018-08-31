@@ -1,28 +1,23 @@
 <template>
   <div id="app">
-    <img src="../static/bg.jpg" class="update_bg" />
-    <div class="update_container">
-      <article>
-        <p>当前版本过低</p>
-        <p>赶紧升级APP来参与活动吧~</p>
-      </article>
-      <button class="default btn_update"
-        v-if="getAppParams.clientType !=  1 || getAppParams.lastAppVersion >= 355"
-        @click="updateMethod">
-        立即升级
-      </button>
-    </div>
+    <appupdate :params="getAppParams" v-if="defaultType === 'appupdate'"></appupdate>
+    <appdownload v-else></appdownload>
   </div>
 </template>
 
 <script>
+import appupdate from '@/views/update'
+import appdownload from '@/views/download'
 export default {
   name: 'App',
+  components: {
+    appupdate,
+    appdownload
+  },
   data () {
     return {
-      getAppParams: {
-        lastAppVersion: 355
-      }
+      getAppParams: {},
+      defaultType: ''
     }
   },
   created () {
@@ -35,14 +30,11 @@ export default {
         }
       }
       this.getAppParams = {
-        ...getSearchParams,
-        lastAppVersion: getSearchParams.version ? getSearchParams.version.split('.').join('') * 1 : 355
+        ...getSearchParams
       }
-    }
-  },
-  methods: {
-    updateMethod () {
-      location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home'
+      this.defaultType = getSearchParams.pageType === 'appupdate' ? 'appupdate' : 'appdownload'
+    } else {
+      this.defaultType = 'appdownload'
     }
   }
 }
@@ -50,7 +42,10 @@ export default {
 
 <style>
 html,body {
+  width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
 }
 #app {
@@ -60,47 +55,9 @@ html,body {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+  width: 100%;
 }
 a{
   color:#fff;
 }
-.update_bg {
-  position: absolute;
-  z-index: -100;
-  width: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-.update_container {
-  margin-top: 850px;
-}
-article {
-  position: relative;
-  bottom: 80px;
-}
-article p {
-  line-height: 70px;
-  font-size: 34px;
-  font-weight: 700;
-}
-
-.btn_update {
-  width: 420px;
-  height: 86px;
-  line-height: 86px;
-  color: #fff;
-  font-weight: 700;
-  font-size: 32px;
-  background-image: -webkit-linear-gradient(top,#ffb812,#fe8d07);
-  background-image: -moz-linear-gradient(top,#ffb812,#fe8d07);
-  background-image: linear-gradient(top,#ffb812,#fe8d07);
-  box-shadow: 3px 6px 3px #eee;
-  border: 0 none;
-  border-radius: 43px;
-  margin-top: 100px;
-  position: relative;
-  bottom: 100px;
-}
-
 </style>

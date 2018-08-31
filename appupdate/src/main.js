@@ -2,7 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import '../rem'
+import 'lib-flexible/flexible'
+import 'normalize.css/normalize.css'
 
 Vue.config.productionTip = false
 
