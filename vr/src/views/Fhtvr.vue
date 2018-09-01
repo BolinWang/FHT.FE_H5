@@ -254,7 +254,7 @@ export default {
     },
     // 房间信息
     houseInfoSlider () {
-      if (this.getSearchParams.houseType != 2) {
+      if (this.getSearchParams.houseType * 1 !== 2) {
         return false
       }
       this.showHouseInfo = !this.showHouseInfo
@@ -307,6 +307,9 @@ export default {
     },
     renderVrPlayer (scenesData) {
       this.houseInfo = scenesData.houseInfo || {}
+      if (this.getSearchParams.houseType * 1 === 2) {
+        this.showHouseInfo = true
+      }
       let defaultOptions = {
         target: 'pano'
       }
