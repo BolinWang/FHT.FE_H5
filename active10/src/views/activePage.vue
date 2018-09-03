@@ -21,7 +21,7 @@
         <div class="active_title"></div>
         <div class="active_date">
           <div class="flex flex_center">
-            <p class="content">活动时间：2018年9月4日-2018年10月4日</p>
+            <p class="content">活动时间：2018年9月8日-2018年10月8日</p>
           </div>
         </div>
       </section>
@@ -384,53 +384,57 @@ export default {
      * 登录
      */
     loginMethod () {
-      if (this.isAPP) {
-        if (!this.isLogin) {
-          // 未登录调用登录方法
-          let bridgeParam = {
-            libCode: 5001,
-            refresh: true
-          }
-          if (this.app_andriod === true) {
-            // eslint-disable-next-line
-            try {
-              console.log(bridgeParam)
-              window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-            } catch (error) {
-              this.$toast('fail', 'Andriod调用失败')
-              console.log(error)
-            }
-          } else if (this.app_ios === true) {
-            Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-              console.log(responseData)
-              window.location.href = window.location.href
-            })
-          } else {
-            console.log('H5')
-          }
-        } else {
-          if (this.isAPP && this.ticket_status === 4) {
-            Dialog.alert({
-              message: '您不是活动期间内新注册的用户<br>无法参与哦！'
-            }).then(() => {
-              this.showNotNewUser = true
-            })
-            return false
-          }
-          // 已登录获取优惠券
-          this.getTickets(this.userInfo.sessionId)
-        }
-        return false
-      }
-      if (!this.mobile) {
-        this.$toast('fail', '请输入手机号')
-        return false
-      }
-      if (!this.vcode) {
-        this.$toast('fail', '请输入验证码')
-        return false
-      }
-      this.login()
+      Dialog.alert({
+        message: '不要着急哦，活动暂未开始！'
+      }).then(() => {})
+
+      // if (this.isAPP) {
+      //   if (!this.isLogin) {
+      //     // 未登录调用登录方法
+      //     let bridgeParam = {
+      //       libCode: 5001,
+      //       refresh: true
+      //     }
+      //     if (this.app_andriod === true) {
+      //       // eslint-disable-next-line
+      //       try {
+      //         console.log(bridgeParam)
+      //         window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+      //       } catch (error) {
+      //         this.$toast('fail', 'Andriod调用失败')
+      //         console.log(error)
+      //       }
+      //     } else if (this.app_ios === true) {
+      //       Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+      //         console.log(responseData)
+      //         window.location.href = window.location.href
+      //       })
+      //     } else {
+      //       console.log('H5')
+      //     }
+      //   } else {
+      //     if (this.isAPP && this.ticket_status === 4) {
+      //       Dialog.alert({
+      //         message: '您不是活动期间内新注册的用户<br>无法参与哦！'
+      //       }).then(() => {
+      //         this.showNotNewUser = true
+      //       })
+      //       return false
+      //     }
+      //     // 已登录获取优惠券
+      //     this.getTickets(this.userInfo.sessionId)
+      //   }
+      //   return false
+      // }
+      // if (!this.mobile) {
+      //   this.$toast('fail', '请输入手机号')
+      //   return false
+      // }
+      // if (!this.vcode) {
+      //   this.$toast('fail', '请输入验证码')
+      //   return false
+      // }
+      // this.login()
     },
     login () {
       customerApi.login({
