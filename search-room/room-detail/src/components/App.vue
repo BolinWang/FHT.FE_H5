@@ -489,6 +489,20 @@ export default {
                 h: 560
               });
             });
+            if (this.picList.length === 0) {
+              this.picList.push({
+                src: defaultPic,
+                w: 750,
+                h: 560
+              });
+            } else if (o.vrUrl) {
+              this.picList.unshift({
+                src: this.picList[0].src,
+                w: 750,
+                h: 560,
+                vrUrl: o.vrUrl
+              });
+            }
             o.rentTypes.forEach((item, index) => {
               this.payway.push({
                 name: item.name,

@@ -4,7 +4,7 @@
     <section class="page_container">
       <div class="infomation_top">
         <div class="top_container">
-          <div class="returnApp" @click="returnApp" v-if="lastVersion >= 357">
+          <div class="returnApp" @click="returnApp" v-if="lastVersion >= 356">
             <van-icon name="arrow-left" />
           </div>
           <div class="houseInfo"
@@ -173,7 +173,7 @@ export default {
       getSearchParams: {},
       houseInfo: {},
       appData: {},
-      lastVersion: 356,
+      lastVersion: 355,
       app_ios: false,
       app_andriod: false
     }
@@ -204,13 +204,13 @@ export default {
       if (this.app_ios === true) {
         Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
           _this.appData = responseData
-          _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 357
+          _this.lastVersion = _this.appData.v ? _this.appData.v.split('.').join('') * 1 : 356
         })
       } else if (this.app_andriod === true) {
         // eslint-disable-next-line
         let getAndriodData = JSON.parse(SetupJsCommunication.getParamsFromNative())
         this.appData = getAndriodData
-        this.lastVersion = this.appData.v ? this.appData.v.split('.').join('') * 1 : 357
+        this.lastVersion = this.appData.v ? this.appData.v.split('.').join('') * 1 : 356
       }
     } catch (error) {
       Toast.clear(toastFunc)
