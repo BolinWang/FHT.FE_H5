@@ -337,6 +337,8 @@ export default {
         return false
       }
       Toast.clear(toastFunc)
+      window.player.view = 0
+      console.log('view初始值：' + player.view)
       try {
         this.$nextTick(() => {
           window.player(defaultOptions)

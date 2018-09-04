@@ -57,7 +57,6 @@
             <div class="ticket_wrapper" v-if="ticket_status === 1">
               <div class="flex_item tips">恭喜您，领券成功！</div>
               <div class="flex_item"><img class="image_ticket" src="../assets/image_ticket.png" alt="" /></div>
-              <div class="flex_item openticket" @click="openticket">拆开查看 >></div>
               <section class="flex_item useTips">
                 <div>抵扣券已发送至账户：{{userInfo.mobile | filterMobile}}</div>
                 <div>
@@ -72,34 +71,41 @@
             </div>
             <!-- 活动已结束 -->
             <div class="ticket_status" v-else-if="ticket_status === 3">
-              <img src="../assets/ticket_finish.png" alt="" />
+              <img src="../assets/ticket_finish_1.png" alt="" />
             </div>
             <!-- 老用户不能参加 -->
             <div class="ticket_status" v-else-if="(!isAPP && ticket_status === 4) || showNotNewUser">
-              <img src="../assets/ticket_user.png" alt="" />
+              <img src="../assets/ticket_user_1.png" alt="" />
             </div>
           </div>
           <!-- 广告位 当前是活动盒子 -->
-          <section class="advert_box flex flex_center">
+          <!-- <section class="advert_box flex flex_center">
             <div :data-emmaBanner="positionKey" class="emma_wrap" v-if="isLogin">
               <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
             </div>
             <div v-else class="emma_wrap" @click="returnClick">
               <img src="../assets/advert.jpg" alt="" />
             </div>
-          </section>
+          </section> -->
           <!-- 活动规则 -->
           <section class="active_rules flex flex_center">
             <article>
               <section class="rules_container" v-for="item in rules_detail" :key="item.title">
-                <div class="rules_title" :class="{title__ticket: item.isTicket}">
-                  <h4>{{item.title}}</h4>
+                <div class="flex flex_center">
+                  <div class="rules_title" :class="{title__ticket: item.isTicket}">
+                    <h4>{{item.title}}</h4>
+                  </div>
                 </div>
                 <p class="rules_item" v-for="(rule, index) in item.list" :key="index">
-                  {{index * 1 + 1}}.{{rule}}
+                  <span v-if="index < item.list.length - 1">{{index * 1 + 1}}.</span>
+                  <span v-html="rule"></span>
                 </p>
               </section>
             </article>
+          </section>
+          <!-- 合作伙伴 -->
+          <section class="active_partner flex flex_center">
+            <img src="../assets/bizpartner.png">
           </section>
         </section>
       </section>
@@ -111,8 +117,6 @@
       <article>
         <section class="agreeTxt" v-html="agreeTxt"></section>
       </article>
-    </van-popup>
-    <van-popup v-model="showTickets" class="popup_tickets" overlay-class="overlay_ticket">
     </van-popup>
   </section>
 </template>
@@ -162,13 +166,13 @@ export default {
       disabled: false,
       timerNum: 59,
       showUserAgree: false,
-      showTickets: false,
       agreeTxt: userAgreeMent,
       isLogin: null, // 是否已登录
       isAPP: false, // 是否APP内
       app_ios: false,
       app_andriod: false,
       ticket_status: null, // 1: 已领取 2: 已抢完 3: 活动结束 4：老用户
+      active_startDate: 1536364800000,
       showNotNewUser: false, // 显示老用户view
       userInfo: {}, // 用户信息
       isDevelopment,
@@ -176,24 +180,13 @@ export default {
       rules_detail: [{
         title: '活动规则',
         list: [
-          '本次活动仅限活动期间内麦邻租房新注册用户领取1次，每个用户仅限使用其中1张；',
-          '本次租房抵扣券仅限用于抵扣非金融房源在线签约订单月租金；',
-          '每人每个房间订单仅限使用1张抵扣券；',
-          '租房抵扣券不可叠加使用，不得与其他优惠同时使用，不可兑现以及用于租房其他费用，消费抵扣后不予退还；',
-          '本次活动抵扣券使用限制城市（上海、杭州），领取不限制；',
-          '更多租房优惠活动咨询客服:400-882-7099；',
-          '本次活动最终解释权归麦邻租房所有；'
-        ]
-      }, {
-        title: '优惠券使用说明',
-        isTicket: true,
-        list: [
-          '仅限活动期间领取，自领取日起90天内有效，逾期作废；',
-          '满1000元-2999元月租金可抵扣50元；',
-          '满3000元-4999元月租金可抵扣150元；',
-          '满5000元-6999元月租金可抵扣300元；',
-          '满7000元-9999元月租金可抵扣500元；',
-          '满10000元以上月租金可抵扣1000元；'
+          '本次活动仅限麦邻租房活动期间新注册用户领取，每人仅限领取和使用1次；',
+          '本次活动租房抵扣券为50元面值，可用于抵扣非金融房源在线签约且在线支付，首笔月租金≥1000元的订单；',
+          '租房抵扣券不可叠加使用，不得与其他优惠同时使用，不可兑现及用于租房其他费用抵扣，消费抵扣后不予退还；',
+          '本次活动抵扣券仅限上海、杭州租房抵扣使用；',
+          '抵扣券仅限活动期间领取，自领取日起30天内有效，逾期作废；',
+          '活动严禁作弊行为，一经查出，取消活动权益资格。<br>本活动解释权归麦邻租房所有。',
+          '咨询电话：400-882-7099'
         ]
       }]
     }
@@ -384,57 +377,62 @@ export default {
      * 登录
      */
     loginMethod () {
-      Dialog.alert({
-        message: '不要着急哦，活动暂未开始！'
-      }).then(() => {})
-
-      // if (this.isAPP) {
-      //   if (!this.isLogin) {
-      //     // 未登录调用登录方法
-      //     let bridgeParam = {
-      //       libCode: 5001,
-      //       refresh: true
-      //     }
-      //     if (this.app_andriod === true) {
-      //       // eslint-disable-next-line
-      //       try {
-      //         console.log(bridgeParam)
-      //         window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-      //       } catch (error) {
-      //         this.$toast('fail', 'Andriod调用失败')
-      //         console.log(error)
-      //       }
-      //     } else if (this.app_ios === true) {
-      //       Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-      //         console.log(responseData)
-      //         window.location.href = window.location.href
-      //       })
-      //     } else {
-      //       console.log('H5')
-      //     }
-      //   } else {
-      //     if (this.isAPP && this.ticket_status === 4) {
-      //       Dialog.alert({
-      //         message: '您不是活动期间内新注册的用户<br>无法参与哦！'
-      //       }).then(() => {
-      //         this.showNotNewUser = true
-      //       })
-      //       return false
-      //     }
-      //     // 已登录获取优惠券
-      //     this.getTickets(this.userInfo.sessionId)
-      //   }
-      //   return false
-      // }
-      // if (!this.mobile) {
-      //   this.$toast('fail', '请输入手机号')
-      //   return false
-      // }
-      // if (!this.vcode) {
-      //   this.$toast('fail', '请输入验证码')
-      //   return false
-      // }
-      // this.login()
+      let tempDateTime = new Date().getTime()
+      if (tempDateTime < this.active_startDate) {
+        Dialog.alert({
+          message: '不要着急嘛，活动暂未开始！'
+        }).then(() => {
+          this.showNotNewUser = true
+        })
+        return false
+      }
+      if (this.isAPP) {
+        if (!this.isLogin) {
+          // 未登录调用登录方法
+          let bridgeParam = {
+            libCode: 5001,
+            refresh: true
+          }
+          if (this.app_andriod === true) {
+            // eslint-disable-next-line
+            try {
+              console.log(bridgeParam)
+              window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+            } catch (error) {
+              this.$toast('fail', 'Andriod调用失败')
+              console.log(error)
+            }
+          } else if (this.app_ios === true) {
+            Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+              console.log(responseData)
+              window.location.href = window.location.href
+            })
+          } else {
+            console.log('H5')
+          }
+        } else {
+          if (this.isAPP && this.ticket_status === 4) {
+            Dialog.alert({
+              message: '您不是活动期间内新注册的用户<br>无法参与哦！'
+            }).then(() => {
+              this.showNotNewUser = true
+            })
+            return false
+          }
+          // 已登录获取优惠券
+          this.getTickets(this.userInfo.sessionId)
+        }
+        return false
+      }
+      if (!this.mobile) {
+        this.$toast('fail', '请输入手机号')
+        return false
+      }
+      if (!this.vcode) {
+        this.$toast('fail', '请输入验证码')
+        return false
+      }
+      this.login()
     },
     login () {
       customerApi.login({
@@ -477,12 +475,7 @@ export default {
         this.timerNum = 59
       })
     },
-    /**
-     * 查看优惠券
-     */
-    openticket () {
-      this.showTickets = true
-    },
+
     /**
      * 用户协议
      */
@@ -622,11 +615,11 @@ export default {
         text-align: center;
         display: flex;
         flex-direction: column;
-        align-content: space-between;
+        justify-content: center;
         align-items: center;
         font-size: 24px;
         .flex_item {
-          margin-bottom: 40px;
+          margin-bottom: 60px;
           &:last-child {
             margin-bottom: 0;
             line-height: 40px;
@@ -664,6 +657,7 @@ export default {
     padding: 20px;
   }
   .active_rules {
+    margin-top: 60px;
     color: #7176ea;
     article {
       width: 625px;
@@ -680,7 +674,7 @@ export default {
         }
         h4 {
           position: relative;
-          top: -22px;
+          top: -60px;
           font-size: 30px;
         }
       }
@@ -689,13 +683,15 @@ export default {
       }
     }
   }
+  .active_partner {
+    margin-top: 60px;
+    img {
+      width: 630px;
+      height: 135px;
+    }
+  }
 }
-.popup_tickets {
-  width: 624px;
-  height: 847px;
-  background: url('../assets/image_ticket__all.png') no-repeat center center;
-  background-size: cover;
-}
+
 .overlay_ticket {
   background-color: rgba(0, 0, 0, 0.6)
 }
