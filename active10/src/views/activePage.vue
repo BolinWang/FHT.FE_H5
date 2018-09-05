@@ -1,6 +1,9 @@
 <template>
   <section class="page_container">
-    <section>
+    <section class="header" v-if="!isAPP">
+      <img src="../assets/logo.png" alt="" />
+    </section>
+    <section class="container">
        <!-- 重力感应区域 -->
       <div class="vr_container" id="scene">
         <div data-depth="0.6">
@@ -134,8 +137,8 @@ import { sensitiveInfo } from '@/utils'
 const initPageInfoData = {
   title: '麦邻租房',
   shareData: {
-    title: '全城VR看房 2000元租房抵扣券免费领',
-    introduction: '点击免费领取',
+    title: '720°VR实景在线租房',
+    introduction: '品质好房，全城带看，无中介费，送租房抵扣券',
     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
     linkUrl: location.href
   }
@@ -497,6 +500,16 @@ export default {
   height: 100%;
   background-color: #0e1125;
   position: relative;
+  .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 199;
+    img {
+      width: 200px;
+      height: 90px;
+    }
+  }
   .vr_container {
     flex: 1;
     position: absolute;
