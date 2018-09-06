@@ -24,7 +24,7 @@
         <div class="active_title"></div>
         <div class="active_date">
           <div class="flex flex_center">
-            <p class="content">活动时间：2018年9月8日-2018年10月8日</p>
+            <p class="content">活动时间：2018年9月8日-2018年10月28日</p>
           </div>
         </div>
       </section>
@@ -178,13 +178,14 @@ export default {
       active_startDate: 1536364800000,
       showNotNewUser: false, // 显示老用户view
       userInfo: {}, // 用户信息
+      urlSearchParams: {}, // search 数据
       isDevelopment,
       positionKey: '5e946959c9', // 活动盒子positionkey
       rules_detail: [{
         title: '活动规则',
         list: [
           '本次活动仅限麦邻租房活动期间新注册用户领取，每人仅限领取和使用1次；',
-          '本次活动租房抵扣券为50元面值，可用于抵扣非金融房源在线签约且在线支付，首笔月租金≥1000元的订单；',
+          '本次活动租房抵扣券为50元面值，可用于抵扣非金融房源在线支付，首笔月租金≥1000元的订单；',
           '租房抵扣券不可叠加使用，不得与其他优惠同时使用，不可兑现及用于租房其他费用抵扣，消费抵扣后不予退还；',
           '本次活动抵扣券仅限上海、杭州租房抵扣使用；',
           '抵扣券仅限活动期间领取，自领取日起30天内有效，逾期作废；',
@@ -195,6 +196,22 @@ export default {
     }
   },
   created () {
+    /**
+     * 获取search数据
+     */
+    let urlSearchParams = {}
+    if (location.search.indexOf('?') !== -1) {
+      const searchArr = location.search.substr(1).split('&')
+      for (let i = 0; i < searchArr.length; i++) {
+        if (searchArr[i].split('=')[1]) {
+          urlSearchParams[searchArr[i].split('=')[0]] = unescape(
+            searchArr[i].split('=')[1]
+          )
+        }
+      }
+    }
+    this.urlSearchParams = urlSearchParams
+
     // 字符串查找不用includes  IOS8不兼容
     this.app_ios = userAgent.indexOf('fht-ios') > -1
     this.app_andriod = userAgent.indexOf('fht-android') > -1
@@ -322,9 +339,18 @@ export default {
         this.$toast('fail', '无登录用户信息')
         return false
       }
+      let sourceType = 'h5'
+      if (this.isAPP) {
+        sourceType = 'APP'
+      } else if (this.urlSearchParams.sourceType) {
+        sourceType = this.urlSearchParams.sourceType
+      } else if (userAgent.indexOf('micromessenger') > -1) {
+        sourceType = 'wechat'
+      }
       customerApi.receiveCoupon({
         sessionId,
-        couponActivityCode: 'MJGY20180904'
+        couponActivityCode: 'MJGY20180904',
+        sourceType: sourceType
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
@@ -380,8 +406,9 @@ export default {
      * 登录
      */
     loginMethod () {
+      // 线上环境控制活动开始时间
       let tempDateTime = new Date().getTime()
-      if (tempDateTime < this.active_startDate) {
+      if (tempDateTime < this.active_startDate && process.env.ENV_CONFIG === 'prod') {
         Dialog.alert({
           message: '不要着急嘛，活动暂未开始！'
         }).then(() => {
