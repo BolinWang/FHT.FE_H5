@@ -89,6 +89,11 @@ export default {
         sealData: this.signImage,
         sessionId: getUserData().sessionId,
         contractNo: this.params.contractNo
+      }, 'post', {
+        imei: this.params.imei,
+        geographicPosition: this.params.geographicPosition,
+        baseStation: this.params.baseStation,
+        lac: this.params.lac
       }).then(res => {
         Dialog.alert({
           message: '签名成功'
