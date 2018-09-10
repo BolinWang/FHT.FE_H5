@@ -30,11 +30,11 @@
 								<img src="../../static/map.png">
 							</div>
 						</flexbox-item>
-						<flexbox-item>
+						<!-- <flexbox-item>
 							<div class="addIcon" @click="handleAddHouse">
 								<x-icon type="ios-plus-outline" size="30"></x-icon>
 							</div>
-						</flexbox-item>
+						</flexbox-item> -->
 					</flexbox>
 				</div>
 			</x-header>
@@ -726,6 +726,9 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
+    .vux-header-left .search{
+       width: 7.8889rem;
+    }
 	.header_container{
 		width:100%;
 		position:absolute;
