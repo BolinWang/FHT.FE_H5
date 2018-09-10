@@ -42,7 +42,7 @@ export function getApi(params = {}) {
 
 /* 房源列表 */
 export function houseApi(params = {}) {
-	params.tags = ['fhd']
+  params.tags = ['fhd']
   return fetch({
     url: searchUrl + '/fhd/room/search',
     method: 'post',

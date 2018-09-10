@@ -77,6 +77,11 @@ export default new Router({
       path: '/message',
       name: 'message',
       component: resolve => require(['@/views/message'], resolve)
+    },
+    {
+      path: '/perlperformance',
+      name: 'perlperformance',
+      component: resolve => require(['@/views/perlperformance'], resolve)
     }
   ]
 })
