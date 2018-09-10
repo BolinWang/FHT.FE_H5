@@ -1,5 +1,5 @@
 <template>
-  <div class="pdf_box">
+  <div class="pdf_box" id="pdf_box">
     <div class="pdf_container">
       <div id="canvas_container"></div>
     </div>
@@ -74,13 +74,13 @@ export default {
     scalePdf (type) {
       if (type === 2) {
         if (this.scale <= 1) {
-          this.$toast('不要再缩小啦！')
+          this.$toast.fail('不要再缩小啦！')
           return false
         }
         this.scale = this.scale * 1 - 0.1
       } else {
         if (this.scale >= 3) {
-          this.$toast('不要再放大啦！')
+          this.$toast.fail('不要再放大啦！')
           return false
         }
         this.scale = this.scale * 1 + 0.1
