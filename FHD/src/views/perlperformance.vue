@@ -60,14 +60,18 @@ export default {
             break
           case '2':
             this.userData.leafDep === true
-            ? this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${jsonList.depName}&&startDate=${this.startDate}&endDate=${this.endDate}`
-            : this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${jsonList.depName}&&startDate=${this.startDate}&endDate=${this.endDate}`
+            ? this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
+            : this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
             break
             default:
             break
         }
       } else {
+        if(this.$route.query.type==1){
         this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.id}&startDate=${this.startDate}&endDate=${this.endDate}`
+        } else{
+           this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
+        }
       }
     }
   }
