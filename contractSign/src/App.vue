@@ -70,7 +70,7 @@ export default {
       })
       this.getContractUrl()
     } else {
-      // this.$toast('请在APP内打开')
+      // this.$toast.fail('请在APP内打开')
       // return false
       this.appParams = {
         sessionId: 'kTUyG6xY7gZmBUiBvyU+a7+5vOotj0w5DS/+on09DM9LLKYnRZU8JoSdEOSGH9kMFAWqNRj29DtG1E/LPCbQzRUsEcEtwzNz2cvjbNeViB0701N12LXZKRCx+GVMSMxpALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8=',
@@ -105,8 +105,12 @@ export default {
     },
     // 获取合同数据
     getContractUrl () {
+      this.$toast.loading({
+        mask: true,
+        message: '加载中...'
+      })
       if (!this.appParams.params || !this.appParams.params.contractNo) {
-        this.$toast('无合同号')
+        this.$toast.fail('无合同号')
         return false
       }
       contractApi.queryContract({

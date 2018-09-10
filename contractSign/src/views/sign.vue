@@ -82,7 +82,7 @@ export default {
     savePNG () {
       this.signImage = this.draw.getPNGImage()
       if (!this.signImage) {
-        this.$toast('fail', '请手写签名后再提交')
+        this.$toast.fail('请手写签名后再提交')
         return false
       }
       contractApi.signContract({
