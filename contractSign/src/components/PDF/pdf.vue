@@ -1,5 +1,5 @@
 <template>
-  <div class="pdf_box">
+  <div class="pdf_box" id="pdf_box">
     <div class="pdf_container">
       <div id="canvas_container"></div>
     </div>

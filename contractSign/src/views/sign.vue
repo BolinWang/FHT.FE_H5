@@ -1,5 +1,11 @@
 <template>
   <div class="container_sign">
+    <section class="header">
+      <div class="returnContract" @click="returnContract">
+        <van-icon name="arrow-left" />
+        <div class="title">查看合同</div>
+      </div>
+    </section>
     <div class="tips">{{msg}}</div>
     <canvas id="canvas_sign">{{supportMsg}}</canvas>
     <section class="canvas_tools">
@@ -9,31 +15,61 @@
       </div>
     </section>
     <section class="footer fixed">
-      <van-button size="large" class="btn_sign" @click="savePNG">确定</van-button>
+      <van-button size="large" class="btn_sign" @click="savePNG">提交签名</van-button>
     </section>
   </div>
-
 </template>
 
 <script>
-import { Button } from 'vant'
+import { Button, Icon, Dialog } from 'vant'
 import Draw from '@/utils/draw'
+import { contractApi } from '@/api/contract'
+import { getUserData } from '@/utils/auth'
+import Bridge from '@/utils/bridge'
 
 export default {
   name: 'sign',
   components: {
     [Button.name]: Button,
+    [Icon.name]: Icon,
+    [Dialog.name]: Dialog,
     Draw
+  },
+  props: {
+    paramsData: {
+      type: Object,
+      default () {
+        return {
+          params: {}
+        }
+      }
+    },
+    isAndriod: {
+      type: Boolean,
+      default: false
+    },
+    isIos: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
       msg: '请在下方区域手写签名，务必使用真实姓名',
       supportMsg: '您的设备暂不支持签名',
-      signImage: ''
+      signImage: '',
+      params: {}
     }
   },
+  created () {
+    this.params = this.paramsData
+    this.app_andriod = this.isAndriod
+    this.app_ios = this.isIos
+  },
   mounted () {
-    this.initCanvas()
+    this.$nextTick(() => {
+      this.initCanvas()
+    })
   },
   methods: {
     initCanvas () {
@@ -45,6 +81,38 @@ export default {
     },
     savePNG () {
       this.signImage = this.draw.getPNGImage()
+      if (!this.signImage) {
+        this.$toast('fail', '请手写签名后再提交')
+        return false
+      }
+      contractApi.signContract({
+        sealData: this.signImage,
+        sessionId: getUserData().sessionId,
+        contractNo: this.params.contractNo
+      }).then(res => {
+        Dialog.alert({
+          message: '签名成功'
+        }).then(() => {
+          this.handleBridge()
+        })
+      })
+    },
+    returnContract () {
+      this.$emit('handleReturnContract')
+    },
+    handleBridge () {
+      let bridgeParam = {
+        libCode: 5016
+      }
+      if (this.app_andriod === true) {
+        window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+      } else if (this.app_ios === true) {
+        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+          window.location.href = window.location.href
+        })
+      } else {
+        console.log('H5')
+      }
     }
   }
 }
@@ -59,17 +127,27 @@ export default {
   z-index: 101;
   background: #FFF;
   font-size: 30px;
+  .header {
+    line-height: 90px;
+    .title {
+      display: inline-block;
+    }
+    .returnContract {
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
   .tips {
     color: #999;
     padding: 0 20px;
-    height: 90px;
-    line-height: 90px;
+    line-height: 60px;
   }
   #canvas_sign {
     background: #fff;
     cursor: default;
     width: 750px;
-    height: calc(100% - 200px);
+    height: calc(100% - 240px);
   }
   .canvas_tools {
     .tools_clear{
@@ -94,9 +172,7 @@ export default {
     }
   }
 }
-#keyword-box {
-  margin: 10px 0;
-}
+
 .footer {
   position: fixed;
   bottom: 0;
