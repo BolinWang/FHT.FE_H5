@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     upDataUrl(jsonList) {
+      console.log(jsonList)
       if (jsonList) {
         this.startDate = jsonList.startTime
         this.endDate = jsonList.endTime
