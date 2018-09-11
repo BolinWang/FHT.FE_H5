@@ -43,6 +43,8 @@ export default {
         fr_password: this.userData.password
       }
     }).then((response) => {
+      console.log(response)
+      console.log('12345')
       if (!response.data.includes('fail')) {
 
       }
