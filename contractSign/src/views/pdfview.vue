@@ -2,7 +2,7 @@
   <div class="container">
     <section class="header">
       <van-nav-bar
-        title="合同"
+        :title="title"
         left-arrow
         fixed
         :z-index="1000"
@@ -50,6 +50,7 @@ export default {
   },
   data () {
     return {
+      title: '合同',
       params: {},
       contractDataInfo: {},
       contentUrl: '',

@@ -2,7 +2,7 @@
   <div class="container">
     <section class="header">
       <van-nav-bar
-        title="签约"
+        :title="title"
         left-arrow
         fixed
         :z-index="1000"
@@ -60,6 +60,7 @@ export default {
   },
   data () {
     return {
+      title: '签约',
       msg: '请在下方区域手写签名，务必使用真实姓名',
       supportMsg: '您的设备暂不支持签名',
       signImage: '',
