@@ -8,7 +8,7 @@
     </pdfview>
     <!-- 手写签名 -->
     <sign v-else-if="active === 2"
-      :paramsData="appParams.params"
+      :paramsData="appParams"
       :isIos="app_ios"
       :isAndriod="app_andriod"
       @handleReturnContract="refreshPage">
