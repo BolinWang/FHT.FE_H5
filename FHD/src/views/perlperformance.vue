@@ -33,8 +33,8 @@ export default {
     let that = this
     window['refreshPage'] = (row) => {
       const jsonList = JSON.parse(row)
-      console.log(row)
       that.upDataUrl(jsonList)
+      return that.nowUrl
     }
     axios.get(`${biUrl}?op=fs_load&cmd=sso`, {
       withCredentials: true,
