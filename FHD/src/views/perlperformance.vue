@@ -5,7 +5,7 @@
 </template>
 <script>
 import axios from 'axios'
-const biUrl = 'http://bi.mdguanjia.com/fh/ReportServer'
+const biUrl = '//bi.mdguanjia.com/fh/ReportServer'
 export default {
   data() {
     return {
