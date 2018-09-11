@@ -49,8 +49,9 @@ export default {
       if (!response.data.includes('fail')) {
 
       }
-    }).catch(
-    )
+    }).catch((error) => {
+      console.log(error)
+    })
   },
   methods: {
     upDataUrl(jsonList) {
