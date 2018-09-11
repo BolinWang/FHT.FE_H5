@@ -35,43 +35,22 @@ export default {
     window['refreshPage'] = (row) => {
       const jsonList = JSON.parse(row)
       that.upDataUrl(jsonList)
-<<<<<<< HEAD
-      return '124'
-=======
-
->>>>>>> 8e4e85df0c39f36f17bd01293ba2009cd57b0f9d
     }
     axios.get(`${biUrl}?op=fs_load&cmd=sso`, {
+      withCredentials: true,
       params: {
         fr_username: this.userData.mobile,
         fr_password: this.userData.password
       }
     }).then((response) => {
       if (!response.data.includes('fail')) {
+
       }
     }).catch(
     )
   },
   methods: {
     upDataUrl(jsonList) {
-<<<<<<< HEAD
-      if (jsonList) {
-        switch (this.$route.query.type) {
-          case 1:
-            this.startDate = this.$route.query.startDate
-            this.endDate = this.$route.query.endDate
-            this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.fid}&startDate=${this.startDate}&endDate=${this.endDate}`
-            break
-          case 2:
-            this.userData.leafDep === true
-            ? this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
-            : this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
-            break
-        }
-      } else {
-        this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.fid}&startDate=${this.startDate}&endDate=${this.endDate}`
-=======
-      console.log(this.$route.query.type)
       if (jsonList) {
         this.startDate = jsonList.startTime
         this.endDate = jsonList.endTime
@@ -84,19 +63,17 @@ export default {
             ? this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
             : this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
             break
-            default:
+          default:
             break
         }
       } else {
-        if(this.$route.query.type==1){
-        this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.id}&startDate=${this.startDate}&endDate=${this.endDate}`
-<<<<<<< HEAD
-        } else{
-           this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
+        if (this.$route.query.type === '1') {
+          this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.id}&startDate=${this.startDate}&endDate=${this.endDate}`
+        } else {
+          this.userData.leafDep === true
+            ? this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
+            : this.nowUrl = `http://bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
         }
-=======
->>>>>>> 8e4e85df0c39f36f17bd01293ba2009cd57b0f9d
->>>>>>> 1a26a127ac96e1743e4d5267c0f5c4dc3d6349c1
       }
     }
   }
@@ -107,8 +84,4 @@ export default {
     min-height: 100%;
     background: #fff;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e4e85df0c39f36f17bd01293ba2009cd57b0f9d
 </style>
