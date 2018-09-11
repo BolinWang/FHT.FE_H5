@@ -34,8 +34,8 @@ export default {
     window['refreshPage'] = (row) => {
       const jsonList = JSON.parse(row)
       that.upDataUrl(jsonList)
-      return that.nowUrl
     }
+    that.upDataUrl()
     axios.get(`${biUrl}?op=fs_load&cmd=sso`, {
       withCredentials: true,
       params: {
@@ -53,12 +53,14 @@ export default {
       if (jsonList) {
         this.startDate = jsonList.startTime
         this.endDate = jsonList.endTime
+        console.log(this.$route.query.type)
         switch (this.$route.query.type) {
           case '1':
             this.nowUrl = `//bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B4e2a%5D%5B4eba%5D%5B4e1a%5D%5B7ee9%5D.cpt&op=h5&fid=${this.userData.id}&startDate=${this.startDate}&endDate=${this.endDate}`
             break
           case '2':
-            this.userData.leafDep === true
+            console.log(jsonList.leafDep)
+            jsonList.leafDep === true
             ? this.nowUrl = `//bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
             : this.nowUrl = `//bi.mdguanjia.com/fh/ReportServer?reportlet=fh%2FcityManagerAPP%2F%5B7ba1%5D%5B7406%5D%5B65e5%5D%5B62a5%5D-%5B975e%5D%5B6700%5D%5B540e%5D%5B4e00%5D%5B7ea7%5D.cpt&op=h5&depId=${this.userData.depId}&&startDate=${this.startDate}&endDate=${this.endDate}`
             break
