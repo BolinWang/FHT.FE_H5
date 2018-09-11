@@ -1,10 +1,11 @@
 <template>
   <div class="container">
-     <iframe width="100%"  height='400' style='min-height: 400px' :src="nowUrl"></iframe>
+     <iframe width="100%"  id="external-frame" height='500' style='min-height: 500px' :src="nowUrl"></iframe>
   </div>
 </template>
 <script>
 import axios from 'axios'
+
 const biUrl = '//bi.mdguanjia.com/fh/ReportServer'
 export default {
   data() {
@@ -47,6 +48,13 @@ export default {
     }).catch((error) => {
       console.log(error)
     })
+    const iframe = document.getElementById('external-frame')
+    if (iframe) {
+      var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow
+      if (iframeWin.document.body) {
+        iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight
+      }
+    }
   },
   methods: {
     upDataUrl(jsonList) {
