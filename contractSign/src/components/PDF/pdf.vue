@@ -11,7 +11,6 @@
 </template>
 <script>
 import PDFJS from 'pdfjs-dist'
-console.log(PDFJS)
 export default {
   data () {
     return {
@@ -96,14 +95,14 @@ export default {
 <style lang="scss" scoped>
 .pdf_box {
   position: fixed;
-  top: 0;
+  top: 90px;
   left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
   overflow: auto;
   .pdf_container {
-    background-color: rgba(0, 0, 0, 0.75);
+    background: #fff;
     width: 100%;
     height: 100%;
   }
@@ -112,7 +111,7 @@ export default {
 .pdf_tools {
   position: fixed;
   right: 0.4rem;
-  bottom: 5rem;
+  bottom: 3rem;
   z-index: 99;
   .tools_zoomOut,
   .tools_zoomIn {

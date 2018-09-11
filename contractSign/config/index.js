@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/pdf': {
-          target: 'https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', // 换成正确的服务器域名
-          changeOrigin: true,
-          pathRewrite: {
-            '^/pdf': ''
-          }
+      '/pdf': {
+        target: 'https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', // 换成正确的服务器域名
+        changeOrigin: true,
+        pathRewrite: {
+          '^/pdf': ''
         }
+      }
     },
 
     // Various Dev Server settings

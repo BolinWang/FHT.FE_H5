@@ -1,27 +1,32 @@
 <template>
-  <div class="container_sign">
+  <div class="container">
     <section class="header">
-      <div class="returnContract" @click="returnContract">
-        <van-icon name="arrow-left" />
-        <div class="title">查看合同</div>
-      </div>
+      <van-nav-bar
+        title="签约"
+        left-arrow
+        fixed
+        :z-index="1000"
+        @click-left="returnContract"
+      />
     </section>
-    <div class="tips">{{msg}}</div>
-    <canvas id="canvas_sign">{{supportMsg}}</canvas>
-    <section class="canvas_tools">
-      <div class="tools_clear" @click="clearDraw">
-        <img class="tools_clear_img" src="../assets/clear.png" alt="" />
-        <div class="tools_clear_title">清 除</div>
-      </div>
-    </section>
-    <section class="footer fixed">
-      <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
+    <section class="container_sign">
+      <div class="tips">{{msg}}</div>
+      <canvas id="canvas_sign">{{supportMsg}}</canvas>
+      <section class="canvas_tools">
+        <div class="tools_clear" @click="clearDraw">
+          <img class="tools_clear_img" src="../assets/clear.png" alt="" />
+          <div class="tools_clear_title">清 除</div>
+        </div>
+      </section>
+      <section class="footer fixed">
+        <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
+      </section>
     </section>
   </div>
 </template>
 
 <script>
-import { Button, Icon, Dialog } from 'vant'
+import { Button, Dialog, NavBar } from 'vant'
 import Draw from '@/utils/draw'
 import { contractApi } from '@/api/contract'
 import { getUserData } from '@/utils/auth'
@@ -31,7 +36,7 @@ export default {
   name: 'sign',
   components: {
     [Button.name]: Button,
-    [Icon.name]: Icon,
+    [NavBar.name]: NavBar,
     [Dialog.name]: Dialog,
     Draw
   },
@@ -58,7 +63,8 @@ export default {
       msg: '请在下方区域手写签名，务必使用真实姓名',
       supportMsg: '您的设备暂不支持签名',
       signImage: '',
-      params: {}
+      params: {},
+      draw: ''
     }
   },
   created () {
@@ -78,17 +84,18 @@ export default {
     },
     clearDraw () {
       this.draw.clear()
+      this.signImage = ''
     },
     savePNG () {
       this.signImage = this.draw.getPNGImage()
-      if (!this.signImage) {
+      if (!this.draw.hasDrawed) {
         this.$toast.fail('请手写签名后再提交')
         return false
       }
       contractApi.signContract({
         sealData: this.signImage,
         sessionId: getUserData().sessionId,
-        contractNo: this.params.contractNo
+        contractNo: this.params.params.contractNo
       }, 'post', {
         imei: this.params.imei,
         geographicPosition: this.params.geographicPosition,
@@ -123,40 +130,37 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.header {
+  color: #333;
+  .van-nav-bar {
+    height: 90px;
+    line-height: 90px;
+  }
+}
 .container_sign {
   position: fixed;
-  top: 0;
+  top: 90px;
   left: 0;
   width: 750px;
   height: 100%;
   z-index: 101;
   background: #FFF;
   font-size: 30px;
-  .header {
-    line-height: 90px;
-    .title {
-      display: inline-block;
-    }
-    .returnContract {
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-    }
-  }
   .tips {
     color: #999;
     padding: 0 20px;
-    line-height: 60px;
+    line-height: 90px;
+    border-bottom: 2px dashed #ccc;
   }
   #canvas_sign {
     background: #fff;
     cursor: default;
     width: 750px;
-    height: calc(100% - 240px);
+    height: calc(100% - 270px);
   }
   .canvas_tools {
     .tools_clear{
-      position: absolute;
+      position: fixed;
       right: 0;
       bottom: 100px;
       z-index: 100;
