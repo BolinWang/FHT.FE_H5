@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <div class="text">123413243</div>
      <iframe width="100%"  height='400' style='min-height: 400px' :src="nowUrl"></iframe>
   </div>
 </template>
@@ -44,11 +43,7 @@ export default {
         fr_password: this.userData.password
       }
     }).then((response) => {
-      console.log(response)
-      console.log('12345')
-      if (!response.data.includes('fail')) {
 
-      }
     }).catch((error) => {
       console.log(error)
     })
