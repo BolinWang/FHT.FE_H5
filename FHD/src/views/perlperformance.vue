@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-     <iframe width="100%"  id="external-frame" height='500' style='min-height: 500px' :src="nowUrl"></iframe>
+     <iframe width="100%" class="external-frame"  id="external-frame" frameborder="0" scrolling="no" :src="nowUrl"></iframe>
   </div>
 </template>
 <script>
@@ -93,5 +93,8 @@ export default {
   .container{
     min-height: 100%;
     background: #fff;
+  }
+  .external-frame{
+    height:500px;
   }
 </style>
