@@ -28,12 +28,12 @@ export default {
     const nowD = myDate.getDate()
     this.endDate = `${nowY}-${(nowM < 10 ? '0' + nowM : nowM)}-${(nowD < 10 ? '0' + nowD : nowD)}`
     this.startDate = `${nowY}-${(nowM < 10 ? '0' + nowM : nowM)}-${(nowD < 10 ? '0' + nowD : nowD)}`
-    this.upDataUrl()
   },
   mounted() {
     let that = this
     window['refreshPage'] = (row) => {
       const jsonList = JSON.parse(row)
+      console.log(row)
       that.upDataUrl(jsonList)
     }
     axios.get(`${biUrl}?op=fs_load&cmd=sso`, {
@@ -43,7 +43,7 @@ export default {
         fr_password: this.userData.password
       }
     }).then((response) => {
-
+      that.upDataUrl()
     }).catch((error) => {
       console.log(error)
     })
