@@ -1,5 +1,14 @@
 <template>
   <div class="container">
+    <section class="header">
+      <van-nav-bar
+        :title="title"
+        left-arrow
+        fixed
+        :z-index="1000"
+        @click-left="returnApp"
+      />
+    </section>
     <section v-if="images && images.length > 0" class="container_images">
       <van-swipe class="images_wrap" vertical>
         <van-swipe-item v-for="(item, index) in images" :key="index">
@@ -13,14 +22,15 @@
   </div>
 </template>
 <script>
-import { Button, Swipe, SwipeItem } from 'vant'
+import { Button, Swipe, SwipeItem, NavBar } from 'vant'
 import { deepClone } from '@/utils/index'
 export default {
   name: 'pdfview',
   components: {
     [Button.name]: Button,
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem
+    [SwipeItem.name]: SwipeItem,
+    [NavBar.name]: NavBar
   },
   props: {
     paramsData: {
@@ -40,6 +50,7 @@ export default {
   },
   data () {
     return {
+      title: '合同',
       params: {},
       contractDataInfo: {},
       contentUrl: '',
@@ -60,18 +71,21 @@ export default {
         return false
       }
       if (this.contentUrl.indexOf('contract_image') > -1) {
+        // 清除DOM中的pdf容器
         let pdfNode = document.getElementById('pdf_box')
         document.body.removeChild(pdfNode)
         this.images = this.contentUrl.split(',')
       } else {
         // this.$showPDF('../../static/default.pdf')
-        // this.$showPDF('/pdf/20170613170959235529')
-        // let contentUrl = this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf')
-        this.$showPDF(this.contentUrl)
+        let contentUrl = this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf')
+        this.$showPDF(contentUrl)
       }
     },
     gotoSign () {
       this.$emit('handleSign', this.params)
+    },
+    returnApp () {
+      console.log('return App')
     }
   },
   watch: {
@@ -98,9 +112,11 @@ export default {
 }
 .container_images {
   position: fixed;
+  top: 90px;
+  left: 0;
   width: 750px;
   height: 100%;
-  z-index: 9999999;
+  z-index: 200;
   background: #fff;
   .images_wrap {
     width: 100%;
@@ -108,6 +124,13 @@ export default {
     .images_item {
       width: 750px;
     }
+  }
+}
+.header {
+  color: #333;
+  .van-nav-bar {
+    height: 90px;
+    line-height: 90px;
   }
 }
 .footer {

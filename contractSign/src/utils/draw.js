@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-09-10 14:04:28
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-09-10 14:31:18
+ * @Last Modified time: 2018-09-11 13:53:44
  */
 
 function Draw (canvas, config = {}) {
@@ -75,6 +75,7 @@ function Draw (canvas, config = {}) {
       point.y = e.clientY - top
       paint(signal)
     }
+    this.hasDrawed = true
   }
   const start = create(1)
   const move = create(2)
@@ -99,6 +100,7 @@ function Draw (canvas, config = {}) {
   }
 }
 Draw.prototype = {
+  hasDrawed: false, // 判断canvas是否绘制过
   // 缩放
   scale (width, height, canvas = this.canvas) {
     const w = canvas.width
@@ -144,6 +146,7 @@ Draw.prototype = {
     let width = this.width
     let height = this.height
     this.context.clearRect(0, 0, width, height)
+    this.hasDrawed = false
   }
 }
 export default Draw
