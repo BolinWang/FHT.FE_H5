@@ -15,7 +15,7 @@
       </div>
     </section>
     <section class="footer fixed">
-      <van-button size="large" class="btn_sign" @click="savePNG">提交签名</van-button>
+      <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
     </section>
   </div>
 </template>
@@ -174,6 +174,7 @@ export default {
       position: relative;
       border-radius: 10px;
       border: 2px dashed #b0b2b7;
+      padding: 15px;
     }
   }
 }
