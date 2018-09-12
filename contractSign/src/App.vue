@@ -138,9 +138,11 @@ export default {
     },
     returnMethod (data) {
       const resource = this.params.resource || {}
+      let resourceCode = Object.values(resource)[0]
+      // 磐谷金融的跳转码为5017，其他为5010
       const bridgeParam = {
         desroy: true,
-        libCode: Object.values(resource)[0]
+        libCode: resourceCode * 1 === 6017 ? 5017 : 5010
       }
       if (this.app_andriod === true) {
         window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))

@@ -224,6 +224,7 @@ export default {
     // 字符串查找不用includes  IOS8不兼容
     this.app_ios = userAgent.indexOf('fht-ios') > -1
     this.app_andriod = userAgent.indexOf('fht-android') > -1
+    this.isAPP = this.app_ios || this.app_andriod
     /**
      * 获取App数据
      */
@@ -239,6 +240,7 @@ export default {
       // eslint-disable-next-line
       let getAndriodData = JSON.parse(window.SetupJsCommunication.getParamsFromNative())
       setUserData(getAndriodData)
+      console.log(getAndriodData)
       this.initActive()
       this.initApp()
     } else {
@@ -286,8 +288,8 @@ export default {
      */
     initActive () {
       let getUserDataFromLoacal = getUserData() || {}
-      this.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
       // 未登录
+      console.log(getUserDataFromLoacal.sessionId)
       if (!getUserDataFromLoacal.sessionId) {
         this.isLogin = false
       } else {
@@ -399,7 +401,7 @@ export default {
         setUserData({
           ...this.userInfo
         })
-        this.initEmma()
+        // this.initEmma()
         this.queryActivityStatus(sessionId)
       }).catch((err) => {
         console.log(err)
