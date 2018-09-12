@@ -4,15 +4,68 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>麦邻租房-全城VR看房</title>
+    <script>
+      /* eslint-disable */
+      let urlSearchParams = {}
+      if (location.search.indexOf('?') !== -1) {
+        const searchArr = location.search.substr(1).split('&')
+        for (let i = 0; i < searchArr.length; i++) {
+          if (searchArr[i].split('=')[1]) {
+            urlSearchParams[searchArr[i].split('=')[0]] = unescape(
+              searchArr[i].split('=')[1]
+            )
+          }
+        }
+      }
+      // 百度推广
+      if (urlSearchParams.sourceType === 'baidu') {
+        window._agl = window._agl || [];
+        (function () {
+          window._agl.push(
+            ['production', '_f7L2XwGXjyszb4d1e2oxPybgD']
+          );
+          (function () {
+            var agl = document.createElement('script')
+            agl.type = 'text/javascript'
+            agl.async = true
+            agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=_f7L2XwGXjyszb4d1e2oxPybgD'
+            var s = document.getElementsByTagName('script')[0]
+            s.parentNode.insertBefore(agl, s)
+          })()
+        })()
+      }
+      // 头条推广
+      else if (urlSearchParams.sourceType === 'toutiao') {
+        (function (root) {
+          root._tt_config = true
+          var ta = document.createElement('script');
+          ta.type = 'text/javascript';
+          ta.async = true
+          ta.src = 'https://s3.pstatp.com/bytecom/resource/track_log/src/toutiao-track-log.js'
+          ta.onerror = function () {
+            var request = new XMLHttpRequest()
+            var web_url = window.encodeURIComponent(window.location.href)
+            var js_url = ta.src
+            var url = '//ad.toutiao.com/link_monitor/cdn_failed?web_url=' + web_url + '&js_url=' + js_url +
+              '&convert_id=1611206099665924'
+            request.open('GET', url, true)
+            request.send(null)
+          }
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(ta, s)
+        })(window)
+      }
+    </script>
   </head>
   <body>
     <div id="app-box"></div>
-    <script src="//emma-sdk.huodonghezi.com/dist/js/emma.js"></script>
+    <!-- 活动盒子SDK -->
+    <!-- <script src="//emma-sdk.huodonghezi.com/dist/js/emma.js"></script> -->
     <script>
-      (function() {
+      (function () {
         document.getElementById('fht_baidu_tj_act10') && document.getElementById('fht_baidu_tj_act10').remove()
         let hm = document.createElement('script')
-        hm.src = "https://hm.baidu.com/hm.js?85264c4fd0fb74ba6477632e3d581d8b"
+        hm.src = 'https://hm.baidu.com/hm.js?85264c4fd0fb74ba6477632e3d581d8b'
         hm.id = 'fht_baidu_tj_act10'
         let s = document.getElementsByTagName('script')[0]
         s.parentNode.insertBefore(hm, s)

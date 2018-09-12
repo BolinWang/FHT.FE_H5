@@ -1,10 +1,14 @@
 <template>
   <section class="page_container">
-    <section class="header" v-if="!isAPP">
+    <section class="openApp" v-if="!isAPP && showOpenApp" @click="callupApp">
+      <img class="close_png" src="../assets/close.png" alt="" @click.stop="showOpenApp = false" />
+      <img class="image" src="../assets/openApp.png" alt="" />
+    </section>
+    <section class="header" v-else-if="!isAPP && !showOpenApp">
       <img src="../assets/logo.png" alt="" />
     </section>
     <section class="container">
-       <!-- 重力感应区域 -->
+      <!-- 重力感应区域 -->
       <div class="vr_container" id="scene">
         <div data-depth="0.6">
           <img
@@ -19,7 +23,7 @@
           </div>
         </div>
       </div>
-       <!-- 活动信息 -->
+      <!-- 活动信息 -->
       <section class="active_info">
         <div class="active_title"></div>
         <div class="active_date">
@@ -35,10 +39,10 @@
             <div class="container">
               <div class="login_field" v-if="!isAPP">
                 <van-cell-group class="item_group" :border="false">
-                  <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
+                  <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" @focus="scrollIntoView" />
                 </van-cell-group>
                 <van-cell-group class="item_group" :border="false">
-                  <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number">
+                  <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number" @focus="scrollIntoView">
                     <label slot="button" class="label_code" @click="getVcode" v-if="!disabled">获取验证码</label>
                     <label slot="button" class="label_code" v-else>{{timerNum}}s后重发</label>
                   </van-field>
@@ -133,6 +137,10 @@ import Bridge from '@/utils/bridge'
 import Parallax from '@/utils/orienterParallax'
 import userAgreeMent from '@/utils/mlAgree'
 import { sensitiveInfo } from '@/utils'
+import { getBrowser } from '@/utils//browser'
+import CallApp from 'callapp-lib'
+
+const browser = getBrowser()
 
 const initPageInfoData = {
   title: '麦邻租房',
@@ -164,6 +172,7 @@ export default {
   },
   data () {
     return {
+      showOpenApp: true,
       vcode: '',
       mobile: '',
       disabled: false,
@@ -243,13 +252,14 @@ export default {
   mounted () {
     this.$nextTick(() => {
       getWxShareInfo(initPageInfoData.shareData)
-      // 活动盒子
-      window.emma.config({
-        key: 'eacb7d079f7bc7104d1346e400291155',
-        debug: false,
-        test: false,
-        eventList: [ 'iconSmall', 'iconBig', 'banner' ]
-      })
+      // // 活动盒子
+      // window.emma.config({
+      //   key: 'eacb7d079f7bc7104d1346e400291155',
+      //   debug: false,
+      //   test: false,
+      //   eventList: [ 'iconSmall', 'iconBig', 'banner' ]
+      // })
+      this.sourceTypeTrack()
     })
     // 重力感应实例化
     let scene = document.getElementById('scene')
@@ -257,6 +267,15 @@ export default {
     console.log(parallax)
   },
   methods: {
+    scrollIntoView () {
+      if (document.activeElement.tagName.toLowerCase() === 'input') {
+        window.setTimeout(() => {
+          browser.isIos && document.activeElement.scrollIntoViewIfNeeded()
+          browser.isAndroid && document.activeElement.scrollIntoView()
+        }, 200)
+      }
+    },
+
     returnClick () {
       this.$toast('fail', '请先领取优惠券')
       return false
@@ -354,6 +373,7 @@ export default {
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
+        this.sourceTypeTrack()
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -517,6 +537,51 @@ export default {
         return false
       }
       window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
+    },
+    // 唤醒APP
+    callupApp () {
+      const schemeConfig = {
+        scheme_IOS: 'MyRoom://',
+        scheme_And: 'myroom://',
+        iosPath: 'activity',
+        yingyongbao: 'http://a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home',
+        appstore: 'https://itunes.apple.com/cn/app/id1191743282?mt=8'
+      }
+      let callupAppOptions = {
+        callback: function () {
+          // IOS 微信中直接前往appstore
+          if (browser.isIos && browser.isWechat) {
+            window.location.href = schemeConfig.appstore
+          } else {
+            window.location.href = schemeConfig.yingyongbao
+          }
+        }
+      }
+      const options = {
+        protocol: browser.isIos ? schemeConfig.scheme_IOS : (browser.isAndroid ? schemeConfig.scheme_And : ''),
+        yingyongbao: schemeConfig.yingyongbao,
+        appstore: schemeConfig.appstore
+      }
+      if (browser.isIos) {
+        callupAppOptions.path = schemeConfig.iosPath
+      }
+      const callLib = new CallApp(options)
+      callLib.open(callupAppOptions)
+    },
+
+    // 推广渠道转化
+    sourceTypeTrack () {
+      switch (this.urlSearchParams.sourceType) {
+        // 百度推广转化成功
+        case 'baidu':
+          window._agl && window._agl.push(['track', ['success', {t: 3}]])
+          break
+        case 'toutiao':
+          window._taq.push({convert_id: '1611206099665924', event_type: 'form'})
+          break
+        default:
+          break
+      }
     }
   }
 }
@@ -527,6 +592,20 @@ export default {
   height: 100%;
   background-color: #0e1125;
   position: relative;
+  .openApp {
+    .image {
+      width: 750px;
+      height: 104px;
+    }
+    .close_png {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      z-index: 1;
+      top: 37px;
+      left: 30px;
+    }
+  }
   .header {
     position: absolute;
     top: 0;
