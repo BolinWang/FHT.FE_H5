@@ -2,16 +2,22 @@
   <div id="app">
     <!-- 合同查看 -->
     <pdfview v-if="active === 1"
-      :paramsData="appParams.params"
+      :paramsData="appParams"
+      :isApp="isApp"
+      :isIos="app_ios"
+      :isAndriod="app_andriod"
       :contractData="contractData"
-      @handleSign="gotoSign">
+      @handleSign="gotoSign"
+      @handleReturn="returnMethod">
     </pdfview>
     <!-- 手写签名 -->
     <sign v-else-if="active === 2"
       :paramsData="appParams"
+      :isApp="isApp"
       :isIos="app_ios"
       :isAndriod="app_andriod"
-      @handleReturnContract="refreshPage">
+      @handleReturnContract="refreshPage"
+      @handleReturn="returnMethod">
     </sign>
   </div>
 </template>
@@ -44,6 +50,7 @@ export default {
         params: {}
       },
       active: 1,
+      isApp: false,
       contractData: {}
     }
   },
@@ -51,6 +58,7 @@ export default {
     // 获取APP数据
     this.app_ios = userAgent.indexOf('fht-ios') > -1
     this.app_andriod = userAgent.indexOf('fht-android') > -1
+    this.isApp = this.app_ios || this.app_andriod
     this.initApp()
     let _this = this
     if (this.app_ios === true) {
@@ -127,6 +135,20 @@ export default {
     // 刷新页面
     refreshPage () {
       window.location.href = window.location.href
+    },
+    returnMethod (data) {
+      const resource = this.params.resource || {}
+      const bridgeParam = {
+        desroy: true,
+        libCode: Object.values(resource)[0]
+      }
+      if (this.app_andriod === true) {
+        window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+      } else if (this.app_ios === true) {
+        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+          console.log(responseData)
+        })
+      }
     }
   }
 }

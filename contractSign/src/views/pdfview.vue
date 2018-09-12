@@ -3,7 +3,7 @@
     <section class="header">
       <van-nav-bar
         :title="title"
-        left-arrow
+        :left-arrow="isApp"
         fixed
         :z-index="1000"
         @click-left="returnApp"
@@ -33,6 +33,11 @@ export default {
     [NavBar.name]: NavBar
   },
   props: {
+    isApp: {
+      type: Boolean,
+      default: false
+    },
+
     paramsData: {
       type: Object,
       default () {
@@ -46,11 +51,19 @@ export default {
       default () {
         return {}
       }
+    },
+    isAndriod: {
+      type: Boolean,
+      default: false
+    },
+    isIos: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      title: '合同',
+      title: '租赁合同',
       params: {},
       contractDataInfo: {},
       contentUrl: '',
@@ -61,6 +74,8 @@ export default {
     this.params = this.paramsData
     this.contractDataInfo = deepClone(this.contractData)
     this.contentUrl = this.contractDataInfo.contentUrl
+    this.app_andriod = this.isAndriod
+    this.app_ios = this.isIos
   },
   mounted () {
     this.handlePreview()
@@ -82,16 +97,22 @@ export default {
       }
     },
     gotoSign () {
-      this.$emit('handleSign', this.params)
+      this.$emit('handleSign')
     },
     returnApp () {
+      if (!this.isApp) {
+        return false
+      }
       console.log('return App')
+      this.$emit('handleReturn', {
+        type: 'contract'
+      })
     }
   },
   watch: {
     contractData: {
       immediate: true,
-      handler: function (val = {}) {
+      handler (val = {}) {
         this.contractDataInfo = deepClone(val)
         this.contentUrl = val.contentUrl
         this.handlePreview()
@@ -99,7 +120,7 @@ export default {
     },
     paramsData: {
       immediate: true,
-      handler: function (val = {}) {
+      handler (val = {}) {
         this.params = deepClone(val)
       }
     }

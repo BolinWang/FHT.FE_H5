@@ -30,7 +30,6 @@ import { Button, Dialog, NavBar } from 'vant'
 import Draw from '@/utils/draw'
 import { contractApi } from '@/api/contract'
 import { getUserData } from '@/utils/auth'
-import Bridge from '@/utils/bridge'
 
 export default {
   name: 'sign',
@@ -106,26 +105,14 @@ export default {
         Dialog.alert({
           message: '签名成功'
         }).then(() => {
-          this.handleBridge()
+          this.$emit('handleReturn', {
+            type: 'sign'
+          })
         })
       })
     },
     returnContract () {
       this.$emit('handleReturnContract')
-    },
-    handleBridge () {
-      let bridgeParam = {
-        libCode: 5016
-      }
-      if (this.app_andriod === true) {
-        window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-      } else if (this.app_ios === true) {
-        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-          window.location.href = window.location.href
-        })
-      } else {
-        console.log('H5')
-      }
     }
   }
 }
