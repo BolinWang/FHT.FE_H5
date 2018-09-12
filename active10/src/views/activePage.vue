@@ -259,7 +259,7 @@ export default {
       //   test: false,
       //   eventList: [ 'iconSmall', 'iconBig', 'banner' ]
       // })
-      this.sourceTypeTrack()
+      // this.sourceTypeTrack()
     })
     // 重力感应实例化
     let scene = document.getElementById('scene')
