@@ -92,8 +92,8 @@ export default {
         this.images = this.contentUrl.split(',')
       } else {
         // this.$showPDF('../../static/default.pdf')
-        let contentUrl = this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf')
-        this.$showPDF(contentUrl)
+        // let contentUrl = this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf')
+        this.$showPDF(this.contentUrl)
       }
     },
     gotoSign () {
