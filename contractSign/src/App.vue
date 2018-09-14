@@ -1,17 +1,19 @@
 <template>
   <div id="app">
     <!-- 合同查看 -->
-    <pdfview v-if="active === 1"
-      :paramsData="appParams"
-      :isApp="isApp"
-      :isIos="app_ios"
-      :isAndriod="app_andriod"
-      :contractData="contractData"
-      @handleSign="gotoSign"
-      @handleReturn="returnMethod">
-    </pdfview>
+    <keep-alive>
+      <pdfview v-if="active === 1"
+        :paramsData="appParams"
+        :isApp="isApp"
+        :isIos="app_ios"
+        :isAndriod="app_andriod"
+        :contractData="contractData"
+        @handleSign="gotoSign"
+        @handleReturn="returnMethod">
+      </pdfview>
+    </keep-alive>
     <!-- 手写签名 -->
-    <sign v-else-if="active === 2"
+    <sign v-if="active === 2"
       :paramsData="appParams"
       :isApp="isApp"
       :isIos="app_ios"
@@ -28,6 +30,7 @@ import sign from '@/views/sign'
 import Bridge from '@/utils/bridge'
 import { setUserData, getUserData } from '@/utils/auth'
 import { contractApi } from '@/api/contract'
+import { ObjectMap } from '@/utils/index'
 const initPageInfoData = {
   title: '合同签约',
   shareData: {
@@ -68,7 +71,7 @@ export default {
         setUserData({
           sessionId: responseData.sessionId
         })
-        this.getContractUrl()
+        _this.getContractUrl()
       })
     } else if (this.app_andriod === true) {
       let getAndriodData = JSON.parse(window.SetupJsCommunication.getParamsFromNative())
@@ -117,6 +120,7 @@ export default {
         mask: true,
         message: '加载中...'
       })
+      console.log(this.appParams)
       if (!this.appParams.params || !this.appParams.params.contractNo) {
         this.$toast.fail('无合同号')
         return false
@@ -132,22 +136,58 @@ export default {
     gotoSign () {
       this.active = 2
     },
-    // 刷新页面
+    // 合同页面初始化
     refreshPage () {
-      window.location.href = window.location.href
+      this.active = 1
     },
     returnMethod (data) {
-      const resource = this.params.resource || {}
-      let resourceCode = Object.values(resource)[0]
-      // 磐谷金融的跳转码为5017，其他为5010
-      const bridgeParam = {
-        desroy: true,
-        libCode: resourceCode * 1 === 6017 ? 5017 : 5010
+      const resource = this.appParams.resource || {}
+      // let resourceCode = Object.values(resource)[0]
+      let resourceCode = resource.ml || resource.md
+      let regionType = data.type || 'contract'
+      /**
+       * contract: 【返回】5000 销毁当前页面
+       * sign:【签约成功】跳转APP相应页面
+       */
+      // 跳转码处理
+      const routerCodeMap = {
+        // 磐谷
+        '6006': {
+          libCode: 5017
+        },
+        // 确认订单界面-签约合同（普通合同）
+        '6007': {
+          libCode: 5010,
+          subLibCode: 1
+        },
+        // 订单、合同签约
+        '6015': {
+          libCode: 5010,
+          subLibCode: 1
+        },
+        '6017': {
+          libCode: 5010,
+          subLibCode: 1
+        }
+      }
+      let bridgeParam = {
+        libCode: 5000 // 返回销毁当前页面
+      }
+      // 签约成功，通知APP跳转相应code
+      if (regionType === 'sign' && resourceCode && routerCodeMap[resourceCode]) {
+        bridgeParam = {
+          ...routerCodeMap[resourceCode]
+        }
+      }
+      if (resourceCode * 1 === 6007) {
+        bridgeParam = {
+          ...routerCodeMap['6007']
+        }
       }
       if (this.app_andriod === true) {
         window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
       } else if (this.app_ios === true) {
-        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+        Bridge.callHandler('jumpToNativePages', ObjectMap(bridgeParam), function responseCallback (responseData) {
           console.log(responseData)
         })
       }

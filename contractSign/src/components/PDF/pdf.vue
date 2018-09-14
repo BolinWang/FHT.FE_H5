@@ -95,7 +95,7 @@ export default {
 <style lang="scss" scoped>
 .pdf_box {
   position: fixed;
-  top: 90px;
+  top: 120px;
   left: 0;
   width: 100%;
   height: 100%;

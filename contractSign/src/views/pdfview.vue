@@ -10,14 +10,14 @@
       />
     </section>
     <section v-if="images && images.length > 0" class="container_images">
-      <van-swipe class="images_wrap" vertical>
+      <van-swipe class="images_wrap" vertical :loop="false">
         <van-swipe-item v-for="(item, index) in images" :key="index">
           <img class="images_item" v-lazy="item" />
         </van-swipe-item>
       </van-swipe>
     </section>
     <section class="footer fixed">
-      <van-button v-if="contractDataInfo.status * 1 === 1" size="large" class="btn_sign" @click="gotoSign">立即签约</van-button>
+      <van-button v-if="canSign" size="large" class="btn_sign" @click="gotoSign">立即签约</van-button>
     </section>
   </div>
 </template>
@@ -37,7 +37,6 @@ export default {
       type: Boolean,
       default: false
     },
-
     paramsData: {
       type: Object,
       default () {
@@ -67,6 +66,7 @@ export default {
       params: {},
       contractDataInfo: {},
       contentUrl: '',
+      canSign: false,
       images: []
     }
   },
@@ -74,6 +74,7 @@ export default {
     this.params = this.paramsData
     this.contractDataInfo = deepClone(this.contractData)
     this.contentUrl = this.contractDataInfo.contentUrl
+    this.canSign = this.contractDataInfo.status * 1 === 1
     this.app_andriod = this.isAndriod
     this.app_ios = this.isIos
   },
@@ -92,8 +93,8 @@ export default {
         this.images = this.contentUrl.split(',')
       } else {
         // this.$showPDF('../../static/default.pdf')
-        // let contentUrl = this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf')
-        this.$showPDF(this.contentUrl)
+        let contentUrl = (process.env.NODE_ENV !== 'development') ? this.contentUrl : (this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf'))
+        this.$showPDF(contentUrl)
       }
     },
     gotoSign () {
@@ -115,6 +116,7 @@ export default {
       handler (val = {}) {
         this.contractDataInfo = deepClone(val)
         this.contentUrl = val.contentUrl
+        this.canSign = val.status * 1 === 1
         this.handlePreview()
       }
     },
@@ -133,7 +135,7 @@ export default {
 }
 .container_images {
   position: fixed;
-  top: 90px;
+  top: 120px;
   left: 0;
   width: 750px;
   height: 100%;
@@ -150,14 +152,15 @@ export default {
 .header {
   color: #333;
   .van-nav-bar {
-    height: 90px;
-    line-height: 90px;
+    width: 750px;
+    height: 120px;
+    line-height: 120px;
   }
 }
 .footer {
   position: fixed;
   bottom: 0;
-  z-index: 100;
+  z-index: 999;
   width: 750px;
   .btn_sign {
     /* autoprefixer: off */

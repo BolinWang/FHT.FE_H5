@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:44:52
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-09-10 18:28:05
+ * @Last Modified time: 2018-09-13 16:06:44
  */
 
 import Vue from 'vue'
@@ -16,7 +16,7 @@ Vue.use(pdf)
 Vue.use(Lazyload)
 // development引用vconsole
 // eslint-disable-next-line
-process.env.NODE_ENV !== 'production' && require('@/utils/vconsole').default
+process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
 
 FastClick.attach(document.body)
 Vue.config.productionTip = false

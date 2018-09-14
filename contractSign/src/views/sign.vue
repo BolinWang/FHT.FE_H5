@@ -71,6 +71,12 @@ export default {
     this.params = this.paramsData
     this.app_andriod = this.isAndriod
     this.app_ios = this.isIos
+    if (this.app_andriod === true) {
+      window.SetupJsCommunication.canBack(true)
+      window.returnBack = () => {
+        this.returnContract()
+      }
+    }
   },
   mounted () {
     this.$nextTick(() => {
@@ -92,6 +98,12 @@ export default {
         this.$toast.fail('请手写签名后再提交')
         return false
       }
+      let toastId = this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+        mask: true,
+        message: '加载中...'
+      })
       contractApi.signContract({
         sealData: this.signImage,
         sessionId: getUserData().sessionId,
@@ -102,6 +114,10 @@ export default {
         baseStation: this.params.baseStation,
         lac: this.params.lac
       }).then(res => {
+        this.$toast.clear(toastId)
+        if (this.app_andriod === true) {
+          window.SetupJsCommunication.canBack(false)
+        }
         Dialog.alert({
           message: '签名成功'
         }).then(() => {
@@ -121,13 +137,14 @@ export default {
 .header {
   color: #333;
   .van-nav-bar {
-    height: 90px;
-    line-height: 90px;
+    width: 750px;
+    height: 120px;
+    line-height: 120px;
   }
 }
 .container_sign {
   position: fixed;
-  top: 90px;
+  top: 120px;
   left: 0;
   width: 750px;
   height: 100%;
@@ -144,7 +161,7 @@ export default {
     background: #fff;
     cursor: default;
     width: 750px;
-    height: calc(100% - 270px);
+    height: calc(100% - 300px);
   }
   .canvas_tools {
     .tools_clear{
