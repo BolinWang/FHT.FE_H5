@@ -108,7 +108,8 @@ export default {
         sealData: this.signImage,
         sessionId: getUserData().sessionId,
         contractNo: this.params.params.contractNo
-      }, 'post', {
+      }, {
+        interceptors: false,
         imei: this.params.imei,
         geographicPosition: this.params.geographicPosition,
         baseStation: this.params.baseStation,
@@ -118,11 +119,21 @@ export default {
         if (this.app_andriod === true) {
           window.SetupJsCommunication.canBack(false)
         }
-        Dialog.alert({
+        let signParams = res.code * 1 === 0 ? {
+          success: true,
           message: '签名成功'
+        } : {
+          success: false,
+          message: res.message || '签名失败'
+        }
+        Dialog.alert({
+          message: signParams.message
         }).then(() => {
           this.$emit('handleReturn', {
-            type: 'sign'
+            type: 'sign',
+            params: {
+              success: signParams.success
+            }
           })
         })
       })

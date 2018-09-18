@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:52:44
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-17 16:51:51
+ * @Last Modified time: 2018-09-18 11:10:18
  */
 
 import axios from 'axios'
@@ -87,11 +87,12 @@ const responseMehod = (response, resolve, reject) => {
   return reject('error')
 }
 
-const judgeMethod = (url, params, method = 'post', config = {}) => {
+const judgeMethod = (url, params, config = {}) => {
+  let method = config.method || 'post'
   let requestBody = {
-    ...config,
     method,
-    url
+    url,
+    ...config
   }
   if (method.toUpperCase() === 'POST') {
     requestBody.data = params

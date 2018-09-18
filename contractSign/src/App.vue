@@ -142,6 +142,8 @@ export default {
     },
     returnMethod (data) {
       const resource = this.appParams.resource || {}
+      const emitParams = data.params || {}
+      console.log(emitParams)
       // let resourceCode = Object.values(resource)[0]
       let resourceCode = resource.ml || resource.md
       let regionType = data.type || 'contract'
@@ -176,7 +178,8 @@ export default {
       // 签约成功，通知APP跳转相应code
       if (regionType === 'sign' && resourceCode && routerCodeMap[resourceCode]) {
         bridgeParam = {
-          ...routerCodeMap[resourceCode]
+          ...routerCodeMap[resourceCode],
+          params: emitParams
         }
       }
       if (resourceCode * 1 === 6007) {
