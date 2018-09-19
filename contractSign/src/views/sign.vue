@@ -18,9 +18,9 @@
           <div class="tools_clear_title">清 除</div>
         </div>
       </section>
-      <section class="footer fixed">
-        <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
-      </section>
+    </section>
+    <section class="footer">
+      <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
     </section>
   </div>
 </template>
@@ -145,20 +145,24 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.container {
+  background: #fff;
+  height: 100%;
+}
 .header {
   color: #333;
   .van-nav-bar {
     width: 750px;
-    height: 120px;
-    line-height: 120px;
+    height: 90px;
+    line-height: 90px;
   }
 }
 .container_sign {
-  position: fixed;
-  top: 120px;
+  position: absolute;
+  top: 90px;
   left: 0;
+  bottom: 90px;
   width: 750px;
-  height: 100%;
   z-index: 101;
   background: #FFF;
   font-size: 30px;
@@ -172,13 +176,13 @@ export default {
     background: #fff;
     cursor: default;
     width: 750px;
-    height: calc(100% - 300px);
+    height: calc(100% - 90px);
   }
   .canvas_tools {
     .tools_clear{
-      position: fixed;
+      position: absolute;
       right: 0;
-      bottom: 100px;
+      bottom: 30px;
       z-index: 100;
       padding: 20px 40px 40px 20px;
     }
@@ -200,7 +204,7 @@ export default {
 }
 
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 100;
   width: 750px;

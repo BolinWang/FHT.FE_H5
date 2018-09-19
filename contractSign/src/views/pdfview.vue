@@ -16,7 +16,8 @@
         </van-swipe-item>
       </van-swipe>
     </section>
-    <section class="footer fixed">
+    <section v-else id="pdfview_wrapper"></section>
+    <section class="footer">
       <van-button v-if="canSign" size="large" class="btn_sign" @click="gotoSign">立即签约</van-button>
     </section>
   </div>
@@ -24,6 +25,8 @@
 <script>
 import { Button, Swipe, SwipeItem, NavBar } from 'vant'
 import { deepClone } from '@/utils/index'
+import PDFPlugin from '@/components/PDF'
+
 export default {
   name: 'pdfview',
   components: {
@@ -79,7 +82,7 @@ export default {
     this.app_ios = this.isIos
   },
   mounted () {
-    this.handlePreview()
+
   },
   methods: {
     handlePreview () {
@@ -92,9 +95,11 @@ export default {
         document.body.removeChild(pdfNode)
         this.images = this.contentUrl.split(',')
       } else {
-        // this.$showPDF('../../static/default.pdf')
         let contentUrl = (process.env.NODE_ENV !== 'development') ? this.contentUrl : (this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf'))
-        this.$showPDF(contentUrl)
+        let $vm = new PDFPlugin().$mount()
+        document.getElementById('pdfview_wrapper').appendChild($vm.$el)
+        $vm.showPDF(contentUrl)
+        // vm.$showPDF('../../static/default.pdf')
       }
     },
     gotoSign () {
@@ -135,7 +140,7 @@ export default {
 }
 .container_images {
   position: fixed;
-  top: 120px;
+  top: 90px;
   left: 0;
   width: 750px;
   height: 100%;
@@ -153,12 +158,12 @@ export default {
   color: #333;
   .van-nav-bar {
     width: 750px;
-    height: 120px;
-    line-height: 120px;
+    height: 90px;
+    line-height: 90px;
   }
 }
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 999;
   width: 750px;

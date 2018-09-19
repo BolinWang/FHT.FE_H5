@@ -81,7 +81,10 @@ export default {
       })
       this.getContractUrl()
     } else {
-      // this.$toast.fail('请在APP内打开')
+      // this.$toast.fail({
+      //   duration: 0,
+      //   message: '请在APP内打开'
+      // })
       // return false
       this.appParams = {
         sessionId: 'kTUyG6xY7gZmBUiBvyU+a7+5vOotj0w5DS/+on09DM9LLKYnRZU8JoSdEOSGH9kMFAWqNRj29DtG1E/LPCbQzRUsEcEtwzNz2cvjbNeViB0701N12LXZKRCx+GVMSMxpALBSLwmdxsjuZj9BVePv02GsseNEtEm290FS0DOeVA8=',
@@ -117,8 +120,10 @@ export default {
     // 获取合同数据
     getContractUrl () {
       this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
         mask: true,
-        message: '加载中...'
+        message: '数据加载中...'
       })
       console.log(this.appParams)
       if (!this.appParams.params || !this.appParams.params.contractNo) {
@@ -129,6 +134,7 @@ export default {
         contractNo: this.appParams.params.contractNo,
         sessionId: getUserData().sessionId
       }).then(res => {
+        this.$toast.clear()
         this.contractData = res.data
       })
     },

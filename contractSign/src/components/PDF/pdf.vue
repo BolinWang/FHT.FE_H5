@@ -25,10 +25,19 @@ export default {
   },
   methods: {
     showPDF (url) {
+      let toastLoading = this.$toast.loading({
+        message: '合同加载中',
+        mask: true,
+        duration: 0,
+        forbidClick: true
+      })
       PDFJS.getDocument(url).then((pdf) => {
         this.pdfDoc = pdf
         for (let i = 1; i <= pdf.pdfInfo.numPages; i++) {
           this.renderPage(i)
+          if (i === pdf.pdfInfo.numPages) {
+            this.$toast.clear(toastLoading)
+          }
         }
       })
     },
@@ -94,13 +103,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .pdf_box {
-  position: fixed;
-  top: 120px;
+  position: absolute;
+  z-index: 99;
+  top: 90px;
+  bottom: 90px;
   left: 0;
   width: 100%;
-  height: 100%;
   text-align: center;
   overflow: auto;
+  /* autoprefixer: off */
+  -webkit-overflow-scrolling: touch;
+   /* autoprefixer: on */
   .pdf_container {
     background: #fff;
     width: 100%;
