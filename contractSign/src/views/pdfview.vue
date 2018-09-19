@@ -92,7 +92,9 @@ export default {
       if (this.contentUrl.indexOf('contract_image') > -1) {
         // 清除DOM中的pdf容器
         let pdfNode = document.getElementById('pdf_box')
-        document.body.removeChild(pdfNode)
+        if (pdfNode) {
+          document.body.removeChild(pdfNode)
+        }
         this.images = this.contentUrl.split(',')
       } else {
         let contentUrl = (process.env.NODE_ENV !== 'development') ? this.contentUrl : (this.contentUrl.replace('https://fh-contract-test.oss-cn-hangzhou.aliyuncs.com', '/pdf'))
@@ -141,9 +143,9 @@ export default {
 .container_images {
   position: fixed;
   top: 90px;
+  bottom: 90px;
   left: 0;
   width: 750px;
-  height: 100%;
   z-index: 200;
   background: #fff;
   .images_wrap {
@@ -179,4 +181,9 @@ export default {
     line-height: 90px;
   }
 }
+</style>
+<style>
+/* .van-swipe-item {
+  height: auto !important;
+} */
 </style>
