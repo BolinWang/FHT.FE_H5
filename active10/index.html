@@ -21,18 +21,18 @@
       if (urlSearchParams.sourceType === 'baidu') {
         window._agl = window._agl || [];
         (function () {
-          window._agl.push(
+          _agl.push(
             ['production', '_f7L2XwGXjyszb4d1e2oxPybgD']
           );
           (function () {
-            var agl = document.createElement('script')
-            agl.type = 'text/javascript'
-            agl.async = true
-            agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=_f7L2XwGXjyszb4d1e2oxPybgD'
-            var s = document.getElementsByTagName('script')[0]
-            s.parentNode.insertBefore(agl, s)
-          })()
-        })()
+            var agl = document.createElement('script');
+            agl.type ='text/javascript';
+            agl.async = true;
+            agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=_f7L2XwGXjyszb4d1e2oxPybgD';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(agl, s);
+          })();
+        })();
       }
       // 头条推广
       else if (urlSearchParams.sourceType === 'toutiao') {
