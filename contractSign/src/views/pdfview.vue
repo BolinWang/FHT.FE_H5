@@ -89,7 +89,7 @@ export default {
       if (!this.contentUrl) {
         return false
       }
-      if (this.contentUrl.indexOf('contract_image') > -1) {
+      if (this.contentUrl.indexOf('_image') > -1) {
         // 清除DOM中的pdf容器
         let pdfNode = document.getElementById('pdf_box')
         if (pdfNode) {
