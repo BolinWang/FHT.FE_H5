@@ -115,16 +115,16 @@
             <div class="vr_wrapper flex flex_center">
               <div class="image_container">
                 <div id="scene2">
-                  <div data-depth="0.6">
-                    <img src="../assets/image_vr.png" @click="goVrRoomPage" />
+                  <div data-depth="0.4">
+                    <img src="../assets/image_vr.jpg" @click="goVrRoomPage" />
                   </div>
                 </div>
               </div>
             </div>
-            <!-- <div class="info">
+            <div class="info">
               <img src="../assets/vr.png" />
               立即体验VR看房
-            </div> -->
+            </div>
           </section>
           <!-- 合作伙伴 -->
           <section class="active_partner flex flex_center">
@@ -281,10 +281,11 @@ export default {
     })
     // 重力感应实例化
     let scene1 = document.getElementById('scene1')
-    // let scene2 = document.getElementById('scene2')
+    let scene2 = document.getElementById('scene2')
     // eslint-disable-next-line
     let parallax1 = new Parallax(scene1)
-    // let parallax2 = new Parallax(scene2)
+    // eslint-disable-next-line
+    let parallax2 = new Parallax(scene2)
   },
   methods: {
     scrollIntoView () {
@@ -605,6 +606,9 @@ export default {
         case 'toutiao':
           window._taq.push({convert_id: '1611206099665924', event_type: 'form'})
           break
+        case 'douyin':
+          window._taq.push({convert_id: '1612833307743251', event_type: 'form'})
+          break
         default:
           break
       }
@@ -838,13 +842,16 @@ export default {
   .active_vrWrapper {
     position: relative;
     .image_container {
-      // border: 8px solid #24116a;
+      border: 8px solid #24116a;
       width: 622px;
       height: 240px;
+      overflow: hidden;
       color: #fff;
       img {
-        width: 622px;
-        height: 240px;
+        width: 680px;
+        height: 300px;
+        margin-top: -30px;
+        margin-left: -30px;
       }
     }
     .info {
@@ -853,11 +860,11 @@ export default {
       left: 50%;
       margin-left: -150px;
       margin-top: -30px;
-      background: rgba(36, 37, 106, 0.5);
+      background: rgba(36, 17, 106, 0.5);
       width: 300px;
       height: 60px;
       border-radius: 60px;
-      padding: 0 20px;
+      padding: 0 30px 0 20px;
       font-size: 24px;
       font-weight: 700;
       color: #fff;
