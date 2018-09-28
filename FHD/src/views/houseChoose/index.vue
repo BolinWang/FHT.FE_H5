@@ -233,7 +233,7 @@ export default {
 			return arr[val - 1] || '未知'
 		},
 		houseFeatureStr(val) {
-			const arr = ['独立厨房', '独卫', '独立阳台', '飘窗']
+			const arr = ['独卫', '独立阳台', '独立厨房', '带飘窗']
 			return arr[val - 1] || '未知'
 		}
 	},
@@ -246,7 +246,7 @@ export default {
 				roomType: '',
 				houseType: 1,
 				houseDirection: 1,
-				houseFeature: '',
+				houseFeature: '1',
 				rentFee: -1, // -1自定义
 				rentFeeName: '1000~2000',
 				rentMin: 1000,
@@ -344,16 +344,24 @@ export default {
 				'hasPic': [{
 					name: '全部',
 					value: '',
+					param: 'hasPic',
 					selected: false
 				},
 				{
 					name: '有图',
 					value: 1,
+					param: 'hasPic',
 					selected: false
 				},
 				{
 					name: '无图',
 					value: 2,
+					param: 'hasPic',
+					selected: false
+				},{
+					name: 'VR照片',
+					value: true,
+					param: 'hasVr',
 					selected: false
 				}],
 				'statusList': [{
@@ -671,7 +679,8 @@ export default {
 			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
 			let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
 			let topListParams = {
-				hasRoomPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
+				hasRoomPic: (hasPicParam.length > 0 && hasPicParam[0].param === 'hasPic') ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
+				hasVr: hasPicParam.length > 0 ? (hasPicParam[0].param === 'hasVr' ? true : '') : '',
 				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
 				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
 				orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime',

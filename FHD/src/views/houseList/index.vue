@@ -181,7 +181,7 @@ import {
 	Loading, TransferDom, InlineLoading
 } from 'vux'
 import footers from '@/components/footer'
-import scroll from "@/components/scroll"
+import scroll from '@/components/scroll'
 import houseList from './components/list'
 import {addClass, removeClass} from '@/utils/dom'
 import {houseApi, recordUrlApi, queryManagerZone} from '@/api/source'
@@ -189,382 +189,402 @@ import {ObjectMap, deepClone} from '@/utils'
 
 export default {
   components: {
-    footers, Tab, TabItem, houseList,
-		Actionsheet, Loading, TransferDom,
-		Cell, Flexbox, FlexboxItem, scroll,
-		Popup, XInput, XButton, Search, InlineLoading
-	},
-	directives: {
+    footers,
+    Tab,
+    TabItem,
+    houseList,
+    Actionsheet,
+    Loading,
+    TransferDom,
+    Cell,
+    Flexbox,
+    FlexboxItem,
+    scroll,
+    Popup,
+    XInput,
+    XButton,
+    Search,
+    InlineLoading
+  },
+  directives: {
     TransferDom
   },
-	created() {
-		this.getArea().then(res => {
+  created() {
+    this.getArea().then(res => {
       this.toSearch()
     }).catch(rej => {
       this.$vux.toast.text(rej.message || '未查询到所属板块')
-		})
+    })
 
 		// 去安卓拿地图数据
-		this.isAndriod = false
-		this.paramsListClone = deepClone(this.paramsList)
-		this.topListParamsClone = deepClone(this.topListParams)
-	},
+    this.isAndriod = false
+    this.paramsListClone = deepClone(this.paramsList)
+    this.topListParamsClone = deepClone(this.topListParams)
+  },
   mounted() {
     window['getMapData'] = (data) => {
 			// 清空所有查询条件
-			this.searchData = {}
-			this.selectOptions.map((item) => {
-				item.selected = false
-				item.active = false
-			})
-			this.paramsList = deepClone(this.paramsListClone)
-			this.topListParams = deepClone(this.topListParamsClone)
-			this.currentIndex = 0
+      this.searchData = {}
+      this.selectOptions.map((item) => {
+        item.selected = false
+        item.active = false
+      })
+      this.paramsList = deepClone(this.paramsListClone)
+      this.topListParams = deepClone(this.topListParamsClone)
+      this.currentIndex = 0
 			// andriod返回数据 空房
-			if (data && data != -999) {
-				this.isAndriod = true
-				this.currentIndex = 2
-				this.searchData.regionAddressId = data
-				this.topListParams.statusList[1].selected = true
-				this.selectOptions[this.currentIndex].selected = true
-			} else {
-				this.isAndriod = false
-				this.searchData.regionAddressId = ''
-			}
-			this.toSearch()
-		},
+      if (data && data != -999) {
+        this.isAndriod = true
+        this.currentIndex = 2
+        this.searchData.regionAddressId = data
+        this.topListParams.statusList[1].selected = true
+        this.selectOptions[this.currentIndex].selected = true
+      } else {
+        this.isAndriod = false
+        this.searchData.regionAddressId = ''
+      }
+      this.toSearch()
+    },
 		window['refreshPage'] = () => {
-			this.toSearch()
-		}
-		window['backUrl'] = () => {
-			if (this.isAndriod) {
-				this.andriodBack()
-				return 'true'
-			} else {
-				return 'false'
-			}
+  this.toSearch()
+}
+    window['backUrl'] = () => {
+      if (this.isAndriod) {
+        this.andriodBack()
+        return 'true'
+      } else {
+        return 'false'
+      }
     }
   },
   data() {
     return {
-			regionAddressName: '',
-			totalPages: 1,
-			pageNo: 1,
-			pageSize: 20,
-			showLoading: false,
+      regionAddressName: '',
+      totalPages: 1,
+      pageNo: 1,
+      pageSize: 20,
+      showLoading: false,
       zoneList: [], // 管辖地区
-			roomDataList: [], // 房源列表数据
-			currentIndex: 0, // 当前选项索引
-			searchData: {}, // 查询参数
+      roomDataList: [], // 房源列表数据
+      currentIndex: 0, // 当前选项索引
+      searchData: {}, // 查询参数
 			/**
 			 * active: 选项激活状态
 			 * selected: 选项有选中
 			 */
       selectOptions: [
-				{
-          text: "搜索",
-					active: false,
-					selected: false
+        {
+          text: '搜索',
+          active: false,
+          selected: false
         },
         {
-          text: "图片",
-					active: false,
-					selected: false
+          text: '图片',
+          active: false,
+          selected: false
         },
         {
-          text: "状态",
-					active: false,
-					selected: false
+          text: '状态',
+          active: false,
+          selected: false
         },
         {
-          text: "租金",
-					active: false,
-					selected: false
+          text: '租金',
+          active: false,
+          selected: false
         },
         {
-          text: "更多",
-					active: false,
-					selected: false
+          text: '更多',
+          active: false,
+          selected: false
         }
-			],
+      ],
 			// 图片。状态。租金
-			topListParams: {
-				'hasPic': [{
-					name: '全部',
-					value: '',
-					selected: false
-				},
-				{
-					name: '有图',
-					value: 1,
-					selected: false
-				},
-				{
-					name: '无图',
-					value: 2,
-					selected: false
-				}],
-				'statusList': [{
-					name: '全部',
-					value: '',
-					selected: false
-				},{
-					name: '空房',
-					value: '1,2,5,6,10',
-					selected: false
-				},{
-					name: '在住',
-					value: '3,4,8',
-					selected: false
-				},{
-					name: '已出租',
-					value: '9',
-					selected: false
-				},{
-					name: '保留中',
-					value: '7',
-					selected: false
-				}],
-				'sortType': [{
-					name: '默认',
-					value: 'desc',
-					selected: false
-				},{
-					name: '从低到高',
-					value: 'asc',
-					selected: false
-				},{
-					name: '从高到低',
-					value: 'desc',
-					selected: false
-				}]
-			},
+      topListParams: {
+        'hasPic': [{
+          name: '全部',
+          value: '',
+          param: 'hasPic',
+          selected: false
+        },
+        {
+          name: '有图',
+          value: 1,
+          param: 'hasPic',
+          selected: false
+        },
+        {
+          name: '无图',
+          value: 2,
+          param: 'hasPic',
+          selected: false
+        }, {
+          name: 'VR照片',
+          value: true,
+          param: 'hasVr',
+          selected: false
+        }],
+        'statusList': [{
+          name: '全部',
+          value: '',
+          selected: false
+        }, {
+          name: '空房',
+          value: '1,2,5,6,10',
+          selected: false
+        }, {
+          name: '在住',
+          value: '3,4,8',
+          selected: false
+        }, {
+          name: '已出租',
+          value: '9',
+          selected: false
+        }, {
+          name: '保留中',
+          value: '7',
+          selected: false
+        }],
+        'sortType': [{
+          name: '默认',
+          value: 'desc',
+          selected: false
+        }, {
+          name: '从低到高',
+          value: 'asc',
+          selected: false
+        }, {
+          name: '从高到低',
+          value: 'desc',
+          selected: false
+        }]
+      },
 			// 更多条件
-			paramsList: {
-				'chamberCounts': [{
-					name: '1室',
-					value: '1',
-					selected: false
-				},{
-					name: '2室',
-					value: '2',
-					selected: false
-				},{
-					name: '3室',
-					value: '3',
-					selected: false
-				},{
-					name: '4室',
-					value: '4',
-					selected: false
-				},{
-					name: '4室以上',
-					value: '999',
-					selected: false
-				}],
-				'roomDirection': [{
-					name: '朝南',
-					value: '1',
-					selected: false
-				},{
-					name: '朝北',
-					value: '2',
-					selected: false
-				},{
-					name: '朝东',
-					value: '3',
-					selected: false
-				},{
-					name: '朝西',
-					value: '4',
-					selected: false
-				}],
-				'housingType': [{
-					name: '合租',
-					value: '2',
-					param: 'houseRentType',
-					selected: false
-				},{
-					name: '整租',
-					value: '1',
-					param: 'houseRentType',
-					selected: false
-				},{
-					name: '公寓',
-					value: '1',
-					param: 'housingType',
-					selected: false
-				}],
-				'decorationDegrees': [{
-					name: '毛坯',
-					value: '1',
-					selected: false
-				},{
-					name: '简装',
-					value: '2',
-					selected: false
-				},{
-					name: '精装',
-					value: '3',
-					selected: false
-				},{
-					name: '豪装',
-					value: '4',
-					selected: false
-				}],
-				'roomAttributeList': [{
-					name: '独卫',
-					value: '1',
-					selected: false
-				},{
-					name: '独立阳台',
-					value: '2',
-					selected: false
-				},{
-					name: '独立厨房',
-					value: '3',
-					selected: false
-				},{
-					name: '带飘窗',
-					value: '4',
-					selected: false
-				}]
-			}
+      paramsList: {
+        'chamberCounts': [{
+          name: '1室',
+          value: '1',
+          selected: false
+        }, {
+          name: '2室',
+          value: '2',
+          selected: false
+        }, {
+          name: '3室',
+          value: '3',
+          selected: false
+        }, {
+          name: '4室',
+          value: '4',
+          selected: false
+        }, {
+          name: '4室以上',
+          value: '999',
+          selected: false
+        }],
+        'roomDirection': [{
+          name: '朝南',
+          value: '1',
+          selected: false
+        }, {
+          name: '朝北',
+          value: '2',
+          selected: false
+        }, {
+          name: '朝东',
+          value: '3',
+          selected: false
+        }, {
+          name: '朝西',
+          value: '4',
+          selected: false
+        }],
+        'housingType': [{
+          name: '合租',
+          value: '2',
+          param: 'houseRentType',
+          selected: false
+        }, {
+          name: '整租',
+          value: '1',
+          param: 'houseRentType',
+          selected: false
+        }, {
+          name: '公寓',
+          value: '1',
+          param: 'housingType',
+          selected: false
+        }],
+        'decorationDegrees': [{
+          name: '毛坯',
+          value: '1',
+          selected: false
+        }, {
+          name: '简装',
+          value: '2',
+          selected: false
+        }, {
+          name: '精装',
+          value: '3',
+          selected: false
+        }, {
+          name: '豪装',
+          value: '4',
+          selected: false
+        }],
+        'roomAttributeList': [{
+          name: '独卫',
+          value: '1',
+          selected: false
+        }, {
+          name: '独立阳台',
+          value: '2',
+          selected: false
+        }, {
+          name: '独立厨房',
+          value: '3',
+          selected: false
+        }, {
+          name: '带飘窗',
+          value: '4',
+          selected: false
+        }]
+      }
     }
   },
   methods: {
 		// 获取管辖地区
-		getArea() {
+    getArea() {
       return new Promise((resolve, reject) => {
-				queryManagerZone().then(res => {
-					if (res.success && res.data && res.data.length > 0) {
+        queryManagerZone().then(res => {
+          if (res.success && res.data && res.data.length > 0) {
             res.data.map(val => {
               this.zoneList.push(val.zoneId)
-						})
-						resolve(res)
+            })
+            resolve(res)
           } else {
-						reject(res)
-					}
-				}).catch(rej => {
-					reject(rej)
-				})
+            reject(res)
+          }
+        }).catch(rej => {
+          reject(rej)
+        })
       })
-		},
-		clickHeader() {
-			this.selectOptions[this.currentIndex].active = false
-		},
-		cancelKeyword() {
-			this.searchData.keyword = ''
-			this.toSearch()
-		},
+    },
+    clickHeader() {
+      this.selectOptions[this.currentIndex].active = false
+    },
+    cancelKeyword() {
+      this.searchData.keyword = ''
+      this.toSearch()
+    },
 		// 控制mask top
-		popShow() {
-			addClass(document.querySelector('.vux-popup-mask'),'popMask')
-		},
-		popHide() {
-			removeClass(document.querySelector('.vux-popup-mask'),'popMask')
-		},
+    popShow() {
+      addClass(document.querySelector('.vux-popup-mask'), 'popMask')
+    },
+    popHide() {
+      removeClass(document.querySelector('.vux-popup-mask'), 'popMask')
+    },
 		// 下拉列表选项
-		showPopup(index) {
+    showPopup(index) {
 			// 重新点击取消选项
-			if (this.selectOptions[index].active) {
-				this.selectOptions[index].active = false
-				return false
-			}
-			this.currentIndex = index
-			this.selectOptions.map((item) => {
-				item.active = false
-			})
-			this.selectOptions[index].active = true
-		},
+      if (this.selectOptions[index].active) {
+        this.selectOptions[index].active = false
+        return false
+      }
+      this.currentIndex = index
+      this.selectOptions.map((item) => {
+        item.active = false
+      })
+      this.selectOptions[index].active = true
+    },
 		// 选择选项
-		selectParams(list = [], index, type) {
-			let isChecked = list[index].selected
-			if (type === 'housingType') {
-				list.map((item) => {
-					item.selected = false
-				})
-				list[index].selected = true
-				let selectedItems_type = list.map((item) => {
-					return item.selected
-				})
+    selectParams(list = [], index, type) {
+      let isChecked = list[index].selected
+      if (type === 'housingType') {
+        list.map((item) => {
+          item.selected = false
+        })
+        list[index].selected = true
+        let selectedItems_type = list.map((item) => {
+          return item.selected
+        })
 				// 非合租时，更改房间合租属性标签
-				if (list[index].value * 1 === 1 && selectedItems_type.length > 0) {
-					this.paramsList.roomAttributeList.map((item) => {
-						item.selected = false
-					})
-				}
-				this.selectOptions[this.currentIndex].selected = true
-				return false
-			}
-			if (type === 'chamberCounts' || type === 'roomAttributeList') {
-				list[index].selected = !list[index].selected
+        if (list[index].value * 1 === 1 && selectedItems_type.length > 0) {
+          this.paramsList.roomAttributeList.map((item) => {
+            item.selected = false
+          })
+        }
+        this.selectOptions[this.currentIndex].selected = true
+        return false
+      }
+      if (type === 'chamberCounts' || type === 'roomAttributeList') {
+        list[index].selected = !list[index].selected
 				// 合租独有的属性
-				if (type === 'roomAttributeList') {
-					let selectedItems_attr = list.map((item) => {
-						return item.selected
-					})
+        if (type === 'roomAttributeList') {
+          let selectedItems_attr = list.map((item) => {
+            return item.selected
+          })
 					// 选择合租属性时，更改房间类型为合租
-					if (selectedItems_attr.length > 0) {
-						this.paramsList.housingType.map((item) => {
-							item.selected = false
-						})
-						this.paramsList.housingType[0].selected = true
-					}
-				}
-				return false
-			}
-			list.map((item) => {
-				item.selected = false
-			})
-			list[index].selected = !isChecked
-			this.selectOptions[this.currentIndex].selected = true
+          if (selectedItems_attr.length > 0) {
+            this.paramsList.housingType.map((item) => {
+              item.selected = false
+            })
+            this.paramsList.housingType[0].selected = true
+          }
+        }
+        return false
+      }
+      list.map((item) => {
+        item.selected = false
+      })
+      list[index].selected = !isChecked
+      this.selectOptions[this.currentIndex].selected = true
 			// 更多选项中不要关闭popup
-			if (type !== 'housingType' && type !== 'roomDirection') {
+      if (type !== 'housingType' && type !== 'roomDirection') {
 				// 选择后关闭popup
-				this.selectOptions[this.currentIndex].active = false
-				this.toSearch()
-			}
-		},
-		clearParam() {
-			this.selectOptions[this.currentIndex].selected = false
+        this.selectOptions[this.currentIndex].active = false
+        this.toSearch()
+      }
+    },
+    clearParam() {
+      this.selectOptions[this.currentIndex].selected = false
 			// 精准搜索
-			if (this.currentIndex === 0) {
-				this.$set(this.searchData, 'estateName', '')
-				this.$set(this.searchData, 'adminNameOrMobile', '')
-				this.$set(this.searchData, 'roomNo', '')
-			} else {
-				this.$set(this.searchData, 'minPrice', '')
-				this.$set(this.searchData, 'maxPrice', '')
-				this.paramsList = deepClone(this.paramsListClone)
-			}
-			this.toSearch()
-		},
-		searchParam() {
-			this.selectOptions[this.currentIndex].selected = false
+      if (this.currentIndex === 0) {
+        this.$set(this.searchData, 'estateName', '')
+        this.$set(this.searchData, 'adminNameOrMobile', '')
+        this.$set(this.searchData, 'roomNo', '')
+      } else {
+        this.$set(this.searchData, 'minPrice', '')
+        this.$set(this.searchData, 'maxPrice', '')
+        this.paramsList = deepClone(this.paramsListClone)
+      }
+      this.toSearch()
+    },
+    searchParam() {
+      this.selectOptions[this.currentIndex].selected = false
 			// 精准搜索
-			if (this.currentIndex === 0) {
-				if (this.searchData.estateName || this.searchData.adminNameOrMobile || this.searchData.roomNo){
-					this.selectOptions[this.currentIndex].selected = true
-					this.searchData.keyword = ''
-				}
-			} else {
-				let totalItems = [
-					...this.paramsList.chamberCounts,
-					...this.paramsList.housingType,
-					...this.paramsList.roomDirection,
-					...this.paramsList.roomAttributeList
-				]
-				const selectedList = totalItems.filter((item) => {
-					return item.selected
-				})
-				if (selectedList.length > 0 || this.searchData.minPrice || this.searchData.maxPrice) {
-					this.selectOptions[this.currentIndex].selected = true
-				}
-			}
-			this.selectOptions[this.currentIndex].active = false
-			this.toSearch()
-		},
+      if (this.currentIndex === 0) {
+        if (this.searchData.estateName || this.searchData.adminNameOrMobile || this.searchData.roomNo) {
+          this.selectOptions[this.currentIndex].selected = true
+          this.searchData.keyword = ''
+        }
+      } else {
+        let totalItems = [
+          ...this.paramsList.chamberCounts,
+          ...this.paramsList.housingType,
+          ...this.paramsList.roomDirection,
+          ...this.paramsList.roomAttributeList
+        ]
+        const selectedList = totalItems.filter((item) => {
+          return item.selected
+        })
+        if (selectedList.length > 0 || this.searchData.minPrice || this.searchData.maxPrice) {
+          this.selectOptions[this.currentIndex].selected = true
+        }
+      }
+      this.selectOptions[this.currentIndex].active = false
+      this.toSearch()
+    },
 		// // 连续数组组装
 		// continueArr(arr){
 		// 	if (!arr || arr.length === 0) {
@@ -586,132 +606,133 @@ export default {
 			 * @param topListParams 图片、状态、租金
 			 * @param paramsList
 			 */
-			if (this.zoneList.length === 0) { // 未查询到所属板块时 一律拦截
-				return false
-			}
-			if (type === 'more') {
-				this.pageNo ++
-			} else {
-				this.pageNo = 1
-				this.showLoading = true
-			}
-			if (this.pageNo > this.totalPages) {
-				this.$refs.scroll.forceUpdate()
-				return false
-			}
+      if (this.zoneList.length === 0) { // 未查询到所属板块时 一律拦截
+        return false
+      }
+      if (type === 'more') {
+        this.pageNo ++
+      } else {
+        this.pageNo = 1
+        this.showLoading = true
+      }
+      if (this.pageNo > this.totalPages) {
+        this.$refs.scroll.forceUpdate()
+        return false
+      }
 
-			let searchData = this.searchData
-			let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
-			let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
-			let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
-			let topListParams = {
-				hasRoomPic: hasPicParam.length > 0 ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
-				statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
-				sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
-				orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime',
-			}
+      let searchData = this.searchData
+      let hasPicParam = this.topListParams.hasPic.filter((item) => item.selected)
+      let statusListParam = this.topListParams.statusList.filter((item) => item.selected && item.value)
+      let sortTypeParam = this.topListParams.sortType.filter((item) => item.selected)
+      let topListParams = {
+        hasRoomPic: (hasPicParam.length > 0 && hasPicParam[0].param === 'hasPic') ? (hasPicParam[0].value * 1 === 1 ? true : hasPicParam[0].value * 1 === 2 ? false : '') : '',
+        hasVr: hasPicParam.length > 0 ? (hasPicParam[0].param === 'hasVr' ? true : '') : '',
+        statusList: statusListParam.length > 0 ? statusListParam[0].value.split(',').map((item) => item * 1) : undefined,
+        sortType: sortTypeParam.length > 0 ? sortTypeParam[0].value : 'desc',
+        orderBy: sortTypeParam.length > 0 ? sortTypeParam[0].name === '默认' ? 'createTime' : 'minRentPrice' : 'createTime'
+      }
 			// keyword和排序规则权重冲突
-			if (searchData.keyword) {
-				topListParams.orderBy = ''
-			}
+      if (searchData.keyword) {
+        topListParams.orderBy = ''
+      }
 			// 户型
-			let chamberCountsParam = this.paramsList.chamberCounts
+      let chamberCountsParam = this.paramsList.chamberCounts
 					.filter((item) => item.selected)
 					.map((item) => {
-						let mapObj = item.value * 1 === 999 ? {
-							'min': 5,
-							'max': '',
-						} : {
-							'min': item.value * 1,
-							'max': item.value * 1,
-						}
-						return mapObj
-					})
-			let housingTypeParam = this.paramsList.housingType.filter((item) => item.selected)
+  let mapObj = item.value * 1 === 999 ? {
+    'min': 5,
+    'max': ''
+  } : {
+    'min': item.value * 1,
+    'max': item.value * 1
+  }
+  return mapObj
+})
+      let housingTypeParam = this.paramsList.housingType.filter((item) => item.selected)
 			//  let decorationDegreesParam = this.paramsList.decorationDegrees.filter((item) => item.selected)
-			let roomDirectionParam = this.paramsList.roomDirection.filter((item) => item.selected)
-			let roomAttributeListParam = this.paramsList.roomAttributeList.filter((item) => item.selected)
-			let paramsList = {
-				chamberCounts: chamberCountsParam.length > 0 ? chamberCountsParam : undefined,
-				roomDirections: roomDirectionParam.length > 0 ? [roomDirectionParam[0].value * 1] : undefined,
+      let roomDirectionParam = this.paramsList.roomDirection.filter((item) => item.selected)
+      let roomAttributeListParam = this.paramsList.roomAttributeList.filter((item) => item.selected)
+      let paramsList = {
+        chamberCounts: chamberCountsParam.length > 0 ? chamberCountsParam : undefined,
+        roomDirections: roomDirectionParam.length > 0 ? [roomDirectionParam[0].value * 1] : undefined,
 			//	decorationDegrees: decorationDegreesParam.length > 0 ? decorationDegreesParam.map((item) => item.value * 1) : undefined,
-				roomAttributeList: roomAttributeListParam.length > 0 ? roomAttributeListParam.map((item) => item.value * 1) : undefined
-			}
+        roomAttributeList: roomAttributeListParam.length > 0 ? roomAttributeListParam.map((item) => item.value * 1) : undefined
+      }
 			// 房间类型
-			if (housingTypeParam.length > 0) {
-				paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
-				if (housingTypeParam[0].param === 'houseRentType') {
-					paramsList.housingType = 2
-				}
-			}
+      if (housingTypeParam.length > 0) {
+        paramsList[housingTypeParam[0].param] = housingTypeParam[0].value * 1
+        if (housingTypeParam[0].param === 'houseRentType') {
+          paramsList.housingType = 2
+        }
+      }
 
-			let searchDataParams = ObjectMap({
-				pageNo: this.pageNo,
-				pageSize: this.pageSize,
-				financeType: 1,
-				...searchData,
-				...topListParams,
-				...paramsList
-			})
-			let toLei = deepClone(searchDataParams)
-			searchDataParams.zoneIds = this.zoneList
+      let searchDataParams = ObjectMap({
+        pageNo: this.pageNo,
+        pageSize: this.pageSize,
+        financeType: 1,
+        ...searchData,
+        ...topListParams,
+        ...paramsList
+      })
+      let toLei = deepClone(searchDataParams)
+      searchDataParams.zoneIds = this.zoneList
       houseApi(searchDataParams).then(res => {
-				type === 'more' ? '' : this.showLoading = false
-				let resultData = res.result || []
-				if (this.isAndriod && resultData.length > 0) {
+        type === 'more' ? '' : this.showLoading = false
+        let resultData = res.result || []
+        if (this.isAndriod && resultData.length > 0) {
 					// 安卓地图返回小区
-					this.regionAddressName = resultData[0].regionAddressName
-				}
+          this.regionAddressName = resultData[0].regionAddressName
+        }
 
-				if (this.pageNo === 1) {
-					this.totalPages = res.totalPages || 1
-					this.roomDataList = resultData
-					this.$refs.scroll.scrollTo(0, 0)
+        if (this.pageNo === 1) {
+          this.totalPages = res.totalPages || 1
+          this.roomDataList = resultData
+          this.$refs.scroll.scrollTo(0, 0)
         } else if (this.pageNo <= this.totalPages) {
           this.roomDataList = this.roomDataList.concat(resultData)
         } else {
           this.$refs.scroll.forceUpdate()
-				}
-				toLei.zoneList = this.zoneList
-				recordUrlApi(toLei).then(res => {
-					console.log('recordUrl')
-				}).catch(res => {})
+        }
+        toLei.zoneList = this.zoneList
+        recordUrlApi(toLei).then(res => {
+          console.log('recordUrl')
+        }).catch(res => {})
       }).catch(res => {
-				type === 'more' ? '' : this.showLoading = false
-			})
-		},
+        type === 'more' ? '' : this.showLoading = false
+      })
+    },
 		// 安卓地图
     handleAndriodMap() {
       if (window.MapSearch) {
         window.MapSearch.goToMap()
-			}
-		},
+      }
+    },
 		// 安卓返回
-		andriodBack() {
-			if (window.MapGoBack) {
+    andriodBack() {
+      if (window.MapGoBack) {
         window.MapGoBack.goBack()
       }
-		},
-		moreData(){
-			if (this.zoneList.length > 0) {
-				this.toSearch('more')
-			} else {
-				this.$refs.scroll.forceUpdate()
-			}
+    },
+    moreData() {
+      if (this.zoneList.length > 0) {
+        this.toSearch('more')
+      } else {
+        this.$refs.scroll.forceUpdate()
+      }
     },
     refreshData() {
-			if (this.zoneList.length > 0) {
-				this.toSearch()
-			} else {
-				this.$refs.scroll.forceUpdate()
-			}
-		},
+      if (this.zoneList.length > 0) {
+        this.toSearch()
+      } else {
+        this.$refs.scroll.forceUpdate()
+      }
+    },
 		// 安卓添加房源
-		handleAddHouse() {
-			if (window.JSAddHouse) {
+    handleAddHouse() {
+      if (window.JSAddHouse) {
         window.JSAddHouse.addHouseAction()
       }
-		}
+    }
   }
 }
 </script>

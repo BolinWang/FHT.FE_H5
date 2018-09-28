@@ -1,8 +1,8 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-25 09:51:13
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-08-13 09:52:57
  */
 
 <template>
@@ -15,6 +15,7 @@
 					</div>
 					<div class="houseDetail">
 						<div class="detailImg" :class="{hasImg: item.roomImageUrl, noImg: !item.roomImageUrl}">
+							<span class="isVrPic" v-if="item.isVr === 1">VR</span>
               <img :src="item.roomImageUrl" class="houseImg" v-if="item.roomImageUrl">
 						</div>
 						<div class="detailRight flex">
@@ -374,7 +375,21 @@ export default {
 	// 在住
 	.zaizhu {
     background: #4680ff !important;
-  }
+	}
+	.isVrPic {
+		position: absolute;
+		top: 3px;
+		right: 3px;
+		color: #4680ff;
+		background: #efefef;
+		width: 30px;
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		border-radius: 5px;
+		opacity: 0.8;
+		font-weight: 700;
+	}
 }
 </style>
 

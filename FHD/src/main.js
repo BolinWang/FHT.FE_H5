@@ -6,7 +6,9 @@ import router from './router'
 import { ConfirmPlugin, ToastPlugin, DatetimePlugin, Group, Cell, ViewBox, XHeader } from 'vux'
 
 FastClick.attach(document.body)
-
+// development引用vconsole
+// eslint-disable-next-line
+process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
 Vue.config.productionTip = false
 
 const vm = new Vue({
@@ -17,8 +19,8 @@ const vm = new Vue({
 })
 
 if (window.JSUserInfo) {
-	const data = window.JSUserInfo.getHouseKeeperUserAction()
-	localStorage.setItem('userData', data)
+  const data = window.JSUserInfo.getHouseKeeperUserAction()
+  localStorage.setItem('userData', data)
 }
 
 Vue.use(vm)

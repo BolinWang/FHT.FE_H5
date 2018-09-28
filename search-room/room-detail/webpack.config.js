@@ -54,7 +54,7 @@ module.exports = (options = {}) => ({
       names: ['vendor', 'manifest']
     }),
     new HtmlWebpackPlugin({
-      title: '麦邻生活',
+      title: '麦邻租房',
       template: resolve(__dirname, 'src/index.html'),
       favicon: resolve(__dirname, 'src/favicon.ico')
     })
@@ -67,8 +67,8 @@ module.exports = (options = {}) => ({
     extensions: ['.js', '.vue']
   },
   devServer: {
-    host: 'localhost',
-    port: 8053,
+    host: '0.0.0.0',
+    port: 3344,
     proxy: {
       '/api': {
         target: 'https://api.mdguanjia.com/myhome/api/',

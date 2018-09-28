@@ -1,5 +1,5 @@
 /* CSS Reset*/
-html { font-family:"微软雅黑", "Helvetica Neue", Helvetica, STHeiTi, Arial, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; font-size: 62.5%; }
+html { -moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; font-size: 62.5%; }
 body { margin: 0; font-size:1.4rem; line-height: 1; color: #000; background-color: #fff; height: 100%; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }

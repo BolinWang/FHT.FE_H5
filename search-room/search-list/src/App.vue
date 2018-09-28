@@ -3,7 +3,7 @@
     <div class="roomList-head" v-if="cityList.length">
       <div class="roomList-search">
         <div class="search-city" @click="showCityList = true">
-          {{cityList[curCityIndex].name}}
+          {{ curCityIndex ? cityList[curCityIndex].name : '定位中...'}}
           <span class="search-city-icon"></span>
         </div>
         <div class="search-input" @click="showSearch = true">
@@ -13,10 +13,11 @@
         </div>
       </div>
       <div class="top-select">
-        <div 
+        <div
           class="select-item"
           :class="{active: showPopupObj[index], selected: selectOptions[index].active}"
           v-for="(item, index) in selectOptions"
+          :key="index"
           @click="showPopup(index)">
           <span class="select-text">
             {{item.text}}
@@ -33,30 +34,42 @@
         </div>
       </div>
       <div id="roomListWrapper" ref="roomListWrapper" class="roomList-container" v-else>
-        <mt-loadmore 
-          :top-method="loadTop" 
+        <mt-loadmore
+          :top-method="loadTop"
           @top-status-change="handleTopChange"
           @bottom-status-change="handleBottomChange"
-          :bottom-method="loadBottom" 
-          :bottom-all-loaded="allLoaded" 
-          ref="loadmore" 
+          :bottom-method="loadBottom"
+          :bottom-all-loaded="allLoaded"
+          ref="loadmore"
           :autoFill="false">
-          <a 
+          <a
             :href="`https://www.mdguanjia.com/waptest/roomDetail/index.html?type=${item.type}&roomId=${item.id}&memorhomeHost=${apiAddr}`"
             class="roomList-item"
-            v-for="(item, index) in roomList">
+            v-for="(item, index) in roomList"
+            :key="index">
             <div class="room-pic">
               <img alt="" v-lazy.roomListWrapper="item.pic">
             </div>
             <div class="room-info">
               <div class="room-name">{{item.name}}</div>
               <div class="room-layout">{{item.houseArea}} | {{item.houseType}} | {{item.decorationDegree}}</div>
-              <div class="room-price">{{item.price}}元/月起</div>
+              <div class="room-price">
+                <span style="font-size: 0.533333rem; font-family: FuturaStd-Condensed;">￥{{item.price}}</span>
+                <span style="font-size: 0.266667rem;">/月</span>
+              </div>
               <div class="room-address">
-                <div class="room-address-text">
-                  {{item.address}}
+                <div class="room-tags">
+                  <span v-for="(tag, tagIndex) in item.showTagList"
+                    :key="tagIndex"
+                    style="border: 1px solid; border-radius: 0.1rem; padding: 0 0.1rem; margin-right: 0.1rem;"
+                    :style="{color: tag.tagColor, borderColor: tag.tagColor}">
+                    {{tag.tagName}}
+                  </span>
                 </div>
-                <mt-badge v-show="item.fullRentType" class="fullRent-tips" size="small" color="#ddd">已出租</mt-badge>
+                <div class="room-address-text">
+                  <i class="icon-location" v-if="item.regionZone"></i>
+                  {{item.regionZone}}
+                </div>
               </div>
             </div>
           </a>
@@ -82,7 +95,7 @@
       zIndex="2000"
       position="top">
       <div class="rentType-list">
-        <label :for="`rentType${index}`" v-for="(item, index) in rentTypeList">
+        <label :for="`rentType${index}`" v-for="(item, index) in rentTypeList" :key="index">
           <input type="radio" :id="`rentType${index}`" :value="item.val" v-model="curRentType">
           <p class="select-item" @click="changeRentType(item)">{{item.text}}</p>
         </label>
@@ -95,18 +108,20 @@
       position="top">
       <div class="district-list">
         <div class="district-item district">
-          <label 
-            :for="`district${index}`" 
-            v-for="(item, index) in districtList">
+          <label
+            :for="`district${index}`"
+            v-for="(item, index) in districtList"
+            :key="index">
             <input type="radio" :id="`district${index}`" :value="index" v-model="curDistrict">
             <p class="select-item" @click="changeRegion(index)">{{item.name}}</p>
           </label>
         </div>
         <div class="district-item district">
-          <label 
+          <label
             v-if="regionList.length"
-            :for="`subDistrict${index}`" 
-            v-for="(item, index) in regionList">
+            :for="`subDistrict${index}`"
+            v-for="(item, index) in regionList"
+            :key="index">
             <input type="radio" :id="`subDistrict${index}`" :value="index" v-model="curRegion">
             <p class="select-item" @click="selectRegion(index)">{{item.zoneName}}</p>
           </label>
@@ -119,7 +134,7 @@
       zIndex="2002"
       position="top">
       <div class="price-list">
-        <label :for="`price${index}`" v-for="(item, index) in priceList">
+        <label :for="`price${index}`" v-for="(item, index) in priceList" :key="index">
           <input type="radio" :id="`price${index}`" :value="item.val" v-model="curPrice">
           <p class="select-item" @click="changePrice(item)">{{item.text}}</p>
         </label>
@@ -133,21 +148,21 @@
       <div class="moreInfo-list">
         <div class="moreInfo-item">
           <p class="moreInfo-title">装修</p>
-          <label class="moreInfo-options" :for="item.text" v-for="item in decorationList">
+          <label class="moreInfo-options" :for="item.text" v-for="(item, index) in decorationList" :key="index">
             <input :id="item.text" type="checkbox" v-model="item.checked" />
             <span>{{item.text}}</span>
           </label>
         </div>
         <div class="moreInfo-item">
           <p class="moreInfo-title">卧室</p>
-          <label class="moreInfo-options" :for="item.text" v-for="item in chamberList">
+          <label class="moreInfo-options" :for="item.text" v-for="(item, index) in chamberList" :key="index">
             <input :id="item.text" type="checkbox" v-model="item.checked" />
             <span>{{item.text}}</span>
           </label>
         </div>
         <div class="moreInfo-item">
           <p class="moreInfo-title">卫生间</p>
-          <label class="moreInfo-options" :for="item.text" v-for="item in toiletList">
+          <label class="moreInfo-options" :for="item.text" v-for="(item, index) in toiletList" :key="index">
             <input :id="item.text" type="checkbox" v-model="item.checked" />
             <span>{{item.text}}</span>
           </label>
@@ -170,7 +185,7 @@
       <div class="cityList-container">
         <div class="cityList-tab">选择服务城市</div>
         <ul>
-          <li 
+          <li
             class="cityList-item"
             v-for="(item, index) in cityList"
             :key="item.id"
@@ -201,26 +216,37 @@
           <span class="remove-icon" @click="removeHistory"></span>
         </div>
         <div class="search-history">
-          <mt-button type="default" size="small" v-for="item in historySearch" @click="doSearch(item)">{{item}}</mt-button>
+          <mt-button type="default" size="small" v-for="(item, index) in historySearch" :key="index" @click="doSearch(item)">{{item}}</mt-button>
         </div>
       </div>
       <div class="search-roomList" v-if="this.searchRoomList.length">
-        <a 
+        <a
         :href="`https://www.mdguanjia.com/waptest/roomDetail/index.html?type=${item.type}&roomId=${item.id}&memorhomeHost=${apiAddr}`"
         class="roomList-item"
-        v-for="(item, index) in searchRoomList">
+        v-for="(item, index) in searchRoomList" :key="index">
           <div class="room-pic">
             <img :src="item.pic" alt="">
           </div>
           <div class="room-info">
             <div class="room-name">{{item.name}}</div>
             <div class="room-layout">{{item.houseArea}} | {{item.houseType}} | {{item.decorationDegree}}</div>
-            <div class="room-price">{{item.price}}元/月起</div>
+            <div class="room-price">
+              <span style="font-size: 0.533333rem; font-family: FuturaStd-Condensed;">￥{{item.price}}</span>
+              <span style="font-size: 0.266667rem;">/月</span>
+            </div>
             <div class="room-address">
-              <div class="room-address-text">
-                {{item.address}}
+              <div class="room-tags">
+                <span v-for="(tag, tagIndex) in item.showTagList"
+                  :key="tagIndex"
+                  style="border: 1px solid; border-radius: 0.1rem; padding: 0 0.1rem;"
+                  :style="{color: tag.tagColor, borderColor: tag.tagColor}">
+                  {{tag.tagName}}
+                </span>
               </div>
-              <mt-badge v-show="item.fullRentType" class="fullRent-tips" size="small" color="#ddd">已出租</mt-badge>
+              <div class="room-address-text">
+                <i class="icon-location" v-if="item.regionZone"></i>
+                {{item.regionZone}}
+              </div>
             </div>
           </div>
         </a>
@@ -242,7 +268,7 @@ export default {
   data() {
     return {
       apiAddr: 'api',
-      curCityIndex: 5,
+      curCityIndex: null,
       pageNo: 1,
       showPopupObj: {
         0: false,
@@ -477,7 +503,48 @@ export default {
       return this.curRentType == 3 ? 1 : (this.curRentType == null ? null : 2);
     }
   },
+  created() {
+    if(location.search){
+      let searchObj = {};
+      let searchArr = location.search.slice(1).split('&');
+      for (let i = 0; i < searchArr.length; i++) {
+        if(searchArr[i].split("=")[1]){
+          searchObj[searchArr[i].split("=")[0]] = unescape(searchArr[i].split("=")[1]);
+        }
+      }
+      this.apiAddr = searchObj['memorhomeHost'] || 'api';
+    }
+    this.getCityList();
+    this.share();
+  },
+  mounted() {
+    let top = this.$refs.roomListWrapper.offsetTop;
+    this.$refs.roomListWrapper.style.height = document.body.clientHeight - top + 'px';
+  },
   methods: {
+    // 获取当前定位城市
+    getCurrentPosition() {
+      if (window.BMap) {
+        let geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition((position) => {
+          let getCurrentPositionCity = position.address.city || '杭州';
+          let filterItemIndex
+          this.cityList.forEach((item, index) => {
+            if (item.name.includes(getCurrentPositionCity)){
+              filterItemIndex = index
+              return false
+            }
+          })
+          this.curCityIndex = localStorage.getItem('MJ_DEFAULT_CITY_INDEX') || filterItemIndex;
+          this.getRoomList(true);
+          this.getDistrictList();
+        });
+      } else {
+        this.curCityIndex = 8;
+        this.getRoomList(true);
+        this.getDistrictList();
+      }
+    },
     getMoreInfoOptions() {
       this.showPopupObj[3] = false;
       let checkLength = 0;
@@ -546,7 +613,7 @@ export default {
               checked: false,
               isChecked: false,
               zones: item.zones || [{
-                zoneId: -1, 
+                zoneId: -1,
                 zoneName: "全部"
               }]
             });
@@ -591,7 +658,6 @@ export default {
         "devId": "5555998cccf2492db015c442f087f00a"
       }).then((res) => {
         if(res.data.code == 0){
-          // console.log(res.data.data);
           res.data.data.cityList.forEach((item, index) => {
             this.cityList.push({
               id: item.areaId,
@@ -599,8 +665,7 @@ export default {
             });
           });
         }
-        this.getRoomList(true);
-        this.getDistrictList();
+        this.getCurrentPosition();
       }).catch((err) => { console.log(err); });
     },
     getRoomList(reFlash) {
@@ -643,8 +708,9 @@ export default {
               decorationDegree: item.decorationDegree,
               price: item.minRentPrice,
               address: item.address,
-              fullRentType: item.isFullRent,
-              type: item.type
+              type: item.type,
+              regionZone: (item.region || '') + ' ' + (item.zone || ''),
+              showTagList: item.showTagList || []
             })
           })
           if(this.pageNo == res.data.data.totalPages){
@@ -780,7 +846,9 @@ export default {
               price: item.minRentPrice.split('.')[0],
               address: item.address,
               fullRentType: item.isFullRent,
-              type: item.type
+              type: item.type,
+              regionZone: (item.region || '') + ' ' + (item.zone || ''),
+              showTagList: item.showTagList || []
             });
           });
         } else {
@@ -806,9 +874,9 @@ export default {
         const res = result.data
         if(res.success){
           var shareData = {
-            title: '帮助中心',
+            title: '麦邻租房',
             share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
-            share_desc:'麦滴管家帮助中心'
+            share_desc:'麦邻租房'
           }
           var response = res.dataObject;
           wx.config({
@@ -895,25 +963,6 @@ export default {
         })
       }
     }
-  },
-  created() {
-    if(location.search){
-      let searchObj = {};
-      let searchArr = location.search.slice(1).split('&');
-      for (let i = 0; i < searchArr.length; i++) {
-        if(searchArr[i].split("=")[1]){
-          searchObj[searchArr[i].split("=")[0]] = unescape(searchArr[i].split("=")[1]);
-        }
-      }
-      this.apiAddr = searchObj['memorhomeHost'] || 'api';
-    }
-    this.curCityIndex = localStorage.getItem('MJ_DEFAULT_CITY_INDEX') || 5;
-    this.share();
-    this.getCityList();
-  },
-  mounted() {
-    let top = this.$refs.roomListWrapper.offsetTop;
-    this.$refs.roomListWrapper.style.height = document.body.clientHeight - top + 'px';
   }
 }
 </script>
@@ -1240,15 +1289,15 @@ body {
   }
   .room-price {
     color: rgb(238, 117, 0);
-    margin-bottom: 0.426667rem;
-    font-size: 0.426667rem;
+    margin-bottom: 0.266667rem;
   }
   .room-address {
     display: flex;
     justify-content: space-between;
-    line-height: 0.426667rem;
+    align-items: center;
+    padding: 0.053333rem 0;
     .room-address-text {
-      flex: 1;
+      color: #999;
       @include text-break;
     }
   }
@@ -1412,5 +1461,15 @@ body {
   color: #fff;
   background-color: rgba(0, 0, 0, .6);
   text-align: center;
+}
+
+.icon-location {
+  display: inline-block;
+  background: url(./assets/images/location.png) no-repeat center center;
+  background-size: contain;
+  width: 0.32rem;
+  height: 0.32rem;
+  position: relative;
+  top: 2px;
 }
 </style>

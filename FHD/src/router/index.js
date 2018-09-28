@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: resolve => require(['@/views/workbench'], resolve)
+      component: resolve => require(['@/views/houseList/index'], resolve)
     },
     {
       path: '/sourceList',
@@ -77,6 +77,11 @@ export default new Router({
       path: '/message',
       name: 'message',
       component: resolve => require(['@/views/message'], resolve)
+    },
+    {
+      path: '/perlperformance',
+      name: 'perlperformance',
+      component: resolve => require(['@/views/perlperformance'], resolve)
     }
   ]
 })
