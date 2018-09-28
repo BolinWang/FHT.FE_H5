@@ -1289,12 +1289,13 @@ body {
   }
   .room-price {
     color: rgb(238, 117, 0);
-    margin-bottom: 0.426667rem;
+    margin-bottom: 0.266667rem;
   }
   .room-address {
     display: flex;
     justify-content: space-between;
-    line-height: 0.426667rem;
+    align-items: center;
+    padding: 0.053333rem 0;
     .room-address-text {
       color: #999;
       @include text-break;

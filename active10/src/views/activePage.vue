@@ -9,7 +9,7 @@
     </section>
     <section class="container">
       <!-- 重力感应区域 -->
-      <div class="vr_container" id="scene">
+      <div class="vr_container" id="scene1">
         <div data-depth="0.6">
           <img
             class="img_bg"
@@ -110,15 +110,31 @@
               </section>
             </article>
           </section>
+          <!-- vr看房 -->
+          <section class="active_vrWrapper">
+            <div class="vr_wrapper flex flex_center">
+              <div class="image_container">
+                <div id="scene2">
+                  <div data-depth="0.6">
+                    <img src="../assets/image_vr.png" @click="goVrRoomPage" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="info">
+              <img src="../assets/vr.png" />
+              立即体验VR看房
+            </div> -->
+          </section>
           <!-- 合作伙伴 -->
           <section class="active_partner flex flex_center">
-            <img src="../assets/bizpartner.png">
+            <img src="../assets/bizpartner.png" />
           </section>
         </section>
       </section>
     </section>
-    <section class="footer fixed" v-if="!isAPP && ticket_status === 1">
-      <van-button size="large" class="btn_downloadApp" @click="downloadAPP">前往VR看房使用抵扣券</van-button>
+    <section class="footer fixed">
+      <van-button size="large" class="btn_downloadApp" @click="goVrRoomPage">前往体验VR看房</van-button>
     </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
@@ -264,9 +280,11 @@ export default {
       // this.sourceTypeTrack()
     })
     // 重力感应实例化
-    let scene = document.getElementById('scene')
-    let parallax = new Parallax(scene)
-    console.log(parallax)
+    let scene1 = document.getElementById('scene1')
+    // let scene2 = document.getElementById('scene2')
+    // eslint-disable-next-line
+    let parallax1 = new Parallax(scene1)
+    // let parallax2 = new Parallax(scene2)
   },
   methods: {
     scrollIntoView () {
@@ -540,6 +558,12 @@ export default {
       }
       window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
     },
+
+    // 前往vr看房页面
+    goVrRoomPage () {
+      window.location.href = `${process.env.WEBSITE_LINK}waptest/roomList/index.html`
+    },
+
     // 唤醒APP
     callupApp () {
       const schemeConfig = {
@@ -809,6 +833,41 @@ export default {
     img {
       width: 630px;
       height: 135px;
+    }
+  }
+  .active_vrWrapper {
+    position: relative;
+    .image_container {
+      // border: 8px solid #24116a;
+      width: 622px;
+      height: 240px;
+      color: #fff;
+      img {
+        width: 622px;
+        height: 240px;
+      }
+    }
+    .info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -150px;
+      margin-top: -30px;
+      background: rgba(36, 37, 106, 0.5);
+      width: 300px;
+      height: 60px;
+      border-radius: 60px;
+      padding: 0 20px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      img {
+        width: 60px;
+        height: 60px;
+      }
     }
   }
 }

@@ -11,7 +11,9 @@
         <swiper-slide
           v-for="(item, index) in picList"
           :key="index">
-          <span class="previewVr" v-if="item.vrUrl">VR</span>
+          <span class="previewVr" v-if="item.vrUrl" @click="showPhoto(index, item)">
+            <img src="../assets/images/vr.png" />
+          </span>
           <img :src="item.src" alt="" @click="showPhoto(index, item)">
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
@@ -377,6 +379,7 @@ export default {
       publicDeviceList: [],
       swiperOption: {
         loop : true,
+        speed: 1000,
         autoplay: {
           disableOnInteraction: false
         },
@@ -1184,10 +1187,14 @@ body {
 }
 .previewVr {
   position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
+  top: 50%;
+  left: 50%;
+  margin-left: -0.8rem;
+  margin-top: -0.8rem;
   z-index: 50;
-  color: #fff;
-  font-size: 0.426667rem;
+  img {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
 }
 </style>
