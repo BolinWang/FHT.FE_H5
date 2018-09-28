@@ -1,5 +1,0 @@
-import Vue from 'vue'
-import MintUI from 'mint-ui'
-import axios from 'axios'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-import VModal from 'vue-js-modal'
