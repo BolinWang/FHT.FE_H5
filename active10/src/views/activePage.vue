@@ -113,15 +113,15 @@
           <!-- vr看房 -->
           <section class="active_vrWrapper">
             <div class="vr_wrapper flex flex_center">
-              <div class="image_container">
+              <div class="image_container" @click="goVrRoomPage">
                 <div id="scene2">
                   <div data-depth="0.4">
-                    <img src="../assets/image_vr.jpg" @click="goVrRoomPage" />
+                    <img src="../assets/image_vr.jpg" />
                   </div>
                 </div>
               </div>
             </div>
-            <div class="info">
+            <div class="info" @click.stop="goVrRoomPage">
               <img src="../assets/vr.png" />
               立即体验VR看房
             </div>
@@ -855,6 +855,7 @@ export default {
       }
     }
     .info {
+      cursor: pointer;
       position: absolute;
       top: 50%;
       left: 50%;
