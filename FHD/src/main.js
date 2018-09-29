@@ -8,7 +8,7 @@ import { ConfirmPlugin, ToastPlugin, DatetimePlugin, Group, Cell, ViewBox, XHead
 FastClick.attach(document.body)
 // development引用vconsole
 // eslint-disable-next-line
-process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
+// process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
 Vue.config.productionTip = false
 
 const vm = new Vue({
@@ -21,6 +21,8 @@ const vm = new Vue({
 if (window.JSUserInfo) {
   const data = window.JSUserInfo.getHouseKeeperUserAction()
   localStorage.setItem('userData', data)
+} else {
+  localStorage.setItem('userData', 'MTgwMTIzNDU2Nzg=')
 }
 
 Vue.use(vm)

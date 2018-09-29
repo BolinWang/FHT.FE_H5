@@ -1,15 +1,15 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-13 09:52:57
+ * @Last Modified by: chudequan
+ * @Last Modified time: 2018-09-29 14:37:22
  */
 
 <template>
 	<div>
 		<div style="height:100%;background:#fff">
 			<ul class="houseNav" v-if="listData.length > 0">
-				<li v-for="(item, index) in listData" :class="{'liMask': chooseIdList.indexOf(item.roomId) > -1}" :key="index" @click="toDetail(item)">
+				<li v-for="(item, index) in listData" :class="{'liMask': chooseIdList.indexOf(item.roomId) > -1, 'liMask unclickable': item.fhdRoomTag === 1}" :key="index" @click="toDetail(item)">
 					<div class="houseTitle">
 						<div>{{item.name}}</div>
 					</div>
@@ -56,30 +56,30 @@
 </template>
 
 <script>
-import { Tab, TabItem, XImg } from "vux"
-import { plusXing, deepClone } from "@/utils"
+import { Tab, TabItem, XImg } from 'vux'
+import { plusXing, deepClone } from '@/utils'
 
 const statusMapData = {
-	'kongfang': '1,2,5,6,10',
-	'zaizhu': '3,4,8',
-	'chuzu': '9',
-	'baoliu': '7'
+  'kongfang': '1,2,5,6,10',
+  'zaizhu': '3,4,8',
+  'chuzu': '9',
+  'baoliu': '7'
 }
 const directionList = [
-	"未知朝向",
-	"朝南",
-	"朝北",
-	"朝东",
-	"朝西",
-	"东南",
-	"西南",
-	"东北",
-	"西北"
+  '未知朝向',
+  '朝南',
+  '朝北',
+  '朝东',
+  '朝西',
+  '东南',
+  '西南',
+  '东北',
+  '西北'
 ]
-const attrList = ["", "独卫", "阳台", "厨房", "飘窗"]
+const attrList = ['', '独卫', '阳台', '厨房', '飘窗']
 
 export default {
-  name: "house-list",
+  name: 'house-list',
   components: {
     Tab, TabItem, XImg
   },
@@ -99,55 +99,58 @@ export default {
   filters: {
     statusStr(val) {
       const statusList = [{
-				name: '空房',
-				value: '1,2,5,6,10'
-			},{
-				name: '在住',
-				value: '3,4,8'
-			},{
-				name: '已出租',
-				value: '9'
-			},{
-				name: '保留中',
-				value: '7'
-			}]
-			let mapArr = statusList.filter((item) => {
-				return item.value.includes(val)
-			})
-			return mapArr.length > 0 ? mapArr[0].name : '空房'
+        name: '空房',
+        value: '1,2,5,6,10'
+      }, {
+        name: '在住',
+        value: '3,4,8'
+      }, {
+        name: '已出租',
+        value: '9'
+      }, {
+        name: '保留中',
+        value: '7'
+      }]
+      let mapArr = statusList.filter((item) => {
+        return item.value.includes(val)
+      })
+      return mapArr.length > 0 ? mapArr[0].name : '空房'
     },
     mobileStr(val) {
       return plusXing(val, 3, 4)
     }
-	},
-	created() {
+  },
+  created() {
     this.listData = this.data
     this.chooseList = this.cList
-		this.listData.map((item) => {
-			item.featureList = []
-			let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
-			let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
-			let roomArea = `${item.roomArea || 0}㎡`
-			let roomDirection = directionList[item.roomDirection]
-			let roomAttributes = item.roomAttributes.split(',').map((item) => {
-				return attrList[item]
-			})
-			item.roomFeatureList = [
-				roomDirection,
-				...roomAttributes
-			]
-			item.featureList = [roomGuard, roomType, roomArea]
-		})
-	},
+    this.listData.map((item) => {
+      item.featureList = []
+      let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
+      let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
+      let roomArea = `${item.roomArea || 0}㎡`
+      let roomDirection = directionList[item.roomDirection]
+      let roomAttributes = item.roomAttributes.split(',').map((item) => {
+        return attrList[item]
+      })
+      item.roomFeatureList = [
+        roomDirection,
+        ...roomAttributes
+      ]
+      item.featureList = [roomGuard, roomType, roomArea]
+    })
+  },
   data() {
     return {
       statusMapData,
       chooseList: [],
-			listData: []
+      listData: []
     }
   },
   methods: {
     toDetail(item) {
+      if (item.fhdRoomTag === 1) {
+        return
+      }
       let hasIndex = -1
       this.chooseList.map((val, index) => {
         if (val.roomId === item.roomId) {
@@ -181,19 +184,19 @@ export default {
   },
   watch: {
     data(val = []) {
-			val.map((item) => {
-				item.featureList = []
-				let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
-				let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
-				let roomArea = `${item.roomArea || 0}㎡`
-				let roomDirection = directionList[item.roomDirection]
-				let roomAttributes = item.roomAttributes.split(',').map((item) => {
-					return attrList[item]
-				})
-				item.roomFeatureList = [
-					roomDirection,
-					...roomAttributes
-				]
+      val.map((item) => {
+        item.featureList = []
+        let roomGuard = `${item.chamberCount || 0}室${item.boardCount || 0}厅${item.toiletCount || 0}卫`
+        let roomType = item.housingType === 1 ? '公寓' : (item.houseRentType === 2 ? '合租' : '整租')
+        let roomArea = `${item.roomArea || 0}㎡`
+        let roomDirection = directionList[item.roomDirection]
+        let roomAttributes = item.roomAttributes.split(',').map((item) => {
+          return attrList[item]
+        })
+        item.roomFeatureList = [
+          roomDirection,
+          ...roomAttributes
+        ]
  				item.featureList = [roomGuard, roomType, roomArea]
       })
       this.listData = val
@@ -349,7 +352,21 @@ export default {
       left: 0px;
       top: 0px;
       z-index: 3;
-    }
+		}
+		&.unclickable {
+			&::after {
+				position: absolute;
+				top: 50%;
+				left: 0.2rem;
+				transform: translateY(-50%);
+				width: 3.2rem;
+				height: 2.3rem;
+				background-image: url(../../../static/is-distribution.png);
+				background-size: 100%;
+				background-repeat: no-repeat;
+				font-size: 0;
+			}
+		}
   }
   .flex {
     display: flex;
