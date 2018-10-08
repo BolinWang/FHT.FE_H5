@@ -196,6 +196,7 @@ export default {
       showUserAgree: false,
       agreeTxt: userAgreeMent,
       isLogin: null, // 是否已登录
+      lastVersion: 357, // APP版本
       isAPP: false, // 是否APP内
       app_ios: false,
       app_andriod: false,
@@ -247,18 +248,18 @@ export default {
     let _this = this
     if (this.app_ios === true) {
       Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
-        console.log(responseData)
         setUserData(responseData)
         _this.initActive()
         _this.initApp()
+        _this.lastVersion = responseData.v ? responseData.v.split('.').join('') * 1 : 357
       })
     } else if (this.app_andriod === true) {
       // eslint-disable-next-line
       let getAndriodData = JSON.parse(window.SetupJsCommunication.getParamsFromNative())
       setUserData(getAndriodData)
-      console.log(getAndriodData)
       this.initActive()
       this.initApp()
+      this.lastVersion = getAndriodData.v ? getAndriodData.v.split('.').join('') * 1 : 357
     } else {
       this.initActive()
       this.initApp()
@@ -565,20 +566,22 @@ export default {
       let bridgeParam = {
         libCode: 5018
       }
-      if (this.app_ios === true) {
-        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
-      } else if (this.app_andriod === true) {
-        bridgeParam = {
-          libCode: 5018,
-          params: {
-            type: 3
+      if (this.lastVersion > 357) {
+        if (this.app_andriod === true) {
+          try {
+            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+          } catch (error) {
+            this.$toast('fail', 'Andriod调用失败')
+            console.log(error)
           }
-        }
-        try {
-          window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-        } catch (error) {
-          this.$toast('fail', 'Andriod调用失败')
-          console.log(error)
+        } else if (this.app_ios === true) {
+          bridgeParam = {
+            libCode: 5018,
+            params: {
+              type: 3
+            }
+          }
+          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
         }
       } else {
         window.location.href = `${process.env.WEBSITE_LINK}waptest/roomList/index.html`
