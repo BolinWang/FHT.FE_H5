@@ -127,7 +127,7 @@
             </div>
           </section>
           <!-- 合作伙伴 -->
-          <section class="active_partner flex flex_center">
+          <section class="active_partner flex flex_center" v-if="urlSearchParams.sourceType !== 'douyin'">
             <img src="../assets/bizpartner.png" />
           </section>
         </section>
