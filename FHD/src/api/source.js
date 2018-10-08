@@ -58,6 +58,7 @@ export function configureHouseApi(params = {}) {
     url: leiUrl + '/api/customer/allocation/searchAllocationList',
     method: 'post',
     isSearch: true,
+    notId: true,
     data: {
       params: params
     }
