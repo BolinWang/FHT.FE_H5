@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chudequan
- * @Last Modified time: 2018-09-29 14:21:23
+ * @Last Modified time: 2018-10-08 16:48:18
  */
 
 import axios from 'axios'
@@ -22,9 +22,8 @@ service.interceptors.request.use(config => {
     sign: '8F4C4A8E9D850EDD9692DE38723D0543'
   }
   if (config.method.toUpperCase() === 'POST') {
-    // const userData = JSON.parse(localStorage.getItem('userData'))
-    // defaultConfig.sessionId = config.notId ? userData.sessionId : userData.id
-    defaultConfig.sessionId = 'MTgwMTIzNDU2Nzg='
+    const userData = JSON.parse(localStorage.getItem('userData'))
+    defaultConfig.sessionId = config.notId ? userData.sessionId : userData.id
     if (!config.noAssign) {
       config.data = Object.assign(config.data, defaultConfig)
     }
