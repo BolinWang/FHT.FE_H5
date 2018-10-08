@@ -127,7 +127,7 @@
             </div>
           </section>
           <!-- 合作伙伴 -->
-          <section class="active_partner flex flex_center">
+          <section class="active_partner flex flex_center" v-if="urlSearchParams.sourceType !== 'douyin'">
             <img src="../assets/bizpartner.png" />
           </section>
         </section>
@@ -562,7 +562,27 @@ export default {
 
     // 前往vr看房页面
     goVrRoomPage () {
-      window.location.href = `${process.env.WEBSITE_LINK}waptest/roomList/index.html`
+      let bridgeParam = {
+        libCode: 5018
+      }
+      if (this.app_ios === true) {
+        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
+      } else if (this.app_andriod === true) {
+        bridgeParam = {
+          libCode: 5018,
+          params: {
+            type: 3
+          }
+        }
+        try {
+          window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+        } catch (error) {
+          this.$toast('fail', 'Andriod调用失败')
+          console.log(error)
+        }
+      } else {
+        window.location.href = `${process.env.WEBSITE_LINK}waptest/roomList/index.html`
+      }
     },
 
     // 唤醒APP
@@ -575,7 +595,7 @@ export default {
         appstore: 'https://itunes.apple.com/cn/app/id1191743282?mt=8'
       }
       let callupAppOptions = {
-        callback: function () {
+        callback () {
           // IOS 微信中直接前往appstore
           if (browser.isIos && browser.isWechat) {
             window.location.href = schemeConfig.appstore
