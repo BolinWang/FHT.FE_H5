@@ -1,30 +1,36 @@
 <template>
-  <div style="height:100%;">
-    <view-box ref="viewBox" >
+	<div style="height:100%;">
+		<view-box ref="viewBox">
 			<div class="askDiv">
 				<flexbox :gutter="0">
-          <flexbox-item :span="1/8">
-            <div class="title">租客<br/>要求</div>
-          </flexbox-item>
-          <flexbox-item>
-            <div class="nav">
+					<flexbox-item :span="1/8">
+						<div class="title">租客<br/>要求</div>
+					</flexbox-item>
+					<flexbox-item>
+						<div class="nav">
 							<span v-if="askParam.rentFeeName && askParam.rentFeeName != '不限'">{{askParam.rentFeeName}}</span>
 							<span>{{askParam.houseType | houseTypeStr}}</span>
 							<span v-if="askParam.roomType">{{askParam.roomType}}室</span>
 							<span>{{askParam.houseDirection | houseDirectionStr}}</span>
-							<span v-for="(item, index) in houseFeatureArr" :key="index">
+							<span
+							 v-for="(item, index) in houseFeatureArr"
+							 :key="index"
+							>
 								{{item | houseFeatureStr}}
 							</span>
 						</div>
-          </flexbox-item>
-        </flexbox>
+					</flexbox-item>
+				</flexbox>
 			</div>
 			<div style="background: #fff;">
 				<div class="top-select">
-					<div class="select-item"
-						:class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
-						v-for="(item, index) in selectOptions" :key="index"
-						@click="showPopup(index)">
+					<div
+					 class="select-item"
+					 :class="{active: selectOptions[index].active, selected: selectOptions[index].selected}"
+					 v-for="(item, index) in selectOptions"
+					 :key="index"
+					 @click="showPopup(index)"
+					>
 						<span class="select-text">
 							{{item.text}}
 						</span>
@@ -32,47 +38,99 @@
 					</div>
 				</div>
 			</div>
-			<div class="textAlign" style="line-height:30px" v-show="showLoading">
-				<inline-loading ></inline-loading> 数据加载中O(∩_∩)O~
+			<div
+			 class="textAlign"
+			 style="line-height:30px"
+			 v-show="showLoading"
+			>
+				<inline-loading></inline-loading> 数据加载中O(∩_∩)O~
 			</div>
-			<scroll :data="roomDataList" ref="scroll" @pullingUp="moreData" @pullingDown="refreshData" id="scroll_container">
-      	<house-list :data="roomDataList" @getLength="getLength" v-if="roomDataList.length > 0" :cList="chooseList" ref="house"></house-list>
-				<div class="noData_content" v-else>
+			<scroll
+			 :data="roomDataList"
+			 ref="scroll"
+			 @pullingUp="moreData"
+			 @pullingDown="refreshData"
+			 id="scroll_container"
+			>
+				<house-list
+				 :data="roomDataList"
+				 @getLength="getLength"
+				 v-if="roomDataList.length > 0"
+				 :cList="chooseList"
+				 ref="house"
+				></house-list>
+				<div
+				 class="noData_content"
+				 v-else
+				>
 					<p>暂无数据o(╥﹏╥)o</p>
 				</div>
 			</scroll>
-			<div slot="bottom" class="bottomDiv">
-        <flexbox :gutter="0">
-          <flexbox-item :span="1/4" class="btn-box"  @click.native="chooseAll">
-            <div class="btn-item text-all">{{isChooseAll ? '全不选' : '全选'}}</div>
-          </flexbox-item>
-          <flexbox-item class="btn-box" @click.native="chooseToApp">
-            <div class="btn-item text-choose">已选择（{{chooseList.length}}）并确定</div>
-          </flexbox-item>
-        </flexbox>
-      </div>
-			<popup ref="mypop" v-model="selectOptions[currentIndex].active"
-				position="top" class="select-list"
-				@on-show="popShow"
-				@on-hide="popHide">
+			<div
+			 slot="bottom"
+			 class="bottomDiv"
+			>
+				<flexbox :gutter="0">
+					<flexbox-item
+					 :span="1/4"
+					 class="btn-box"
+					 @click.native="chooseAll"
+					>
+						<div class="btn-item text-all">{{isChooseAll ? '全不选' : '全选'}}</div>
+					</flexbox-item>
+					<flexbox-item
+					 class="btn-box"
+					 @click.native="chooseToApp"
+					>
+						<div class="btn-item text-choose">已选择（{{chooseList.length}}）并确定</div>
+					</flexbox-item>
+				</flexbox>
+			</div>
+			<popup
+			 ref="mypop"
+			 v-model="selectOptions[currentIndex].active"
+			 position="top"
+			 class="select-list"
+			 @on-show="popShow"
+			 @on-hide="popHide"
+			>
 				<div class="pop_container">
 					<!-- 精准搜索 -->
-					<div class="pop_item" style="border-top: 0;" v-if="currentIndex === 0">
+					<div
+					 class="pop_item"
+					 style="border-top: 0;"
+					 v-if="currentIndex === 0"
+					>
 						<group title="小区/公寓">
-							<x-input v-model="searchData.estateName" placeholder="小区/公寓"></x-input>
+							<x-input
+							 v-model="searchData.estateName"
+							 placeholder="小区/公寓"
+							></x-input>
 						</group>
 						<group title="房东/房东手机号码">
-							<x-input v-model="searchData.adminNameOrMobile" placeholder="房东/房东手机号码"></x-input>
+							<x-input
+							 v-model="searchData.adminNameOrMobile"
+							 placeholder="房东/房东手机号码"
+							></x-input>
 						</group>
 						<group title="房间号">
-							<x-input v-model="searchData.roomNo" placeholder="房间号"></x-input>
+							<x-input
+							 v-model="searchData.roomNo"
+							 placeholder="房间号"
+							></x-input>
 						</group>
 						<flexbox class="pop_btn_group">
 							<flexbox-item>
-								<x-button @click.native="clearParam" style="background: #fff;">清空</x-button>
+								<x-button
+								 @click.native="clearParam"
+								 style="background: #fff;"
+								>清空</x-button>
 							</flexbox-item>
 							<flexbox-item :span="8">
-								<x-button :gradients="['#19D5FD','#1D62F0']" @click.native="searchParam">确定</x-button>
+								<x-button
+								 :gradients="['#19D5FD','#1D62F0']"
+								 @click.native="searchParam"
+								>确定</x-button>
 							</flexbox-item>
 						</flexbox>
 					</div>
@@ -86,91 +144,138 @@
 						</div>
 					</div> -->
 					<!-- 房态 -->
-					<div class="pop_item" v-else-if="currentIndex === 1">
-						<div class="pop_item-pic"
-							v-for="(item, index) in topListParams.statusList" :key="index"
-							:class="{active: topListParams.statusList[index].selected}"
-							@click="selectParams(topListParams.statusList, index, 'statusList')">
+					<div
+					 class="pop_item"
+					 v-else-if="currentIndex === 1"
+					>
+						<div
+						 class="pop_item-pic"
+						 v-for="(item, index) in topListParams.statusList"
+						 :key="index"
+						 :class="{active: topListParams.statusList[index].selected}"
+						 @click="selectParams(topListParams.statusList, index, 'statusList')"
+						>
 							{{item.name}}
 						</div>
 					</div>
 					<!-- 价格排序 -->
-					<div class="pop_item" v-else-if="currentIndex === 2">
-						<div class="pop_item-pic"
-							v-for="(item, index) in topListParams.sortType" :key="index"
-							:class="{active: topListParams.sortType[index].selected}"
-							@click="selectParams(topListParams.sortType, index, 'sortType')">
+					<div
+					 class="pop_item"
+					 v-else-if="currentIndex === 2"
+					>
+						<div
+						 class="pop_item-pic"
+						 v-for="(item, index) in topListParams.sortType"
+						 :key="index"
+						 :class="{active: topListParams.sortType[index].selected}"
+						 @click="selectParams(topListParams.sortType, index, 'sortType')"
+						>
 							{{item.name}}
 						</div>
 					</div>
 					<!-- 更多 -->
-					<div class="pop_item" style="border-top: 0;"  v-else>
+					<div
+					 class="pop_item"
+					 style="border-top: 0;"
+					 v-else
+					>
 						<group title="月租金租金范围">
 							<flexbox>
 								<flexbox-item>
-									<x-input :show-clear="false" v-model="searchData.minPrice" placeholder="最小租金" style="padding-right: 0"></x-input>
+									<x-input
+									 :show-clear="false"
+									 v-model="searchData.minPrice"
+									 placeholder="最小租金"
+									 style="padding-right: 0"
+									></x-input>
 								</flexbox-item>
-								<flexbox-item style="text-align: center;" :span="1">
+								<flexbox-item
+								 style="text-align: center;"
+								 :span="1"
+								>
 									一
 								</flexbox-item>
 								<flexbox-item>
-									<x-input :show-clear="false" v-model="searchData.maxPrice" placeholder="最大租金" style="padding-left: 0"></x-input>
+									<x-input
+									 :show-clear="false"
+									 v-model="searchData.maxPrice"
+									 placeholder="最大租金"
+									 style="padding-left: 0"
+									></x-input>
 								</flexbox-item>
 							</flexbox>
 						</group>
 						<group title="户型">
 							<div class="pop_item_chamberCounts">
-								<span class="pop_item_tags"
-									v-for="(item, index) in paramsList.chamberCounts" :key="index"
-									:class="{active_chamberCounts: paramsList.chamberCounts[index].selected}"
-									@click="selectParams(paramsList.chamberCounts, index, 'chamberCounts')">
+								<span
+								 class="pop_item_tags"
+								 v-for="(item, index) in paramsList.chamberCounts"
+								 :key="index"
+								 :class="{active_chamberCounts: paramsList.chamberCounts[index].selected}"
+								 @click="selectParams(paramsList.chamberCounts, index, 'chamberCounts')"
+								>
 									{{item.name}}
 								</span>
 							</div>
 						</group>
 						<group title="房间类型">
 							<div class="pop_item_chamberCounts">
-								<span class="pop_item_tags"
-									v-for="(item, index) in paramsList.housingType" :key="index"
-									:class="{active_chamberCounts: paramsList.housingType[index].selected}"
-									@click="selectParams(paramsList.housingType, index, 'housingType')">
+								<span
+								 class="pop_item_tags"
+								 v-for="(item, index) in paramsList.housingType"
+								 :key="index"
+								 :class="{active_chamberCounts: paramsList.housingType[index].selected}"
+								 @click="selectParams(paramsList.housingType, index, 'housingType')"
+								>
 									{{item.name}}
 								</span>
 							</div>
 						</group>
 						<group title="房间朝向">
 							<div class="pop_item_chamberCounts">
-								<span class="pop_item_tags"
-									v-for="(item, index) in paramsList.roomDirection" :key="index"
-									:class="{active_chamberCounts: paramsList.roomDirection[index].selected}"
-									@click="selectParams(paramsList.roomDirection, index, 'roomDirection')">
+								<span
+								 class="pop_item_tags"
+								 v-for="(item, index) in paramsList.roomDirection"
+								 :key="index"
+								 :class="{active_chamberCounts: paramsList.roomDirection[index].selected}"
+								 @click="selectParams(paramsList.roomDirection, index, 'roomDirection')"
+								>
 									{{item.name}}
 								</span>
 							</div>
 						</group>
 						<group title="房间特色">
 							<div class="pop_item_chamberCounts">
-								<span class="pop_item_tags"
-									v-for="(item, index) in paramsList.roomAttributeList" :key="index"
-									:class="{active_chamberCounts: paramsList.roomAttributeList[index].selected}"
-									@click="selectParams(paramsList.roomAttributeList, index, 'roomAttributeList')">
+								<span
+								 class="pop_item_tags"
+								 v-for="(item, index) in paramsList.roomAttributeList"
+								 :key="index"
+								 :class="{active_chamberCounts: paramsList.roomAttributeList[index].selected}"
+								 @click="selectParams(paramsList.roomAttributeList, index, 'roomAttributeList')"
+								>
 									{{item.name}}
 								</span>
 							</div>
 						</group>
 						<flexbox class="pop_btn_group">
 							<flexbox-item>
-								<x-button @click.native="clearParam" style="background: #fff;">清空</x-button>
+								<x-button
+								 @click.native="clearParam"
+								 style="background: #fff;"
+								>清空</x-button>
 							</flexbox-item>
 							<flexbox-item :span="8">
-								<x-button :gradients="['#19D5FD','#1D62F0']" @click.native="searchParam">确定</x-button>
+								<x-button
+								 :gradients="['#19D5FD','#1D62F0']"
+								 @click.native="searchParam"
+								>确定</x-button>
 							</flexbox-item>
 						</flexbox>
 					</div>
 				</div>
 			</popup>
-    </view-box>
-  </div>
+		</view-box>
+	</div>
 </template>
 
 <script>
@@ -182,9 +287,9 @@ import {
 import footers from '@/components/footer'
 import scroll from '@/components/scroll'
 import houseList from './components/list'
-import {addClass, removeClass} from '@/utils/dom'
-import {configureHouseApi, recordUrlApi, queryManagerZone} from '@/api/source'
-import {ObjectMap, deepClone} from '@/utils'
+import { addClass, removeClass } from '@/utils/dom'
+import { configureHouseApi, recordUrlApi, queryManagerZone } from '@/api/source'
+import { ObjectMap, deepClone } from '@/utils'
 const priceList = [{
   minPrice: '',
   maxPrice: ''
@@ -676,7 +781,7 @@ export default {
         return false
       }
       if (type === 'more') {
-        this.pageNo ++
+        this.pageNo++
       } else {
         this.pageNo = 1
         this.showLoading = true
@@ -703,8 +808,8 @@ export default {
       }
 			// 户型
       let chamberCountsParam = this.paramsList.chamberCounts
-					.filter((item) => item.selected)
-					.map((item) => {
+				.filter((item) => item.selected)
+				.map((item) => {
   let mapObj = item.value * 1 === 999 ? {
     'min': 5,
     'max': ''
@@ -721,7 +826,7 @@ export default {
       let paramsList = {
         chamberCounts: chamberCountsParam.length > 0 ? chamberCountsParam : undefined,
         roomDirections: roomDirectionParam.length > 0 ? [roomDirectionParam[0].value * 1] : undefined,
-			//	decorationDegrees: decorationDegreesParam.length > 0 ? decorationDegreesParam.map((item) => item.value * 1) : undefined,
+				//	decorationDegrees: decorationDegreesParam.length > 0 ? decorationDegreesParam.map((item) => item.value * 1) : undefined,
         roomAttributeList: roomAttributeListParam.length > 0 ? roomAttributeListParam.map((item) => item.value * 1) : undefined
       }
 			// 房间类型
@@ -742,7 +847,10 @@ export default {
       })
       let toLei = deepClone(searchDataParams)
       searchDataParams.zoneIds = this.zoneList
-      configureHouseApi(searchDataParams).then(res => {
+      configureHouseApi({
+        customerId: this.askParam.customerId || '',
+        searchForRoomRequest: Object.assign(searchDataParams, {tags: ['fhd']})
+      }).then(res => {
         res = res.data
         type === 'more' ? '' : this.showLoading = false
         let resultData = res.result || []
@@ -763,7 +871,7 @@ export default {
         toLei.zoneList = this.zoneList
         recordUrlApi(toLei).then(res => {
           console.log('recordUrl')
-        }).catch(res => {})
+        }).catch(res => { })
       }).catch(res => {
         type === 'more' ? '' : this.showLoading = false
       })
@@ -799,224 +907,224 @@ export default {
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
-	.header_container{
-		width:100%;
-		position:absolute;
-		left:0;
-		top:0;
-		z-index:100;
-	}
-	#scroll_container {
-   height: 450px;
-	}
-	.textAlign {
-		width: 100%;
-		text-align: center;
-	}
-  .search {
-    width: 300px;
-    height: 30px;
-		line-height: 30px;
-		padding-left: 0;
-    background-color: #4680ff;
-		position: relative;
-		top: 0 !important;
-    &:after{
-      content: '';
-      font-family: "iconfont";
-      position: absolute;
-      left: 0;
-    }
-	}
-	.selected,
-	.active {
-		color: #4680ff;
-	}
-	.active_chamberCounts {
-		background: #4680ff;
-		color: #fff;
-		border-color: #4680ff;
-	}
-	.askDiv {
-		background: #fff;
-		.title {
-			text-align: center;
-		}
-		border-bottom: 1px solid #ccc;
-		.nav {
-			display: flex;
-			align-items: flex-start;
-			flex-wrap: wrap;
-			span {
-				padding: 0px 5px;
-				border: 1px solid #ccc;
-				border-radius: 5px;
-				margin-right: 5px;
-				margin-top: 5px;
-			}
-			margin-bottom: 5px;
-		}
-	}
-	.top-select {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 40px;
-		padding: 10px 0;
-		font-size: 14px;
-		border-bottom: 1px solid #ddd;
-		background: #fff;
-		.select-item {
-			width: 90px;
-			text-align: center;
-			&:not(:first-child){
-				border-left: 1px solid #ddd;
-			}
-			&.active {
-				color: rgb(112, 161, 255);
-				.select-icon {
-					border-width: 0 5px 5px;
-					border-color:transparent transparent rgb(112, 161, 255);
-					top: -10px;
-				}
-			}
-			.select-icon {
-				width:0;
-				height:0;
-				border-width: 5px 5px 0;
-				border-style: solid;
-				border-color:#bababa transparent transparent;
-				position: relative;
-				top: 10px;
-			}
-		}
-	}
-	.select-list {
-		width: 100%;
-		// top: 85px !important;
-		background-color: #fff;
-		font-size: 14px;
-		.pop_btn_group {
-			padding: 15px;
-			button.weui-btn {
-				padding: 8px;
-				font-size: 14px;
-				line-height: 1.2;
-				border: 1px solid #4680ff;
-			}
-		}
-		.pop_item{
-			color: #333;
-			.pop_item-pic {
-				text-align: center;
-				line-height: 40px;
-				border-bottom: 1px solid #ddd;
-			}
-			.pop_item_chamberCounts {
-				padding-left: 15px;
-				.pop_item_tags {
-					display: inline-block;
-					padding: 4px 10px;
-					border: 1px solid #ddd;
-					border-radius: 3px;
-					margin-bottom: 10px;
-					margin-top: 5px;
-					+.pop_item_tags {
-						margin-left: 10px;
-					}
-				}
-			}
-		}
-	}
-	.pop_container {
-		border-top: 1px solid #ddd;
-	}
-	.addIcon {
-    width: 46px;
-    height: 46px;
+.header_container {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+#scroll_container {
+  height: 450px;
+}
+.textAlign {
+  width: 100%;
+  text-align: center;
+}
+.search {
+  width: 300px;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 0;
+  background-color: #4680ff;
+  position: relative;
+  top: 0 !important;
+  &:after {
+    content: "";
+    font-family: "iconfont";
+    position: absolute;
+    left: 0;
+  }
+}
+.selected,
+.active {
+  color: #4680ff;
+}
+.active_chamberCounts {
+  background: #4680ff;
+  color: #fff;
+  border-color: #4680ff;
+}
+.askDiv {
+  background: #fff;
+  .title {
     text-align: center;
-		line-height: 46px;
-		top: 0;
-		left: 10px;
-    position: relative;
-  	img {
-			width: 24px;
-			height: 24px;
-			vertical-align: middle;
-		}
-	}
-	.bottomDiv {
-		z-index: 9;
-		top: -36PX;
-		.btn-item {
-			text-align: center;
-			height: 36px;
-			line-height: 36px;
-			background: #4680ff;
-			color: #fff;
-			font-weight: 700;
-		}
-		.text-all {
-			background: #fff;
-			color: #4680ff;
-		}
-	}
+  }
+  border-bottom: 1px solid #ccc;
+  .nav {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    span {
+      padding: 0px 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+    margin-bottom: 5px;
+  }
+}
+.top-select {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 10px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+  .select-item {
+    width: 90px;
+    text-align: center;
+    &:not(:first-child) {
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      color: rgb(112, 161, 255);
+      .select-icon {
+        border-width: 0 5px 5px;
+        border-color: transparent transparent rgb(112, 161, 255);
+        top: -10px;
+      }
+    }
+    .select-icon {
+      width: 0;
+      height: 0;
+      border-width: 5px 5px 0;
+      border-style: solid;
+      border-color: #bababa transparent transparent;
+      position: relative;
+      top: 10px;
+    }
+  }
+}
+.select-list {
+  width: 100%;
+  // top: 85px !important;
+  background-color: #fff;
+  font-size: 14px;
+  .pop_btn_group {
+    padding: 15px;
+    button.weui-btn {
+      padding: 8px;
+      font-size: 14px;
+      line-height: 1.2;
+      border: 1px solid #4680ff;
+    }
+  }
+  .pop_item {
+    color: #333;
+    .pop_item-pic {
+      text-align: center;
+      line-height: 40px;
+      border-bottom: 1px solid #ddd;
+    }
+    .pop_item_chamberCounts {
+      padding-left: 15px;
+      .pop_item_tags {
+        display: inline-block;
+        padding: 4px 10px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        margin-top: 5px;
+        + .pop_item_tags {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+.pop_container {
+  border-top: 1px solid #ddd;
+}
+.addIcon {
+  width: 46px;
+  height: 46px;
+  text-align: center;
+  line-height: 46px;
+  top: 0;
+  left: 10px;
+  position: relative;
+  img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+  }
+}
+.bottomDiv {
+  z-index: 9;
+  top: -36px;
+  .btn-item {
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    background: #4680ff;
+    color: #fff;
+    font-weight: 700;
+  }
+  .text-all {
+    background: #fff;
+    color: #4680ff;
+  }
+}
 </style>
 
 <style rel="stylesheet/less" lang="less">
 .vux-popup-mask.popMask {
-	top: 85px;
+  top: 85px;
 }
-.pop_item{
-	.weui-cells{
-		font-size: 12px;
-		&::before{
-			border-top: 0 !important;
-		}
-	}
-	.vux-x-input {
-		padding: 5px 15px 10px 15px;
-	}
-	.weui-cells__title {
-		margin-bottom: 0;
-		color: #333;
-	}
-	.weui-input {
-		background-color: #F2F2F2;
-		padding: 10px;
-		border-radius: 5px;
-		height: 30px;
-		line-height: 30px;
-	}
+.pop_item {
+  .weui-cells {
+    font-size: 12px;
+    &::before {
+      border-top: 0 !important;
+    }
+  }
+  .vux-x-input {
+    padding: 5px 15px 10px 15px;
+  }
+  .weui-cells__title {
+    margin-bottom: 0;
+    color: #333;
+  }
+  .weui-input {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 5px;
+    height: 30px;
+    line-height: 30px;
+  }
 }
 .header_container {
-	height: 46px;
-	.vux-header-title {
-		font-size: 14px !important;
-		margin: 0 95px !important;
-	}
-	.weui-icon-clear {
-		color: #B2B2B2 !important;
-	}
-	.weui-search-bar {
-		padding: 8px 10px !important;
-		.weui-search-bar__label {
-			top: 0;
-		}
-	}
-	.vux-header-back,
-	.left-arrow {
-		margin-top: 13px;
-	}
-	&.vux-header{
-		padding: 3px 0;
-		.vux-header-right{
-			top: 0;
-		}
-		.vux-header-left {
-			top: 0;
-		}
-	}
+  height: 46px;
+  .vux-header-title {
+    font-size: 14px !important;
+    margin: 0 95px !important;
+  }
+  .weui-icon-clear {
+    color: #b2b2b2 !important;
+  }
+  .weui-search-bar {
+    padding: 8px 10px !important;
+    .weui-search-bar__label {
+      top: 0;
+    }
+  }
+  .vux-header-back,
+  .left-arrow {
+    margin-top: 13px;
+  }
+  &.vux-header {
+    padding: 3px 0;
+    .vux-header-right {
+      top: 0;
+    }
+    .vux-header-left {
+      top: 0;
+    }
+  }
 }
 </style>
