@@ -21,8 +21,6 @@ const vm = new Vue({
 if (window.JSUserInfo) {
   const data = window.JSUserInfo.getHouseKeeperUserAction()
   localStorage.setItem('userData', data)
-} else {
-  localStorage.setItem('userData', 'MTgwMTIzNDU2Nzg=')
 }
 
 Vue.use(vm)
