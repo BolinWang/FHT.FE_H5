@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <section class="agreeTxt" v-html="userAgreeMent"></section>
+    <section class="agreeTxt">
+      <h4 class="title">用户服务协议和隐私声明</h4>
+      <article v-html="userAgreeMent"></article>
+    </section>
   </div>
 </template>
 
@@ -22,5 +25,9 @@ export default {
   width: 750px;
   padding: 20px;
   margin: 0 auto;
+}
+.title {
+  font-size: 32px;
+  text-align: center;
 }
 </style>
