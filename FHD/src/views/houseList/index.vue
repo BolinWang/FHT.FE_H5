@@ -215,7 +215,12 @@ export default {
     }).catch(rej => {
       this.$vux.toast.text(rej.message || '未查询到所属板块')
     })
-
+    this.userData = JSON.parse(localStorage.getItem('userData')) || {}
+    if (window.JSUserInfo) {
+      const data = window.JSUserInfo.getHouseKeeperUserAction()
+      localStorage.setItem('userData', data)
+      this.userData = JSON.parse(data)
+    }
 		// 去安卓拿地图数据
     this.isAndriod = false
     this.paramsListClone = deepClone(this.paramsList)
@@ -263,6 +268,7 @@ export default {
       totalPages: 1,
       pageNo: 1,
       pageSize: 20,
+      userData: '',
       showLoading: false,
       zoneList: [], // 管辖地区
       roomDataList: [], // 房源列表数据
@@ -676,6 +682,7 @@ export default {
       })
       let toLei = deepClone(searchDataParams)
       searchDataParams.zoneIds = this.zoneList
+      searchDataParams = Object.assign(searchDataParams, this.userData)
       houseApi(searchDataParams).then(res => {
         type === 'more' ? '' : this.showLoading = false
         let resultData = res.result || []
