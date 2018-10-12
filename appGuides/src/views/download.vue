@@ -53,7 +53,8 @@ export default {
 }
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .download_wrap {
   position: absolute;

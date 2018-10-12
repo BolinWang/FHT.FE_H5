@@ -2,14 +2,14 @@
   <div class="img-list">
     <ul>
       <li v-for="(item, index) in cropperList" :key="index">
-        <span @click="deleteImg(index)" class="iconfont">&#xe601;</span>  
+        <span @click="deleteImg(index)" class="iconfont">&#xe601;</span>
         <p><img :src="item.src"  class="preview-img" alt="" @click="defaultImgList(index)"></p>
       </li>
       <div v-show="uploadParam.isShowUploadBtn" class="showUploadBtn" @click="chooseImg">
         <img src="../../assets/upload.png" alt="" class="icon-upload">
-        <!-- <input type="file" 
-          class="file-upload" 
-          multiple  
+        <!-- <input type="file"
+          class="file-upload"
+          multiple
           @change="uploadImg($event)"> -->
       </div>
     </ul>
@@ -164,8 +164,8 @@ import bus from './bus'
         console.log(self.cropperList)
       }, 3000);
       console.log(self.cropperList)
-    
-      
+
+
       bus.$on('editImg', data => {
         self.$preview.close()
         self.isCropper = true

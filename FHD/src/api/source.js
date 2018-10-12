@@ -51,6 +51,20 @@ export function houseApi(params = {}) {
   })
 }
 
+/* 配房列表 */
+export function configureHouseApi(params = {}) {
+  // params.tags = ['fhd']
+  return fetch({
+    url: leiUrl + '/api/customer/allocation/searchAllocationList',
+    method: 'post',
+    isSearch: true,
+    notId: true,
+    data: {
+      params: params
+    }
+  })
+}
+
 /* 获取用户名 */
 export function getUserNameApi(params = {}) {
   return fetch({

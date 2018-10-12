@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:09:35
- * @Last Modified by: chenxing
- * @Last Modified time: 2018-07-05 11:05:34
+ * @Last Modified by: chudequan
+ * @Last Modified time: 2018-09-29 14:21:08
  */
 
 'use strict'
@@ -19,7 +19,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: proxyIPs.HONGDENG,
-        changeOrigin: true,
+				changeOrigin: true,
         pathRewrite: {
           '^/api': ''
         }

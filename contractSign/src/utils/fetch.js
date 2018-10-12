@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:52:44
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-17 16:51:51
+ * @Last Modified time: 2018-09-26 00:01:58
  */
 
 import axios from 'axios'
@@ -13,8 +13,8 @@ import { getUserData, removeUserData } from '@/utils/auth'
 const defaultConfig = {
   version: '1.0',
   timestamp: new Date().getTime(),
-  reqId: '0010C2379272774D6EC087B917CE2A71438DEF90',
-  sign: '8F4C4A8E9D850EDD9692DE38723D0543'
+  reqId: 'h5',
+  sign: 'contractSign'
 }
 
 /* 创建axios实例 */
@@ -87,11 +87,12 @@ const responseMehod = (response, resolve, reject) => {
   return reject('error')
 }
 
-const judgeMethod = (url, params, method = 'post', config = {}) => {
+const judgeMethod = (url, params, config = {}) => {
+  let method = config.method || 'post'
   let requestBody = {
-    ...config,
     method,
-    url
+    url,
+    ...config
   }
   if (method.toUpperCase() === 'POST') {
     requestBody.data = params

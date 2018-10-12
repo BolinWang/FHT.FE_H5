@@ -1,11 +1,15 @@
 <template>
   <section class="page_container">
-    <section class="header" v-if="!isAPP">
+    <section class="openApp" v-if="!isAPP && showOpenApp" @click="callupApp">
+      <img class="close_png" src="../assets/close.png" alt="" @click.stop="showOpenApp = false" />
+      <img class="image" src="../assets/openApp.png" alt="" />
+    </section>
+    <section class="header" v-else-if="!isAPP && !showOpenApp">
       <img src="../assets/logo.png" alt="" />
     </section>
     <section class="container">
-       <!-- 重力感应区域 -->
-      <div class="vr_container" id="scene">
+      <!-- 重力感应区域 -->
+      <div class="vr_container" id="scene1">
         <div data-depth="0.6">
           <img
             class="img_bg"
@@ -19,7 +23,7 @@
           </div>
         </div>
       </div>
-       <!-- 活动信息 -->
+      <!-- 活动信息 -->
       <section class="active_info">
         <div class="active_title"></div>
         <div class="active_date">
@@ -35,10 +39,10 @@
             <div class="container">
               <div class="login_field" v-if="!isAPP">
                 <van-cell-group class="item_group" :border="false">
-                  <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" />
+                  <van-field class="login_item" v-model="mobile" placeholder="请输入手机号" clearable type="number" @focus="scrollIntoView" />
                 </van-cell-group>
                 <van-cell-group class="item_group" :border="false">
-                  <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number">
+                  <van-field class="login_item" v-model="vcode" placeholder="请输入验证码" clearable type="number" @focus="scrollIntoView">
                     <label slot="button" class="label_code" @click="getVcode" v-if="!disabled">获取验证码</label>
                     <label slot="button" class="label_code" v-else>{{timerNum}}s后重发</label>
                   </van-field>
@@ -106,15 +110,31 @@
               </section>
             </article>
           </section>
+          <!-- vr看房 -->
+          <section class="active_vrWrapper">
+            <div class="vr_wrapper flex flex_center">
+              <div class="image_container" @click="goVrRoomPage">
+                <div id="scene2">
+                  <div data-depth="0.4">
+                    <img src="../assets/image_vr.jpg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="info" @click.stop="goVrRoomPage">
+              <img src="../assets/vr.png" />
+              立即体验VR看房
+            </div>
+          </section>
           <!-- 合作伙伴 -->
-          <section class="active_partner flex flex_center">
-            <img src="../assets/bizpartner.png">
+          <section class="active_partner flex flex_center" v-if="urlSearchParams.sourceType !== 'douyin'">
+            <img src="../assets/bizpartner.png" />
           </section>
         </section>
       </section>
     </section>
-    <section class="footer fixed" v-if="!isAPP && ticket_status === 1">
-      <van-button size="large" class="btn_downloadApp" @click="downloadAPP">前往VR看房使用抵扣券</van-button>
+    <section class="footer fixed">
+      <van-button size="large" class="btn_downloadApp" @click="goVrRoomPage">前往体验VR看房</van-button>
     </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
@@ -133,6 +153,10 @@ import Bridge from '@/utils/bridge'
 import Parallax from '@/utils/orienterParallax'
 import userAgreeMent from '@/utils/mlAgree'
 import { sensitiveInfo } from '@/utils'
+import { getBrowser } from '@/utils//browser'
+import CallApp from 'callapp-lib'
+
+const browser = getBrowser()
 
 const initPageInfoData = {
   title: '麦邻租房',
@@ -164,6 +188,7 @@ export default {
   },
   data () {
     return {
+      showOpenApp: true,
       vcode: '',
       mobile: '',
       disabled: false,
@@ -171,6 +196,7 @@ export default {
       showUserAgree: false,
       agreeTxt: userAgreeMent,
       isLogin: null, // 是否已登录
+      lastVersion: 357, // APP版本
       isAPP: false, // 是否APP内
       app_ios: false,
       app_andriod: false,
@@ -215,16 +241,17 @@ export default {
     // 字符串查找不用includes  IOS8不兼容
     this.app_ios = userAgent.indexOf('fht-ios') > -1
     this.app_andriod = userAgent.indexOf('fht-android') > -1
+    this.isAPP = this.app_ios || this.app_andriod
     /**
      * 获取App数据
      */
     let _this = this
     if (this.app_ios === true) {
       Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
-        console.log(responseData)
         setUserData(responseData)
         _this.initActive()
         _this.initApp()
+        _this.lastVersion = responseData.v ? responseData.v.split('.').join('') * 1 : 357
       })
     } else if (this.app_andriod === true) {
       // eslint-disable-next-line
@@ -232,6 +259,7 @@ export default {
       setUserData(getAndriodData)
       this.initActive()
       this.initApp()
+      this.lastVersion = getAndriodData.v ? getAndriodData.v.split('.').join('') * 1 : 357
     } else {
       this.initActive()
       this.initApp()
@@ -243,20 +271,33 @@ export default {
   mounted () {
     this.$nextTick(() => {
       getWxShareInfo(initPageInfoData.shareData)
-      // 活动盒子
-      window.emma.config({
-        key: 'eacb7d079f7bc7104d1346e400291155',
-        debug: false,
-        test: false,
-        eventList: [ 'iconSmall', 'iconBig', 'banner' ]
-      })
+      // // 活动盒子
+      // window.emma.config({
+      //   key: 'eacb7d079f7bc7104d1346e400291155',
+      //   debug: false,
+      //   test: false,
+      //   eventList: [ 'iconSmall', 'iconBig', 'banner' ]
+      // })
+      // this.sourceTypeTrack()
     })
     // 重力感应实例化
-    let scene = document.getElementById('scene')
-    let parallax = new Parallax(scene)
-    console.log(parallax)
+    let scene1 = document.getElementById('scene1')
+    let scene2 = document.getElementById('scene2')
+    // eslint-disable-next-line
+    let parallax1 = new Parallax(scene1)
+    // eslint-disable-next-line
+    let parallax2 = new Parallax(scene2)
   },
   methods: {
+    scrollIntoView () {
+      if (document.activeElement.tagName.toLowerCase() === 'input') {
+        window.setTimeout(() => {
+          browser.isIos && document.activeElement.scrollIntoViewIfNeeded()
+          browser.isAndroid && document.activeElement.scrollIntoView()
+        }, 200)
+      }
+    },
+
     returnClick () {
       this.$toast('fail', '请先领取优惠券')
       return false
@@ -267,8 +308,8 @@ export default {
      */
     initActive () {
       let getUserDataFromLoacal = getUserData() || {}
-      this.isAPP = getUserDataFromLoacal.v && getUserDataFromLoacal.platform
       // 未登录
+      console.log(getUserDataFromLoacal.sessionId)
       if (!getUserDataFromLoacal.sessionId) {
         this.isLogin = false
       } else {
@@ -354,6 +395,7 @@ export default {
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
+        this.sourceTypeTrack()
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -379,7 +421,7 @@ export default {
         setUserData({
           ...this.userInfo
         })
-        this.initEmma()
+        // this.initEmma()
         this.queryActivityStatus(sessionId)
       }).catch((err) => {
         console.log(err)
@@ -517,6 +559,82 @@ export default {
         return false
       }
       window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
+    },
+
+    // 前往vr看房页面
+    goVrRoomPage () {
+      let bridgeParam = {
+        libCode: 5018
+      }
+      if (this.lastVersion > 357) {
+        if (this.app_andriod === true) {
+          try {
+            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+          } catch (error) {
+            this.$toast('fail', 'Andriod调用失败')
+            console.log(error)
+          }
+        } else if (this.app_ios === true) {
+          bridgeParam = {
+            libCode: 5018,
+            params: {
+              type: 3
+            }
+          }
+          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
+        }
+      } else {
+        window.location.href = `${process.env.WEBSITE_LINK}waptest/roomList/index.html`
+      }
+    },
+
+    // 唤醒APP
+    callupApp () {
+      const schemeConfig = {
+        scheme_IOS: 'MyRoom://',
+        scheme_And: 'myroom://',
+        iosPath: 'activity',
+        yingyongbao: 'http://a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home',
+        appstore: 'https://itunes.apple.com/cn/app/id1191743282?mt=8'
+      }
+      let callupAppOptions = {
+        callback () {
+          // IOS 微信中直接前往appstore
+          if (browser.isIos && browser.isWechat) {
+            window.location.href = schemeConfig.appstore
+          } else {
+            window.location.href = schemeConfig.yingyongbao
+          }
+        }
+      }
+      const options = {
+        protocol: browser.isIos ? schemeConfig.scheme_IOS : (browser.isAndroid ? schemeConfig.scheme_And : ''),
+        yingyongbao: schemeConfig.yingyongbao,
+        appstore: schemeConfig.appstore
+      }
+      if (browser.isIos) {
+        callupAppOptions.path = schemeConfig.iosPath
+      }
+      const callLib = new CallApp(options)
+      callLib.open(callupAppOptions)
+    },
+
+    // 推广渠道转化
+    sourceTypeTrack () {
+      switch (this.urlSearchParams.sourceType) {
+        // 百度推广转化成功
+        case 'baidu':
+          window._agl && window._agl.push(['track', ['success', {t: 3}]])
+          break
+        case 'toutiao':
+          window._taq.push({convert_id: '1611206099665924', event_type: 'form'})
+          break
+        case 'douyin':
+          window._taq.push({convert_id: '1612833307743251', event_type: 'form'})
+          break
+        default:
+          break
+      }
     }
   }
 }
@@ -527,6 +645,20 @@ export default {
   height: 100%;
   background-color: #0e1125;
   position: relative;
+  .openApp {
+    .image {
+      width: 750px;
+      height: 104px;
+    }
+    .close_png {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      z-index: 1;
+      top: 37px;
+      left: 30px;
+    }
+  }
   .header {
     position: absolute;
     top: 0;
@@ -728,6 +860,45 @@ export default {
     img {
       width: 630px;
       height: 135px;
+    }
+  }
+  .active_vrWrapper {
+    position: relative;
+    .image_container {
+      border: 8px solid #24116a;
+      width: 622px;
+      height: 240px;
+      overflow: hidden;
+      color: #fff;
+      img {
+        width: 680px;
+        height: 300px;
+        margin-top: -30px;
+        margin-left: -30px;
+      }
+    }
+    .info {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -150px;
+      margin-top: -30px;
+      background: rgba(36, 17, 106, 0.5);
+      width: 300px;
+      height: 60px;
+      border-radius: 60px;
+      padding: 0 30px 0 20px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      img {
+        width: 60px;
+        height: 60px;
+      }
     }
   }
 }

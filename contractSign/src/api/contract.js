@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:39:33
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-09-10 14:59:51
+ * @Last Modified time: 2018-09-18 11:12:34
  */
 import { fetch } from '@/utils/fetch'
 export const contractApi = {
@@ -19,6 +19,6 @@ export const contractApi = {
     return fetch(contractApi.requestUrl, {
       method: 'signContract',
       params
-    }, 'post', options)
+    }, options)
   }
 }

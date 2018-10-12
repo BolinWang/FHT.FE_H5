@@ -18,9 +18,9 @@
           <div class="tools_clear_title">清 除</div>
         </div>
       </section>
-      <section class="footer fixed">
-        <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
-      </section>
+    </section>
+    <section class="footer">
+      <van-button size="large" class="btn_sign" @click="savePNG">提交</van-button>
     </section>
   </div>
 </template>
@@ -30,7 +30,6 @@ import { Button, Dialog, NavBar } from 'vant'
 import Draw from '@/utils/draw'
 import { contractApi } from '@/api/contract'
 import { getUserData } from '@/utils/auth'
-import Bridge from '@/utils/bridge'
 
 export default {
   name: 'sign',
@@ -72,6 +71,12 @@ export default {
     this.params = this.paramsData
     this.app_andriod = this.isAndriod
     this.app_ios = this.isIos
+    if (this.app_andriod === true) {
+      window.SetupJsCommunication.canBack(true)
+      window.returnBack = () => {
+        this.returnContract()
+      }
+    }
   },
   mounted () {
     this.$nextTick(() => {
@@ -93,57 +98,71 @@ export default {
         this.$toast.fail('请手写签名后再提交')
         return false
       }
+      let toastId = this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+        mask: true,
+        message: '加载中...'
+      })
       contractApi.signContract({
         sealData: this.signImage,
         sessionId: getUserData().sessionId,
         contractNo: this.params.params.contractNo
-      }, 'post', {
+      }, {
+        interceptors: false,
         imei: this.params.imei,
         geographicPosition: this.params.geographicPosition,
         baseStation: this.params.baseStation,
         lac: this.params.lac
       }).then(res => {
-        Dialog.alert({
+        this.$toast.clear(toastId)
+        if (this.app_andriod === true) {
+          window.SetupJsCommunication.canBack(false)
+        }
+        let signParams = res.code * 1 === 0 ? {
+          success: true,
           message: '签名成功'
+        } : {
+          success: false,
+          message: res.message || '签名失败'
+        }
+        Dialog.alert({
+          message: signParams.message
         }).then(() => {
-          this.handleBridge()
+          this.$emit('handleReturn', {
+            type: 'sign',
+            params: {
+              success: signParams.success
+            }
+          })
         })
       })
     },
     returnContract () {
       this.$emit('handleReturnContract')
-    },
-    handleBridge () {
-      let bridgeParam = {
-        libCode: 5016
-      }
-      if (this.app_andriod === true) {
-        window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-      } else if (this.app_ios === true) {
-        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-          window.location.href = window.location.href
-        })
-      } else {
-        console.log('H5')
-      }
     }
   }
 }
 </script>
 <style scoped lang="scss">
+.container {
+  background: #fff;
+  height: 100%;
+}
 .header {
   color: #333;
   .van-nav-bar {
+    width: 750px;
     height: 90px;
     line-height: 90px;
   }
 }
 .container_sign {
-  position: fixed;
+  position: absolute;
   top: 90px;
   left: 0;
+  bottom: 90px;
   width: 750px;
-  height: 100%;
   z-index: 101;
   background: #FFF;
   font-size: 30px;
@@ -157,13 +176,13 @@ export default {
     background: #fff;
     cursor: default;
     width: 750px;
-    height: calc(100% - 270px);
+    height: calc(100% - 90px);
   }
   .canvas_tools {
     .tools_clear{
-      position: fixed;
+      position: absolute;
       right: 0;
-      bottom: 100px;
+      bottom: 30px;
       z-index: 100;
       padding: 20px 40px 40px 20px;
     }
@@ -185,7 +204,7 @@ export default {
 }
 
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 100;
   width: 750px;
