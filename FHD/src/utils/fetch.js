@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
- * @Last Modified by: chudequan
- * @Last Modified time: 2018-10-08 16:48:18
+ * @Last Modified by:
+ * @Last Modified time: 2018-10-12 12:48:33
  */
 
 import axios from 'axios'
@@ -24,6 +24,7 @@ service.interceptors.request.use(config => {
   if (config.method.toUpperCase() === 'POST') {
     const userData = JSON.parse(localStorage.getItem('userData'))
     defaultConfig.sessionId = config.notId ? userData.sessionId : userData.id
+    defaultConfig.imei = userData.imei
     if (!config.noAssign) {
       config.data = Object.assign(config.data, defaultConfig)
     }
