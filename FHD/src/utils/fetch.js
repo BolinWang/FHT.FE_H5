@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
- * @Last Modified by:
- * @Last Modified time: 2018-10-12 12:48:33
+ * @Last Modified by: chudequan
+ * @Last Modified time: 2018-10-15 16:23:27
  */
 
 import axios from 'axios'
@@ -58,7 +58,7 @@ service.interceptors.response.use(
         if (window.JSLogout) {
           window.JSLogout.logOutAction()
         }
-      }, 3000)
+      }, 1000)
       return Promise.reject(res)
     } else if (res.code !== '0') {
       if (res.code === '1011') {

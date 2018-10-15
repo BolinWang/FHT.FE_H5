@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-07-02 10:19:21
  * @Last Modified by: chudequan
- * @Last Modified time: 2018-09-29 14:37:22
+ * @Last Modified time: 2018-10-15 16:20:39
  */
 
 <template>
@@ -171,7 +171,7 @@ export default {
       }
     },
     allIn(flag) {
-      this.chooseList = flag ? deepClone(this.listData) : []
+      this.chooseList = flag ? deepClone(this.listData.filter(item => item.fhdRoomTag !== 1)) : []
       this.$emit('getLength', this.chooseList)
     }
   },
