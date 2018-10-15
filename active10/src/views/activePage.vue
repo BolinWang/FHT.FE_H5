@@ -627,7 +627,7 @@ export default {
           window._agl && window._agl.push(['track', ['success', {t: 3}]])
           break
         case 'toutiao':
-          window._taq.push({convert_id: '1611206099665924', event_type: 'form'})
+          window._taq.push({convert_id: '1614378656386093', event_type: 'form'})
           break
         case 'douyin':
           window._taq.push({convert_id: '1612833307743251', event_type: 'form'})
