@@ -2,7 +2,7 @@
  * @Author: chenxing
  * @Date: 2018-04-19 17:10:17
  * @Last Modified by: chudequan
- * @Last Modified time: 2018-10-15 16:23:27
+ * @Last Modified time: 2018-10-15 16:37:25
  */
 
 import axios from 'axios'
@@ -52,7 +52,7 @@ service.interceptors.response.use(
     const res = response.data
     if (res.success) {
       return response.data
-    } else if (res.code === '1016') {
+    } else if (res.code === '1015' || res.code === '1016') {
       Vue.$vux.toast.text(res.message)
       setTimeout(() => {
         if (window.JSLogout) {
