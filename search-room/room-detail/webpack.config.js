@@ -1,6 +1,7 @@
 const resolve = require('path').resolve
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const url = require('url')
 const publicPath = ''
 
@@ -27,7 +28,10 @@ module.exports = (options = {}) => ({
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ['css-loader', 'postcss-loader']
+        })
       },
       {
         test: /\.scss$/,
@@ -57,6 +61,10 @@ module.exports = (options = {}) => ({
       title: '麦邻租房',
       template: resolve(__dirname, 'src/index.html'),
       favicon: resolve(__dirname, 'src/favicon.ico')
+    }),
+    new ExtractTextPlugin({
+      filename: 'css/[name].[contenthash].css',
+      allChunks: false
     })
   ],
   resolve: {
