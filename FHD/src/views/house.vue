@@ -1,8 +1,8 @@
 /*
  * @Author: chenxing
  * @Date: 2018-04-23 17:40:16
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-07-03 15:10:29
+ * @Last Modified by: chudequan
+ * @Last Modified time: 2018-10-18 16:57:21
  */
 <template>
   <div style="height:100%;">
@@ -45,7 +45,7 @@ import { search } from '@/api/source'
 import { plusXing } from '@/utils'
 import scroll from '@/components/scroll'
 import axios from 'axios'
-const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api'
+const leiUrl = process.env.ENV_CONFIG === 'dev' ? 'yunce-flying-api' : 'flying-api'
 export default {
   name: 'house',
   directives: {

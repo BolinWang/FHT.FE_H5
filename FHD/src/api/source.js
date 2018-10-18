@@ -4,7 +4,7 @@ const hmsUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'api') +
 // 搜索接口是一个域名
 const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search'
 // 雷星星接口又是一个域名
-const leiUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'test-flying-api' : 'flying-api') + '.mdguanjia.com'
+const leiUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'yunce-flying-api' : 'flying-api') + '.mdguanjia.com'
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
