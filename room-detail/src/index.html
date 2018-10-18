@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="麦邻租房好帮手，一站式贴心服务给您优质生活" />
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <script src="https://webapi.amap.com/maps?v=1.4.10&key=db361f3b8d6956e22504285a98230888"></script>
+  <script>
+	  document.documentElement.style.fontSize = Math.min(document.documentElement.clientWidth / 10, 75) + 'px';
+    window.onresize = function () {
+      document.documentElement.style.fontSize = Math.min(document.documentElement.clientWidth / 10, 75) + 'px';
+    }
+  </script>
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+  <div id="mj-container"></div>
+</body>
+
+</html>
