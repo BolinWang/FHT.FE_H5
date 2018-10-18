@@ -519,7 +519,6 @@
         :houseType="houseType"
         :decorationDegree="decorationDegree"
         :roomArea="roomArea"
-        :apiAddr="apiAddr"
         :clientType="clientType"
         :isIntel="isIntel"
       >
@@ -542,7 +541,6 @@ const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '�
 export default {
   data() {
     return {
-      apiAddr: 'api',
       clientType: 'h5',
       isIntel: '',
       type: null,
@@ -642,7 +640,6 @@ export default {
         }
         this.type = searchObj['type'];
         this.roomId = searchObj['roomId'];
-        this.apiAddr = searchObj['memorhomeHost'] || 'api';
         this.clientType = searchObj['clientType'] || 'h5';
         this.isIntel = searchObj['isIntel'];
         this.keyID = searchObj['key'];

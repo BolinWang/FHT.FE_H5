@@ -198,7 +198,7 @@ import { Toast } from 'mint-ui'
 import { sendCheckcodeApi, BookingRoomApi, intelligentTenantTimeApi } from '~/api/index'
 const weekList = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 export default {
-  props: ['type', 'roomId', 'roomName', 'pic', 'price', 'address', 'houseType', 'decorationDegree', 'roomArea', 'apiAddr', 'clientType', 'isIntel'],
+  props: ['type', 'roomId', 'roomName', 'pic', 'price', 'address', 'houseType', 'decorationDegree', 'roomArea', 'clientType', 'isIntel'],
   data() {
     return {
       showPicker: false,
