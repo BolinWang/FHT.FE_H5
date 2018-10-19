@@ -1,10 +1,10 @@
 import fetch from '@/utils/fetch'
 // 客源接口是一个域名
-const hmsUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'api') + '.mdguanjia.com/hms/api/hmsuser'
+const hmsUrl = process.env.hmsUrl
 // 搜索接口是一个域名
-const searchUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'dev' : 'www') + '.mdguanjia.com/search'
+const searchUrl = process.env.searchUrl
 // 雷星星接口又是一个域名
-const leiUrl = 'https://' + (process.env.ENV_CONFIG === 'dev' ? 'yunce-flying-api' : 'flying-api') + '.mdguanjia.com'
+const leiUrl = process.env.leiUrl
 /* 获取用户列表 */
 export function queryListByPageApi(params = {}) {
   return fetch({
