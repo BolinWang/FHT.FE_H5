@@ -4,9 +4,11 @@ import fetch from '~/utils/fetch'
 export const queryRoomDetailApi = {
   estate(params = {}) {
     return fetch({
+      noAssign: true,
       url: '/api/estate',
       method: 'post',
       data: {
+        v: '3.6',
         method: 'eRoomTypeDetail',
         params
       }
@@ -14,9 +16,11 @@ export const queryRoomDetailApi = {
   },
   house(params = {}) {
     return fetch({
+      noAssign: true,
       url: '/api/house',
       method: 'post',
       data: {
+        v: '3.6',
         method: 'queryHouseRoomDetail',
         params
       }
