@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section class="header hei-header">
+    <section class="header">
       <van-nav-bar
         :title="title"
         left-arrow
