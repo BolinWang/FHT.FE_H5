@@ -62,7 +62,7 @@
           :autoFill="false"
         >
           <a
-            :href="`/waptest/roomDetail/index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
+            :href="`index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
             class="roomList-item"
             v-for="(item, index) in roomList"
             :key="index"
@@ -384,7 +384,7 @@
         v-if="this.searchRoomList.length"
       >
         <a
-          :href="`/waptest/roomDetail/index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
+          :href="`index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
           class="roomList-item"
           v-for="(item, index) in searchRoomList"
           :key="index"
@@ -679,7 +679,7 @@ export default {
   },
   filters: {
     linkFilter(val) {
-      return location.origin + val
+      return process.env.DETAIL_URL + val
     }
   },
   created() {
