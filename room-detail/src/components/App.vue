@@ -260,7 +260,7 @@
     </div>
     <div
       class="room-intro"
-      v-if="type == 2 && roomDesc"
+      v-if="roomDesc"
     >
       <div class="room-intro-title">房间描述</div>
       <div
@@ -800,7 +800,7 @@ export default {
         this.phone = isEstate ? o.telephone : o.contactMobile;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
         this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(2) : o.houseArea;
-        this.roomDesc = isEstate ? o.desc : o.houseDesc;
+        this.roomDesc = isEstate ? '' : o.houseDesc;
         this.address = o.address;
         this.coordinate.push(o.longitude);
         this.coordinate.push(o.latitude);
@@ -897,9 +897,6 @@ export default {
   },
   watch: {
     roomDesc(val) {
-      if (this.type == 1) {
-        return false
-      }
       if (val) {
         this.$nextTick(() => {
           let rowHeight = document.documentElement.clientWidth / 10 * 0.48;
@@ -978,9 +975,7 @@ export default {
 @mixin multiple-text-break($line: 2) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /* autoprefixer: off */
   -webkit-line-clamp: $line;
-  /* autoprefixer: on */
   overflow: hidden;
 }
 
