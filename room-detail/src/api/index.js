@@ -2,13 +2,13 @@ import fetch from '~/utils/fetch'
 
 /* 获取房间详情 */
 export const queryRoomDetailApi = {
-  estate(params = {}) {
+  estate(params = {}, version = '3.6') {
     return fetch({
       noAssign: true,
       url: '/api/estate',
       method: 'post',
       data: {
-        v: '3.6.0',
+        v: version,
         method: 'eRoomTypeDetail',
         params
       }

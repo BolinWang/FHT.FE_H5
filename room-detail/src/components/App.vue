@@ -89,7 +89,7 @@
     </div>
     <div
       class="room-intro"
-      v-if="houseType"
+      v-if="type == 2 || isApp3_6_0"
     >
       <div class="room-intro-title">房源信息</div>
       <div class="room-info-list">
@@ -260,7 +260,7 @@
     </div>
     <div
       class="room-intro"
-      v-if="roomDesc"
+      v-if="type == 2 && roomDesc"
     >
       <div class="room-intro-title">房间描述</div>
       <div
@@ -288,7 +288,7 @@
         class="map_content"
       ></div>
     </div>
-    <div v-if="type == 1" class="estate-info" @click="onlineOrder">
+    <div v-if="type == 1 && isApp3_6_0" class="estate-info" @click="onlineOrder">
       <img
         class="estate-info-l"
         :src="estateInfo.estatePicUrl"
@@ -558,6 +558,7 @@ const RoomDirection = ['', '南', '北', '东', '西', '东南', '西南', '东�
 export default {
   data() {
     return {
+      isApp3_6_0: false,
       clientType: 'h5',
       isIntel: '',
       type: null,
@@ -664,6 +665,7 @@ export default {
         this.isIntel = searchObj['isIntel'];
         this.keyID = searchObj['key'];
         this.rentPrice = searchObj['rentPrice'];
+        this.isApp3_6_0 = !!this.rentPrice;
         if (this.type && this.roomId) {
           this.getRoomInfo();
         } else {
@@ -682,11 +684,11 @@ export default {
         estateRoomTypeId: this.roomId,
         rentPrice: this.rentPrice
       } : {
-          devId: '5555998cccf2492db015c442f087f00a',
-          roomId: this.roomId,
-          rentPrice: this.rentPrice
-        }
-      reqFunc(params).then((res) => {
+        devId: '5555998cccf2492db015c442f087f00a',
+        roomId: this.roomId,
+        rentPrice: this.rentPrice
+      }
+      reqFunc(params, this.isApp3_6_0 ? '3.6.0' : '3.6').then((res) => {
         let o = res.data;
         var imgList = isEstate ? o.imageUrls : o.images
         imgList.forEach((item, index) => {
@@ -735,36 +737,37 @@ export default {
               });
             }
           })
-          this.rooms = o.rooms || [];
-          if (typeof o.houseDirection === 'string') {
+          if (this.isApp3_6_0) {
+            o.houseDirection = o.houseDirection || '';
             let houseDirection = [];
             new Set(o.houseDirection.split(',')).forEach((item) => {
               houseDirection.push(RoomDirection[item])
             })
             this.roomDirection = houseDirection.join(',');
-          }
-          this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
-          this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
-          o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
-          this.$set(this, 'estateInfo', o.estateInfo);
-          // 获取推荐房源列表
-          querySimilarListApi({
-            devId: '5555998cccf2492db015c442f087f00a',
-            gaodeLongitude: o.longitude,
-            gaodeLatitude: o.latitude,
-            sourceType: 2,
-            currentHousingType: this.type,
-            estateRoomTypeId: this.roomId
-          }).then((res) => {
-            res.data.resultList.forEach((item, index) => {
-              this.similarRoomList.push({
-                id: item.id,
-                pic: item.imageUrl,
-                price: item.minRentPrice,
-                address: item.region
+            this.rooms = o.rooms || [];
+            this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
+            this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
+            o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
+            this.$set(this, 'estateInfo', o.estateInfo);
+            // 获取推荐房源列表
+            querySimilarListApi({
+              devId: '5555998cccf2492db015c442f087f00a',
+              gaodeLongitude: o.longitude,
+              gaodeLatitude: o.latitude,
+              sourceType: 2,
+              currentHousingType: this.type,
+              estateRoomTypeId: this.roomId
+            }).then((res) => {
+              res.data.resultList.forEach((item, index) => {
+                this.similarRoomList.push({
+                  id: item.id,
+                  pic: item.imageUrl,
+                  price: item.minRentPrice,
+                  address: item.region
+                });
               });
-            });
-          })
+            })
+          }
         } else {
           o.privateFacilityItems && o.privateFacilityItems.forEach((item, index) => {
             this.deviceList.push({
@@ -894,6 +897,9 @@ export default {
   },
   watch: {
     roomDesc(val) {
+      if (this.type == 1) {
+        return false
+      }
       if (val) {
         this.$nextTick(() => {
           let rowHeight = document.documentElement.clientWidth / 10 * 0.48;
