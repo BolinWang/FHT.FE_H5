@@ -13,7 +13,7 @@ service.interceptors.request.use(config => {
   const defaultConfig = {
     reqId: 'cdq',
     timestamp: new Date().getTime().toString(),
-    v: '1.0',
+    v: '3.6.0',
   }
   if (!config.noAssign) {
     config.data = Object.assign(config.data, defaultConfig)

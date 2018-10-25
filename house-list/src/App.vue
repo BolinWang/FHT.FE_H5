@@ -62,7 +62,7 @@
           :autoFill="false"
         >
           <a
-            :href="`index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
+            :href="`?type=${item.type}&roomId=${item.id}&rentPrice=${item.price}` | linkFilter"
             class="roomList-item"
             v-for="(item, index) in roomList"
             :key="index"
@@ -384,7 +384,7 @@
         v-if="this.searchRoomList.length"
       >
         <a
-          :href="`index.html?type=${item.type}&roomId=${item.id}` | linkFilter"
+          :href="`?type=${item.type}&roomId=${item.id}&rentPrice=${item.price}` | linkFilter"
           class="roomList-item"
           v-for="(item, index) in searchRoomList"
           :key="index"
