@@ -278,7 +278,7 @@
       </div>
     </div>
     <div
-      class="room-intro"
+      class="room-intro address-info"
       v-if="address"
     >
       <div class="room-intro-title">地理位置</div>
@@ -288,8 +288,22 @@
         class="map_content"
       ></div>
     </div>
+    <div v-if="type == 1" class="estate-info" @click="onlineOrder">
+      <img
+        class="estate-info-l"
+        :src="estateInfo.estatePicUrl"
+        alt=""
+      >
+      <div class="estate-info-c">
+        <div class="estate-title">{{estateInfo.estateName}}</div>
+        <div class="estate-room-count">待租房源：{{estateInfo.roomCount || 0}}套(所有房型)</div>
+      </div>
+      <div class="estate-info-r">
+        详情 >
+      </div>
+    </div>
     <div
-      class="room-intro"
+      class="room-intro similar-list"
       v-if="similarRoomList.length"
     >
       <div class="room-intro-title">为您推荐</div>
@@ -563,6 +577,7 @@ export default {
       roomCode: '',
       roomDesc: '',
       address: '',
+      estateInfo: {},
       isRent: false,
       coordinate: [],
       payway: [],
@@ -667,10 +682,10 @@ export default {
         estateRoomTypeId: this.roomId,
         rentPrice: this.rentPrice
       } : {
-        devId: '5555998cccf2492db015c442f087f00a',
-        roomId: this.roomId,
-        rentPrice: this.rentPrice
-      }
+          devId: '5555998cccf2492db015c442f087f00a',
+          roomId: this.roomId,
+          rentPrice: this.rentPrice
+        }
       reqFunc(params).then((res) => {
         let o = res.data;
         var imgList = isEstate ? o.imageUrls : o.images
@@ -681,7 +696,7 @@ export default {
             h: 560
           });
         });
-        
+
         if (this.picList.length === 0) {
           this.picList.push({
             src: defaultPic,
@@ -730,12 +745,16 @@ export default {
           }
           this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
           this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
+          o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
+          this.$set(this, 'estateInfo', o.estateInfo);
           // 获取推荐房源列表
           querySimilarListApi({
             devId: '5555998cccf2492db015c442f087f00a',
             gaodeLongitude: o.longitude,
             gaodeLatitude: o.latitude,
-            sourceType: 2
+            sourceType: 2,
+            currentHousingType: this.type,
+            estateRoomTypeId: this.roomId
           }).then((res) => {
             res.data.resultList.forEach((item, index) => {
               this.similarRoomList.push({
@@ -774,7 +793,7 @@ export default {
         }
 
         this.price = isEstate ? o.rentPrice : o.price;
-        this.name = isEstate ? o.estateName : o.houseName;
+        this.name = isEstate ? (o.estateName + '·' + o.styleName) : o.houseName;
         this.phone = isEstate ? o.telephone : o.contactMobile;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
         this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(2) : o.houseArea;
@@ -818,53 +837,53 @@ export default {
           callback: 'h5'
         }
       }).then((result) => {
-          const res = result.data
-          if (res.success) {
-            var shareData = {
-              title: '麦邻租房',
-              share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
-              share_desc: '麦邻生活租房平台'
-            }
-            var response = res.dataObject;
-            wx.config({
-              debug: false,
-              appId: response.appid,
-              timestamp: response.timestamp,
-              nonceStr: response.noncestr,
-              signature: response.signature,
-              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
+        const res = result.data
+        if (res.success) {
+          var shareData = {
+            title: '麦邻租房',
+            share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
+            share_desc: '麦邻生活租房平台'
           }
-          wx.ready(function () {
-            var share_url = location.href;
-            wx.onMenuShareTimeline({
-              title: shareData.title, // 分享标题
-              link: share_url, // 分享链接
-              imgUrl: shareData.share_img, // 分享图标
-              success: function () {
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-              }
-            });
-            wx.onMenuShareAppMessage({
-              title: shareData.title, // 分享标题
-              desc: shareData.share_desc, // 分享描述
-              link: share_url, // 分享链接
-              imgUrl: shareData.share_img, // 分享图标
-              type: '', // 分享类型,music、video或link，不填默认为link
-              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-              success: function () {
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-              }
-            });
+          var response = res.dataObject;
+          wx.config({
+            debug: false,
+            appId: response.appid,
+            timestamp: response.timestamp,
+            nonceStr: response.noncestr,
+            signature: response.signature,
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
-          wx.error(function (res) {
-            console.debug(res)
+        }
+        wx.ready(function () {
+          var share_url = location.href;
+          wx.onMenuShareTimeline({
+            title: shareData.title, // 分享标题
+            link: share_url, // 分享链接
+            imgUrl: shareData.share_img, // 分享图标
+            success: function () {
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
           });
-        })
+          wx.onMenuShareAppMessage({
+            title: shareData.title, // 分享标题
+            desc: shareData.share_desc, // 分享描述
+            link: share_url, // 分享链接
+            imgUrl: shareData.share_img, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
+          });
+        });
+        wx.error(function (res) {
+          console.debug(res)
+        });
+      })
         .catch(err => { console.error(err) })
     }
   },
@@ -1087,6 +1106,9 @@ body {
   margin: 0 0.4rem;
   border-bottom: 1px solid #f2f2f2;
   font-size: 0.373333rem;
+  &.similar-list, &.address-info {
+    border-bottom: 0;
+  }
   .room-intro-title {
     font-size: 0.426667rem;
     font-weight: bold;
@@ -1096,6 +1118,9 @@ body {
   .room-name {
     font-size: 0.48rem;
     line-height: 0.64rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .room-price {
     margin-bottom: 0.24rem;
@@ -1211,6 +1236,35 @@ body {
   }
   .room-address {
     margin-bottom: 0.32rem;
+  }
+}
+.estate-info {
+  display: flex;
+  align-items: center;
+  padding: 0.6667rem 0.4rem;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+  .estate-info-l {
+    width: 1.44rem;
+    height: 1.44rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .estate-info-c {
+    flex: 1;
+    padding-left: 0.4rem;
+    .estate-title {
+      font-size: 0.4267rem;
+      font-weight: bold;
+      margin-bottom: 0.2667rem;
+    }
+    .estate-room-count {
+      font-size: 0.32rem;
+      color: #999;
+    }
+  }
+  .estate-info-r {
+    font-size: 0.32rem;
+    color: #999;
   }
 }
 .device-box {
