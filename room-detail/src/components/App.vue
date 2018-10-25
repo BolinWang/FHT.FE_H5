@@ -89,27 +89,30 @@
     </div>
     <div
       class="room-intro"
-      v-if="type==2 && houseType"
+      v-if="houseType"
     >
       <div class="room-intro-title">房源信息</div>
       <div class="room-info-list">
         <div>
           <span>户型</span> {{houseType}}
         </div>
-        <div>
+        <div v-if="type == 2">
           <span>装修</span> {{decorationDegree}}
         </div>
         <div>
-          <span>面积</span> {{roomArea}}m²
-        </div>
-        <div>
-          <span>朝向</span> {{roomDirection}}
+          <span>面积</span> {{roomArea}}m²{{type == 2 ? '' : '起'}}
         </div>
         <div>
           <span>楼层</span> {{floor}}层
         </div>
         <div>
+          <span>朝向</span> {{roomDirection}}
+        </div>
+        <div v-if="type == 2">
           <span>编号</span> {{roomCode}}
+        </div>
+        <div v-else>
+          <span>房间数</span> {{rooms.length}}间
         </div>
       </div>
     </div>
@@ -533,10 +536,10 @@ import BookingRoom from './BookingRoom.vue'
 import { Toast } from 'mint-ui'
 import axios from 'axios'
 import defaultPic from '~/assets/images/room-default.jpg'
-import { queryRoomDetailApi, queryFlyingKeyApi } from '~/api/index'
+import { queryRoomDetailApi, queryFlyingKeyApi, querySimilarListApi } from '~/api/index'
 
 const DecorationList = ['', '毛坯', '简装', '精装修', '豪华装'];
-const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '西南', '东北', '西北'];
+const RoomDirection = ['', '南', '北', '东', '西', '东南', '西南', '东北', '西北'];
 
 export default {
   data() {
@@ -545,7 +548,9 @@ export default {
       isIntel: '',
       type: null,
       roomId: null,
+      rentPrice: '',
       picList: [],
+      rooms: [],
       name: '',
       phone: '',
       price: '',
@@ -643,6 +648,7 @@ export default {
         this.clientType = searchObj['clientType'] || 'h5';
         this.isIntel = searchObj['isIntel'];
         this.keyID = searchObj['key'];
+        this.rentPrice = searchObj['rentPrice'];
         if (this.type && this.roomId) {
           this.getRoomInfo();
         } else {
@@ -654,15 +660,17 @@ export default {
       }
     },
     getRoomInfo() {
-      var isEstate = this.type == 1
+      var isEstate = this.type == 1 // 1.集中式 2.分散式
       var reqFunc = isEstate ? queryRoomDetailApi.estate : queryRoomDetailApi.house
       var params = isEstate ? {
         devId: '5555998cccf2492db015c442f087f00a',
-        estateRoomTypeId: this.roomId
+        estateRoomTypeId: this.roomId,
+        rentPrice: this.rentPrice
       } : {
-          devId: '5555998cccf2492db015c442f087f00a',
-          roomId: this.roomId
-        }
+        devId: '5555998cccf2492db015c442f087f00a',
+        roomId: this.roomId,
+        rentPrice: this.rentPrice
+      }
       reqFunc(params).then((res) => {
         let o = res.data;
         var imgList = isEstate ? o.imageUrls : o.images
@@ -673,6 +681,7 @@ export default {
             h: 560
           });
         });
+        
         if (this.picList.length === 0) {
           this.picList.push({
             src: defaultPic,
@@ -711,6 +720,32 @@ export default {
               });
             }
           })
+          this.rooms = o.rooms || [];
+          if (typeof o.houseDirection === 'string') {
+            let houseDirection = [];
+            new Set(o.houseDirection.split(',')).forEach((item) => {
+              houseDirection.push(RoomDirection[item])
+            })
+            this.roomDirection = houseDirection.join(',');
+          }
+          this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
+          this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
+          // 获取推荐房源列表
+          querySimilarListApi({
+            devId: '5555998cccf2492db015c442f087f00a',
+            gaodeLongitude: o.longitude,
+            gaodeLatitude: o.latitude,
+            sourceType: 2
+          }).then((res) => {
+            res.data.resultList.forEach((item, index) => {
+              this.similarRoomList.push({
+                id: item.id,
+                pic: item.imageUrl,
+                price: item.minRentPrice,
+                address: item.region
+              });
+            });
+          })
         } else {
           o.privateFacilityItems && o.privateFacilityItems.forEach((item, index) => {
             this.deviceList.push({
@@ -724,17 +759,25 @@ export default {
               name: item.name
             })
           });
+          o.similarRoomList.forEach((item, index) => {
+            this.similarRoomList.push({
+              id: item.roomId,
+              pic: item.imageUrl,
+              price: item.minRentPrice,
+              address: item.region
+            });
+          });
           this.roomDirection = RoomDirection[o.roomDirection];
-          this.floor = o.floorName;
           this.roomCode = o.roomCode;
+          this.houseType = o.houseType;
+          this.floor = o.floorName;
         }
 
         this.price = isEstate ? o.rentPrice : o.price;
         this.name = isEstate ? o.estateName : o.houseName;
         this.phone = isEstate ? o.telephone : o.contactMobile;
-        this.houseType = isEstate ? (o.minChamber + '室') : o.houseType;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
-        this.roomArea = isEstate ? parseFloat(o.minRoomArea).toFixed(2) : o.houseArea;
+        this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(2) : o.houseArea;
         this.roomDesc = isEstate ? o.desc : o.houseDesc;
         this.address = o.address;
         this.coordinate.push(o.longitude);
@@ -755,7 +798,7 @@ export default {
       this.openPhotoSwipe(this.$refs.pswp, this.picList, options);
     },
     onlineOrder() {
-      window.location.href = 'https://www.mdguanjia.com/appdownload/index.html?roomId=' + this.roomId + '&housingType=' + this.type + '&clientType=' + this.clientType;
+      window.location.href = process.env.APP_DOWNLOAD_URL + '?roomId=' + this.roomId + '&housingType=' + this.type + '&clientType=' + this.clientType;
     },
     goBack() {
       history.go(-1);
@@ -1083,6 +1126,9 @@ body {
     div {
       width: 50%;
       margin-bottom: 0.32rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     span {
       color: #ccc;

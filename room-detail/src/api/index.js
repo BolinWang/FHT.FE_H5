@@ -8,7 +8,7 @@ export const queryRoomDetailApi = {
       url: '/api/estate',
       method: 'post',
       data: {
-        v: '3.6',
+        v: '3.6.0',
         method: 'eRoomTypeDetail',
         params
       }
@@ -20,12 +20,26 @@ export const queryRoomDetailApi = {
       url: '/api/house',
       method: 'post',
       data: {
-        v: '3.6',
+        v: '3.6.0',
         method: 'queryHouseRoomDetail',
         params
       }
     })
   }
+}
+
+/* 获取推荐房源 */
+export function querySimilarListApi(params = {}) {
+  return fetch({
+    noAssign: true,
+    url: '/api/search',
+    method: 'post',
+    data: {
+      v: '3.6.0',
+      method: 'recommendList',
+      params
+    }
+  })
 }
 
 /* 不知道干嘛用的 */
