@@ -103,16 +103,16 @@
           <span>面积</span> {{roomArea}}m²{{type == 2 ? '' : '起'}}
         </div>
         <div>
-          <span>楼层</span> {{floor}}层
+          <span>朝向</span> {{roomDirection}}
         </div>
         <div>
-          <span>朝向</span> {{roomDirection}}
+          <span>楼层</span> {{floor}}层
         </div>
         <div v-if="type == 2">
           <span>编号</span> {{roomCode}}
         </div>
         <div v-else>
-          <span>房间数</span> {{rooms.length}}间
+          <span>房间数</span> {{roomCount}}间
         </div>
       </div>
     </div>
@@ -566,6 +566,7 @@ export default {
       rentPrice: '',
       picList: [],
       rooms: [],
+      roomCount: 0,
       name: '',
       phone: '',
       price: '',
@@ -745,6 +746,7 @@ export default {
             })
             this.roomDirection = houseDirection.join('、');
             this.rooms = o.rooms || [];
+            this.roomCount = o.totalRoomCount || 0;
             this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
             this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
             o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
