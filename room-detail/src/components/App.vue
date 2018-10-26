@@ -96,7 +96,7 @@
         <div>
           <span>户型</span> {{houseType}}
         </div>
-        <div v-if="type == 2">
+        <div>
           <span>装修</span> {{decorationDegree}}
         </div>
         <div>
@@ -553,7 +553,7 @@ import defaultPic from '~/assets/images/room-default.jpg'
 import { queryRoomDetailApi, queryFlyingKeyApi, querySimilarListApi } from '~/api/index'
 
 const DecorationList = ['', '毛坯', '简装', '精装修', '豪华装'];
-const RoomDirection = ['', '南', '北', '东', '西', '东南', '西南', '东北', '西北'];
+const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '西南', '东北', '西北'];
 
 export default {
   data() {
@@ -743,7 +743,7 @@ export default {
             new Set(o.houseDirection.split(',')).forEach((item) => {
               houseDirection.push(RoomDirection[item])
             })
-            this.roomDirection = houseDirection.join(',');
+            this.roomDirection = houseDirection.join('、');
             this.rooms = o.rooms || [];
             this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
             this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
@@ -799,7 +799,7 @@ export default {
         this.name = isEstate ? (o.estateName + '·' + o.styleName) : o.houseName;
         this.phone = isEstate ? o.telephone : o.contactMobile;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
-        this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(2) : o.houseArea;
+        this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(1) : o.houseArea;
         this.roomDesc = isEstate ? '' : o.houseDesc;
         this.address = o.address;
         this.coordinate.push(o.longitude);
