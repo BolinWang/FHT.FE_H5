@@ -66,15 +66,6 @@
               <div class="title">本活动仅限新注册用户参与！</div>
             </div>
           </div>
-          <!-- 广告位 当前是活动盒子 -->
-          <!-- <section class="advert_box flex flex_center">
-            <div :data-emmaBanner="positionKey" class="emma_wrap" v-if="isLogin">
-              <img v-if="isDevelopment" src="../assets/advert.jpg" alt="" />
-            </div>
-            <div v-else class="emma_wrap" @click="returnClick">
-              <img src="../assets/advert.jpg" alt="" />
-            </div>
-          </section> -->
           <!-- 活动规则 -->
           <section class="active_rules flex flex_center">
             <article>
@@ -91,7 +82,7 @@
               </section>
             </article>
           </section>
-          <!-- vr看房 -->
+          <!-- APP跳转 -->
           <section class="active_vrWrapper" @click.stop="goVrRoomPage">
             <div class="vr_wrapper flex flex_center">
               <div class="image_container">
@@ -108,10 +99,6 @@
               去使用租房体验券
             </div>
           </section>
-          <!-- 合作伙伴 -->
-          <!-- <section class="active_partner flex flex_center" v-if="urlSearchParams.sourceType !== 'douyin'">
-            <img src="../assets/bizpartner.png" />
-          </section> -->
         </section>
       </section>
     </section>
@@ -143,8 +130,8 @@ const browser = getBrowser()
 const initPageInfoData = {
   title: '麦邻租房',
   shareData: {
-    title: '720°VR实景在线租房',
-    introduction: '品质好房，全城带看，无中介费，送租房抵扣券',
+    title: '新用户领50元租房抵扣券',
+    introduction: '720°VR看房，真实房源，0中介费，免费带看',
     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
     linkUrl: location.href
   }
@@ -556,8 +543,8 @@ export default {
       } else if (this.app_ios === true) {
         Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
       } else {
-        this.callupApp()
-        // window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
+        // this.callupApp()
+        window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
       }
     },
 
@@ -570,7 +557,6 @@ export default {
         yingyongbao: '//a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home',
         appstore: '//itunes.apple.com/cn/app/id1191743282?mt=8'
       }
-      console.log(1)
       let callupAppOptions = {
         callback () {
           // IOS 微信中直接前往appstore
@@ -581,19 +567,15 @@ export default {
           }
         }
       }
-      console.log(2)
       const options = {
         protocol: browser.isIos ? schemeConfig.scheme_IOS : (browser.isAndroid ? schemeConfig.scheme_And : ''),
         yingyongbao: schemeConfig.yingyongbao,
         appstore: schemeConfig.appstore
       }
-      console.log(3)
       if (browser.isIos) {
         callupAppOptions.path = schemeConfig.iosPath
       }
-      console.log(4)
       const callLib = new CallApp(options)
-      console.log(5)
       callLib.open(callupAppOptions)
     },
 
@@ -685,9 +667,9 @@ export default {
         }
         .btn_login {
           /* autoprefixer: off */
-          background-image: -webkit-linear-gradient(bottom ,#742dfe, #e6d7fc);
+          background-image: -webkit-linear-gradient(bottom ,#732cfe, #9a51ff);
           /* autoprefixer: on */
-          background-color: initial;
+          background-color: inherit;
           font-size: 36px;
           border: 0 none;
           border-radius: 15px;
@@ -828,13 +810,13 @@ export default {
       position: absolute;
       top: 50%;
       left: 50%;
-      margin-left: -150px;
+      margin-left: -162px;
       margin-top: -30px;
       background: rgba(135, 36, 1, 0.5);
       width: 325px;
       height: 60px;
       border-radius: 60px;
-      padding: 0 30px 0 20px;
+      padding: 0 35px 0 25px;
       font-size: 24px;
       font-weight: 700;
       color: #fff;
