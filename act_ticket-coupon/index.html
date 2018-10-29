@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>麦邻租房-新邻有礼</title>
+    <script>
+      /* eslint-disable */
+      let urlSearchParams = {}
+      if (location.search.indexOf('?') !== -1) {
+        const searchArr = location.search.substr(1).split('&')
+        for (let i = 0; i < searchArr.length; i++) {
+          if (searchArr[i].split('=')[1]) {
+            urlSearchParams[searchArr[i].split('=')[0]] = unescape(
+              searchArr[i].split('=')[1]
+            )
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app-box"></div>
+    <!-- 活动盒子SDK -->
+    <!-- <script src="//emma-sdk.huodonghezi.com/dist/js/emma.js"></script> -->
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?db9a19b6acbc743a009b45af06c1c167";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  </body>
+</html>
