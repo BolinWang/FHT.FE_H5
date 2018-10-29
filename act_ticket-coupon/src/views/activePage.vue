@@ -200,7 +200,8 @@ export default {
           '本活动解释权归麦邻租房所有。',
           '咨询电话：400-033-9858'
         ]
-      }]
+      }],
+      activityCode: 'MJGY20181029'
     }
   },
   created () {
@@ -322,7 +323,7 @@ export default {
     queryActivityStatus (sessionId) {
       customerApi.activityCoupon({
         sessionId,
-        activityCode: 'MJGY20180904'
+        activityCode: this.activityCode
       }).then(response => {
         this.isLogin = true
         let resData = response.data
@@ -369,7 +370,7 @@ export default {
       }
       customerApi.receiveCoupon({
         sessionId,
-        couponActivityCode: 'MJGY20180904',
+        couponActivityCode: this.activityCode,
         sourceType: sourceType
       }).then(response => {
         this.$toast('success', '领取成功')
