@@ -89,7 +89,7 @@
     </div>
     <div
       class="room-intro"
-      v-if="type==2 && houseType"
+      v-if="type == 2 || isApp3_6_0"
     >
       <div class="room-intro-title">房源信息</div>
       <div class="room-info-list">
@@ -100,7 +100,7 @@
           <span>装修</span> {{decorationDegree}}
         </div>
         <div>
-          <span>面积</span> {{roomArea}}m²
+          <span>面积</span> {{roomArea}}m²{{type == 2 ? '' : '起'}}
         </div>
         <div>
           <span>朝向</span> {{roomDirection}}
@@ -108,8 +108,11 @@
         <div>
           <span>楼层</span> {{floor}}层
         </div>
-        <div>
+        <div v-if="type == 2">
           <span>编号</span> {{roomCode}}
+        </div>
+        <div v-else>
+          <span>房间数</span> {{roomCount}}间
         </div>
       </div>
     </div>
@@ -275,7 +278,7 @@
       </div>
     </div>
     <div
-      class="room-intro"
+      class="room-intro address-info"
       v-if="address"
     >
       <div class="room-intro-title">地理位置</div>
@@ -285,8 +288,22 @@
         class="map_content"
       ></div>
     </div>
+    <div v-if="type == 1 && isApp3_6_0" class="estate-info" @click="onlineOrder">
+      <img
+        class="estate-info-l"
+        :src="estateInfo.estatePicUrl"
+        alt=""
+      >
+      <div class="estate-info-c">
+        <div class="estate-title">{{estateInfo.estateName}}</div>
+        <div class="estate-room-count">待租房源：{{estateInfo.roomCount || 0}}套(所有房型)</div>
+      </div>
+      <div class="estate-info-r">
+        详情 >
+      </div>
+    </div>
     <div
-      class="room-intro"
+      class="room-intro similar-list"
       v-if="similarRoomList.length"
     >
       <div class="room-intro-title">为您推荐</div>
@@ -533,7 +550,7 @@ import BookingRoom from './BookingRoom.vue'
 import { Toast } from 'mint-ui'
 import axios from 'axios'
 import defaultPic from '~/assets/images/room-default.jpg'
-import { queryRoomDetailApi, queryFlyingKeyApi } from '~/api/index'
+import { queryRoomDetailApi, queryFlyingKeyApi, querySimilarListApi } from '~/api/index'
 
 const DecorationList = ['', '毛坯', '简装', '精装修', '豪华装'];
 const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '西南', '东北', '西北'];
@@ -541,11 +558,15 @@ const RoomDirection = ['', '朝南', '朝北', '朝东', '朝西', '东南', '�
 export default {
   data() {
     return {
+      isApp3_6_0: false,
       clientType: 'h5',
       isIntel: '',
       type: null,
       roomId: null,
+      rentPrice: '',
       picList: [],
+      rooms: [],
+      roomCount: 0,
       name: '',
       phone: '',
       price: '',
@@ -558,6 +579,7 @@ export default {
       roomCode: '',
       roomDesc: '',
       address: '',
+      estateInfo: {},
       isRent: false,
       coordinate: [],
       payway: [],
@@ -643,6 +665,8 @@ export default {
         this.clientType = searchObj['clientType'] || 'h5';
         this.isIntel = searchObj['isIntel'];
         this.keyID = searchObj['key'];
+        this.rentPrice = searchObj['rentPrice'];
+        this.isApp3_6_0 = !!this.rentPrice;
         if (this.type && this.roomId) {
           this.getRoomInfo();
         } else {
@@ -654,16 +678,18 @@ export default {
       }
     },
     getRoomInfo() {
-      var isEstate = this.type == 1
+      var isEstate = this.type == 1 // 1.集中式 2.分散式
       var reqFunc = isEstate ? queryRoomDetailApi.estate : queryRoomDetailApi.house
       var params = isEstate ? {
         devId: '5555998cccf2492db015c442f087f00a',
-        estateRoomTypeId: this.roomId
+        estateRoomTypeId: this.roomId,
+        rentPrice: this.rentPrice
       } : {
-          devId: '5555998cccf2492db015c442f087f00a',
-          roomId: this.roomId
-        }
-      reqFunc(params).then((res) => {
+        devId: '5555998cccf2492db015c442f087f00a',
+        roomId: this.roomId,
+        rentPrice: this.rentPrice
+      }
+      reqFunc(params, this.isApp3_6_0 ? '3.6.0' : '3.6').then((res) => {
         let o = res.data;
         var imgList = isEstate ? o.imageUrls : o.images
         imgList.forEach((item, index) => {
@@ -673,6 +699,7 @@ export default {
             h: 560
           });
         });
+
         if (this.picList.length === 0) {
           this.picList.push({
             src: defaultPic,
@@ -711,6 +738,38 @@ export default {
               });
             }
           })
+          if (this.isApp3_6_0) {
+            o.houseDirection = o.houseDirection || '';
+            let houseDirection = [];
+            new Set(o.houseDirection.split(',')).forEach((item) => {
+              houseDirection.push(RoomDirection[item])
+            })
+            this.roomDirection = houseDirection.join('、');
+            this.rooms = o.rooms || [];
+            this.roomCount = o.totalRoomCount || 0;
+            this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
+            this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
+            o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
+            this.$set(this, 'estateInfo', o.estateInfo);
+            // 获取推荐房源列表
+            querySimilarListApi({
+              devId: '5555998cccf2492db015c442f087f00a',
+              gaodeLongitude: o.longitude,
+              gaodeLatitude: o.latitude,
+              sourceType: 2,
+              currentHousingType: this.type,
+              estateRoomTypeId: this.roomId
+            }).then((res) => {
+              res.data.resultList.forEach((item, index) => {
+                this.similarRoomList.push({
+                  id: item.id,
+                  pic: item.imageUrl,
+                  price: item.minRentPrice,
+                  address: item.region
+                });
+              });
+            })
+          }
         } else {
           o.privateFacilityItems && o.privateFacilityItems.forEach((item, index) => {
             this.deviceList.push({
@@ -724,18 +783,26 @@ export default {
               name: item.name
             })
           });
+          o.similarRoomList.forEach((item, index) => {
+            this.similarRoomList.push({
+              id: item.roomId,
+              pic: item.imageUrl,
+              price: item.minRentPrice,
+              address: item.region
+            });
+          });
           this.roomDirection = RoomDirection[o.roomDirection];
-          this.floor = o.floorName;
           this.roomCode = o.roomCode;
+          this.houseType = o.houseType;
+          this.floor = o.floorName;
         }
 
         this.price = isEstate ? o.rentPrice : o.price;
-        this.name = isEstate ? o.estateName : o.houseName;
+        this.name = isEstate ? (o.estateName + '·' + o.styleName) : o.houseName;
         this.phone = isEstate ? o.telephone : o.contactMobile;
-        this.houseType = isEstate ? (o.minChamber + '室') : o.houseType;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
-        this.roomArea = isEstate ? parseFloat(o.minRoomArea).toFixed(2) : o.houseArea;
-        this.roomDesc = isEstate ? o.desc : o.houseDesc;
+        this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(1) : o.houseArea;
+        this.roomDesc = isEstate ? '' : o.houseDesc;
         this.address = o.address;
         this.coordinate.push(o.longitude);
         this.coordinate.push(o.latitude);
@@ -755,7 +822,7 @@ export default {
       this.openPhotoSwipe(this.$refs.pswp, this.picList, options);
     },
     onlineOrder() {
-      window.location.href = 'https://www.mdguanjia.com/appdownload/index.html?roomId=' + this.roomId + '&housingType=' + this.type + '&clientType=' + this.clientType;
+      window.location.href = process.env.APP_DOWNLOAD_URL + '?roomId=' + this.roomId + '&housingType=' + this.type + '&clientType=' + this.clientType;
     },
     goBack() {
       history.go(-1);
@@ -775,53 +842,53 @@ export default {
           callback: 'h5'
         }
       }).then((result) => {
-          const res = result.data
-          if (res.success) {
-            var shareData = {
-              title: '麦邻租房',
-              share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
-              share_desc: '麦邻生活租房平台'
-            }
-            var response = res.dataObject;
-            wx.config({
-              debug: false,
-              appId: response.appid,
-              timestamp: response.timestamp,
-              nonceStr: response.noncestr,
-              signature: response.signature,
-              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
+        const res = result.data
+        if (res.success) {
+          var shareData = {
+            title: '麦邻租房',
+            share_img: 'https://www.mdguanjia.com/waptest/houseInfo/images/apple-touch-icon.png',
+            share_desc: '麦邻生活租房平台'
           }
-          wx.ready(function () {
-            var share_url = location.href;
-            wx.onMenuShareTimeline({
-              title: shareData.title, // 分享标题
-              link: share_url, // 分享链接
-              imgUrl: shareData.share_img, // 分享图标
-              success: function () {
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-              }
-            });
-            wx.onMenuShareAppMessage({
-              title: shareData.title, // 分享标题
-              desc: shareData.share_desc, // 分享描述
-              link: share_url, // 分享链接
-              imgUrl: shareData.share_img, // 分享图标
-              type: '', // 分享类型,music、video或link，不填默认为link
-              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-              success: function () {
-              },
-              cancel: function () {
-                // 用户取消分享后执行的回调函数
-              }
-            });
+          var response = res.dataObject;
+          wx.config({
+            debug: false,
+            appId: response.appid,
+            timestamp: response.timestamp,
+            nonceStr: response.noncestr,
+            signature: response.signature,
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
-          wx.error(function (res) {
-            console.debug(res)
+        }
+        wx.ready(function () {
+          var share_url = location.href;
+          wx.onMenuShareTimeline({
+            title: shareData.title, // 分享标题
+            link: share_url, // 分享链接
+            imgUrl: shareData.share_img, // 分享图标
+            success: function () {
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
           });
-        })
+          wx.onMenuShareAppMessage({
+            title: shareData.title, // 分享标题
+            desc: shareData.share_desc, // 分享描述
+            link: share_url, // 分享链接
+            imgUrl: shareData.share_img, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
+          });
+        });
+        wx.error(function (res) {
+          console.debug(res)
+        });
+      })
         .catch(err => { console.error(err) })
     }
   },
@@ -910,9 +977,7 @@ export default {
 @mixin multiple-text-break($line: 2) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /* autoprefixer: off */
   -webkit-line-clamp: $line;
-  /* autoprefixer: on */
   overflow: hidden;
 }
 
@@ -1044,6 +1109,9 @@ body {
   margin: 0 0.4rem;
   border-bottom: 1px solid #f2f2f2;
   font-size: 0.373333rem;
+  &.similar-list, &.address-info {
+    border-bottom: 0;
+  }
   .room-intro-title {
     font-size: 0.426667rem;
     font-weight: bold;
@@ -1053,6 +1121,9 @@ body {
   .room-name {
     font-size: 0.48rem;
     line-height: 0.64rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .room-price {
     margin-bottom: 0.24rem;
@@ -1083,6 +1154,9 @@ body {
     div {
       width: 50%;
       margin-bottom: 0.32rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     span {
       color: #ccc;
@@ -1165,6 +1239,35 @@ body {
   }
   .room-address {
     margin-bottom: 0.32rem;
+  }
+}
+.estate-info {
+  display: flex;
+  align-items: center;
+  padding: 0.6667rem 0.4rem;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+  .estate-info-l {
+    width: 1.44rem;
+    height: 1.44rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .estate-info-c {
+    flex: 1;
+    padding-left: 0.4rem;
+    .estate-title {
+      font-size: 0.4267rem;
+      font-weight: bold;
+      margin-bottom: 0.2667rem;
+    }
+    .estate-room-count {
+      font-size: 0.32rem;
+      color: #999;
+    }
+  }
+  .estate-info-r {
+    font-size: 0.32rem;
+    color: #999;
   }
 }
 .device-box {

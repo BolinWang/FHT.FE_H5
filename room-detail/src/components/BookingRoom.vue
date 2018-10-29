@@ -434,11 +434,7 @@ export default {
     },
     jumpUrl() {
       if(this.orderSuccess){
-        if (this.clientType == 'h5') {
-          window.location.href = 'https://www.mdguanjia.com/waptest/houseInfo/appdownload/index.html';
-        }else{
-          window.location.href = 'https://www.mdguanjia.com/waptest/activePages/intelEstate/index.html';
-        }
+        window.location.href = process.env.APP_DOWNLOAD_URL;
       }
     },
     getOrderTime() {
