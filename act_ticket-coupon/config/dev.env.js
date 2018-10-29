@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 16:09:03
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-31 14:38:21
+ * @Last Modified time: 2018-10-29 17:32:22
  */
 
 'use strict'
@@ -13,6 +13,6 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   ENV_CONFIG: '"dev"',
   BASE_API: '"https://test.mdguanjia.com/myhome/api/"',
-  WEBSITE_LINK: '"https://wwwtest.mdguanjia.com/"'
+  WEBSITE_LINK: '"https://tstatic190.mdguanjia.com/"'
 })
 

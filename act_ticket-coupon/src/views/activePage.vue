@@ -375,7 +375,7 @@ export default {
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
-        this.sourceTypeTrack()
+        // this.sourceTypeTrack()
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -557,6 +557,7 @@ export default {
         Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
       } else {
         this.callupApp()
+        // window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
       }
     },
 
@@ -566,9 +567,10 @@ export default {
         scheme_IOS: 'MyRoom://',
         scheme_And: 'myroom://',
         iosPath: 'activity',
-        yingyongbao: 'http://a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home',
-        appstore: 'https://itunes.apple.com/cn/app/id1191743282?mt=8'
+        yingyongbao: '//a.app.qq.com/o/simple.jsp?pkgname=com.memorhome.home',
+        appstore: '//itunes.apple.com/cn/app/id1191743282?mt=8'
       }
+      console.log(1)
       let callupAppOptions = {
         callback () {
           // IOS 微信中直接前往appstore
@@ -579,15 +581,19 @@ export default {
           }
         }
       }
+      console.log(2)
       const options = {
         protocol: browser.isIos ? schemeConfig.scheme_IOS : (browser.isAndroid ? schemeConfig.scheme_And : ''),
         yingyongbao: schemeConfig.yingyongbao,
         appstore: schemeConfig.appstore
       }
+      console.log(3)
       if (browser.isIos) {
         callupAppOptions.path = schemeConfig.iosPath
       }
+      console.log(4)
       const callLib = new CallApp(options)
+      console.log(5)
       callLib.open(callupAppOptions)
     },
 
@@ -679,8 +685,9 @@ export default {
         }
         .btn_login {
           /* autoprefixer: off */
-          background-image: -webkit-linear-gradient(bottom ,#742dfe, #9a51ff);
+          background-image: -webkit-linear-gradient(bottom ,#742dfe, #e6d7fc);
           /* autoprefixer: on */
+          background-color: initial;
           font-size: 36px;
           border: 0 none;
           border-radius: 15px;
