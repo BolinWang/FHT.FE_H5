@@ -81,6 +81,8 @@
                 </p>
               </section>
             </article>
+            <div class="cloud_item--left"></div>
+            <div class="cloud_item--right"></div>
           </section>
           <!-- APP跳转 -->
           <section class="active_vrWrapper" @click.stop="goVrRoomPage">
@@ -93,6 +95,7 @@
                 </div>
               </div>
               <div class="superposition"></div>
+              <div class="image_flower"></div>
             </div>
             <div class="info">
               <img src="../assets/vr.png" />
@@ -531,20 +534,27 @@ export default {
     // 前往vr看房页面
     goVrRoomPage () {
       let bridgeParam = {
-        libCode: 5013
+        libCode: 5018
       }
-      if (this.app_andriod === true) {
-        try {
-          window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-        } catch (error) {
-          this.$toast('fail', 'Andriod调用失败')
-          console.log(error)
+      if (this.lastVersion > 357) {
+        if (this.app_andriod === true) {
+          try {
+            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+          } catch (error) {
+            this.$toast('fail', 'Andriod调用失败')
+            console.log(error)
+          }
+        } else if (this.app_ios === true) {
+          bridgeParam = {
+            libCode: 5018,
+            params: {
+              type: 3
+            }
+          }
+          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
         }
-      } else if (this.app_ios === true) {
-        Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {})
       } else {
-        // this.callupApp()
-        window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
+        window.location.href = `${process.env.WEBSITE_LINK}house-list/index.html`
       }
     },
 
@@ -748,6 +758,7 @@ export default {
     padding: 20px;
   }
   .active_rules {
+    position: relative;
     margin-top: 60px;
     color: #fff;
     article {
@@ -805,6 +816,16 @@ export default {
       width: 606px;
       height: 224px;
     }
+    .image_flower {
+      position: absolute;
+      right: 10px;
+      bottom: -10px;
+      width: 100px;
+      height: 150px;
+      background: url('../assets/flower.png') no-repeat center center;
+      background-size: cover;
+      z-index: 3;
+    }
     .info {
       cursor: pointer;
       position: absolute;
@@ -861,6 +882,24 @@ export default {
     height: 90px;
     line-height: 90px;
   }
+}
+
+.cloud_item--left {
+  position: absolute;
+  left: 40px;
+  background: url('../assets/cloud_left.png') no-repeat center center;
+  background-size: cover;
+  width: 60px;
+  height: 25px;
+}
+.cloud_item--right {
+  position: absolute;
+  right: 10px;
+  top: -50px;
+  background: url('../assets/cloud_right.png') no-repeat center center;
+  background-size: cover;
+  width: 155px;
+  height: 55px;
 }
 
 </style>
