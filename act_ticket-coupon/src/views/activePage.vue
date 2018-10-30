@@ -99,7 +99,7 @@
             </div>
             <div class="info">
               <img src="../assets/vr.png" />
-              去使用租房体验券
+              去使用租房抵扣券
             </div>
           </section>
         </section>
