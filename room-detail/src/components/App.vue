@@ -94,25 +94,31 @@
       <div class="room-intro-title">房源信息</div>
       <div class="room-info-list">
         <div>
-          <span>户型</span> {{houseType}}
+          <span>户型</span> {{houseType === '暂无数据' ? houseType : houseType + '层'}}
         </div>
         <div>
           <span>装修</span> {{decorationDegree}}
         </div>
         <div>
-          <span>面积</span> {{roomArea}}m²{{type == 2 ? '' : '起'}}
+          <span>面积</span> 
+          <template v-if="roomArea === '暂无数据'">
+            {{roomArea}}
+          </template>
+          <template v-else>
+            {{parseFloat(roomArea).toFixed(1)}}m²{{type == 2 ? '' : '起'}}
+          </template>
         </div>
         <div>
-          <span>朝向</span> {{roomDirection}}
+          <span>朝向</span> {{roomDirection || '暂无数据'}}
         </div>
         <div>
-          <span>楼层</span> {{floor}}层
+          <span>楼层</span> {{floor === '暂无数据' ? floor : floor + '层'}}
         </div>
         <div v-if="type == 2">
           <span>编号</span> {{roomCode}}
         </div>
         <div v-else>
-          <span>房间数</span> {{roomCount}}间
+          <span>房间数</span> {{roomCount === '暂无数据' ? roomCount : roomCount + '间'}}
         </div>
       </div>
     </div>
@@ -739,16 +745,19 @@ export default {
             }
           })
           if (this.isApp3_6_0) {
-            o.houseDirection = o.houseDirection || '';
-            let houseDirection = [];
-            new Set(o.houseDirection.split(',')).forEach((item) => {
-              houseDirection.push(RoomDirection[item])
-            })
-            this.roomDirection = houseDirection.join('、');
+            this.roomDirection = formatRoomInfo(o.houseDirection);
+            if (this.roomDirection !== '暂无数据') {
+              let houseDirection = [];
+              new Set(o.houseDirection.split(',')).forEach((item) => {
+                houseDirection.push(RoomDirection[item])
+              })
+              this.roomDirection = houseDirection.join('、')
+            }
             this.rooms = o.rooms || [];
-            this.roomCount = o.totalRoomCount || 0;
-            this.houseType = o.minChamber === o.maxChamber ? ((o.minChamber || 0) + '室') : ((o.minChamber || 0) + '~' + (o.maxChamber || 0) + '室')
-            this.floor = o.minFloorNum === o.maxFloorNum ? (o.minFloorNum || 0) : ((o.minFloorNum || 0) + '~' + (o.maxFloorNum || 0));
+            this.roomCount = formatRoomInfo(o.totalRoomCount);
+            this.houseType = formatRoomInfo(o.minChamber, o.maxChamber);
+            this.floor = formatRoomInfo(o.minFloorNum, o.maxFloorNum);
+            this.roomArea = formatRoomInfo(o.minRoomArea);
             o.estateInfo.estatePicUrl = o.estateInfo.estatePicUrl || o.imageUrls[0];
             this.$set(this, 'estateInfo', o.estateInfo);
             // 获取推荐房源列表
@@ -795,13 +804,13 @@ export default {
           this.roomCode = o.roomCode;
           this.houseType = o.houseType;
           this.floor = o.floorName;
+          this.roomArea = o.houseArea;
         }
 
         this.price = isEstate ? o.rentPrice : o.price;
         this.name = isEstate ? (o.estateName + '·' + o.styleName) : o.houseName;
         this.phone = isEstate ? o.telephone : o.contactMobile;
         this.decorationDegree = isEstate ? DecorationList[3] : DecorationList[o.decorationDegree];
-        this.roomArea = isEstate ? parseFloat(o.minRoomArea || 0).toFixed(1) : o.houseArea;
         this.roomDesc = isEstate ? '' : o.houseDesc;
         this.address = o.address;
         this.coordinate.push(o.longitude);
@@ -809,6 +818,22 @@ export default {
         this.isRent = o.hasRent || false;
         this.activityData = o.activity || {}
       })
+
+      function formatRoomInfo (roomInfo1, roomInfo2) {
+        if (typeof roomInfo2 === 'undefined') {
+          return roomInfo1 || '暂无数据'
+        }
+
+        if (!roomInfo1 && !roomInfo2) {
+          return '暂无数据'
+        }
+
+        if (roomInfo1 === roomInfo2) {
+          return roomInfo1
+        }
+
+        return roomInfo1 + '~' + roomInfo2
+      }
     },
     showPhoto(i, item) {
       if (item && item.vrUrl) {
