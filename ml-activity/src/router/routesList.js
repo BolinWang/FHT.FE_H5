@@ -1,4 +1,4 @@
-import ActivePage from '@/views/ActivePage'
+import ActivePage from '@/views/ActivePage.vue'
 // import AsistancePage from '@/pages/AsistancePage'
 
 export default [
