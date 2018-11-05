@@ -79,17 +79,17 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
 
-    // new PrerenderSPAPlugin({
-    //   staticDir: config.build.assetsRoot,
-    //   routes: [ '/', '/friends-assistance' ],
-    //   renderer: new Renderer({
-    //     inject: {
-    //       foo: 'bar'
-    //     },
-    //     headless: false,
-    //     renderAfterDocumentEvent: 'render-event'
-    //   })
-    // }),
+    new PrerenderSPAPlugin({
+      staticDir: config.build.assetsRoot,
+      routes: [ '/', '/friends-assistance' ],
+      renderer: new Renderer({
+        inject: {
+          foo: 'bar'
+        },
+        headless: false,
+        renderAfterDocumentEvent: 'render-event'
+      })
+    }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting
