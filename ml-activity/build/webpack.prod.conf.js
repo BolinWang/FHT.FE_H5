@@ -11,8 +11,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const PrerenderSPAPlugin = require('prerender-spa-plugin')
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+// const PrerenderSPAPlugin = require('prerender-spa-plugin')
+// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 // const env = require('../config/prod.env')
 const env = require('../config/' + process.env.env_config + '.env')
@@ -79,17 +79,17 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
 
-    new PrerenderSPAPlugin({
-      staticDir: config.build.assetsRoot,
-      routes: [ '/', '/friends-assistance' ],
-      renderer: new Renderer({
-        inject: {
-          foo: 'bar'
-        },
-        headless: false,
-        renderAfterDocumentEvent: 'render-event'
-      })
-    }),
+    // new PrerenderSPAPlugin({
+    //   staticDir: config.build.assetsRoot,
+    //   routes: [ '/', '/friends-assistance' ],
+    //   renderer: new Renderer({
+    //     inject: {
+    //       foo: 'bar'
+    //     },
+    //     headless: false,
+    //     renderAfterDocumentEvent: 'render-event'
+    //   })
+    // }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting

@@ -62,7 +62,7 @@
 
 <script>
 import { getWxShareInfo } from '@/utils/wxshare'
-import { getUserData } from '@/utils/auth'
+import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
 import LoginModel from './components/LoginModel.vue'
 import { Popup, Dialog } from 'vant'
@@ -127,7 +127,8 @@ export default {
         }
       }
     }
-    this.urlSearchParams = urlSearchParams
+
+    this.urlSearchParams = this.$route.query
 
     // 字符串查找不用includes  IOS8不兼容
     this.app_ios = userAgent.indexOf('fht-ios') > -1
@@ -162,6 +163,9 @@ export default {
           resolve({
             sessionId: _this.urlSearchParams.sessionId
           })
+          setUserData({
+            sessionId: _this.urlSearchParams.sessionId
+          }, 'user')
         } else if (_this.app_ios) { // iosApp内
           Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
             resolve(responseData)
@@ -198,10 +202,11 @@ export default {
     initApp () {
       // 已登录修改分享链接地址
       if (this.isLogin) {
-        initPageInfoData.shareData.linkUrl = window.location.href + 'friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
       }
 
       if (this.app_ios === true) {
+        console.log(initPageInfoData)
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')
           responseCallback(initPageInfoData)
