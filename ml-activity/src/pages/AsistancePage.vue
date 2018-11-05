@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import LoginModel from './components/LoginModel.vue'
+import LoginModel from './components/LoginModel'
 import { Popup, Dialog } from 'vant'
 import { getUserData } from '@/utils/auth'
 import { friendsHelpApi } from '@/api/asistancePage'
