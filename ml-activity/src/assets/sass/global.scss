@@ -1,0 +1,8 @@
+$textRed: #ff0000;
+$defaultTextColor: #333;
+$mlThemeColor: #ff8c07;
+
+@mixin ml-tag($color, $bgcolor) {
+  color: $color;
+  background-color: $bgcolor;
+}
