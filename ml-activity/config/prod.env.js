@@ -1,6 +1,14 @@
+/*
+ * @Author: FT.FE.Bolin
+ * @Date: 2018-08-17 16:08:45
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-10-18 14:00:23
+ */
+
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"https://api.mdguanjia.com/myhome/"',
-  APP_DOWNLOAD_URL: '"https://tstatic201.mdguanjia.com/appGuides/index.html"'
+  ENV_CONFIG: '"prod"',
+  BASE_API: '"//www.mdguanjia.com/activity/"',
+  ML_API: '"//api.mdguanjia.com/myhome/api/"'
 }

@@ -1,8 +1,8 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:52:44
- * @Last Modified by: chudequan
- * @Last Modified time: 2018-11-05 11:14:31
+ * @Last Modified by: FT.FE.Bolin
+ * @Last Modified time: 2018-10-18 14:24:24
  */
 
 import axios from 'axios'
@@ -13,9 +13,8 @@ import { getUserData, removeUserData } from '@/utils/auth'
 const defaultConfig = {
   version: '1.0',
   timestamp: new Date().getTime(),
-  reqId: 'h5',
-  sign: '8F4C4A8E9D850EDD9692DE38723D0543',
-  devId: 'h5'
+  reqId: '0010C2379272774D6EC087B917CE2A71438DEF90',
+  sign: '8F4C4A8E9D850EDD9692DE38723D0543'
 }
 
 /* 创建axios实例 */
@@ -43,6 +42,14 @@ service.interceptors.request.use(config => {
     if (!config.noAssign) {
       config.params = Object.assign(config.params, defaultConfig)
     }
+  }
+  /**
+   * 处理mock
+   * [process.env.MOCK] config/配置
+   * [config.isMock] 请求参数配置
+   */
+  if (process.env.MOCK && config.isMock) {
+    config.url = `${config.url}/${config.data.method || 'isMock'}`
   }
   return config
 }, error => {
@@ -88,11 +95,12 @@ const responseMehod = (response, resolve, reject) => {
   return reject('error')
 }
 
-const judgeMethod = (url, params, method = 'post', config = {}) => {
+const judgeMethod = (url, params, config = {}) => {
+  let method = config.method || 'post'
   let requestBody = {
-    ...config,
     method,
-    url
+    url,
+    ...config
   }
   if (method.toUpperCase() === 'POST') {
     requestBody.data = params

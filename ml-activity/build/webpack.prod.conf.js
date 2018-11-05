@@ -11,11 +11,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-// const PrerenderSPAPlugin = require('prerender-spa-plugin')
-// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
-
-// const env = require('../config/prod.env')
 const env = require('../config/' + process.env.env_config + '.env')
+
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -68,6 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: config.build.index,
       template: 'index.html',
       inject: true,
+      favicon: resolve('favicon.ico'),
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -78,18 +79,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
-
-    // new PrerenderSPAPlugin({
-    //   staticDir: config.build.assetsRoot,
-    //   routes: [ '/', '/friends-assistance' ],
-    //   renderer: new Renderer({
-    //     inject: {
-    //       foo: 'bar'
-    //     },
-    //     headless: false,
-    //     renderAfterDocumentEvent: 'render-event'
-    //   })
-    // }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting

@@ -21,6 +21,12 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'no-console': 'off',
+    // 不限制自闭合标签
+    'vue/html-self-closing': 'off',
+    'camelcase': [0, {
+      'properties': 'always'
+    }],
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
