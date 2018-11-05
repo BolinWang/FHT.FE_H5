@@ -1,0 +1,221 @@
+<template>
+  <div class="asistance-wrapper">
+    <div class="open-app">
+      <img class="ml-logo" src="../assets/images/ml_icon_logo@2x.png" alt="">
+      <div class="ml-slogan">上麦邻租房&nbsp;&nbsp;&nbsp;轻松租好房</div>
+      <div class="open-app-btn">
+        <img @click="toAppDownloadPage" src="../assets/images/ml_btn_open@2x.png" alt="">
+      </div>
+    </div>
+    <div class="page_container">
+      <div class="main-wrapper">
+        <div class="main-asistance-from">
+          <span v-if="mobile">
+            用户{{mobile}}发起的助力
+          </span>
+        </div>
+        <div class="main-friends-num">
+          <div class="main-friends-bg"></div>
+          <div class="main-friends-center" v-if="countHelpCustomer">
+            当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
+          </div>
+        </div>
+        <div class="main-button">
+          <img @click="asistanceAction" class="main-button-pic" src="../assets/images/ml_btn_zhuli_default@2x.png" alt="">
+        </div>
+        <div class="main-button">
+          <img @click="joinAction" class="main-button-pic" src="../assets/images/ml_btn_canyu_default@2x.png" alt="">
+        </div>
+      </div>
+      <div class="ml-activity-rules">
+        <div class="rules-title"></div>
+        <div class="rules-container">
+          <p>1、本次活动仅限麦邻租房新注册用户发起助力， 每人仅可发起1次助力；</p>
+          <p>2、好友助力仅限麦邻租房新注册用户，每人仅可帮 助好友助力1次； </p>
+          <p>3、邀请三位好友助力可得100元租金券，邀请五位 好友助力可得300元租金券，邀请七位好友助力可 得500元租金券，邀请十位好友助力可得800元租 金券，邀请十二位好友助力可得1200元租金券；</p>
+          <p>4、租金券可用于上海、杭州地区非金融房源在线交 租抵扣租金使用，签约租期1年及以上，抵扣租金 需≥1200元；租金券分12次使用，每次可使用1张 100元租金券；</p>
+          <p>5、本次活动仅有100个名额，发完即止，请及时参 与；麦邻租房拥有在法律范围内的最终解释权，咨 询电话400 -033-9858。</p>
+        </div>
+      </div>
+      <div class="ml-footer"></div>
+      <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
+        <login-model ref="loginForm" roles="friends"></login-model>
+        <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
+      </van-popup>
+    </div>
+  </div>
+</template>
+
+<script>
+import LoginModel from './components/LoginModel.vue'
+import { Popup, Dialog } from 'vant'
+import { getUserData } from '@/utils/auth'
+import { friendsHelpApi } from '@/api/asistancePage'
+import { joinActivityApi } from '@/api/activePage'
+export default {
+  components: {
+    LoginModel,
+    [Popup.name]: Popup,
+    [Dialog.name]: Dialog
+  },
+  data () {
+    return {
+      mobile: '',
+      countHelpCustomer: '',
+      loginModelVisible: false,
+      isLogin: false,
+      sessionId: '',
+      customerId: '',
+      urlSearchParams: {}
+    }
+  },
+  created () {
+    // 获取search数据
+    let urlSearchParams = {}
+    if (location.search.indexOf('?') !== -1) {
+      const searchArr = location.search.substr(1).split('&')
+      for (let i = 0; i < searchArr.length; i++) {
+        if (searchArr[i].split('=')[1]) {
+          urlSearchParams[searchArr[i].split('=')[0]] = unescape(
+            searchArr[i].split('=')[1]
+          )
+        }
+      }
+    }
+    this.$set(this, 'urlSearchParams', urlSearchParams)
+
+    this.$nextTick(() => {
+      this.getUserInfo()
+    })
+
+    if (getUserData('friends')) {
+      this.sessionId = getUserData('friends').sessionId
+      this.isLogin = true
+    }
+  },
+  methods: {
+    // 获取参加活动的人的信息
+    getUserInfo () {
+      if (!this.checkVisible()) {
+        return false
+      }
+      joinActivityApi.getData({
+        sessionId: decodeURIComponent(this.urlSearchParams.sessionId),
+        activityCode: 'MJGY20181022'
+      }).then((res) => {
+        if (res.code !== '0') {
+          return false
+        }
+        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
+        this.mobile = res.data.phone || ''
+        this.customerId = res.data.customerId || ''
+      })
+    },
+    // 助力好友
+    asistanceAction () {
+      if (!this.checkVisible()) {
+        return false
+      }
+      if (!this.isLogin) {
+        this.loginModelVisible = true
+        return false
+      }
+      friendsHelpApi({
+        devId: '',
+        sessionId: this.sessionId,
+        activityCode: 'MJGY20181022',
+        customerId: this.customerId
+      }).then((res) => {
+        Dialog.alert({
+          message: res.message
+        })
+      })
+    },
+    // 参加活动
+    joinAction () {
+      if (!this.checkVisible()) {
+        return false
+      }
+      if (!this.isLogin) {
+        this.$router.push({
+          path: '/'
+        })
+      } else {
+        this.$router.push({
+          path: '/',
+          query: {
+            sessionId: this.sessionId
+          }
+        })
+      }
+    },
+    // 关闭登录弹窗
+    closeLoginModel () {
+      this.$refs.loginForm.resetFrom()
+      this.loginModelVisible = false
+    },
+    // 跳转到下载app页
+    toAppDownloadPage () {
+      window.location.href = process.env.APP_DOWNLOAD_URL
+    },
+    checkVisible () {
+      if (!this.urlSearchParams.sessionId) {
+        Dialog.alert({
+          message: '请通过好友分享的链接访问当前页面'
+        })
+        return false
+      }
+      return true
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  .asistance-wrapper {
+    padding-top: 100px;
+    background-color: #FFAB2C;
+    .open-app {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(0, 0, 0, .5);
+      z-index: 1000;
+      .ml-logo {
+        width: 60px;
+        height: 60px;
+      }
+      .ml-slogan {
+        flex: 1;
+        font-size: 30px;
+        color: #fff;
+        padding-left: 20px;
+      }
+      .open-app-btn {
+        img {
+          width: 146px;
+          height: 50px;
+        }
+      }
+    }
+    .main-wrapper {
+      height: 570px;
+      background-image: url(../assets/images/ml_bg_small2@2x.png);
+      .main-button {
+        margin-bottom: 36px;
+      }
+    }
+    .main-asistance-from {
+      margin-top: 36px;
+      margin-bottom: 40px;
+      font-size: 28px;
+      height: 40px;
+    }
+  }
+</style>
