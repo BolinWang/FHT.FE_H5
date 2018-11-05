@@ -1,28 +1,8 @@
-// body {
-//   background-color: #f6f6f6;
-// }
-
-// .justify-content-fs {
-//   display: flex;
-//   align-items: center;
-// }
-// .justify-content-sb {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-// }
-// .justify-content-ct {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// }
-
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-  // background-color: #FFAB2C;
 }
 
 html {
@@ -33,18 +13,9 @@ html,
 body,
 #app {
   height: 100%;
-  width: 100%;
+  width: 750px;
   overflow-x: hidden;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-  html,
-  body,
-  #app {
-    height: 724px;
-  }
 }
 
 *,
@@ -88,14 +59,3 @@ a:hover {
   min-width: 120px;
   width: auto;
 }
-
-.ml-model-close {
-  position: absolute;
-  bottom: -88px;
-  left: 50%;
-  margin-left: -24px;
-  width: 48px;
-  height: 48px;
-}
-
-
