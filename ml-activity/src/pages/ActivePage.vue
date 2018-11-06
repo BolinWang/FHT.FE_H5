@@ -71,7 +71,7 @@ import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
 const initPageInfoData = {
-  title: '麦邻租房',
+  title: '麦邻租房减房租啦！',
   shareData: {
     title: '麦邻租房减房租啦！',
     introduction: '帮好友助力，助TA领取1200元租金券',
@@ -204,7 +204,6 @@ export default {
       if (this.isLogin) {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
       }
-
       if (this.app_ios === true) {
         console.log(initPageInfoData)
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
@@ -212,7 +211,7 @@ export default {
           responseCallback(initPageInfoData)
         })
         Bridge.registerHandler('refreshPage', function (data, responseCallback) {
-          window.location.href = window.location.href
+          window.location.reload()
         })
       } else if (this.app_andriod === true) {
         // eslint-disable-next-line
@@ -220,7 +219,7 @@ export default {
           JSON.stringify(initPageInfoData)
         )
         window.refreshPage = function () {
-          window.location.href = window.location.href
+          window.location.reload()
         }
       }
     },
@@ -333,12 +332,14 @@ export default {
         }
         if (this.app_ios) {
           Bridge.callHandler('jumpToNativePages', {
-            libCode: 5013
+            libCode: 5013,
+            refresh: true
           }, function responseCallback (responseData) {
           })
         } else {
           window.SetupJsCommunication.jumpToNativePages(JSON.stringify({
-            libCode: 5013
+            libCode: 5013,
+            refresh: true
           }))
         }
       } else {
