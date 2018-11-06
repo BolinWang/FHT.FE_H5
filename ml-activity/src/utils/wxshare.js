@@ -20,7 +20,7 @@ const wechatShareCase = {
   callbackFail () {},
   getAuthInfo () {
     fetch('//www.mdguanjia.com/myhome/act/august/wechat.htm', {
-      url: location.href,
+      url: location.href.split('#')[0],
       callback: 'h5'
     }, 'get', {
       noAssign: true,
@@ -72,7 +72,7 @@ const wechatShareCase = {
       }
     })
     wx.error((res) => {
-      console.debug(res)
+      console.log(res)
     })
   },
   // 微信分享注册
