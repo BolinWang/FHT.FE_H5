@@ -313,7 +313,7 @@ export default {
         } else {
           // 名额用完
           Dialog.alert({
-            message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
+            message: res.message || '太不好意思啦，本次100个名额已用完，请关注下期活动哦！'
           })
         }
       })
