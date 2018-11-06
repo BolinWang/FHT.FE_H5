@@ -67,15 +67,15 @@ import { Popup, Dialog } from 'vant'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
-// const initPageInfoData = {
-//   title: '麦邻租房减房租啦！',
-//   shareData: {
-//     title: '麦邻租房减房租啦！',
-//     introduction: '帮好友助力，助TA领取1200元租金券',
-//     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-//     linkUrl: location.href // 要带上mobile和助力人数
-//   }
-// }
+const initPageInfoData = {
+  title: '麦邻租房减房租啦！',
+  shareData: {
+    title: '麦邻租房减房租啦！',
+    introduction: '帮好友助力，助TA领取1200元租金券',
+    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+    linkUrl: location.href // 要带上mobile和助力人数
+  }
+}
 
 export default {
   name: 'activePage',
@@ -162,19 +162,46 @@ export default {
         if (!res || !res.sessionId) {
           this.countHelpCustomer = '00'
           this.couponFee = 0
-          // this.initApp()
+          this.initApp()
           return false
         }
 
         this.sessionId = res.sessionId
         this.isLogin = true
-        // this.initApp()
+        this.initApp()
         // this.joinActivity()
         // this.getUserInfo()
       }).catch((error) => {
-        // this.initApp()
+        this.initApp()
         console.log(error)
       })
+    },
+    /**
+     * 注册IOS/Andriod方法，获取页面信息
+     */
+    initApp () {
+      // 已登录修改分享链接地址
+      if (this.isLogin) {
+        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+      }
+      if (this.app_ios === true) {
+        console.log(initPageInfoData)
+        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
+          console.log('initPageInfo')
+          responseCallback(initPageInfoData)
+        })
+        Bridge.registerHandler('refreshPage', function (data, responseCallback) {
+          window.location.reload()
+        })
+      } else if (this.app_andriod === true) {
+        // eslint-disable-next-line
+        window.SetupJsCommunication.initPageInfo(
+          JSON.stringify(initPageInfoData)
+        )
+        window.refreshPage = function () {
+          window.location.reload()
+        }
+      }
     },
     // 邀请好友助力
     inviteFriends () {
