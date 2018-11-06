@@ -1,33 +1,25 @@
 <template>
-  <div id="app">
-    <activePage></activePage>
+  <div id="app-box">
+    <div class="ml-main">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
-import activePage from '@/views/activePage'
-
 export default {
-  name: 'app',
-  components: {
-    activePage
-  },
+  name: 'App',
   data () {
     return {
-      active: 0, // 0：无， 1：activePage  2: login
-      urlSearchParams: {}, // search 数据
-      app_ios: false, // ios
-      app_andriod: false, // andriod
-      isAPP: false // 是否APP内
     }
   },
-  created () {
-    this.active = 1
+  methods: {
+
   },
   mounted () {
 
   },
-  methods: {
+  created () {
   }
 }
 </script>

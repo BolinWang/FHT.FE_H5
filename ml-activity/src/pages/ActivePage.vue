@@ -53,17 +53,20 @@
         请点击右上角分享
       </div>
     </van-popup>
+    <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
+      <login-model ref="loginForm" roles="user"></login-model>
+      <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
+    </van-popup>
   </div>
 </template>
 
 <script>
-
 import { getWxShareInfo } from '@/utils/wxshare'
 import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-// import LoginModel from './components/LoginModel'
+import LoginModel from './components/LoginModel'
 import { Popup, Dialog } from 'vant'
-import { joinActivityApi } from '@/api/activePage'
+import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
@@ -80,8 +83,12 @@ const initPageInfoData = {
 export default {
   name: 'activePage',
   components: {
+    LoginModel,
     [Popup.name]: Popup,
     [Dialog.name]: Dialog
+  },
+  props: {
+
   },
   data () {
     return {
@@ -109,6 +116,18 @@ export default {
   },
   created () {
     // 获取search数据
+    let urlSearchParams = {}
+    if (location.search.indexOf('?') !== -1) {
+      const searchArr = location.search.substr(1).split('&')
+      for (let i = 0; i < searchArr.length; i++) {
+        if (searchArr[i].split('=')[1]) {
+          urlSearchParams[searchArr[i].split('=')[0]] = unescape(
+            searchArr[i].split('=')[1]
+          )
+        }
+      }
+    }
+
     this.urlSearchParams = this.$route.query
 
     // 字符串查找不用includes  IOS8不兼容
@@ -128,6 +147,7 @@ export default {
     })
 
     this.initPage()
+    // this.initApp()
   },
   mounted () {
     this.$nextTick(() => {
@@ -344,7 +364,7 @@ export default {
         return false
       }
       if (n.isActive) {
-        joinActivityApi({
+        receiveCouponApi({
           sessionId: this.sessionId,
           activityCode: 'MJGY20181022',
           count: n.count
@@ -353,7 +373,7 @@ export default {
             // 领取成功
             Dialog.alert({
               confirmButtonText: '立即查看使用',
-              message: `恭喜获得${n.count}元租金券！`
+              message: '恭喜获得1111元租金券！'
             }).then(() => {
               this.toUseCoupon()
             })
@@ -375,6 +395,9 @@ export default {
       this.$refs.loginForm.resetFrom()
       this.loginModelVisible = false
     }
+  },
+  watch: {
+
   }
 }
 </script>

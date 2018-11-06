@@ -1,22 +1,25 @@
 /*
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 16:00:08
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-08-30 10:02:48
+ * @Last Modified by: chudequan
+ * @Last Modified time: 2018-10-30 16:26:45
  */
 
 import store from 'store'
 
-const userDataKey = 'FHT.FE-H5'
-
-export function getUserData () {
-  return store.get(userDataKey)
+const activityRoles = {
+  user: 'ML_FRIENDS_HELP_USER',
+  friends: 'ML_FRIENDS_HELP_FRIENDS'
 }
 
-export function setUserData (data) {
-  return store.set(userDataKey, data)
+export function getUserData (role) {
+  return store.get(activityRoles[role])
 }
 
-export function removeUserData () {
-  return store.remove(userDataKey)
+export function setUserData (data, role) {
+  return store.set(activityRoles[role], data)
+}
+
+export function removeUserData (role) {
+  return store.remove(activityRoles[role])
 }

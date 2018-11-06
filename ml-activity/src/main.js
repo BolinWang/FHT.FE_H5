@@ -1,30 +1,29 @@
-/*
- * @Author: FT.FE.Bolin
- * @Date: 2018-08-17 14:44:52
- * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-10-18 14:19:40
- */
-
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import router from './router'
+
 import 'lib-flexible/flexible'
 import 'normalize.css/normalize.css'
 import FastClick from 'fastclick'
 import { Toast } from 'vant'
-// development引用vconsole
+FastClick.attach(document.body)
+
 // eslint-disable-next-line
 process.env.ENV_CONFIG !== 'prod' && require('@/utils/vconsole').default
-
-process.env.MOCK && require('./mock')
-
-FastClick.attach(document.body)
 Vue.config.productionTip = false
 
-const vm = new Vue({
+/* eslint-disable no-new */
+new Vue({
   el: '#app-box',
+  router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  mounted () {
+    // You'll need this for renderAfterDocumentEvent.
+    // document.dispatchEvent(new Event('render-event'))
+  }
 })
-Vue.use(vm)
 
 Vue.prototype.$toast = Toast
