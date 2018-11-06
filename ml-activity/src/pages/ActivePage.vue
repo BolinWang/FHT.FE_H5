@@ -377,7 +377,6 @@ export default {
     }
   },
   watch: {
-
   }
 }
 </script>

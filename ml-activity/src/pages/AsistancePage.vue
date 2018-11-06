@@ -50,11 +50,23 @@
 </template>
 
 <script>
+import { getWxShareInfo } from '@/utils/wxshare'
 import LoginModel from './components/loginModel'
 import { Popup, Dialog, Loading } from 'vant'
 import { getUserData } from '@/utils/auth'
 import { friendsHelpApi } from '@/api/asistancePage'
 import { joinActivityApi } from '@/api/activePage'
+
+const initPageInfoData = {
+  title: '麦邻租房减房租啦！',
+  shareData: {
+    title: '麦邻租房减房租啦！',
+    introduction: '帮好友助力，助TA领取1200元租金券',
+    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+    linkUrl: location.origin + location.pathname // 要带上mobile和助力人数
+  }
+}
+
 export default {
   components: {
     LoginModel,
@@ -80,6 +92,11 @@ export default {
 
     this.$nextTick(() => {
       this.getUserInfo()
+    })
+  },
+  mounted () {
+    this.$nextTick(() => {
+      getWxShareInfo(initPageInfoData.shareData)
     })
   },
   methods: {
