@@ -64,7 +64,7 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-import LoginModel from '@/pages/components/loginModel.vue'
+import LoginModel from './components/loginModel'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 
@@ -116,18 +116,6 @@ export default {
   },
   created () {
     // 获取search数据
-    let urlSearchParams = {}
-    if (location.search.indexOf('?') !== -1) {
-      const searchArr = location.search.substr(1).split('&')
-      for (let i = 0; i < searchArr.length; i++) {
-        if (searchArr[i].split('=')[1]) {
-          urlSearchParams[searchArr[i].split('=')[0]] = unescape(
-            searchArr[i].split('=')[1]
-          )
-        }
-      }
-    }
-
     this.urlSearchParams = this.$route.query
 
     // 字符串查找不用includes  IOS8不兼容
@@ -373,7 +361,7 @@ export default {
             // 领取成功
             Dialog.alert({
               confirmButtonText: '立即查看使用',
-              message: '恭喜获得1111元租金券！'
+              message: '恭喜获得' + n.count + '元租金券！'
             }).then(() => {
               this.toUseCoupon()
             })
