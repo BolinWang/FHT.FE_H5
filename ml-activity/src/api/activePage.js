@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:39:33
  * @Last Modified by: chudequan
- * @Last Modified time: 2018-11-06 11:10:50
+ * @Last Modified time: 2018-11-06 11:22:45
  */
 import { fetch } from '@/utils/fetch'
 
@@ -56,13 +56,9 @@ export const joinActivityApi = {
       method: '',
       params
     })
-  }
-}
-
-export const receiveCouponApi = {
-  requestUrl: '/api/coupon',
-  getData (params) {
-    return fetch(receiveCouponApi.requestUrl, {
+  },
+  receiveCoupon (params) {
+    return fetch(joinActivityApi.requestUrl, {
       method: '',
       params
     })

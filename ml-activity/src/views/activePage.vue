@@ -63,7 +63,7 @@ import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
 // import LoginModel from './components/LoginModel'
 import { Popup, Dialog } from 'vant'
-import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
+import { joinActivityApi } from '@/api/activePage'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
@@ -297,7 +297,7 @@ export default {
     },
     // 领取租房抵扣券
     receivePacket (n) {
-      receiveCouponApi.getData({
+      joinActivityApi.receiveCoupon({
         sessionId: this.sessionId,
         activityCode: 'MJGY20181022',
         count: 123
