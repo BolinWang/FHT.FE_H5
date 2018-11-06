@@ -10,7 +10,7 @@
           当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
         </div>
       </div>
-      <div class="main-steps">
+      <div class="main-steps" v-if="couponList.length">
         <div class="main-steps-reward">
           <div class="reward-item" :class="n.isActive ? 'active' : ''" v-for="n in couponList" :key="n.count" @click="receivePacket(n)">
             <img class="reward-item-pic" :class="(!n.isActive && !n.isUse) ? 'waiting-receive' : ''" :src="n.isActive ? rewardPicList.active : (n.isUse ? require(`../assets/images/received-discount-${n.worth}@2x.png`) : rewardPicList.default)" alt="">
