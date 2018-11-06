@@ -57,6 +57,7 @@ const wechatShareCase = {
         wx.checkJsApi({
           jsApiList,
           complete (res) {
+            console.log('结果', res)
             if (res.errMsg.indexOf('ok')) {
               const checkApiObj = res.checkResult || {}
               supportApi = Object.keys(checkApiObj).filter(item => {
@@ -72,7 +73,7 @@ const wechatShareCase = {
       }
     })
     wx.error((res) => {
-      console.log(res)
+      console.debug(res)
     })
   },
   // 微信分享注册

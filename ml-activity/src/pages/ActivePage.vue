@@ -139,9 +139,9 @@ export default {
     // this.initApp()
   },
   mounted () {
-    this.$nextTick(() => {
-      getWxShareInfo(initPageInfoData.shareData)
-    })
+    // this.$nextTick(() => {
+    //   getWxShareInfo(initPageInfoData.shareData)
+    // })
   },
   methods: {
     // 获取用户信息
@@ -209,6 +209,8 @@ export default {
         window.refreshPage = function () {
           window.location.reload()
         }
+      } else {
+        getWxShareInfo(initPageInfoData.shareData)
       }
     },
     // 登录方法

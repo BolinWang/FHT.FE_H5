@@ -45,7 +45,7 @@ body,
   // overflow-x: hidden;
   // overflow-y: auto;
   // -webkit-overflow-scrolling: touch;
-  // background-color: #FFAB2C;
+  background-color: #FFAB2C;
 }
 
 // @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
@@ -126,7 +126,7 @@ $mlMainColor: #91440A;
 }
 .main-wrapper {
   width: 750px;
-  height: 750px;
+  height: 760px;
   padding-top: 64px;
   color: $mlMainColor;
   text-align: center;
