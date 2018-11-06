@@ -53,10 +53,10 @@
         请点击右上角分享
       </div>
     </van-popup>
-    <!-- <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
+    <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
       <login-model ref="loginForm" roles="user"></login-model>
       <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
-    </van-popup> -->
+    </van-popup>
   </div>
 </template>
 
@@ -64,7 +64,7 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-// import LoginModel from './components/LoginModel'
+import LoginModel from '@/pages/components/LoginModel.vue'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 
@@ -83,7 +83,7 @@ const initPageInfoData = {
 export default {
   name: 'activePage',
   components: {
-    // LoginModel,
+    LoginModel,
     [Popup.name]: Popup,
     [Dialog.name]: Dialog
   },
