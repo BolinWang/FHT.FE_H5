@@ -169,8 +169,8 @@ export default {
         this.sessionId = res.sessionId
         this.isLogin = true
         this.initApp()
-        // this.joinActivity()
-        // this.getUserInfo()
+        this.joinActivity()
+        this.getUserInfo()
       }).catch((error) => {
         this.initApp()
         console.log(error)
@@ -205,7 +205,7 @@ export default {
     },
     // 参加活动获取
     joinActivity () {
-      joinActivityApi.getData({
+      joinActivityApi.joinActivity({
         devId: '',
         sessionId: this.sessionId,
         activityCode: 'MJGY20181022'
@@ -214,6 +214,37 @@ export default {
           this.customerId = res.data.customerId || ''
           this.isNewUser = true
         }
+      })
+    },
+    // 获取活动用户信息
+    getUserInfo () {
+      joinActivityApi.getData({
+        sessionId: this.sessionId,
+        activityCode: 'MJGY20181022'
+      }).then((res) => {
+        if (res.code !== '0') {
+          return false
+        }
+        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
+        this.couponFee = res.data.couponFee || 0
+        this.mobile = res.data.phone || ''
+        this.customerId = res.data.customerId || ''
+
+        // [1, 0, 0, 0, 0]
+        const couponReceivedList = typeof res.data.receiveStatus === 'string' ? res.data.receiveStatus.split(',') : []
+
+        couponReceivedList.forEach((item, index) => {
+          if (index > 4) {
+            return false
+          }
+          this.couponList[index].isUse = !!Number(item)
+          if (!Number(item) && res.data.countHelpCustomer >= this.couponList[index].count) {
+            this.couponList[index].isActive = true
+          }
+          if (res.data.countHelpCustomer >= this.couponList[index].count) {
+            this.progressLength = (index + 1) * 20
+          }
+        })
       })
     },
     // 邀请好友助力
