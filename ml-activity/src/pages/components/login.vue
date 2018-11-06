@@ -26,13 +26,21 @@
 <script>
 import { getBrowser } from '@/utils/browser'
 import { Popup } from 'vant'
+import AgreementModel from './agreementModel'
 
 const browser = getBrowser()
 
 export default {
+  name: 'login',
   components: {
-    [Popup.name]: Popup
-    // AgreementModel
+    [Popup.name]: Popup,
+    AgreementModel
+  },
+  props: {
+    roles: {
+      type: String,
+      default: 'user'
+    }
   },
   data () {
     return {
@@ -52,6 +60,10 @@ export default {
     },
     showMlAgreement () {
       this.mlAgreementModelVisible = true
+    },
+    resetFrom () {
+      this.mobile = ''
+      this.vcode = ''
     },
     scrollIntoView () {
       if (document.activeElement.tagName.toLowerCase() === 'input') {
