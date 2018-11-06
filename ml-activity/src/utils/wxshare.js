@@ -20,9 +20,10 @@ const wechatShareCase = {
   callbackFail () {},
   getAuthInfo () {
     fetch('//www.mdguanjia.com/myhome/act/august/wechat.htm', {
-      url: location.href,
+      url: location.href.split('#')[0],
       callback: 'h5'
-    }, 'get', {
+    }, {
+      method: 'get',
       noAssign: true,
       interceptors: false
     }).then((data) => {
@@ -127,7 +128,7 @@ const getWxShareInfo = (
   shareData = {
     title: '麦邻租房',
     introduction: '麦邻租房',
-    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png'
+    thumbnail: '//www.mdguanjia.com/images/wx_share__ml.png'
   },
   callbackOk = () => { console.log('分享成功') },
   callbackFail = () => { console.log('分享失败') }
