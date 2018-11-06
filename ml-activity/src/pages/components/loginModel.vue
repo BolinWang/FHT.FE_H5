@@ -53,40 +53,7 @@ export default {
       mlAgreementModelVisible: false
     }
   },
-  created () {
-    console.log(12313)
-  },
-  mounted () {
-    console.log(this.roles)
-  },
   methods: {
-    login () {
-      if (!this.mobile) {
-        this.$toast.fail('请输入手机号')
-        return false
-      }
-      if (this.mobile.length !== 11) {
-        this.$toast.fail('请输入正确的手机号')
-        return false
-      }
-      if (!this.vcode) {
-        this.$toast.fail('请输入验证码')
-        return false
-      }
-      loginApi.login({
-        mobile: this.mobile,
-        vcode: this.vcode
-      }).then(response => {
-        console.log(response)
-        setUserData({
-          sessionId: response.data.sessionId
-        }, this.roles)
-        this.$toast.success('登录成功')
-        setTimeout(() => {
-          window.location.reload()
-        }, 1000)
-      }).catch()
-    },
     getVcode () {
       if (this.disabled) {
         return false
@@ -117,6 +84,33 @@ export default {
         this.disabled = false
         this.timerNum = 59
       })
+    },
+    login () {
+      if (!this.mobile) {
+        this.$toast.fail('请输入手机号')
+        return false
+      }
+      if (this.mobile.length !== 11) {
+        this.$toast.fail('请输入正确的手机号')
+        return false
+      }
+      if (!this.vcode) {
+        this.$toast.fail('请输入验证码')
+        return false
+      }
+      loginApi.login({
+        mobile: this.mobile,
+        vcode: this.vcode
+      }).then(response => {
+        console.log(response)
+        setUserData({
+          sessionId: response.data.sessionId
+        }, this.roles)
+        this.$toast.success('登录成功')
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      }).catch()
     },
     showMlAgreement () {
       this.mlAgreementModelVisible = true

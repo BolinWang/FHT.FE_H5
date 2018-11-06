@@ -64,7 +64,7 @@
 import { getWxShareInfo } from '@/utils/wxshare'
 import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-import LoginModel from '@/pages/components/login.vue'
+import LoginModel from '@/pages/components/LoginModel.vue'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 
