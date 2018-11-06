@@ -78,6 +78,7 @@ const wechatShareCase = {
   // 微信分享注册
   initWxMethods (supportApi) {
     let _this = this
+    console.log(_this.shareData)
     if (supportApi.find(item => item === 'updateAppMessageShareData')) {
       wx.updateAppMessageShareData({
         title: _this.shareData.title,
