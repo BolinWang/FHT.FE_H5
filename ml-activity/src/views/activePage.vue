@@ -203,6 +203,30 @@ export default {
         }
       }
     },
+    // 登录方法
+    loginAction () {
+      if (this.isAPP) {
+        const bridgeParam = {
+          libCode: 5001,
+          refresh: true
+        }
+        if (this.app_ios) {
+          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+
+          })
+        } else {
+          // eslint-disable-next-line
+          try {
+            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+          } catch (error) {
+            this.$toast('fail', 'Andriod调用失败')
+            console.log(error)
+          }
+        }
+      } else {
+        this.loginModelVisible = true
+      }
+    },
     // 参加活动获取
     joinActivity () {
       joinActivityApi.joinActivity({
@@ -259,6 +283,18 @@ export default {
       if (this.isNewUser) {
         // 引导用户点右上角分享
         this.leadModelVisible = true
+        // if (this.isAPP) {
+        //   // 引导用户点右上角分享
+        //   this.leadModelVisible = true
+        // } else {
+        //   // 跳转到好友助力页面
+        //   this.$router.push({
+        //     path: '/friends-assistance',
+        //     query: {
+        //       sessionId: this.sessionId
+        //     }
+        //   })
+        // }
       } else {
         // 提示新用户才能发起助力
         Dialog.alert({
@@ -297,26 +333,47 @@ export default {
     },
     // 领取租房抵扣券
     receivePacket (n) {
-      joinActivityApi.receiveCoupon({
-        sessionId: this.sessionId,
-        activityCode: 'MJGY20181022',
-        count: 123
-      }).then((res) => {
-        if (res.code === '0') {
-          // 领取成功
-          Dialog.alert({
-            confirmButtonText: '立即查看使用',
-            message: '恭喜获得1111元租金券！'
-          }).then((res) => {
-            this.toUseCoupon()
-          })
-        } else {
-          // 名额用完
-          Dialog.alert({
-            message: res.message || '太不好意思啦，本次100个名额已用完，请关注下期活动哦！'
-          })
-        }
-      })
+      if (!this.isLogin) {
+        this.loginAction()
+        return false
+      }
+      if (n.isUse) {
+        Dialog.alert({
+          message: '该租金券已领取'
+        })
+        return false
+      }
+      if (n.isActive) {
+        joinActivityApi.receiveCoupon({
+          sessionId: this.sessionId,
+          activityCode: 'MJGY20181022',
+          count: n.count
+        }).then((res) => {
+          if (res.code === '0') {
+            // 领取成功
+            Dialog.alert({
+              confirmButtonText: '立即查看使用',
+              message: `恭喜获得1111元租金券！`
+            }).then(() => {
+              this.toUseCoupon()
+            })
+          } else {
+            // 名额用完
+            Dialog.alert({
+              message: res.message || '太不好意思啦，本次100个名额已用完，请关注下期活动哦！'
+            })
+          }
+        })
+      } else {
+        Dialog.alert({
+          message: '当前助力人数不足，快去邀请好友助力吧！'
+        })
+      }
+    },
+    // 关闭登录弹窗，把表单清空
+    closeLoginModel () {
+      this.$refs.loginForm.resetFrom()
+      this.loginModelVisible = false
     }
   }
 }
