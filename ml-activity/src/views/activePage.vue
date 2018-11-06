@@ -10,7 +10,7 @@
           当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
         </div>
       </div>
-      <div class="main-steps" v-if="couponList.length">
+      <div class="main-steps">
         <div class="main-steps-reward">
           <div class="reward-item" :class="n.isActive ? 'active' : ''" v-for="n in couponList" :key="n.count" @click="receivePacket(n)">
             <img class="reward-item-pic" :class="(!n.isActive && !n.isUse) ? 'waiting-receive' : ''" :src="n.isActive ? rewardPicList.active : (n.isUse ? require(`../assets/images/received-discount-${n.worth}@2x.png`) : rewardPicList.default)" alt="">
@@ -297,26 +297,27 @@ export default {
     },
     // 领取租房抵扣券
     receivePacket (n) {
-      joinActivityApi.receiveCoupon({
-        sessionId: this.sessionId,
-        activityCode: 'MJGY20181022',
-        count: 123
-      }).then((res) => {
-        if (res.code === '0') {
-          // 领取成功
-          Dialog.alert({
-            confirmButtonText: '立即查看使用',
-            message: `恭喜获得1111元租金券！`
-          }).then(() => {
-            this.toUseCoupon()
-          })
-        } else {
-          // 名额用完
-          Dialog.alert({
-            message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
-          })
-        }
-      })
+      console.log(n)
+      // joinActivityApi.receiveCoupon({
+      //   sessionId: this.sessionId,
+      //   activityCode: 'MJGY20181022',
+      //   count: 123
+      // }).then((res) => {
+      //   if (res.code === '0') {
+      //     // 领取成功
+      //     Dialog.alert({
+      //       confirmButtonText: '立即查看使用',
+      //       message: `恭喜获得1111元租金券！`
+      //     }).then(() => {
+      //       this.toUseCoupon()
+      //     })
+      //   } else {
+      //     // 名额用完
+      //     Dialog.alert({
+      //       message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
+      //     })
+      //   }
+      // })
     }
   }
 }
