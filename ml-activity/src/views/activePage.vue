@@ -58,24 +58,24 @@
 
 <script>
 
-import { getWxShareInfo } from '@/utils/wxshare'
+// import { getWxShareInfo } from '@/utils/wxshare'
 import { getUserData, setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
 // import LoginModel from './components/LoginModel'
 import { Popup, Dialog } from 'vant'
-import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
+// import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
-const initPageInfoData = {
-  title: '麦邻租房减房租啦！',
-  shareData: {
-    title: '麦邻租房减房租啦！',
-    introduction: '帮好友助力，助TA领取1200元租金券',
-    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-    linkUrl: location.href // 要带上mobile和助力人数
-  }
-}
+// const initPageInfoData = {
+//   title: '麦邻租房减房租啦！',
+//   shareData: {
+//     title: '麦邻租房减房租啦！',
+//     introduction: '帮好友助力，助TA领取1200元租金券',
+//     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+//     linkUrl: location.href // 要带上mobile和助力人数
+//   }
+// }
 
 export default {
   name: 'activePage',
@@ -130,9 +130,9 @@ export default {
     this.initPage()
   },
   mounted () {
-    this.$nextTick(() => {
-      getWxShareInfo(initPageInfoData.shareData)
-    })
+    // this.$nextTick(() => {
+    //   getWxShareInfo(initPageInfoData.shareData)
+    // })
   },
   methods: {
     // 获取用户信息
@@ -162,113 +162,18 @@ export default {
         if (!res || !res.sessionId) {
           this.countHelpCustomer = '00'
           this.couponFee = 0
-          this.initApp()
+          // this.initApp()
           return false
         }
 
         this.sessionId = res.sessionId
         this.isLogin = true
-        this.initApp()
-        this.joinActivity()
-        this.getUserInfo()
+        // this.initApp()
+        // this.joinActivity()
+        // this.getUserInfo()
       }).catch((error) => {
-        this.initApp()
+        // this.initApp()
         console.log(error)
-      })
-    },
-    /**
-     * 注册IOS/Andriod方法，获取页面信息
-     */
-    initApp () {
-      // 已登录修改分享链接地址
-      if (this.isLogin) {
-        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
-      }
-      if (this.app_ios === true) {
-        console.log(initPageInfoData)
-        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
-          console.log('initPageInfo')
-          responseCallback(initPageInfoData)
-        })
-        Bridge.registerHandler('refreshPage', function (data, responseCallback) {
-          window.location.reload()
-        })
-      } else if (this.app_andriod === true) {
-        // eslint-disable-next-line
-        window.SetupJsCommunication.initPageInfo(
-          JSON.stringify(initPageInfoData)
-        )
-        window.refreshPage = function () {
-          window.location.reload()
-        }
-      }
-    },
-    // 登录方法
-    loginAction () {
-      if (this.isAPP) {
-        const bridgeParam = {
-          libCode: 5001,
-          refresh: true
-        }
-        if (this.app_ios) {
-          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-
-          })
-        } else {
-          // eslint-disable-next-line
-          try {
-            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-          } catch (error) {
-            this.$toast('fail', 'Andriod调用失败')
-            console.log(error)
-          }
-        }
-      } else {
-        this.loginModelVisible = true
-      }
-    },
-    // 参加活动获取
-    joinActivity () {
-      joinActivityApi.joinActivity({
-        devId: '',
-        sessionId: this.sessionId,
-        activityCode: 'MJGY20181022'
-      }).then((res) => {
-        if (res.code === '0') {
-          this.customerId = res.data.customerId || ''
-          this.isNewUser = true
-        }
-      })
-    },
-    // 获取活动用户信息
-    getUserInfo () {
-      joinActivityApi.getData({
-        sessionId: this.sessionId,
-        activityCode: 'MJGY20181022'
-      }).then((res) => {
-        if (res.code !== '0') {
-          return false
-        }
-        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
-        this.couponFee = res.data.couponFee || 0
-        this.mobile = res.data.phone || ''
-        this.customerId = res.data.customerId || ''
-
-        // [1, 0, 0, 0, 0]
-        const couponReceivedList = typeof res.data.receiveStatus === 'string' ? res.data.receiveStatus.split(',') : []
-
-        couponReceivedList.forEach((item, index) => {
-          if (index > 4) {
-            return false
-          }
-          this.couponList[index].isUse = !!Number(item)
-          if (!Number(item) && res.data.countHelpCustomer >= this.couponList[index].count) {
-            this.couponList[index].isActive = true
-          }
-          if (res.data.countHelpCustomer >= this.couponList[index].count) {
-            this.progressLength = (index + 1) * 20
-          }
-        })
       })
     },
     // 邀请好友助力
@@ -283,18 +188,6 @@ export default {
       if (this.isNewUser) {
         // 引导用户点右上角分享
         this.leadModelVisible = true
-        // if (this.isAPP) {
-        //   // 引导用户点右上角分享
-        //   this.leadModelVisible = true
-        // } else {
-        //   // 跳转到好友助力页面
-        //   this.$router.push({
-        //     path: '/friends-assistance',
-        //     query: {
-        //       sessionId: this.sessionId
-        //     }
-        //   })
-        // }
       } else {
         // 提示新用户才能发起助力
         Dialog.alert({
@@ -329,45 +222,6 @@ export default {
         } else {
           this.loginModelVisible = true
         }
-      }
-    },
-    // 领取租房抵扣券
-    receivePacket (n) {
-      if (!this.isLogin) {
-        this.loginAction()
-        return false
-      }
-      if (n.isUse) {
-        Dialog.alert({
-          message: '该租金券已领取'
-        })
-        return false
-      }
-      if (n.isActive) {
-        receiveCouponApi({
-          sessionId: this.sessionId,
-          activityCode: 'MJGY20181022',
-          count: n.count
-        }).then((res) => {
-          if (res.code === '0') {
-            // 领取成功
-            Dialog.alert({
-              confirmButtonText: '立即查看使用',
-              message: `恭喜获得${n.worth}元租金券！`
-            }).then(() => {
-              this.toUseCoupon()
-            })
-          } else {
-            // 名额用完
-            Dialog.alert({
-              message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
-            })
-          }
-        })
-      } else {
-        Dialog.alert({
-          message: '当前助力人数不足，快去邀请好友助力吧！'
-        })
       }
     }
   }
