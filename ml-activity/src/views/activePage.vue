@@ -302,7 +302,20 @@ export default {
         activityCode: 'MJGY20181022',
         count: 123
       }).then((res) => {
-        console.log(res)
+        if (res.code === '0') {
+          // 领取成功
+          Dialog.alert({
+            confirmButtonText: '立即查看使用',
+            message: `恭喜获得1111元租金券！`
+          }).then(() => {
+            this.toUseCoupon()
+          })
+        } else {
+          // 名额用完
+          Dialog.alert({
+            message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
+          })
+        }
       })
     }
   }
