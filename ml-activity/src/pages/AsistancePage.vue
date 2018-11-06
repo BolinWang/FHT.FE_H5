@@ -117,6 +117,8 @@ export default {
       }).then((res) => {
         Dialog.alert({
           message: res.message
+        }).then(() => {
+          window.location.reload()
         })
       })
     },

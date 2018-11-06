@@ -4,7 +4,7 @@
       <input class="ml-input" v-model="mobile" placeholder="请输入手机号" type="tel" @focus="scrollIntoView">
     </div>
     <div class="input-group">
-      <input class="ml-input" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView">
+      <input class="ml-input vcode" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView">
       <div class="input-group-action" :class="[disabled ? 'is-disabled' : '']" @click="getVcode">
         {{disabled ? timerNum + 's后重新获取' : '获取验证码'}}
       </div>
@@ -54,7 +54,7 @@ export default {
     }
   },
   created () {
-    console.log(12313)
+
   },
   mounted () {
     console.log(this.roles)
@@ -142,7 +142,7 @@ export default {
     width: 690px;
     padding: 60px 30px;
     .input-group {
-      display: flex;
+      position: relative;
       height: 100px;
       margin-bottom: 40px;
       border: 1px solid #9D6A43;
@@ -151,18 +151,23 @@ export default {
       .ml-input {
         background-color: transparent;
         border: 0;
-        flex: 1;
+        width: 100%;
         height: 100%;
         padding: 30px;
+        &.vcode {
+          padding-right: 200px;
+        }
       }
       .input-group-action {
-        position: relative;
+        position: absolute;
+        top: 0;
+        right: 0;
         padding: 30px 20px;
+        white-space: nowrap;
         &.is-disabled {
           padding: 20px;
           font-size: 24px;
           line-height: 60px;
-          white-space: nowrap;
           color: #999;
         }
         &::before {

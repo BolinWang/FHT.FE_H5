@@ -177,7 +177,7 @@ export default {
         this.sessionId = res.sessionId
         this.isLogin = true
         this.initApp()
-        this.joinActivity()
+        // this.joinActivity()
         this.getUserInfo()
       }).catch((error) => {
         this.initApp()
@@ -245,6 +245,11 @@ export default {
         if (res.code === '0') {
           this.customerId = res.data.customerId || ''
           this.isNewUser = true
+          this.leadModelVisible = true
+        } else {
+          Dialog.alert({
+            message: res.message
+          })
         }
       })
     },
@@ -287,28 +292,29 @@ export default {
         this.loginAction()
         return false
       }
+      this.joinActivity()
       // 是否新用户
-      if (this.isNewUser) {
-        // 引导用户点右上角分享
-        this.leadModelVisible = true
-        // if (this.isAPP) {
-        //   // 引导用户点右上角分享
-        //   this.leadModelVisible = true
-        // } else {
-        //   // 跳转到好友助力页面
-        //   this.$router.push({
-        //     path: '/friends-assistance',
-        //     query: {
-        //       sessionId: this.sessionId
-        //     }
-        //   })
-        // }
-      } else {
-        // 提示新用户才能发起助力
-        Dialog.alert({
-          message: '抱歉，新用户才能发起助力'
-        })
-      }
+      // if (this.isNewUser) {
+      //   // 引导用户点右上角分享
+      //   this.leadModelVisible = true
+      //   // if (this.isAPP) {
+      //   //   // 引导用户点右上角分享
+      //   //   this.leadModelVisible = true
+      //   // } else {
+      //   //   // 跳转到好友助力页面
+      //   //   this.$router.push({
+      //   //     path: '/friends-assistance',
+      //   //     query: {
+      //   //       sessionId: this.sessionId
+      //   //     }
+      //   //   })
+      //   // }
+      // } else {
+      //   // 提示新用户才能发起助力
+      //   Dialog.alert({
+      //     message: '抱歉，新用户才能发起助力'
+      //   })
+      // }
     },
     // 使用优惠券
     toUseCoupon () {

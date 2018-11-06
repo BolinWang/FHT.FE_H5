@@ -2,12 +2,12 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-08-17 14:52:44
  * @Last Modified by: chudequan
- * @Last Modified time: 2018-11-05 11:14:31
+ * @Last Modified time: 2018-11-06 14:39:15
  */
 
 import axios from 'axios'
 import { Toast } from 'vant'
-import { getUserData, removeUserData } from '@/utils/auth'
+import { getUserData } from '@/utils/auth'
 
 /* 默认请求参数 */
 const defaultConfig = {
@@ -65,27 +65,10 @@ service.interceptors.response.use(
   }
 )
 
-/* 调用退出系统 */
-const logOutMethod = () => {
-  removeUserData()
-}
-
 /* axios请求体包装 */
 const responseMehod = (response, resolve, reject) => {
   const res = response.data
-  if (!response.config.interceptors || res.code * 1 === 0) {
-    return resolve(res)
-  }
-  if (res.code * 1 === 1011 && res.message === '数据不存在') {
-    logOutMethod()
-  }
-  Toast.fail(res.message || '未知错误，请联系管理员')
-  // sessionId 失效
-  if (res.code * 1 === 1016) {
-    Toast.fail(`${res.message}，请重新登录`)
-    logOutMethod()
-  }
-  return reject('error')
+  resolve(res)
 }
 
 const judgeMethod = (url, params, method = 'post', config = {}) => {
