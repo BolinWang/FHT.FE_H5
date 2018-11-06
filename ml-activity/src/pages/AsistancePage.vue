@@ -38,23 +38,23 @@
         </div>
       </div>
       <div class="ml-footer"></div>
-      <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
+      <!-- <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
         <login-model ref="loginForm" roles="friends"></login-model>
         <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
-      </van-popup>
+      </van-popup> -->
     </div>
   </div>
 </template>
 
 <script>
-import LoginModel from './components/LoginModel'
+// import LoginModel from './components/LoginModel'
 import { Popup, Dialog } from 'vant'
 import { getUserData } from '@/utils/auth'
 import { friendsHelpApi } from '@/api/asistancePage'
 import { joinActivityApi } from '@/api/activePage'
 export default {
   components: {
-    LoginModel,
+    // LoginModel,
     [Popup.name]: Popup,
     [Dialog.name]: Dialog
   },
@@ -71,18 +71,7 @@ export default {
   },
   created () {
     // 获取search数据
-    // let urlSearchParams = {}
-    // if (location.search.indexOf('?') !== -1) {
-    //   const searchArr = location.search.substr(1).split('&')
-    //   for (let i = 0; i < searchArr.length; i++) {
-    //     if (searchArr[i].split('=')[1]) {
-    //       urlSearchParams[searchArr[i].split('=')[0]] = unescape(
-    //         searchArr[i].split('=')[1]
-    //       )
-    //     }
-    //   }
-    // }
-    this.$set(this, 'urlSearchParams', this.$route.query)
+    // this.$set(this, 'urlSearchParams', this.$route.query)
 
     this.$nextTick(() => {
       this.getUserInfo()
