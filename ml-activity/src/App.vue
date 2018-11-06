@@ -174,7 +174,6 @@ $mlMainColor: #91440A;
     color: #9C4D0D;
     font-size: 26px;
     line-height: 36px;
-    text-align: justify;
     p {
       margin: 0;
     }

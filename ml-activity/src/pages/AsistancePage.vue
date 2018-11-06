@@ -1,54 +1,57 @@
 <template>
-  <div class="asistance-wrapper">
-    <div class="open-app">
-      <img class="ml-logo" src="../assets/images/ml_icon_logo@2x.png" alt="">
-      <div class="ml-slogan">上麦邻租房&nbsp;&nbsp;&nbsp;轻松租好房</div>
-      <div class="open-app-btn">
-        <img @click="toAppDownloadPage" src="../assets/images/ml_btn_open@2x.png" alt="">
-      </div>
-    </div>
-    <div class="page_container">
-      <div class="main-wrapper">
-        <div class="main-asistance-from">
-          <span v-if="mobile">
-            用户{{mobile}}发起的助力
-          </span>
+  <div>
+    <van-loading class="ml-loading" size="60px" v-if="isLoading" />
+    <div class="asistance-wrapper" v-else>
+      <div class="open-app">
+        <img class="ml-logo" src="../assets/images/ml_icon_logo@2x.png" alt="">
+        <div class="ml-slogan">上麦邻租房&nbsp;&nbsp;&nbsp;轻松租好房</div>
+        <div class="open-app-btn">
+          <img @click="toAppDownloadPage" src="../assets/images/ml_btn_open@2x.png" alt="">
         </div>
-        <div class="main-friends-num">
-          <div class="main-friends-bg"></div>
-          <div class="main-friends-center" v-if="countHelpCustomer">
-            当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
+      </div>
+      <div class="page_container">
+        <div class="main-wrapper">
+          <div class="main-asistance-from">
+            <span v-if="mobile">
+              用户{{mobile}}发起的助力
+            </span>
+          </div>
+          <div class="main-friends-num">
+            <div class="main-friends-bg"></div>
+            <div class="main-friends-center" v-if="countHelpCustomer">
+              当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
+            </div>
+          </div>
+          <div class="main-button">
+            <img @click="asistanceAction" class="main-button-pic" src="../assets/images/ml_btn_zhuli_default@2x.png" alt="">
+          </div>
+          <div class="main-button">
+            <img @click="joinAction" class="main-button-pic" src="../assets/images/ml_btn_canyu_default@2x.png" alt="">
           </div>
         </div>
-        <div class="main-button">
-          <img @click="asistanceAction" class="main-button-pic" src="../assets/images/ml_btn_zhuli_default@2x.png" alt="">
+        <div class="ml-activity-rules">
+          <div class="rules-title"></div>
+          <div class="rules-container">
+            <p>1、本次活动仅限麦邻租房新注册用户发起助力， 每人仅可发起1次助力；</p>
+            <p>2、好友助力仅限麦邻租房新注册用户，每人仅可帮 助好友助力1次； </p>
+            <p>3、邀请三位好友助力可得100元租金券，邀请五位 好友助力可得300元租金券，邀请七位好友助力可 得500元租金券，邀请十位好友助力可得800元租 金券，邀请十二位好友助力可得1200元租金券；</p>
+            <p>4、租金券可用于上海、杭州地区非金融房源在线交 租抵扣租金使用，签约租期1年及以上，抵扣租金 需≥1200元；租金券分12次使用，每次可使用1张 100元租金券；</p>
+            <p>5、本次活动仅有100个名额，发完即止，请及时参 与；麦邻租房拥有在法律范围内的最终解释权，咨 询电话400 -033-9858。</p>
+          </div>
         </div>
-        <div class="main-button">
-          <img @click="joinAction" class="main-button-pic" src="../assets/images/ml_btn_canyu_default@2x.png" alt="">
-        </div>
+        <div class="ml-footer"></div>
+        <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
+          <login-model ref="loginForm" roles="friends"></login-model>
+          <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
+        </van-popup>
       </div>
-      <div class="ml-activity-rules">
-        <div class="rules-title"></div>
-        <div class="rules-container">
-          <p>1、本次活动仅限麦邻租房新注册用户发起助力， 每人仅可发起1次助力；</p>
-          <p>2、好友助力仅限麦邻租房新注册用户，每人仅可帮 助好友助力1次； </p>
-          <p>3、邀请三位好友助力可得100元租金券，邀请五位 好友助力可得300元租金券，邀请七位好友助力可 得500元租金券，邀请十位好友助力可得800元租 金券，邀请十二位好友助力可得1200元租金券；</p>
-          <p>4、租金券可用于上海、杭州地区非金融房源在线交 租抵扣租金使用，签约租期1年及以上，抵扣租金 需≥1200元；租金券分12次使用，每次可使用1张 100元租金券；</p>
-          <p>5、本次活动仅有100个名额，发完即止，请及时参 与；麦邻租房拥有在法律范围内的最终解释权，咨 询电话400 -033-9858。</p>
-        </div>
-      </div>
-      <div class="ml-footer"></div>
-      <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
-        <login-model ref="loginForm" roles="friends"></login-model>
-        <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
-      </van-popup>
     </div>
   </div>
 </template>
 
 <script>
 import LoginModel from './components/loginModel'
-import { Popup, Dialog } from 'vant'
+import { Popup, Dialog, Loading } from 'vant'
 import { getUserData } from '@/utils/auth'
 import { friendsHelpApi } from '@/api/asistancePage'
 import { joinActivityApi } from '@/api/activePage'
@@ -56,7 +59,8 @@ export default {
   components: {
     LoginModel,
     [Popup.name]: Popup,
-    [Dialog.name]: Dialog
+    [Dialog.name]: Dialog,
+    [Loading.name]: Loading
   },
   data () {
     return {
@@ -66,7 +70,8 @@ export default {
       isLogin: false,
       sessionId: '',
       customerId: '',
-      urlSearchParams: {}
+      urlSearchParams: {},
+      isLoading: true
     }
   },
   created () {
@@ -76,18 +81,32 @@ export default {
     this.$nextTick(() => {
       this.getUserInfo()
     })
-
-    if (getUserData('friends')) {
-      this.sessionId = getUserData('friends').sessionId
-      this.isLogin = true
-    }
   },
   methods: {
     // 获取参加活动的人的信息
     getUserInfo () {
       if (!this.checkVisible()) {
+        this.isLoading = false
         return false
       }
+      joinActivityApi.joinActivity({
+        devId: '',
+        sessionId: this.urlSearchParams.sessionId,
+        activityCode: 'MJGY20181022'
+      }).then((res) => {
+        if (res.code === '0') {
+          this.isLoading = false
+          if (getUserData('friends')) {
+            this.sessionId = getUserData('friends').sessionId
+            this.isLogin = true
+          }
+        } else {
+          // 跳转到活动页
+          this.$router.push({
+            path: '/'
+          })
+        }
+      })
       joinActivityApi.getData({
         sessionId: decodeURIComponent(this.urlSearchParams.sessionId),
         activityCode: 'MJGY20181022'
@@ -109,17 +128,24 @@ export default {
         this.loginModelVisible = true
         return false
       }
+
       friendsHelpApi({
         devId: '',
         sessionId: this.sessionId,
         activityCode: 'MJGY20181022',
         customerId: this.customerId
       }).then((res) => {
-        Dialog.alert({
-          message: res.message
-        }).then(() => {
-          window.location.reload()
-        })
+        if (res.code === '0') {
+          Dialog.alert({
+            message: '助力成功'
+          }).then(() => {
+            window.location.reload()
+          })
+        } else {
+          Dialog.alert({
+            message: res.message || '助力失败'
+          })
+        }
       })
     },
     // 参加活动
@@ -163,6 +189,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .ml-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
   .asistance-wrapper {
     padding-top: 100px;
     background-color: #FFAB2C;
