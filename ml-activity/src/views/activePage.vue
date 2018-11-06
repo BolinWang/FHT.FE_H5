@@ -203,30 +203,6 @@ export default {
         }
       }
     },
-    // 登录方法
-    loginAction () {
-      if (this.isAPP) {
-        const bridgeParam = {
-          libCode: 5001,
-          refresh: true
-        }
-        if (this.app_ios) {
-          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
-
-          })
-        } else {
-          // eslint-disable-next-line
-          try {
-            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
-          } catch (error) {
-            this.$toast('fail', 'Andriod调用失败')
-            console.log(error)
-          }
-        }
-      } else {
-        this.loginModelVisible = true
-      }
-    },
     // 参加活动获取
     joinActivity () {
       joinActivityApi.joinActivity({
@@ -283,18 +259,6 @@ export default {
       if (this.isNewUser) {
         // 引导用户点右上角分享
         this.leadModelVisible = true
-        // if (this.isAPP) {
-        //   // 引导用户点右上角分享
-        //   this.leadModelVisible = true
-        // } else {
-        //   // 跳转到好友助力页面
-        //   this.$router.push({
-        //     path: '/friends-assistance',
-        //     query: {
-        //       sessionId: this.sessionId
-        //     }
-        //   })
-        // }
       } else {
         // 提示新用户才能发起助力
         Dialog.alert({
@@ -369,11 +333,6 @@ export default {
           message: '当前助力人数不足，快去邀请好友助力吧！'
         })
       }
-    },
-    // 关闭登录弹窗，把表单清空
-    closeLoginModel () {
-      this.$refs.loginForm.resetFrom()
-      this.loginModelVisible = false
     }
   }
 }
