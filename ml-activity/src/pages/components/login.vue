@@ -25,6 +25,7 @@
 
 <script>
 import { getBrowser } from '@/utils/browser'
+import { loginApi } from '@/api/login'
 import { Popup } from 'vant'
 import AgreementModel from './agreementModel'
 
@@ -53,7 +54,35 @@ export default {
   },
   methods: {
     getVcode () {
-
+      if (this.disabled) {
+        return false
+      }
+      if (!this.mobile) {
+        this.$toast.fail('请输入手机号')
+        return false
+      }
+      if (this.mobile.length !== 11) {
+        this.$toast.fail('请输入正确的手机号')
+        return false
+      }
+      loginApi.getVcode({
+        mobile: this.mobile
+      }).then(response => {
+        this.$toast.success('验证码已发送')
+        this.disabled = true
+        let timetimer = setInterval(() => {
+          this.timerNum--
+          if (this.timerNum <= 0) {
+            this.disabled = false
+            this.timerNum = 59
+            clearInterval(timetimer)
+          }
+        }, 1000)
+      }).catch((error) => {
+        console.log(error)
+        this.disabled = false
+        this.timerNum = 59
+      })
     },
     login () {
 

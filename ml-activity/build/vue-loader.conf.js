@@ -24,7 +24,7 @@ module.exports = {
       rootValue: 75, // 这里对应的是750的设计图尺寸
       selectorBlackList: [],
       mediaQuery: true,
-      propBlackList: [] // 如果要保持font-size不转换，替换为 ['font-size']
+      propBlackList: ['border'] // 如果要保持font-size不转换，替换为 ['font-size']
     })
   ]
 }
