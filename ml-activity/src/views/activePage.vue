@@ -306,7 +306,7 @@ export default {
           // 领取成功
           Dialog.alert({
             confirmButtonText: '立即查看使用',
-            message: `恭喜获得1111元租金券！`
+            message: '恭喜获得1111元租金券！'
           }).then((res) => {
             this.toUseCoupon()
           })
