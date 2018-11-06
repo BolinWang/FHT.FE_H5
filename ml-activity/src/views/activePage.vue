@@ -47,15 +47,41 @@
       </div>
     </div>
     <div class="ml-footer"></div>
+    <van-popup class="ml-lead-model" v-model="leadModelVisible">
+      <div class="ml-lead-container">
+        <img class="ml-lead-arrow" src="../assets/images/cc-arrow-up.svg" alt="">
+        请点击右上角分享
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 
+import { getWxShareInfo } from '@/utils/wxshare'
+import { getUserData, setUserData } from '@/utils/auth'
+import Bridge from '@/utils/bridge'
+// import LoginModel from './components/LoginModel'
+import { Popup, Dialog } from 'vant'
+import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
+
+const userAgent = navigator.userAgent.toLocaleLowerCase()
+
+const initPageInfoData = {
+  title: '麦邻租房减房租啦！',
+  shareData: {
+    title: '麦邻租房减房租啦！',
+    introduction: '帮好友助力，助TA领取1200元租金券',
+    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+    linkUrl: location.href // 要带上mobile和助力人数
+  }
+}
+
 export default {
   name: 'activePage',
   components: {
-
+    [Popup.name]: Popup,
+    [Dialog.name]: Dialog
   },
   data () {
     return {
@@ -82,17 +108,267 @@ export default {
     }
   },
   created () {
+    // 获取search数据
+    // this.urlSearchParams = this.$route.query
 
+    // 字符串查找不用includes  IOS8不兼容
+    this.app_ios = userAgent.indexOf('fht-ios') > -1
+    this.app_andriod = userAgent.indexOf('fht-android') > -1
+    this.isAPP = this.app_ios || this.app_andriod
+
+    const countList = [3, 5, 7, 10, 12]
+    const worthList = [100, 200, 200, 300, 400]
+    countList.forEach((item, index) => {
+      this.couponList.push({
+        count: item,
+        isUse: false,
+        isActive: false,
+        worth: worthList[index]
+      })
+    })
+
+    this.initPage()
   },
   mounted () {
-
+    this.$nextTick(() => {
+      getWxShareInfo(initPageInfoData.shareData)
+    })
   },
   methods: {
-    inviteFriends () {
-      console.log(1111)
+    // 获取用户信息
+    initPage () {
+      let _this = this
+      const getSessionId = new Promise(function (resolve, reject) {
+        if (_this.urlSearchParams.sessionId) { // 从好友助力页面跳过来的
+          resolve({
+            sessionId: _this.urlSearchParams.sessionId
+          })
+          setUserData({
+            sessionId: _this.urlSearchParams.sessionId
+          }, 'user')
+        } else if (_this.app_ios) { // iosApp内
+          Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
+            resolve(responseData)
+          })
+        } else if (_this.app_andriod) { // androidApp内
+          resolve(JSON.parse(window.SetupJsCommunication.getParamsFromNative()))
+        } else {
+          resolve(getUserData('user')) // 从本地缓存拿sessionId
+        }
+      })
+
+      getSessionId.then((res) => {
+        console.log(res)
+        if (!res || !res.sessionId) {
+          this.countHelpCustomer = '00'
+          this.couponFee = 0
+          this.initApp()
+          return false
+        }
+
+        this.sessionId = res.sessionId
+        this.isLogin = true
+        this.initApp()
+        this.joinActivity()
+        this.getUserInfo()
+      }).catch((error) => {
+        this.initApp()
+        console.log(error)
+      })
     },
+    /**
+     * 注册IOS/Andriod方法，获取页面信息
+     */
+    initApp () {
+      // 已登录修改分享链接地址
+      if (this.isLogin) {
+        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+      }
+      if (this.app_ios === true) {
+        console.log(initPageInfoData)
+        Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
+          console.log('initPageInfo')
+          responseCallback(initPageInfoData)
+        })
+        Bridge.registerHandler('refreshPage', function (data, responseCallback) {
+          window.location.reload()
+        })
+      } else if (this.app_andriod === true) {
+        // eslint-disable-next-line
+        window.SetupJsCommunication.initPageInfo(
+          JSON.stringify(initPageInfoData)
+        )
+        window.refreshPage = function () {
+          window.location.reload()
+        }
+      }
+    },
+    // 登录方法
+    loginAction () {
+      if (this.isAPP) {
+        const bridgeParam = {
+          libCode: 5001,
+          refresh: true
+        }
+        if (this.app_ios) {
+          Bridge.callHandler('jumpToNativePages', bridgeParam, function responseCallback (responseData) {
+
+          })
+        } else {
+          // eslint-disable-next-line
+          try {
+            window.SetupJsCommunication.jumpToNativePages(JSON.stringify(bridgeParam))
+          } catch (error) {
+            this.$toast('fail', 'Andriod调用失败')
+            console.log(error)
+          }
+        }
+      } else {
+        this.loginModelVisible = true
+      }
+    },
+    // 参加活动获取
+    joinActivity () {
+      joinActivityApi.joinActivity({
+        devId: '',
+        sessionId: this.sessionId,
+        activityCode: 'MJGY20181022'
+      }).then((res) => {
+        if (res.code === '0') {
+          this.customerId = res.data.customerId || ''
+          this.isNewUser = true
+        }
+      })
+    },
+    // 获取活动用户信息
+    getUserInfo () {
+      joinActivityApi.getData({
+        sessionId: this.sessionId,
+        activityCode: 'MJGY20181022'
+      }).then((res) => {
+        if (res.code !== '0') {
+          return false
+        }
+        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
+        this.couponFee = res.data.couponFee || 0
+        this.mobile = res.data.phone || ''
+        this.customerId = res.data.customerId || ''
+
+        // [1, 0, 0, 0, 0]
+        const couponReceivedList = typeof res.data.receiveStatus === 'string' ? res.data.receiveStatus.split(',') : []
+
+        couponReceivedList.forEach((item, index) => {
+          if (index > 4) {
+            return false
+          }
+          this.couponList[index].isUse = !!Number(item)
+          if (!Number(item) && res.data.countHelpCustomer >= this.couponList[index].count) {
+            this.couponList[index].isActive = true
+          }
+          if (res.data.countHelpCustomer >= this.couponList[index].count) {
+            this.progressLength = (index + 1) * 20
+          }
+        })
+      })
+    },
+    // 邀请好友助力
+    inviteFriends () {
+      // 判断是否登录
+      if (!this.isLogin) {
+        // 调用登录方法
+        this.loginAction()
+        return false
+      }
+      // 是否新用户
+      if (this.isNewUser) {
+        // 引导用户点右上角分享
+        this.leadModelVisible = true
+        // if (this.isAPP) {
+        //   // 引导用户点右上角分享
+        //   this.leadModelVisible = true
+        // } else {
+        //   // 跳转到好友助力页面
+        //   this.$router.push({
+        //     path: '/friends-assistance',
+        //     query: {
+        //       sessionId: this.sessionId
+        //     }
+        //   })
+        // }
+      } else {
+        // 提示新用户才能发起助力
+        Dialog.alert({
+          message: '抱歉，新用户才能发起助力'
+        })
+      }
+    },
+    // 使用优惠券
     toUseCoupon () {
-      console.log(11111)
+      if (this.isAPP) {
+        // 跳转到我的优惠券页
+        if (!this.isLogin) {
+          this.loginAction()
+          return false
+        }
+        if (this.app_ios) {
+          Bridge.callHandler('jumpToNativePages', {
+            libCode: 5013,
+            refresh: true
+          }, function responseCallback (responseData) {
+          })
+        } else {
+          window.SetupJsCommunication.jumpToNativePages(JSON.stringify({
+            libCode: 5013,
+            refresh: true
+          }))
+        }
+      } else {
+        if (this.isLogin) {
+          // 跳转到下载app页
+          window.location.href = process.env.APP_DOWNLOAD_URL
+        } else {
+          this.loginModelVisible = true
+        }
+      }
+    },
+    // 领取租房抵扣券
+    receivePacket (n) {
+      if (!this.isLogin) {
+        this.loginAction()
+        return false
+      }
+      if (n.isUse) {
+        Dialog.alert({
+          message: '该租金券已领取'
+        })
+        return false
+      }
+      if (n.isActive) {
+        receiveCouponApi({
+          sessionId: this.sessionId,
+          activityCode: 'MJGY20181022',
+          count: n.count
+        }).then((res) => {
+          if (res.code === '0') {
+            // 领取成功
+            Dialog.alert({
+              confirmButtonText: '立即查看使用',
+              message: `恭喜获得${n.worth}元租金券！`
+            }).then(() => {
+              this.toUseCoupon()
+            })
+          } else {
+            // 名额用完
+            Dialog.alert({
+              message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
+            })
+          }
+        })
+      } else {
+        Dialog.alert({
+          message: '当前助力人数不足，快去邀请好友助力吧！'
+        })
+      }
     }
   }
 }
