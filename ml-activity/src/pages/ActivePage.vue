@@ -67,6 +67,7 @@ import Bridge from '@/utils/bridge'
 import LoginModel from './components/loginModel'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
+import { getBrowser } from '@/utils/browser'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
@@ -177,7 +178,6 @@ export default {
         this.sessionId = res.sessionId
         this.isLogin = true
         this.initApp()
-        // this.joinActivity()
         this.getUserInfo()
       }).catch((error) => {
         this.initApp()
@@ -245,7 +245,14 @@ export default {
         if (res.code === '0') {
           this.customerId = res.data.customerId || ''
           this.isNewUser = true
-          this.leadModelVisible = true
+          // 判断访问来源
+          if (getBrowser().isQQ || getBrowser().isWechat || this.isAPP) {
+            this.leadModelVisible = true
+          } else {
+            Dialog.alert({
+              message: '请通过微信或麦邻租房app参加此活动'
+            })
+          }
         } else {
           Dialog.alert({
             message: res.message
@@ -293,28 +300,6 @@ export default {
         return false
       }
       this.joinActivity()
-      // 是否新用户
-      // if (this.isNewUser) {
-      //   // 引导用户点右上角分享
-      //   this.leadModelVisible = true
-      //   // if (this.isAPP) {
-      //   //   // 引导用户点右上角分享
-      //   //   this.leadModelVisible = true
-      //   // } else {
-      //   //   // 跳转到好友助力页面
-      //   //   this.$router.push({
-      //   //     path: '/friends-assistance',
-      //   //     query: {
-      //   //       sessionId: this.sessionId
-      //   //     }
-      //   //   })
-      //   // }
-      // } else {
-      //   // 提示新用户才能发起助力
-      //   Dialog.alert({
-      //     message: '抱歉，新用户才能发起助力'
-      //   })
-      // }
     },
     // 使用优惠券
     toUseCoupon () {
@@ -358,6 +343,7 @@ export default {
         return false
       }
       if (n.isActive) {
+        console.log('租金券', n.count)
         receiveCouponApi({
           sessionId: this.sessionId,
           activityCode: 'MJGY20181022',
@@ -367,7 +353,7 @@ export default {
             // 领取成功
             Dialog.alert({
               confirmButtonText: '立即查看使用',
-              message: '恭喜获得' + n.count + '元租金券！'
+              message: '恭喜获得' + n.worth + '元租金券！'
             }).then(() => {
               this.toUseCoupon()
             })
