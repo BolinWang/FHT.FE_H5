@@ -102,9 +102,7 @@ export default {
           }
         } else {
           // 跳转到活动页
-          this.$router.push({
-            path: '/'
-          })
+          window.location.href = window.location.origin + window.location.pathname
         }
       })
       joinActivityApi.getData({
