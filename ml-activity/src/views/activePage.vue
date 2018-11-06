@@ -297,42 +297,26 @@ export default {
     },
     // 领取租房抵扣券
     receivePacket (n) {
-      if (!this.isLogin) {
-        this.loginAction()
-        return false
-      }
-      if (n.isUse) {
-        Dialog.alert({
-          message: '该租金券已领取'
-        })
-        return false
-      }
-      if (n.isActive) {
-        receiveCouponApi.getData({
-          sessionId: this.sessionId,
-          activityCode: 'MJGY20181022',
-          count: n.count
-        }).then((res) => {
-          if (res.code === '0') {
-            // 领取成功
-            Dialog.alert({
-              confirmButtonText: '立即查看使用',
-              message: `恭喜获得${n.worth}元租金券！`
-            }).then(() => {
-              this.toUseCoupon()
-            })
-          } else {
-            // 名额用完
-            Dialog.alert({
-              message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
-            })
-          }
-        })
-      } else {
-        Dialog.alert({
-          message: '当前助力人数不足，快去邀请好友助力吧！'
-        })
-      }
+      receiveCouponApi.getData({
+        sessionId: this.sessionId,
+        activityCode: 'MJGY20181022',
+        count: 123
+      }).then((res) => {
+        if (res.code === '0') {
+          // 领取成功
+          Dialog.alert({
+            confirmButtonText: '立即查看使用',
+            message: `恭喜获得1111元租金券！`
+          }).then(() => {
+            this.toUseCoupon()
+          })
+        } else {
+          // 名额用完
+          Dialog.alert({
+            message: res.message || `太不好意思啦，本次100个名额已用完，请关注下期活动哦！`
+          })
+        }
+      })
     }
   }
 }
