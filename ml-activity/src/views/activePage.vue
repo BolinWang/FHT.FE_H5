@@ -109,7 +109,7 @@ export default {
   },
   created () {
     // 获取search数据
-    // this.urlSearchParams = this.$route.query
+    this.urlSearchParams = this.$route.query
 
     // 字符串查找不用includes  IOS8不兼容
     this.app_ios = userAgent.indexOf('fht-ios') > -1
@@ -344,7 +344,7 @@ export default {
         return false
       }
       if (n.isActive) {
-        joinActivityApi.receiveCoupon({
+        joinActivityApi({
           sessionId: this.sessionId,
           activityCode: 'MJGY20181022',
           count: n.count
@@ -353,7 +353,7 @@ export default {
             // 领取成功
             Dialog.alert({
               confirmButtonText: '立即查看使用',
-              message: '恭喜获得1111元租金券！'
+              message: `恭喜获得${n.count}元租金券！`
             }).then(() => {
               this.toUseCoupon()
             })
