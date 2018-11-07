@@ -58,14 +58,13 @@ const wechatShareCase = {
           jsApiList,
           complete (res) {
             console.log('结果', res)
-            if (res.errMsg.indexOf('ok')) {
-              const checkApiObj = res.checkResult || {}
-              supportApi = Object.keys(checkApiObj).filter(item => {
-                return checkApiObj[item] === true
-              })
-            } else {
-              supportApi = ['onMenuShareTimeline', 'onMenuShareAppMessage']
-            }
+            // if (res.errMsg.indexOf('ok')) {
+            //   const checkApiObj = JSON.parse(res.checkResult || '{}')
+            //   supportApi = Object.keys(checkApiObj)
+            // } else {
+            //   supportApi = ['onMenuShareTimeline', 'onMenuShareAppMessage']
+            // }
+            supportApi = ['onMenuShareTimeline', 'onMenuShareAppMessage']
             _this.initWxMethods(supportApi)
             _this.callbackOk()
           }
@@ -79,8 +78,8 @@ const wechatShareCase = {
   // 微信分享注册
   initWxMethods (supportApi) {
     let _this = this
-    console.log(_this.shareData)
     if (supportApi.find(item => item === 'updateAppMessageShareData')) {
+      console.log('updateAppMessageShareData')
       wx.updateAppMessageShareData({
         title: _this.shareData.title,
         link: _this.shareData.linkUrl,
@@ -91,6 +90,7 @@ const wechatShareCase = {
       })
     }
     if (supportApi.find(item => item === 'updateTimelineShareData')) {
+      console.log('updateTimelineShareData')
       wx.updateTimelineShareData({
         title: _this.shareData.title,
         link: _this.shareData.linkUrl,
