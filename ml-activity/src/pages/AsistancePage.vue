@@ -65,7 +65,7 @@ const initPageInfoData = {
     title: '麦邻租房减房租啦！',
     introduction: '帮好友助力，助TA领取1200元租金券',
     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-    linkUrl: location.origin + location.pathname // 要带上mobile和助力人数
+    linkUrl: location.href
   }
 }
 
