@@ -69,11 +69,11 @@ import Bridge from '@/utils/bridge'
 import LoginModel from './components/loginModel'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
-import { getBrowser } from '@/utils/browser'
+// import { getBrowser } from '@/utils/browser'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
-const initPageInfoData = {
+let initPageInfoData = {
   title: '麦邻租房减房租啦！',
   shareData: {
     title: '麦邻租房减房租啦！',
@@ -150,7 +150,6 @@ export default {
       let _this = this
       const getSessionId = new Promise(function (resolve, reject) {
         if (_this.urlSearchParams.sessionId) { // 从好友助力页面跳过来的
-          console.log(1111)
           setUserData({
             sessionId: decodeURIComponent(_this.urlSearchParams.sessionId)
           }, 'user')
@@ -169,7 +168,6 @@ export default {
       })
 
       getSessionId.then((res) => {
-        console.log(res)
         if (!res || !res.sessionId) {
           this.countHelpCustomer = '0'
           this.couponFee = 0
@@ -180,7 +178,7 @@ export default {
         this.sessionId = res.sessionId
         this.isLogin = true
         this.initApp()
-        this.getUserInfo()
+        // this.getUserInfo()
       }).catch((error) => {
         this.initApp()
         console.log(error)
@@ -194,6 +192,13 @@ export default {
       if (this.isLogin) {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
         initPageInfoData.shareData.introduction = '帮好友助力，助TA领取1200元租金券!'
+      } else {
+        initPageInfoData.shareData = {
+          title: '麦邻租房减房租啦！',
+          introduction: '邀请助力，最高可获得1200元租金券!',
+          thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+          linkUrl: 'http://www.baidu.com'
+        }
       }
       if (this.app_ios === true) {
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
@@ -250,13 +255,14 @@ export default {
           this.customerId = res.data.customerId || ''
           this.isNewUser = true
           // 判断访问来源
-          if (getBrowser().isQQ || getBrowser().isWechat || this.isAPP) {
-            this.leadModelVisible = true
-          } else {
-            Dialog.alert({
-              message: '请通过微信或麦邻租房app参加此活动'
-            })
-          }
+          window.location.href = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+          // if (getBrowser().isQQ || getBrowser().isWechat || this.isAPP) {
+          //   this.leadModelVisible = true
+          // } else {
+          //   Dialog.alert({
+          //     message: '请通过微信或麦邻租房app参加此活动'
+          //   })
+          // }
         } else {
           Dialog.alert({
             message: res.message
@@ -348,7 +354,6 @@ export default {
         return false
       }
       if (n.isActive) {
-        console.log('租金券', n.count)
         receiveCouponApi({
           sessionId: this.sessionId,
           activityCode: 'MJGY20181022',
@@ -357,7 +362,7 @@ export default {
           if (res.code === '0') {
             // 领取成功
             Dialog.alert({
-              confirmButtonText: '立即查看使用',
+              confirmButtonText: this.isAPP ? '立即查看使用' : '立即下载APP查看使用',
               message: '恭喜获得' + n.worth + '元租金券！'
             }).then(() => {
               this.toUseCoupon()

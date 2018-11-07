@@ -52,22 +52,22 @@
 </template>
 
 <script>
-// import { getWxShareInfo } from '@/utils/wxshare'
+import { getWxShareInfo } from '@/utils/wxshare'
 import LoginModel from './components/loginModel'
 import { Popup, Dialog, Loading } from 'vant'
 import { getUserData } from '@/utils/auth'
 import { friendsHelpApi } from '@/api/asistancePage'
 import { joinActivityApi } from '@/api/activePage'
 
-// const initPageInfoData = {
-//   title: '麦邻租房减房租啦！',
-//   shareData: {
-//     title: '麦邻租房减房租啦！',
-//     introduction: '帮好友助力，助TA领取1200元租金券',
-//     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-//     linkUrl: location.href
-//   }
-// }
+let initPageInfoData = {
+  title: '麦邻租房减房租啦！',
+  shareData: {
+    title: '麦邻租房减房租啦！',
+    introduction: '帮好友助力，助TA领取1200元租金券',
+    thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
+    linkUrl: location.href
+  }
+}
 
 export default {
   components: {
@@ -85,7 +85,7 @@ export default {
       sessionId: '',
       customerId: '',
       urlSearchParams: {},
-      isLoading: true
+      isLoading: false
     }
   },
   created () {
@@ -93,13 +93,13 @@ export default {
     this.$set(this, 'urlSearchParams', this.$route.query || {})
 
     this.$nextTick(() => {
-      this.getUserInfo()
+      // this.getUserInfo()
     })
   },
   mounted () {
-    // this.$nextTick(() => {
-    //   getWxShareInfo(initPageInfoData.shareData)
-    // })
+    this.$nextTick(() => {
+      getWxShareInfo(initPageInfoData.shareData)
+    })
   },
   methods: {
     // 获取参加活动的人的信息

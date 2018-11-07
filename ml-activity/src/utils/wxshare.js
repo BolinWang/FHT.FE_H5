@@ -57,7 +57,6 @@ const wechatShareCase = {
         wx.checkJsApi({
           jsApiList,
           complete (res) {
-            console.log('结果', res)
             // if (res.errMsg.indexOf('ok')) {
             //   const checkApiObj = JSON.parse(res.checkResult || '{}')
             //   supportApi = Object.keys(checkApiObj)
@@ -111,6 +110,7 @@ const wechatShareCase = {
     }
     if (supportApi.find(item => item === 'onMenuShareAppMessage')) {
       console.log('onMenuShareAppMessage')
+      console.log(_this.shareData)
       wx.onMenuShareAppMessage({
         title: this.shareData.title, // 分享标题
         desc: this.shareData.introduction, // 分享描述
