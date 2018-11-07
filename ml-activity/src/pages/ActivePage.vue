@@ -197,7 +197,7 @@ export default {
           title: '麦邻租房减房租啦！',
           introduction: '邀请助力，最高可获得1200元租金券!',
           thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-          linkUrl: 'http://www.baidu.com'
+          linkUrl: window.location.origin + window.location.pathname
         }
       }
       if (this.app_ios === true) {
