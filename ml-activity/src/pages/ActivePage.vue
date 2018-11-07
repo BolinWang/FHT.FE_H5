@@ -43,7 +43,7 @@
         <p>2、好友助力仅限麦邻租房新注册用户，每人仅可帮助好友助力1次； </p>
         <p>3、邀请三位好友助力可得100元租金券，邀请五位好友助力可得300元租金券，邀请七位好友助力可得500元租金券，邀请十位好友助力可得800元租金券，邀请十二位好友助力可得1200元租金券；</p>
         <p>4、租金券可用于上海、杭州地区非金融房源在线交租抵扣租金使用，签约租期1年及以上，抵扣租金需≥1200元；租金券分12次使用，每次可使用1张100元租金券；</p>
-        <p>5、本次活动仅有100个名额，发完即止，请及时参与；麦邻租房拥有在法律范围内的最终解释权，咨询电话400 -033-9858。</p>
+        <p>5、本次活动仅有100个名额，发完即止，请及时参与；麦邻租房拥有在法律范围内的最终解释权，咨询电话400-033-9858。</p>
       </div>
     </div>
     <div class="ml-footer"></div>
@@ -195,7 +195,6 @@ export default {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
         initPageInfoData.shareData.introduction = '帮好友助力，助TA领取1200元租金券!'
       }
-      console.log('woca', this.sessionId)
       if (this.app_ios === true) {
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')
