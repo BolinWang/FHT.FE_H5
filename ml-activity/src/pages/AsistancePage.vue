@@ -85,7 +85,7 @@ export default {
       sessionId: '',
       customerId: '',
       urlSearchParams: {},
-      isLoading: false
+      isLoading: true
     }
   },
   created () {
@@ -93,7 +93,7 @@ export default {
     this.$set(this, 'urlSearchParams', this.$route.query || {})
 
     this.$nextTick(() => {
-      // this.getUserInfo()
+      this.getUserInfo()
     })
   },
   mounted () {

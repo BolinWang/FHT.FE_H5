@@ -5,7 +5,7 @@
       <van-icon v-show="showMobileClear" class="ml-input-clear" name="clear" @click="clearInput(1)" />
     </div>
     <div class="input-group">
-      <input class="ml-input vcode" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView(2)" @blur="showVcodeClear = false">
+      <input ref="mlVcode" class="ml-input vcode" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView(2)" @blur="showVcodeClear = false">
       <van-icon v-show="showVcodeClear" class="ml-input-clear" name="clear" @click="clearInput(2)" />
       <div class="input-group-action" :class="[disabled ? 'is-disabled' : '']" @click="getVcode">
         {{disabled ? timerNum + 's后重新获取' : '获取验证码'}}
@@ -136,11 +136,11 @@ export default {
       this.vcode = ''
     },
     scrollIntoView (type) {
-      if (type === 1 && this.mobile.length) {
-        this.showMobileClear = true
+      if (type === 1) {
+        this.showMobileClear = !!this.mobile.length
       }
-      if (type === 2 && this.vcode.length) {
-        this.showMobileClear = true
+      if (type === 2) {
+        this.showVcodeClear = !!this.vcode.length
       }
       if (document.activeElement.tagName.toLowerCase() === 'input') {
         window.setTimeout(() => {

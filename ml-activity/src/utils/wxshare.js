@@ -41,7 +41,7 @@ const wechatShareCase = {
       'onMenuShareAppMessage'
     ]
     wx.config({
-      debug: true,
+      debug: false,
       appId: response.appid,
       timestamp: response.timestamp,
       nonceStr: response.noncestr,

@@ -69,7 +69,7 @@ import Bridge from '@/utils/bridge'
 import LoginModel from './components/loginModel'
 import { Popup, Dialog } from 'vant'
 import { joinActivityApi, receiveCouponApi } from '@/api/activePage'
-// import { getBrowser } from '@/utils/browser'
+import { getBrowser } from '@/utils/browser'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
@@ -178,7 +178,7 @@ export default {
         this.sessionId = res.sessionId
         this.isLogin = true
         this.initApp()
-        // this.getUserInfo()
+        this.getUserInfo()
       }).catch((error) => {
         this.initApp()
         console.log(error)
@@ -197,7 +197,7 @@ export default {
           title: '麦邻租房减房租啦！',
           introduction: '邀请助力，最高可获得1200元租金券!',
           thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-          linkUrl: window.location.origin + window.location.pathname
+          linkUrl: location.origin + location.pathname
         }
       }
       if (this.app_ios === true) {
@@ -255,14 +255,13 @@ export default {
           this.customerId = res.data.customerId || ''
           this.isNewUser = true
           // 判断访问来源
-          window.location.href = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
-          // if (getBrowser().isQQ || getBrowser().isWechat || this.isAPP) {
-          //   this.leadModelVisible = true
-          // } else {
-          //   Dialog.alert({
-          //     message: '请通过微信或麦邻租房app参加此活动'
-          //   })
-          // }
+          if (getBrowser().isQQ || getBrowser().isWechat || this.isAPP) {
+            this.leadModelVisible = true
+          } else {
+            Dialog.alert({
+              message: '请通过微信或麦邻租房app参加此活动'
+            })
+          }
         } else {
           Dialog.alert({
             message: res.message
