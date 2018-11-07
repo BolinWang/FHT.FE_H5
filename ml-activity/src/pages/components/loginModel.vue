@@ -1,10 +1,12 @@
 <template>
   <div class="ml-login-container">
     <div class="input-group">
-      <input class="ml-input" v-model="mobile" placeholder="请输入手机号" type="tel" @focus="scrollIntoView">
+      <input ref="mlMobile" class="ml-input" v-model="mobile" placeholder="请输入手机号" type="tel" @focus="scrollIntoView(1)" @blur="showMobileClear = false">
+      <van-icon v-show="showMobileClear" class="ml-input-clear" name="clear" @click="clearInput(1)" />
     </div>
     <div class="input-group">
-      <input class="ml-input vcode" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView">
+      <input class="ml-input vcode" v-model="vcode" placeholder="请输入验证码" type="number" @focus="scrollIntoView(2)" @blur="showVcodeClear = false">
+      <van-icon v-show="showVcodeClear" class="ml-input-clear" name="clear" @click="clearInput(2)" />
       <div class="input-group-action" :class="[disabled ? 'is-disabled' : '']" @click="getVcode">
         {{disabled ? timerNum + 's后重新获取' : '获取验证码'}}
       </div>
@@ -18,7 +20,9 @@
     </div>
     <van-popup class="ml-agreement-model" v-model="mlAgreementModelVisible" get-container="body" position="top" :overlay="false">
       <agreement-model></agreement-model>
-      <img @click="mlAgreementModelVisible = false" class="ml-model-close" src="../../assets/images/ml_btn_close@2x.png" alt="">
+      <div class="ml-model-close" @click="mlAgreementModelVisible = false">
+        <img src="../../assets/images/ml_btn_close@2x.png" alt="">
+      </div>
     </van-popup>
   </div>
 </template>
@@ -27,7 +31,7 @@
 import { getBrowser } from '@/utils/browser'
 import { setUserData } from '@/utils/auth'
 import { loginApi } from '@/api/login'
-import { Popup } from 'vant'
+import { Popup, Icon } from 'vant'
 import AgreementModel from './agreementModel'
 
 const browser = getBrowser()
@@ -36,6 +40,7 @@ export default {
   name: 'login',
   components: {
     [Popup.name]: Popup,
+    [Icon.name]: Icon,
     AgreementModel
   },
   props: {
@@ -50,7 +55,9 @@ export default {
       mobile: '',
       disabled: false,
       timerNum: 59,
-      mlAgreementModelVisible: false
+      mlAgreementModelVisible: false,
+      showMobileClear: false,
+      showVcodeClear: false
     }
   },
   created () {
@@ -77,7 +84,10 @@ export default {
         mobile: this.mobile,
         vcode: this.vcode
       }).then(response => {
-        console.log(response)
+        if (response.code !== '0') {
+          this.$toast.fail(response.message || '登录失败')
+          return false
+        }
         setUserData({
           sessionId: response.data.sessionId
         }, this.roles)
@@ -125,13 +135,36 @@ export default {
       this.mobile = ''
       this.vcode = ''
     },
-    scrollIntoView () {
+    scrollIntoView (type) {
+      if (type === 1 && this.mobile.length) {
+        this.showMobileClear = true
+      }
+      if (type === 2 && this.vcode.length) {
+        this.showMobileClear = true
+      }
       if (document.activeElement.tagName.toLowerCase() === 'input') {
         window.setTimeout(() => {
           browser.isIos && document.activeElement.scrollIntoViewIfNeeded()
           browser.isAndroid && document.activeElement.scrollIntoView()
         }, 200)
       }
+    },
+    clearInput (type) {
+      if (type === 1) {
+        this.mobile = ''
+        this.$refs.mlMobile.focus()
+      } else {
+        this.vcode = ''
+        this.$refs.mlVcode.focus()
+      }
+    }
+  },
+  watch: {
+    mobile (val) {
+      this.showMobileClear = !!val
+    },
+    vcode (val) {
+      this.showVcodeClear = !!val
     }
   }
 }
@@ -155,8 +188,18 @@ export default {
         height: 100%;
         padding: 30px;
         &.vcode {
-          padding-right: 200px;
+          padding-right: 240px;
+          & + .ml-input-clear {
+            right: 220px;
+          }
         }
+      }
+      .ml-input-clear {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        color: #999;
       }
       .input-group-action {
         position: absolute;

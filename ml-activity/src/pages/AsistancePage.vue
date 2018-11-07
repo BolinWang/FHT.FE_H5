@@ -42,7 +42,9 @@
         <div class="ml-footer"></div>
         <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
           <login-model ref="loginForm" roles="friends"></login-model>
-          <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
+          <div class="ml-model-close" @click="closeLoginModel">
+            <img src="../assets/images/ml_btn_close@2x.png" alt="">
+          </div>
         </van-popup>
       </div>
     </div>
@@ -108,7 +110,7 @@ export default {
       }
       joinActivityApi.joinActivity({
         devId: '',
-        sessionId: this.urlSearchParams.sessionId,
+        sessionId: decodeURIComponent(this.urlSearchParams.sessionId),
         activityCode: 'MJGY20181022'
       }).then((res) => {
         if (res.code === '0') {
@@ -169,14 +171,16 @@ export default {
         return false
       }
       if (!this.isLogin) {
+        console.log(1111)
         this.$router.push({
           path: '/'
         })
       } else {
+        console.log(2222)
         this.$router.push({
           path: '/',
           query: {
-            sessionId: this.sessionId
+            sessionId: getUserData('friends').sessionId
           }
         })
       }

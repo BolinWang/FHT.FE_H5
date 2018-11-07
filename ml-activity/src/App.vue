@@ -48,16 +48,6 @@ body,
   background-color: #FFAB2C;
 }
 
-// @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-//   html,
-//   body,
-//   #app {
-//     height: 100%;
-//     box-sizing: content-box;
-//     padding-bottom: 0.4533rem;
-//   }
-// }
-
 *,
 *:before,
 *:after {
@@ -98,15 +88,21 @@ a:hover {
 .van-toast--default {
   min-width: 120px;
   width: auto;
+  .van-toast__text {
+    font-size: 30px;
+  }
 }
 
 .ml-model-close {
   position: absolute;
-  bottom: -88px;
+  bottom: -108px;
   left: 50%;
-  margin-left: -24px;
-  width: 48px;
-  height: 48px;
+  margin-left: -44px;
+  padding: 20px;
+  img {
+    width: 48px;
+    height: 48px;
+  }
 }
 // 两个页面公共样式
 $mlMainColor: #91440A;

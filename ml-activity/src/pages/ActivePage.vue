@@ -55,7 +55,9 @@
     </van-popup>
     <van-popup :close-on-click-overlay="false" class="ml-login-model" v-model="loginModelVisible">
       <login-model ref="loginForm" roles="user"></login-model>
-      <img @click="closeLoginModel" class="ml-model-close" src="../assets/images/ml_btn_close@2x.png" alt="">
+      <div class="ml-model-close" @click="closeLoginModel">
+        <img src="../assets/images/ml_btn_close@2x.png" alt="">
+      </div>
     </van-popup>
   </div>
 </template>
