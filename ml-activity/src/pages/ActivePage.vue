@@ -150,14 +150,14 @@ export default {
     initPage () {
       let _this = this
       const getSessionId = new Promise(function (resolve, reject) {
-        console.log('sessionId', _this.urlSearchParams.sessionId)
         if (_this.urlSearchParams.sessionId) { // 从好友助力页面跳过来的
-          resolve({
-            sessionId: _this.urlSearchParams.sessionId
-          })
+          console.log(1111)
           setUserData({
-            sessionId: _this.urlSearchParams.sessionId
+            sessionId: decodeURIComponent(_this.urlSearchParams.sessionId)
           }, 'user')
+          resolve({
+            sessionId: decodeURIComponent(_this.urlSearchParams.sessionId)
+          })
         } else if (_this.app_ios) { // iosApp内
           Bridge.callHandler('getParamsFromNative', {}, function responseCallback (responseData) {
             resolve(responseData)
@@ -195,7 +195,7 @@ export default {
       if (this.isLogin) {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
       }
-      console.log(initPageInfoData)
+      console.log('woca', this.sessionId)
       if (this.app_ios === true) {
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')

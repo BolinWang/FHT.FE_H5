@@ -171,12 +171,10 @@ export default {
         return false
       }
       if (!this.isLogin) {
-        console.log(1111)
         this.$router.push({
           path: '/'
         })
       } else {
-        console.log(2222)
         this.$router.push({
           path: '/',
           query: {
