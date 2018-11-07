@@ -150,6 +150,7 @@ export default {
     initPage () {
       let _this = this
       const getSessionId = new Promise(function (resolve, reject) {
+        console.log('sessionId', _this.urlSearchParams.sessionId)
         if (_this.urlSearchParams.sessionId) { // 从好友助力页面跳过来的
           resolve({
             sessionId: _this.urlSearchParams.sessionId
@@ -171,7 +172,7 @@ export default {
       getSessionId.then((res) => {
         console.log(res)
         if (!res || !res.sessionId) {
-          this.countHelpCustomer = '00'
+          this.countHelpCustomer = '0'
           this.couponFee = 0
           this.initApp()
           return false
@@ -194,8 +195,8 @@ export default {
       if (this.isLogin) {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
       }
+      console.log(initPageInfoData)
       if (this.app_ios === true) {
-        console.log(initPageInfoData)
         Bridge.registerHandler('initPageInfo', (data, responseCallback) => {
           console.log('initPageInfo')
           responseCallback(initPageInfoData)
@@ -273,7 +274,8 @@ export default {
         if (res.code !== '0') {
           return false
         }
-        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
+        this.countHelpCustomer = res.data.countHelpCustomer || '0'
+        this.countHelpCustomer = this.countHelpCustomer >= 10 ? this.countHelpCustomer : '0' + this.countHelpCustomer
         this.couponFee = res.data.couponFee || 0
         this.mobile = res.data.phone || ''
         this.customerId = res.data.customerId || ''
