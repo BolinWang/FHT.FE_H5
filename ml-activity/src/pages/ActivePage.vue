@@ -77,9 +77,9 @@ const initPageInfoData = {
   title: '麦邻租房减房租啦！',
   shareData: {
     title: '麦邻租房减房租啦！',
-    introduction: '帮好友助力，助TA领取1200元租金券',
+    introduction: '邀请助力，最高可获得1200元租金券!',
     thumbnail: 'https://www.mdguanjia.com/images/wx_share__ml.png',
-    linkUrl: location.href // 要带上mobile和助力人数
+    linkUrl: location.href
   }
 }
 
@@ -138,7 +138,6 @@ export default {
     })
 
     this.initPage()
-    // this.initApp()
   },
   mounted () {
     // this.$nextTick(() => {
@@ -194,6 +193,7 @@ export default {
       // 已登录修改分享链接地址
       if (this.isLogin) {
         initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+        initPageInfoData.shareData.introduction = '帮好友助力，助TA领取1200元租金券!'
       }
       console.log('woca', this.sessionId)
       if (this.app_ios === true) {
