@@ -2,7 +2,6 @@
   <div id="app-box">
     <div class="ml-main">
       <router-view/>
-      <van-button @click="remove" class="ceshi-btn" type="primary" size="small">退出登录</van-button>
     </div>
   </div>
 </template>
@@ -20,11 +19,7 @@ export default {
     }
   },
   methods: {
-    remove () {
-      removeUserData('user')
-      removeUserData('friends')
-      window.location.reload()
-    }
+
   },
   mounted () {
 
