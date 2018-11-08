@@ -45,6 +45,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  max-width: 750px;
   // background-color: #FFAB2C;
 }
 
@@ -61,6 +62,7 @@ body,
   // overflow-y: auto;
   // -webkit-overflow-scrolling: touch;
   background-color: #FFAB2C;
+  margin: 0 auto;
 }
 
 *,
