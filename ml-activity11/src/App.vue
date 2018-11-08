@@ -2,19 +2,29 @@
   <div id="app-box">
     <div class="ml-main">
       <router-view/>
+      <van-button @click="remove" class="ceshi-btn" type="primary" size="small">退出登录</van-button>
     </div>
   </div>
 </template>
 
 <script>
+import { removeUserData } from '@/utils/auth'
+import { Button } from 'vant'
 export default {
   name: 'App',
+  components: {
+    [Button.name]: Button
+  },
   data () {
     return {
     }
   },
   methods: {
-
+    remove () {
+      removeUserData('user')
+      removeUserData('friends')
+      window.location.reload()
+    }
   },
   mounted () {
 
@@ -25,6 +35,11 @@ export default {
 </script>
 
 <style lang="scss">
+.ceshi-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+}
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
