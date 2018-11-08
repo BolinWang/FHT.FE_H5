@@ -69,6 +69,8 @@ let initPageInfoData = {
   }
 }
 
+const activityCode = 'MJGY20181108'
+
 export default {
   components: {
     LoginModel,
@@ -111,7 +113,7 @@ export default {
       joinActivityApi.joinActivity({
         devId: '',
         sessionId: decodeURIComponent(this.urlSearchParams.sessionId),
-        activityCode: 'MJGY20181022'
+        activityCode: activityCode
       }).then((res) => {
         if (res.code === '0') {
           this.isLoading = false
@@ -126,7 +128,7 @@ export default {
       })
       joinActivityApi.getData({
         sessionId: decodeURIComponent(this.urlSearchParams.sessionId),
-        activityCode: 'MJGY20181022'
+        activityCode: activityCode
       }).then((res) => {
         if (res.code !== '0') {
           return false
@@ -149,7 +151,7 @@ export default {
       friendsHelpApi({
         devId: '',
         sessionId: this.sessionId,
-        activityCode: 'MJGY20181022',
+        activityCode: activityCode,
         customerId: this.customerId
       }).then((res) => {
         if (res.code === '0') {

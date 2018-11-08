@@ -73,6 +73,8 @@ import { getBrowser } from '@/utils/browser'
 
 const userAgent = navigator.userAgent.toLocaleLowerCase()
 
+const activityCode = 'MJGY20181108'
+
 let initPageInfoData = {
   title: '麦邻租房减房租啦！',
   shareData: {
@@ -249,7 +251,7 @@ export default {
       joinActivityApi.joinActivity({
         devId: '',
         sessionId: this.sessionId,
-        activityCode: 'MJGY20181022'
+        activityCode: activityCode
       }).then((res) => {
         if (res.code === '0') {
           this.customerId = res.data.customerId || ''
@@ -273,7 +275,7 @@ export default {
     getUserInfo () {
       joinActivityApi.getData({
         sessionId: this.sessionId,
-        activityCode: 'MJGY20181022'
+        activityCode: activityCode
       }).then((res) => {
         if (res.code !== '0') {
           return false
@@ -354,7 +356,7 @@ export default {
       if (n.isActive) {
         receiveCouponApi({
           sessionId: this.sessionId,
-          activityCode: 'MJGY20181022',
+          activityCode: activityCode,
           count: n.count
         }).then((res) => {
           if (res.code === '0') {
