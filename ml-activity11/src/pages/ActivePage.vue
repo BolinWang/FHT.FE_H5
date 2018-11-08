@@ -209,16 +209,13 @@ export default {
           window.location.reload()
         })
       } else if (this.app_andriod === true) {
-        window.refreshPage = function () {
-          window.location.reload()
-        }
-        if (!this.isLogin) {
-          return false
-        }
         // eslint-disable-next-line
         window.SetupJsCommunication.initPageInfo(
           JSON.stringify(initPageInfoData)
         )
+        window.refreshPage = function () {
+          window.location.reload()
+        }
       } else {
         getWxShareInfo(initPageInfoData.shareData)
       }
