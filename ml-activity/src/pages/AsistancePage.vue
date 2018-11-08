@@ -19,7 +19,7 @@
           <div class="main-friends-num">
             <div class="main-friends-bg"></div>
             <div class="main-friends-center" v-if="countHelpCustomer">
-              当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
+              当前助力人数: <span class="friends-num">{{countHelpCustomer | countHelpCustomerFilter}}</span>
             </div>
           </div>
           <div class="main-button">
@@ -131,7 +131,7 @@ export default {
         if (res.code !== '0') {
           return false
         }
-        this.countHelpCustomer = res.data.countHelpCustomer >= 10 ? res.data.countHelpCustomer : '0' + res.data.countHelpCustomer
+        this.countHelpCustomer = res.data.countHelpCustomer || '0'
         this.mobile = res.data.phone || ''
         this.customerId = res.data.customerId || ''
       })
@@ -200,6 +200,14 @@ export default {
         return false
       }
       return true
+    }
+  },
+  filters: {
+    countHelpCustomerFilter (val) {
+      if (val >= 10 || val === '0') {
+        return val
+      }
+      return '0' + val
     }
   }
 }

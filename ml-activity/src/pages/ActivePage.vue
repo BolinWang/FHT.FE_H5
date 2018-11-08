@@ -7,7 +7,7 @@
       <div class="main-friends-num">
         <div class="main-friends-bg"></div>
         <div class="main-friends-center" v-if="countHelpCustomer">
-          当前助力人数: <span class="friends-num">{{countHelpCustomer}}</span>
+          当前助力人数: <span class="friends-num">{{countHelpCustomer | countHelpCustomerFilter}}</span>
         </div>
       </div>
       <div class="main-steps">
@@ -190,7 +190,7 @@ export default {
     initApp () {
       // 已登录修改分享链接地址
       if (this.isLogin) {
-        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId)
+        initPageInfoData.shareData.linkUrl = window.location.origin + window.location.pathname + '?addParams=111111#/friends-assistance?sessionId=' + encodeURIComponent(this.sessionId) // addParams: app分享到qq的时候会在后面拼上一段参数导致页面访问错误，这边需要主动加上参数
         initPageInfoData.shareData.introduction = '帮好友助力，助TA领取1200元租金券!'
       } else {
         initPageInfoData.shareData = {
@@ -279,7 +279,6 @@ export default {
           return false
         }
         this.countHelpCustomer = res.data.countHelpCustomer || '0'
-        this.countHelpCustomer = this.countHelpCustomer >= 10 ? this.countHelpCustomer : '0' + this.countHelpCustomer
         this.couponFee = res.data.couponFee || 0
         this.mobile = res.data.phone || ''
         this.customerId = res.data.customerId || ''
@@ -385,7 +384,13 @@ export default {
       this.loginModelVisible = false
     }
   },
-  watch: {
+  filters: {
+    countHelpCustomerFilter (val) {
+      if (val >= 10 || val === '0') {
+        return val
+      }
+      return '0' + val
+    }
   }
 }
 </script>
