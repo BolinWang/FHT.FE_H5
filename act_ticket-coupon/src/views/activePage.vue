@@ -3,8 +3,8 @@
     <!-- <section class="openApp" v-if="!isAPP && showOpenApp" @click="callupApp">
       <img class="close_png" src="../assets/close.png" alt="" @click.stop="showOpenApp = false" />
       <img class="image" src="../assets/openApp.png" alt="" />
-    </section>
-    <section class="header" v-else-if="!isAPP && !showOpenApp">
+    </section> -->
+    <!-- <section class="header" v-else-if="!isAPP && !showOpenApp">
       <img src="../assets/logo.png" alt="" />
     </section> -->
     <section class="container">
@@ -110,9 +110,9 @@
         </section>
       </section>
     </section>
-    <!-- <section class="footer fixed">
-      <van-button size="large" class="btn_downloadApp" @click="goVrRoomPage">前往体验VR看房</van-button>
-    </section> -->
+    <section class="footer fixed">
+      <van-button size="large" class="btn_downloadApp" @click="callupApp">立即下载麦邻租房</van-button>
+    </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
         <section class="agreeTxt" v-html="agreeTxt"></section>
@@ -533,7 +533,7 @@ export default {
       if (this.isAPP) {
         return false
       }
-      window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
+      window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
     },
 
     // 前往vr看房页面
@@ -871,7 +871,7 @@ export default {
   width: 750px;
   .btn_downloadApp {
     /* autoprefixer: off */
-    background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
+    background-image: -webkit-linear-gradient(top ,#ffc835, #ff9140);
     /* autoprefixer: on */
     border: 0 none;
     border-radius: 0;
