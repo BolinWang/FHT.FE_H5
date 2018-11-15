@@ -111,7 +111,7 @@
       </section>
     </section>
     <section class="footer fixed">
-      <van-button size="large" class="btn_downloadApp" @click="callupApp">立即下载麦邻租房</van-button>
+      <van-button size="large" class="btn_downloadApp" @click="callupApp">立即前往麦邻租房</van-button>
     </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
@@ -565,6 +565,11 @@ export default {
 
     // 唤醒APP
     callupApp () {
+      if (this.isAPP) {
+        this.goVrRoomPage()
+        return false
+      }
+      this.$toast('loading', '尝试唤醒APP...')
       const schemeConfig = {
         scheme_IOS: 'MyRoom://',
         scheme_And: 'myroom://',
@@ -653,6 +658,7 @@ export default {
     .active_container {
       position: relative;
       z-index: 100;
+      margin-bottom: 100px;
       &>div {
         position: relative;
         background: -webkit-linear-gradient(top, #ffbb72, #ff9140)
