@@ -79,6 +79,11 @@
                   <span v-if="index < item.list.length - 1">{{index * 1 + 1}}.</span>
                   <span v-html="rule"></span>
                 </p>
+                <div class="rules_item" v-if="urlSearchParams.sourceType === '360'">
+                  <p>杭州复恒科技有限公司</p>
+                  <p>服务热线: 0571-85001960</p>
+                  <p>联系地址 : 杭州市西溪路550号钱江西溪新座6幢B座5楼</p>
+                </div>
               </section>
             </article>
             <div class="cloud_item--left"></div>
