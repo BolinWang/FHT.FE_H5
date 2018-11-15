@@ -365,7 +365,7 @@ export default {
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
-        // this.sourceTypeTrack()
+        this.sourceTypeTrack()
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -592,15 +592,8 @@ export default {
     // 推广渠道转化
     sourceTypeTrack () {
       switch (this.urlSearchParams.sourceType) {
-        // 百度推广转化成功
-        case 'baidu':
-          window._agl && window._agl.push(['track', ['success', {t: 3}]])
-          break
         case 'toutiao':
-          window._taq.push({convert_id: '1614378656386093', event_type: 'form'})
-          break
-        case 'douyin':
-          window._taq.push({convert_id: '1612833307743251', event_type: 'form'})
+          window._taq.push({convert_id: '1617166205306931', event_type: 'form'})
           break
         default:
           break
