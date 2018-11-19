@@ -22,9 +22,10 @@ const wechatShareCase = {
     fetch('//www.mdguanjia.com/myhome/act/august/wechat.htm', {
       url: location.href.split('#')[0],
       callback: 'h5'
-    }, 'get', {
+    }, {
       noAssign: true,
-      interceptors: false
+      interceptors: false,
+      method: 'get'
     }).then((data) => {
       if (!data.success) {
         return false

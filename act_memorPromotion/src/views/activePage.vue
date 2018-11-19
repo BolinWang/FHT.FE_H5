@@ -99,7 +99,7 @@ export default {
     },
     closeMask (e) {
       const img = document.getElementById('img')
-      if (!img.contains(e.target)) {
+      if (!img || !img.contains(e.target)) {
         this.mask = false
       }
     }
