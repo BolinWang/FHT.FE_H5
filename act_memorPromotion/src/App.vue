@@ -10,7 +10,6 @@ import { getWxShareInfo } from '@/utils/wxshare'
 import { getBrowser } from '@/utils/browser'
 import { setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-import shareIcon from '../static/shareIcon.jpg'
 
 // 获取客户端类型
 const browser = getBrowser()
@@ -22,7 +21,7 @@ const initPageInfo = {
   shareData: {
     title: '麦家公寓减房租了',
     introduction: '最高立减1000元房租！',
-    thumbnail: shareIcon,
+    thumbnail: '//h5.52mailin.com/act_memorPromotion/static/shareIcon.jpg',
     linkUrl: location.href
   }
 }
