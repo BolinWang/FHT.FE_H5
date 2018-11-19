@@ -605,6 +605,9 @@ export default {
         case 'toutiao':
           window._taq.push({convert_id: '1617166205306931', event_type: 'form'})
           break
+        case 'baidu':
+          window._agl && window._agl.push(['track', ['success', {t: 3}]])
+          break
         default:
           break
       }

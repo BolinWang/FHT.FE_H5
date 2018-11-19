@@ -33,6 +33,21 @@
           };
           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ta, s);
         })(window);
+      } else if (urlSearchParams.sourceType === 'baidu') {
+        window._agl = window._agl || [];
+        (function () {
+          _agl.push(
+            ['production', '_f7L2XwGXjyszb4d1e2oxPybgD']
+          );
+          (function () {
+            var agl = document.createElement('script');
+            agl.type ='text/javascript';
+            agl.async = true;
+            agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=_f7L2XwGXjyszb4d1e2oxPybgD';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(agl, s);
+          })();
+        })();
       }
     </script>
   </head>
@@ -42,12 +57,12 @@
     <!-- <script src="//emma-sdk.huodonghezi.com/dist/js/emma.js"></script> -->
     <script>
       var _hmt = _hmt || [];
-      (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?db9a19b6acbc743a009b45af06c1c167";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
+      (function () {
+        var hm = document.createElement('script')
+        hm.src = 'https://hm.baidu.com/hm.js?db9a19b6acbc743a009b45af06c1c167'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(hm, s)
+      })()
     </script>
   </body>
 </html>
