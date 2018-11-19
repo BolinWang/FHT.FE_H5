@@ -10,7 +10,7 @@ import { getWxShareInfo } from '@/utils/wxshare'
 import { getBrowser } from '@/utils/browser'
 import { setUserData } from '@/utils/auth'
 import Bridge from '@/utils/bridge'
-import shareIcon from '@/assets/shareIcon.jpg'
+import shareIcon from '../static/shareIcon.jpg'
 
 // 获取客户端类型
 const browser = getBrowser()
