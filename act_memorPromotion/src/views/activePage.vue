@@ -66,7 +66,7 @@
         </ul>
       </div>
       <div class="mask" v-show="mask" @click="closeMask">
-            <!-- <img src="../assets/actDetail.jpg" alt="" id="img" > -->
+          <img src="../assets/actDetail.jpg" alt="" id="img" >
       </div>
   </div>
 </template>
