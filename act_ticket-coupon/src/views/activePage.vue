@@ -3,8 +3,8 @@
     <!-- <section class="openApp" v-if="!isAPP && showOpenApp" @click="callupApp">
       <img class="close_png" src="../assets/close.png" alt="" @click.stop="showOpenApp = false" />
       <img class="image" src="../assets/openApp.png" alt="" />
-    </section>
-    <section class="header" v-else-if="!isAPP && !showOpenApp">
+    </section> -->
+    <!-- <section class="header" v-else-if="!isAPP && !showOpenApp">
       <img src="../assets/logo.png" alt="" />
     </section> -->
     <section class="container">
@@ -79,6 +79,11 @@
                   <span v-if="index < item.list.length - 1">{{index * 1 + 1}}.</span>
                   <span v-html="rule"></span>
                 </p>
+                <div class="rules_item" v-if="urlSearchParams.sourceType === '360'">
+                  <p>杭州复恒科技有限公司</p>
+                  <p>服务热线: 0571-85001960</p>
+                  <p>联系地址: 杭州市西溪路550号钱江西溪新座6幢B座5楼</p>
+                </div>
               </section>
             </article>
             <div class="cloud_item--left"></div>
@@ -105,9 +110,9 @@
         </section>
       </section>
     </section>
-    <!-- <section class="footer fixed">
-      <van-button size="large" class="btn_downloadApp" @click="goVrRoomPage">前往体验VR看房</van-button>
-    </section> -->
+    <section class="footer fixed">
+      <van-button size="large" class="btn_downloadApp" @click="callupApp">立即前往麦邻租房</van-button>
+    </section>
     <van-popup v-model="showUserAgree" position="right">
       <article>
         <section class="agreeTxt" v-html="agreeTxt"></section>
@@ -365,7 +370,7 @@ export default {
       }).then(response => {
         this.$toast('success', '领取成功')
         this.ticket_status = 1
-        // this.sourceTypeTrack()
+        this.sourceTypeTrack()
       }).catch((err) => {
         this.$toast('fail', '领取优惠券失败')
         console.log(err)
@@ -528,7 +533,7 @@ export default {
       if (this.isAPP) {
         return false
       }
-      window.location.href = `${process.env.WEBSITE_LINK}appdownload/index.html`
+      window.location.href = `${process.env.WEBSITE_LINK}appGuides/index.html`
     },
 
     // 前往vr看房页面
@@ -560,6 +565,11 @@ export default {
 
     // 唤醒APP
     callupApp () {
+      if (this.isAPP) {
+        this.goVrRoomPage()
+        return false
+      }
+      this.$toast('loading', '尝试唤醒APP...')
       const schemeConfig = {
         scheme_IOS: 'MyRoom://',
         scheme_And: 'myroom://',
@@ -592,15 +602,8 @@ export default {
     // 推广渠道转化
     sourceTypeTrack () {
       switch (this.urlSearchParams.sourceType) {
-        // 百度推广转化成功
-        case 'baidu':
-          window._agl && window._agl.push(['track', ['success', {t: 3}]])
-          break
         case 'toutiao':
-          window._taq.push({convert_id: '1614378656386093', event_type: 'form'})
-          break
-        case 'douyin':
-          window._taq.push({convert_id: '1612833307743251', event_type: 'form'})
+          window._taq.push({convert_id: '1617166205306931', event_type: 'form'})
           break
         default:
           break
@@ -655,6 +658,7 @@ export default {
     .active_container {
       position: relative;
       z-index: 100;
+      margin-bottom: 100px;
       &>div {
         position: relative;
         background: -webkit-linear-gradient(top, #ffbb72, #ff9140)
@@ -873,7 +877,7 @@ export default {
   width: 750px;
   .btn_downloadApp {
     /* autoprefixer: off */
-    background-image: -webkit-linear-gradient(top ,#ffc835, #fdab29);
+    background-image: -webkit-linear-gradient(top ,#ffc835, #ff9140);
     /* autoprefixer: on */
     border: 0 none;
     border-radius: 0;
